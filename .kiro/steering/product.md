@@ -33,7 +33,16 @@ Primary persona: a provincial or district disaster officer who needs a 2-minute 
 
 ## Priority order (scope rule)
 
-Brain + Library + Ledger end-to-end, then Oracle, then Eyes, then Voice. Voice is cut first if behind. Every spec's tasks.md marks tasks as `core`, `stretch`, or `cuttable`.
+Brain + Library + Ledger end-to-end, then Oracle, then Eyes, then Voice. Every spec's tasks.md marks tasks as `core`, `stretch`, or `cuttable`.
+
+**Voice is time-boxed.** It starts only after the other organs' core tasks are done, has a fixed budget and a go/no-go checkpoint, and is the first cut if the schedule slips.
+
+**Demo-first rule.** Every organ works from the committed demo dataset with no network calls. Live mode is a bonus, never a dependency. Tests for demo paths run with sockets disabled.
+
+## Honest labeling (non-negotiable)
+- Oracle output is **modeled** GloFAS discharge (via Open-Meteo). It is never called gauge data or observations, in the UI, evals, or docs.
+- Eyes: the Sindh scene is a demo scene. The model is validated on the Sen1Floods11 test split only. The UI labels these separately.
+- Voice TTS is a hosted API by default. Any non-commercial local model is optional, off by default, and listed in THIRD_PARTY.md.
 
 ## Hackathon constraints
 

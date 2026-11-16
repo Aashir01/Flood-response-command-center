@@ -2,7 +2,7 @@
 inclusion: always
 ---
 
-# MCP contracts (v0.1, draft pending spec approval)
+# MCP contracts (v0.2)
 
 Single source of truth for organ tool I/O. `packages/stitch_common` mirrors these as Pydantic v2 models; the contract hook validates both directions. Schemas are written as compact JSON Schema (`?` = optional). Any change bumps `contract_version` and is logged at the bottom.
 
@@ -61,7 +61,11 @@ out: { "flood_extent_km2": number,
        "permanent_water_km2": number,
        "confidence": number [0,1],                 // mean per-pixel max-prob over flood pixels
        "tiles_processed": int,
-       "source_scene": { "sensor": str, "acquired": datetime, "scene_id": str } }
+       "source_scene": { "sensor": str, "acquired": datetime, "scene_id": str },
+       "validation": { "validated_for_region": bool,       // false for the Sindh demo scene
+                       "eval_dataset": str,                 // "sen1floods11_test"
+                       "note": str },
+       "reference_overlay_geojson": FeatureCollection | null }   // UNOSAT/CEMS extent, qualitative only
 ```
 `compare_with_permanent_water`
 ```jsonc
@@ -76,6 +80,8 @@ out: { "total_water_km2": number, "permanent_water_km2": number, "new_flood_km2"
 ```jsonc
 in:  { "station_id": str, "horizon_days": int [1,14], "as_of"?: date, "coverage"?: number (default 0.8) }
 out: { "station_id": str, "unit": "m3/s", "as_of": date,
+       "target_kind": "modeled_glofas",                   // never "gauge"
+       "target_label": "Modeled river discharge (GloFAS via Open-Meteo)",
        "forecast": [ { "date": date, "lead_days": int, "discharge": Interval,
                        "rainfall_mm"?: Interval } ],
        "danger_threshold_m3s": number | null,
@@ -139,12 +145,17 @@ out: { "status": "optimal|feasible|infeasible",
 ```
 `sensitivity_report`
 ```jsonc
-in:  { "run_id": str }
+in:  { "run_id": str, "floor_steps"?: int [2,21] (default 11) }
 out: { "shadow_prices": [ { "constraint": "supply:<commodity_id>|budget|min_coverage:<district_id>",
                             "value": number, "unit": str, "binding": bool } ],
        "reduced_costs": [ { "district_id": str, "commodity_id": str, "value": number } ],
        "ranges": [ { "constraint": str, "allowable_increase": number, "allowable_decrease": number } ],
        "basis": "lp_relaxation",                  // shadow prices come from the LP relaxation when integer=true
+       "equity_tradeoff": [ { "min_coverage_floor": number [0,1],
+                              "status": "optimal|feasible|infeasible",
+                              "total_coverage": number | null,
+                              "people_covered": number | null } ],
+       "equity_cost": number | null,              // coverage given up by the run's own floor
        "notes": [str] }
 ```
 
@@ -159,7 +170,8 @@ out: { "text": str, "lang": "en|ur", "segments": [ { "start": number, "end": num
 `speak`
 ```jsonc
 in:  { "text": str (<= 4000 chars), "lang": "en|ur", "voice"?: str, "format"?: "wav|mp3" }
-out: { "audio_b64": str, "format": str, "duration_s": number, "sample_rate": int, "lang": str }
+out: { "audio_b64": str, "format": str, "duration_s": number, "sample_rate": int, "lang": str,
+       "provider": "hosted|prerendered|local-mms|fake", "synthesized": "live|cache|prerendered" }
 ```
 
 ## 8. Brain API (browser-facing, not MCP)
@@ -184,3 +196,4 @@ Invariant (BRN-P1): every claim has `evidence.length >= 1` and every `EvidenceRe
 
 ## 9. Change log
 - 0.1 draft: initial contracts.
+- 0.2: eyes `validation` and `reference_overlay_geojson`; oracle `target_kind`/`target_label`; ledger `equity_tradeoff`, `equity_cost`, `floor_steps`; voice `provider`, `synthesized`.

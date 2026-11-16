@@ -6,14 +6,14 @@ Organ: quantile forecasting of river discharge and rainfall. Prefix `ORA`. Contr
 The Oracle predicts river discharge at a gauge station for 1 to 14 days ahead, with p10/p50/p90 quantiles and conformally calibrated intervals, and explains the main drivers.
 
 ## Glossary
-- **Station**: a river gauge or a grid-cell proxy (e.g. Indus at Guddu/Sukkur/Kotri).
+- **Station**: a named point on the river (e.g. Indus near Guddu, Sukkur, Kotri) mapped to the nearest GloFAS grid cell. It is not a physical gauge.
 - **Conformal interval**: an interval whose empirical coverage is guaranteed marginally on exchangeable data by split conformal prediction (conformalized quantile regression).
 - **CRPS**: continuous ranked probability score, approximated from quantiles.
 
 ## Requirements
 
 ### ORA-R1 Data inputs
-1. THE Oracle SHALL build features from Open-Meteo (forecast and flood API), ERA5 reanalysis, and gauge data where available.
+1. THE Oracle SHALL build features from Open-Meteo (forecast and flood API) and ERA5 reanalysis. The forecast target is modeled GloFAS discharge from the Open-Meteo flood API.
 2. WHERE `mode = demo`, THE Oracle SHALL read pre-cached Parquet files from `data/demo/` and make no network calls.
 3. WHERE `mode = live`, THE Oracle SHALL fetch Open-Meteo data, cache it in DuckDB/Parquet, and degrade to the last cached data with a warning when the network is down.
 4. IF required input data has gaps above a configured length, THEN THE Oracle SHALL return a result with a `warnings` entry or `UPSTREAM_UNAVAILABLE` and not impute silently.
@@ -48,6 +48,23 @@ The Oracle predicts river discharge at a gauge station for 1 to 14 days ahead, w
 ### ORA-R7 Eval
 1. THE Oracle eval SHALL report CRPS, pinball loss per quantile, empirical interval coverage versus nominal (including on the 2022 flood season as a stress test), interval width, and a baseline (persistence and climatology) comparison, by lead day.
 
+### ORA-R8 Modeled-data labeling
+1. THE Oracle SHALL set `target_kind = "modeled_glofas"` and `target_label = "Modeled river discharge (GloFAS via Open-Meteo)"` in every `forecast_river` result and in eval output.
+2. THE Oracle SHALL NOT call the target gauge data, observations, or measurements in tool descriptions, narratives, warnings, docs, or evals.
+3. Stations SHALL be described as "GloFAS grid cell nearest to <name>", with cell coordinates in provenance.
+
+### ORA-R9 Gauge validation (stretch)
+1. WHERE public gauge readings for the Indus at Guddu, Sukkur, or Kotri can be obtained cheaply and redistributably, THE Oracle eval SHALL compare modeled discharge with them as a small validation set, reported separately as "observed gauge validation (small n)".
+2. IF such readings are not available at low cost, THEN THE eval SHALL state that no observed validation was performed.
+
+### ORA-R10 Training reproducibility
+1. THE training SHALL run on free Colab or Modal (no local GPU). Notebooks, configs, seeds, and data fetch scripts SHALL be committed in `organs/oracle/training/`.
+2. THE repo SHALL commit only the exported model file, conformity scores, and the demo Parquet data, not checkpoints or raw downloads.
+
+### ORA-R11 Demo-first
+1. THE Oracle SHALL serve every tool from committed Parquet data with no network calls, enforced by tests that disable sockets.
+2. Live mode is optional and SHALL fall back to demo data with a warning on any upstream failure.
+
 ## Correctness properties (formalized in design)
 - ORA-P1: for all outputs, p10 <= p50 <= p90 at every lead day.
 - ORA-P2: all discharge values are >= 0.
@@ -57,9 +74,12 @@ The Oracle predicts river discharge at a gauge station for 1 to 14 days ahead, w
 - ORA-P6: `exceedance_prob` is in [0,1] and non-increasing in the threshold.
 - ORA-P7: on the held-out calibration protocol, empirical coverage >= nominal minus a stated tolerance (eval check, not a unit property).
 
+- ORA-P8: every successful `forecast_river` result and every eval report carries `target_kind = "modeled_glofas"`.
+
 ## Out of scope
 Hydrodynamic modeling. Real-time gauge ingestion from Pakistan WAPDA/FFD if no public API is available.
 
-## Open questions
-1. Which gauge/discharge source is acceptable? Candidates: GloFAS via Open-Meteo Flood API (modeled discharge, grid-based), or public historical gauge series. Proposal: GloFAS discharge via Open-Meteo as the "gauge" target, and be explicit that it is modeled.
-2. Gradient boosting (LightGBM or sklearn HistGradientBoosting quantile) vs PyTorch? Proposal: gradient boosting + CQR as the core, with a small PyTorch quantile MLP as a stretch comparison.
+## Decisions (resolved)
+1. Target is modeled GloFAS discharge via Open-Meteo, labeled "modeled" everywhere (UI, evals, docs).
+2. Gradient boosting with conformalized quantile regression is the core model. A small PyTorch quantile MLP is a stretch comparison.
+3. Public gauge readings are a small optional validation set only if cheap to obtain.

@@ -38,6 +38,7 @@ A polished mad-scientist lab bench where the user chooses a region and scenario,
 4. THE UI SHALL show refusals from the Library as a normal, labelled outcome.
 5. THE UI SHALL show the confidence "heartbeat" and the demo/live and decision-support notices.
 6. THE UI SHALL show Ledger shadow prices in a readable "what would one more unit buy" panel.
+7. THE UI SHALL show the coverage-versus-equity-floor trade-off as a chart with a slider moving along the precomputed `equity_tradeoff` points (no re-solve), marking the run's current floor and the `equity_cost`, and showing infeasible floors as such.
 
 ### FRN-R6 Voice
 1. WHERE Voice is available, THE UI SHALL let the user play the spoken briefing and record a spoken question using Web Audio, with a visible waveform and permission handling.
@@ -75,6 +76,16 @@ A polished mad-scientist lab bench where the user chooses a region and scenario,
 1. THE project SHALL include Playwright smoke tests for: boot, run default briefing in demo mode, organ error state, evidence drill-down, Urdu RTL toggle, keyboard-only run, and reduced motion.
 2. THE project SHALL run an automated accessibility scan (axe) in the Playwright suite and fail on serious violations.
 
+### FRN-R14 Honest labeling
+1. THE Eyes panel SHALL show two separate labels: "Demo scene: Sindh, Aug 2022" and "Model validated on Sen1Floods11 test split", and SHALL NOT present Sindh output as validated.
+2. WHERE `reference_overlay_geojson` is present, THE map SHALL offer a "reference extent" overlay, labeled qualitative.
+3. EVERY Oracle number, chart, and eval row SHALL carry the label "Modeled (GloFAS)". The UI SHALL NOT use the words gauge or observed for Oracle output.
+4. THE UI SHALL show which TTS provider produced audio and disclose that briefing text is sent to a hosted provider before first live synthesis.
+
+### FRN-R15 Demo-first and cuttable Voice
+1. THE UI SHALL work fully against a Brain running in demo mode with no network.
+2. THE UI SHALL render Voice as disabled (not broken) when Voice is cut or unavailable, and no other feature SHALL depend on it.
+
 ## Correctness properties (formalized in design)
 - FRN-P1: every organ has exactly one visible state at any time, derived from the event stream via a pure reducer.
 - FRN-P2: replaying the same event sequence yields the same UI state (reducer is deterministic).
@@ -82,10 +93,13 @@ A polished mad-scientist lab bench where the user chooses a region and scenario,
 - FRN-P4: no briefing claim renders without an accessible evidence control.
 - FRN-P5: no animation exceeds 3 flashes per second.
 
+- FRN-P6: every rendered Oracle-derived value has an adjacent "Modeled (GloFAS)" label (component-level test).
+- FRN-P7: the equity trade-off chart never interpolates across infeasible points.
+
 ## Out of scope
 Authentication. Native mobile apps. Editing the plan by hand.
 
-## Open questions
-1. Org visuals: illustrated SVG jars (hand-made, consistent) or generated art? Proposal: hand-built SVG with CSS/Framer Motion, no raster art, to keep licensing clean.
-2. Fonts: OK to use open-licensed fonts (OFL) self-hosted, such as Cinzel and Noto?
-3. Base map geometry: OK to build style from Natural Earth plus OSM-derived Sindh extracts in the demo dataset?
+## Decisions (resolved)
+1. Organ art: hand-built SVG with CSS and Framer Motion, no raster art.
+2. Fonts: OFL-licensed (e.g. Cinzel, Noto), self-hosted, listed in THIRD_PARTY.md.
+3. Base map: self-hosted style from Natural Earth plus OSM-derived Sindh extracts in the demo dataset.

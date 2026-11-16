@@ -59,6 +59,15 @@ The Ledger decides how much of each relief commodity goes to each district, give
 ### LED-R9 Eval
 1. THE Ledger eval SHALL generate randomized instances (seeded) and report feasibility rate, optimality gap distribution, solve time, and comparison with a greedy proportional baseline (coverage uplift).
 
+### LED-R10 Equity trade-off
+1. WHEN `sensitivity_report` is called, THE Ledger SHALL also return `equity_tradeoff`: for `floor_steps` equally spaced floors `f` from 0 to 1 (default 11 points) plus `f_max`, report `status`, `total_coverage`, and `people_covered`. `f_max` is the largest feasible uniform floor. Floors at or below `f_max` are re-solved; floors above it are reported `infeasible` with null values, so the UI can show where equity becomes unaffordable.
+2. THE Ledger SHALL report `equity_cost`, the coverage given up in the original run by its floor: coverage at floor 0 minus coverage at the run's floor (null when the run had no floor).
+3. THE trade-off points SHALL use the same solver mode as the original run, or the LP relaxation with `basis` stating so.
+4. THE trade-off computation SHALL finish in under 10 s for demo scenarios, and otherwise return the points computed so far with a warning.
+
+### LED-R11 Demo-first
+1. THE Ledger SHALL run on committed district, population, and road-access data with no network calls, enforced by tests that disable sockets.
+
 ## Correctness properties (formalized in design)
 - LED-P1: for every valid input, for each commodity, sum of allocations <= supply.
 - LED-P2: all allocated quantities >= 0.
@@ -70,9 +79,12 @@ The Ledger decides how much of each relief commodity goes to each district, give
 - LED-P8: scaling all populations by k>0 and need accordingly yields coverage fractions unchanged (scale invariance), where applicable.
 - LED-P9: output is a deterministic function of input.
 
+- LED-P10: along the equity trade-off, `total_coverage` is non-increasing as the floor increases.
+- LED-P11: the trade-off point at floor 0 equals the unconstrained optimum within solver tolerance.
+
 ## Out of scope
 Vehicle routing and last-mile logistics. Multi-period dynamic allocation. Prices as real market data.
 
-## Open questions
-1. Should the objective be pure coverage maximization, or a weighted blend with an equity term (e.g. maximin)? Proposal: coverage objective plus an optional equity floor.
-2. Commodity set for the demo: proposal is food packs, clean water (liters), shelter kits, and medical kits.
+## Decisions (resolved)
+1. Objective: maximize weighted coverage with an optional equity floor. The UI shows shadow prices and the coverage-versus-equity-floor trade-off.
+2. Demo commodities: food packs, clean water (liters), shelter kits, and medical kits.

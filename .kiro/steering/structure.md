@@ -19,7 +19,8 @@ organs/<organ>/
     server.py          MCP tool definitions (thin)
     models.py          imports from stitch_common where shared
   tests/               unit/, property/, contract/
-  models/              committed demo weights (ONNX etc.)
+  models/              committed demo weights (ONNX etc.), no checkpoints
+  training/            (eyes, oracle) Colab/Modal notebooks, configs, fetch scripts
   README.md
 packages/stitch_common/  contract models, provenance, LLM client, logging
 brain/                   planner, task graph, conflict detector, critic, provenance, FastAPI + SSE

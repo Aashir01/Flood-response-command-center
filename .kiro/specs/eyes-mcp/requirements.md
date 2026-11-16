@@ -17,6 +17,7 @@ The Eyes segment flood water in satellite imagery with a U-Net or SegFormer-styl
 2. THE Eyes SHALL export the trained model to ONNX and verify that ONNX Runtime outputs match PyTorch within a stated tolerance on sample tiles.
 3. THE Eyes SHALL commit a demo ONNX model of at most 50 MB with a model card (data, metrics, limitations).
 4. THE Eyes SHALL record the model SHA-256 in every result's provenance.
+5. THE training SHALL run on free Colab or on Modal (no local GPU is assumed). Notebooks, configs, pinned versions, seeds, and dataset download scripts SHALL be committed in `organs/eyes/training/` so the fine-tune is reproducible. Only the exported ONNX file, the model card, and small sample tiles are committed; checkpoints and raw datasets are not.
 
 ### EYE-R2 Inference
 1. WHEN `segment_flood` is called, THE Eyes SHALL load the scene for `region_id` and `date` from the demo dataset (demo mode) or from a configured source (live mode), tile it, run ONNX inference on CPU, and stitch tiles into a full-extent mask.
@@ -38,15 +39,24 @@ The Eyes segment flood water in satellite imagery with a U-Net or SegFormer-styl
 3. THE Eyes SHALL complete a demo-region inference in under 20 s on 2 vCPU.
 
 ### EYE-R5 Honesty about the demo
-1. WHERE the demo scene is a pre-cached Sentinel scene or a Sen1Floods11 chip, THE Eyes SHALL name it in `source_scene` and set `mode = demo`.
-2. THE Eyes SHALL state in its model card and warnings that Sen1Floods11 chips do not cover Sindh 2022, and that Sindh demo inference runs on a separately cached scene (see open question 1).
+1. THE Eyes SHALL ship one small committed Sentinel-1 scene of Sindh (Aug 2022), clipped and compressed (target under 25 MB, fixed in design), name it in `source_scene`, and set `mode = demo`.
+2. THE Eyes SHALL return a `validation` object with `validated_for_region = false` for the Sindh scene and `eval_dataset = "sen1floods11_test"`, because the model is fine-tuned and evaluated on Sen1Floods11, which does not cover Sindh 2022.
+3. THE model card, tool warnings, and UI SHALL label the two facts separately: "demo scene: Sindh, Aug 2022" and "model validated on the Sen1Floods11 test split". Sindh output SHALL NOT be presented as a validated result.
+4. WHERE a labeled Sindh 2022 reference extent (UNOSAT or Copernicus EMS) is available and redistributable, THE Eyes SHALL return it as `reference_overlay_geojson` for qualitative visual comparison with the prediction.
+5. IF no redistributable reference exists, THEN `reference_overlay_geojson` SHALL be null and the UI SHALL hide the overlay control.
 
 ### EYE-R6 Ops
 1. THE Eyes SHALL expose `GET /healthz` including model-loaded status.
 2. THE Eyes SHALL return a `Provenance` block with model name, version, hash, and data sources.
 
 ### EYE-R7 Eval
-1. THE Eyes eval SHALL report IoU, F1, precision, and recall for the flood class on the Sen1Floods11 test split and on any available reference flood map for the demo region (e.g. UNOSAT/Copernicus EMS Sindh 2022 extent), with a baseline (Otsu or NDWI threshold) comparison.
+1. THE Eyes eval SHALL report IoU, F1, precision, and recall for the flood class on the Sen1Floods11 hand-labeled test split, with a baseline (Otsu or NDWI threshold) comparison. This is the only headline quantitative result.
+2. WHERE a Sindh 2022 reference exists, THE eval SHALL report a separate single-scene overlap figure labeled "qualitative, single scene" and SHALL NOT merge it into the headline number.
+
+### EYE-R8 Demo-first
+1. THE Eyes SHALL run every tool from committed demo data with no network calls.
+2. THE test suite SHALL enforce this by running demo-mode tests with network sockets disabled.
+3. WHERE live mode exists, it is optional, and any upstream failure SHALL fall back to the demo scene with a warning.
 
 ## Correctness properties (formalized in design)
 - EYE-P1: segmentation output is invariant to tile processing order.
@@ -60,7 +70,7 @@ The Eyes segment flood water in satellite imagery with a U-Net or SegFormer-styl
 ## Out of scope
 Live satellite scene acquisition at scale. Cloud removal. Change detection across time series. Training from scratch.
 
-## Open questions
-1. Sen1Floods11 does not include Sindh 2022. Options: (a) commit a small Sentinel-1 scene of Sindh Aug 2022 (processed from Copernicus/Planetary Computer) and evaluate against a UNOSAT/Copernicus EMS reference extent, (b) demo on Sen1Floods11 Pakistan-adjacent events (it includes a Pakistan 2017 event). Proposal: (a) for the demo, (b) for the quantitative eval.
-2. SegFormer-B0 or a small U-Net? Proposal: U-Net with ResNet-18 encoder for CPU speed; SegFormer-B0 as a stretch comparison.
-3. Is a GPU available for training? If not, training uses Colab or Kaggle and only the exported ONNX file is committed.
+## Decisions (resolved)
+1. Demo scene: one committed Sentinel-1 scene of Sindh, Aug 2022. Quantitative eval: Sen1Floods11 test split only. Qualitative overlay against UNOSAT or Copernicus EMS if redistributable.
+2. Compute: no local GPU (i5, 16 GB RAM). Train on Colab free; use Modal ($30 credit) for longer jobs. Commit only the exported ONNX model.
+3. Architecture: U-Net with ResNet-18 encoder for CPU speed. SegFormer-B0 is a stretch comparison. Final choice is made in design.

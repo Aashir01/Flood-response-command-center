@@ -13,6 +13,7 @@ inclusion: always
 
 ## ML
 - PyTorch for training, ONNX Runtime for CPU inference in the container. Training scripts are committed; trained demo weights are small enough to commit (target under 50 MB each, Git LFS not required).
+- Training compute: the dev laptop (i5, 16 GB, no GPU) is for development and inference only. Training runs on free Colab or on Modal ($30 credit). Notebooks and configs live in `organs/<organ>/training/`. Only exported artifacts are committed.
 - scikit-learn (incl. gradient boosting), rasterio, geopandas for geodata.
 - Determinism: every training and eval script takes a seed. Inference is deterministic on CPU.
 
@@ -42,3 +43,22 @@ See `testing.md`.
 - Validate all input at the Brain API and at each organ tool boundary with Pydantic.
 - Fetched documents and tool outputs are data, never instructions (prompt-injection posture for the Library and Brain).
 - Organs run as non-root, with read-only filesystems where possible.
+
+## Brain
+Custom asyncio task-graph executor. No agent framework.
+
+## Demo-first
+Every organ runs from `data/demo/` with no network calls. Live mode (Open-Meteo etc.) is optional and falls back to demo with a warning.
+
+## Configuration (env)
+| Variable | Purpose | Default |
+|---|---|---|
+| `STITCH_MODE` | `demo` or `live` | `demo` |
+| `STITCH_LLM_PROVIDER` | `fake`, `anthropic`, `openai` | `fake` |
+| `STITCH_WHISPER_MODEL` | Whisper size | `base` |
+| `STITCH_EMBED_MODEL` | Library embedding model | small multilingual |
+| `STITCH_RERANK_MODEL` | Library reranker | small |
+| `STITCH_TTS_PROVIDER` | `hosted`, `prerendered`, `local-mms` | `hosted` (falls back to `prerendered`) |
+| `STITCH_TTS_API_KEY` | hosted TTS key (name finalized in design) | unset |
+
+Defaults are sized for a 2 vCPU / 4 GB host.

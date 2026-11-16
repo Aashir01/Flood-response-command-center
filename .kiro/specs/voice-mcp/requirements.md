@@ -1,6 +1,6 @@
 # voice-mcp: Requirements
 
-Organ: speech-to-text and text-to-speech, Urdu and English. Prefix `VOX`. Contract: `mcp-contracts.md` §7. Priority: **cuttable** (lowest).
+Organ: speech-to-text and text-to-speech, Urdu and English. Prefix `VOX`. Contract: `mcp-contracts.md` §7. Priority: **cuttable** (lowest), time-boxed (VOX-R8).
 
 ## Introduction
 The Voice transcribes spoken questions (Whisper) and speaks the briefing (TTS) in Urdu or English.
@@ -22,13 +22,14 @@ The Voice transcribes spoken questions (Whisper) and speaks the briefing (TTS) i
 5. IF the requested language lacks a configured voice, THEN THE Voice SHALL return `INVALID_INPUT` and not silently use another language.
 
 ### VOX-R3 Offline and cache
-1. THE Voice SHALL run fully on CPU with locally stored models (no external API required).
-2. THE Voice SHALL cache synthesized audio by hash of (text, lang, voice) and ship pre-rendered demo-briefing audio so the demo works if TTS is disabled.
+1. THE Voice SHALL run Whisper speech-to-text locally on CPU, with the model size set by `STITCH_WHISPER_MODEL` (default `base`, `tiny` supported, larger sizes opt-in).
+2. THE Voice SHALL cache synthesized audio by hash of (text, lang, voice, provider) and ship pre-rendered demo-briefing audio (Urdu and English) so the demo works offline. The pre-rendered audio SHALL only be committed if the TTS provider terms permit redistribution of generated audio, and the provider SHALL be named in THIRD_PARTY.md.
 3. WHERE the Voice organ is disabled or unavailable, THE system SHALL still produce a text briefing and show the Voice as unwell without blocking the other organs.
 
 ### VOX-R4 Safety and privacy
 1. THE Voice SHALL not persist user audio beyond the request.
 2. THE Voice SHALL not log transcribed text at info level.
+3. THE Voice SHALL send only briefing text (never user audio) to a hosted TTS provider, and the UI SHALL disclose this before first use.
 
 ### VOX-R5 Ops
 1. THE Voice SHALL expose `GET /healthz` and a `Provenance` block with model names and hashes.
@@ -36,15 +37,38 @@ The Voice transcribes spoken questions (Whisper) and speaks the briefing (TTS) i
 ### VOX-R6 Eval
 1. THE Voice eval SHALL report word error rate (WER) for English and Urdu on a small recorded or public test set, and a TTS intelligibility check by round-trip (TTS then ASR) WER.
 
+### VOX-R7 Pluggable TTS providers
+1. THE Voice SHALL define a `TTSProvider` interface and select the provider with `STITCH_TTS_PROVIDER`. Values: `hosted` (default), `prerendered`, and `local-mms` (optional, off by default).
+2. THE `hosted` provider SHALL call a hosted TTS API with Urdu and English voices. The key is read from env and never committed. The specific vendor is chosen in design (see decisions).
+3. THE `prerendered` provider SHALL serve only the cached demo audio and return `NOT_FOUND` for other text, so the offline demo works with no key or network.
+4. THE `local-mms` provider (non-commercial model license) SHALL be disabled unless explicitly enabled, SHALL NOT be bundled in default images, and SHALL be listed in `THIRD_PARTY.md` as an optional non-commercial mode.
+5. WHEN the provider changes, THE `speak` output schema SHALL NOT change, and `provider` and `synthesized` (`live`, `cache`, or `prerendered`) SHALL be reported.
+6. IF the hosted provider fails or no key is set, THEN THE Voice SHALL fall back to `prerendered` for demo text, otherwise return `UPSTREAM_UNAVAILABLE` and the Brain SHALL show Voice as unwell.
+
+### VOX-R8 Time-box
+1. THE Voice work SHALL start only after Brain, Library, Ledger, Oracle, and Eyes core tasks are complete.
+2. THE tasks SHALL define a fixed time budget and a go/no-go checkpoint. IF the checkpoint is missed, THEN THE Voice SHALL be cut to: pre-rendered briefing playback plus Whisper transcribe, or removed entirely, with the UI showing Voice as disabled.
+3. Cutting Voice SHALL NOT break any other spec's tests or the demo.
+
+### VOX-R9 Demo-first
+1. `transcribe` SHALL work offline (local Whisper). `speak` SHALL work offline for the pre-rendered demo briefing.
+2. THE tests SHALL run with sockets disabled and a fake TTS provider.
+
 ## Correctness properties (formalized in design)
 - VOX-P1: `speak` output duration is > 0 and monotone non-decreasing in text length (for the same language and voice, within a tolerance).
 - VOX-P2: text normalization is idempotent.
 - VOX-P3: caching returns byte-identical audio for identical (text, lang, voice).
 - VOX-P4: oversized or malformed audio is rejected with `INVALID_INPUT`, never a crash.
 
+- VOX-P5: swapping TTS providers never changes the `speak` output schema.
+
 ## Out of scope
 Voice cloning. Real-time streaming conversation. Speaker diarization.
 
-## Open questions
-1. TTS engine for Urdu on CPU: candidates are Piper (limited Urdu), MMS-TTS (Meta, CC-BY-NC), Coqui XTTS (non-commercial license), or a hosted API as fallback. License matters for a public repo. Proposal: MMS-TTS `urd-script_arabic` for Urdu and Piper for English, with licenses disclosed. Is non-commercial acceptable?
-2. Whisper size: `small` for Urdu quality, or `base` for speed?
+## Decisions (resolved)
+1. Default TTS is a hosted API behind a pluggable interface. A non-commercial local model would create a license mismatch with the MIT repo, so it is an optional local mode, off by default, listed in THIRD_PARTY.md.
+2. Whisper `base` by default, `tiny` allowed, size set by env.
+3. Voice is time-boxed and the first thing cut if the schedule slips.
+
+## Remaining question
+Which hosted vendor? Candidates with Urdu voices: Google Cloud TTS, Azure Speech (ur-PK), ElevenLabs. Design will compare Urdu quality, price, and terms on redistributing generated audio, then recommend one. You choose.

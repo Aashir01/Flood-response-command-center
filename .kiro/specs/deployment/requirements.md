@@ -18,6 +18,7 @@ Everything runs from `docker compose up` with the demo dataset, and is served at
 1. THE images SHALL be built from pinned base images, use multi-stage builds, run as non-root, and exclude dev dependencies and training data.
 2. THE ML images SHALL be CPU-only and each stay under a stated size budget (set in design).
 3. THE Compose file SHALL define resource limits per service sized for the target VPS.
+4. THE default model sizes SHALL fit the assumed floor (2 vCPU / 4 GB RAM) and be configurable by env: `STITCH_WHISPER_MODEL` (default `base`), `STITCH_EMBED_MODEL` (small multilingual), `STITCH_RERANK_MODEL`, `STITCH_TTS_PROVIDER`. Larger models are opt-in.
 
 ### DEP-R3 Configuration and secrets
 1. THE repo SHALL contain `.env.example` with variable names and no values for secrets.
@@ -38,12 +39,12 @@ Everything runs from `docker compose up` with the demo dataset, and is served at
 4. CI SHALL cache uv and npm dependencies.
 
 ### DEP-R6 CD
-1. WHEN a commit is pushed to `main` and CI passes, THE pipeline SHALL deploy to the VPS over SSH (or by pull from a registry), run migrations, and run a post-deploy smoke test.
+1. WHEN a commit is pushed to `main` and CI passes, THE pipeline SHALL build and push images to GHCR, deploy to the VPS over SSH by pulling those images, run migrations, and run a post-deploy smoke test.
 2. THE deploy SHALL keep the previous image tag to allow rollback with one command.
 3. THE deploy credentials SHALL be GitHub Actions secrets, scoped to a restricted deploy user on the VPS.
 
 ### DEP-R7 Operations
-1. THE VPS setup SHALL be documented in `deploy/README.md`: firewall (80, 443, SSH only), non-root user, unattended security updates, and DNS records.
+1. THE VPS setup SHALL be documented in `deploy/README.md`: firewall (80, 443, SSH only), non-root user, unattended security updates, and the DNS step (an A record for `stitch.aashirnoman.dev` pointing at the VPS IP, created at name.com, with a verification command).
 2. THE system SHALL have health checks for each service and a status endpoint reachable through Caddy.
 3. THE logs SHALL be structured and rotated (Docker log driver limits).
 4. THE Postgres data SHALL live in a named volume with a documented backup command.
@@ -57,6 +58,11 @@ Everything runs from `docker compose up` with the demo dataset, and is served at
 ### DEP-R9 Hackathon write-up support
 1. THE repo SHALL include `docs/kiro-writeup.md` documenting each Kiro feature used (steering, specs, property tests, hooks, custom agent, MCP, powers, IDE vs CLI), updated as features land.
 
+### DEP-R10 Demo-first
+1. THE stack SHALL pass the smoke test (default briefing in demo mode) with outbound network access blocked after images are present.
+2. THE CI SHALL run that offline check.
+3. Live mode and the hosted TTS provider are optional and SHALL NOT be required for `docker compose up` to become healthy.
+
 ## Correctness properties (checked by scripts/CI, not Hypothesis)
 - DEP-P1: a clean-clone `docker compose up` reaches all-healthy within a stated time on the target VPS size.
 - DEP-P2: no file in the repo matches the secret-scan ruleset.
@@ -64,10 +70,15 @@ Everything runs from `docker compose up` with the demo dataset, and is served at
 - DEP-P4: no organ port is bound to a public interface in the production profile.
 - DEP-P5: bringing the stack down and up again preserves the seeded index and does not duplicate it.
 
+- DEP-P6: the Compose stack reaches healthy and passes the demo smoke test with outbound network blocked.
+
 ## Out of scope
 Kubernetes, multi-region, autoscaling, managed databases.
 
-## Open questions
-1. Deploy method: SSH + `docker compose pull` from GHCR (proposal) versus building on the VPS?
-2. VPS size (vCPU/RAM)? It determines Whisper size, embedding model, and whether Eyes/Voice are enabled in production. Assumption: 4 vCPU / 8 GB.
-3. DNS for `aashirnoman.dev` is already under your control and can point an A record to the VPS?
+## Decisions (resolved)
+1. Deploy: build and push to GHCR in CI, then SSH to the VPS and pull.
+2. DNS: you control `aashirnoman.dev` at name.com. An A record for `stitch.aashirnoman.dev` points to the Vultr VPS.
+3. Model sizes: small by default, env-configurable.
+
+## Remaining question
+The VPS size was not stated. I assumed a floor of 2 vCPU / 4 GB RAM and sized defaults for it. Confirm or give the real plan.

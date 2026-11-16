@@ -40,3 +40,13 @@ Metrics: Eyes IoU and F1 vs reference maps; Oracle CRPS and interval coverage; L
 - Tests never hit the network. Live-mode paths are tested against recorded fixtures in `tests/fixtures/`.
 - No test depends on a real LLM. Use `FakeLLM`.
 - A bug fix lands with a failing test first.
+
+## Demo-first enforcement
+A pytest fixture (`no_network`) disables sockets (e.g. via `pytest-socket`) and is applied by default to all demo-mode, unit, property, and integration tests. A test needing the network is explicitly marked `@pytest.mark.live` and is excluded from CI. The Compose smoke test also runs with outbound traffic blocked.
+
+## Additional properties (added after requirements approval)
+- LED-P10 coverage is non-increasing in the equity floor. LED-P11 floor 0 equals the unconstrained optimum.
+- ORA-P8 every forecast and eval carries `target_kind = modeled_glofas`.
+- VOX-P5 swapping TTS providers never changes the output schema.
+- LIB-P6 no non-redistributable document is committed.
+- FRN-P6 every Oracle value renders with a "Modeled (GloFAS)" label.

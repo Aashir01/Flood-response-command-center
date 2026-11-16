@@ -20,7 +20,7 @@ The Brain discovers organs over MCP, plans a task graph for a scenario, runs org
 4. IF an organ is unreachable at startup, THEN THE Brain SHALL start anyway and retry with backoff.
 
 ### BRN-R2 Planning
-1. WHEN a briefing is requested with `{region, scenario, lang, mode}`, THE Brain SHALL produce a task graph, using a planner (LangGraph or a plain tool-calling loop, chosen in design).
+1. WHEN a briefing is requested with `{region, scenario, lang, mode}`, THE Brain SHALL produce a task graph and execute it with a custom asyncio task-graph executor. No agent framework (e.g. LangGraph) is used.
 2. THE Brain SHALL emit the plan as a `plan` event before executing it.
 3. THE planner's output SHALL be validated against a schema, and an invalid plan SHALL fall back to a deterministic default plan for the scenario.
 4. WHERE `STITCH_LLM_PROVIDER = fake`, THE Brain SHALL use the deterministic default plan and recorded synthesis.
@@ -71,6 +71,13 @@ The Brain discovers organs over MCP, plans a task graph for a scenario, runs org
 ### BRN-R11 Eval
 1. THE Brain eval SHALL report end-to-end faithfulness: the fraction of claims whose text is entailed by their evidence (code check for numbers; judge check, with `fake` or a real LLM, for statements), claim provenance coverage, conflict-detection recall on seeded scenarios, and mean time to briefing.
 
+### BRN-R12 Demo-first
+1. THE Brain SHALL produce a full briefing in demo mode from committed data with no network calls, using the `fake` LLM, enforced by tests that disable sockets.
+2. Live mode is optional. Upstream failure SHALL fall back to demo with a visible banner.
+
+### BRN-R13 Design write-up
+1. THE repo SHALL document the planner, executor, conflict rules, critic, and provenance design in `docs/brain-design.md`, since the architecture is the demonstration of the "Frankenstein" idea.
+
 ## Correctness properties (formalized in design)
 - BRN-P1: every claim in an emitted briefing has at least one `EvidenceRef`, and each resolves.
 - BRN-P2: every number in claim text appears in (or is derivable by a named pure function from) its evidence.
@@ -83,6 +90,8 @@ The Brain discovers organs over MCP, plans a task graph for a scenario, runs org
 ## Out of scope
 User accounts. Persistent multi-user history beyond the last N runs. Autonomous action outside the organs.
 
-## Open questions
-1. LangGraph or a plain tool-calling loop? Proposal: plain asyncio task graph with a small custom executor (fewer deps, easier property testing), with the LLM only for planning variations and prose.
-2. Is a user-visible "ask a question" mode (free-text to Library via Brain) in scope, or only the fixed briefing flow plus voice questions? Proposal: include a simple "ask the creature" box that routes to Library only.
+## Decisions (resolved)
+1. Planner: a plain asyncio task graph. LangGraph is not added just to name a framework.
+
+## Remaining question
+Is an "ask the creature" box (free text routed to the Library only) in scope? Assumed yes, minimal, unless you say otherwise.
