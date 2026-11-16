@@ -212,6 +212,15 @@ def load_i18n(path: str | None = None) -> I18n:
     return i18n
 
 
+@lru_cache(maxsize=2)
+def load_rules(path: str | None = None) -> Any:
+    """The conflict rule set (``conflict_rules.yaml``), parsed and statically checked."""
+    from stitch_brain.core.rules import load_ruleset_text
+
+    p = Path(path) if path else config_dir() / "conflict_rules.yaml"
+    return load_ruleset_text(p.read_text(encoding="utf-8"))
+
+
 @lru_cache(maxsize=8)
 def load_yaml(name: str) -> Any:
     return _read_yaml(config_dir() / name)
