@@ -70,3 +70,31 @@ Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond 
 | DuckDB | RunStore (run results for `sensitivity_report`) | MIT | in use |
 | PyArrow | read the committed district Parquet | Apache-2.0 | in use |
 | NumPy, pandas, protobuf, absl-py | transitive dependencies of OR-Tools | BSD-3-Clause, BSD-3-Clause, BSD-3-Clause, Apache-2.0 | in use (transitive) |
+
+## frontend code libraries and fonts
+npm packages (versions pinned in `frontend/package-lock.json`). Runtime packages ship in the browser bundle; dev packages do not.
+| Library | Used for | License | Status |
+|---|---|---|---|
+| Next.js | static-export app framework | MIT | in use (runtime) |
+| React, React DOM | UI | MIT | in use (runtime) |
+| Motion (`motion`, formerly Framer Motion) | `LazyMotion` jar and card animation | MIT | in use (runtime) |
+| MapLibre GL JS | haunted map (lazy chunk) | BSD-3-Clause | in use (runtime, lazy) |
+| Tailwind CSS, `@tailwindcss/postcss`, PostCSS | styling | MIT | in use (build) |
+| TypeScript | type-check | Apache-2.0 | in use (dev) |
+| ESLint, eslint-config-next, `@eslint/eslintrc` | lint | MIT | in use (dev) |
+| Vitest, `@vitejs/plugin-react`, jsdom | unit and component tests | MIT | in use (dev) |
+| Testing Library (`@testing-library/react`, `jest-dom`, `user-event`) | component tests | MIT | in use (dev) |
+| fast-check | property tests (FRN-P1 to P7) | MIT | in use (dev) |
+| Playwright (`@playwright/test`) | UI smoke tests | Apache-2.0 | in use (dev) |
+| axe-core, `@axe-core/playwright` | accessibility scan | MPL-2.0 | in use (dev) |
+| Ajv, ajv-formats | validate fixtures against the exported JSON Schemas | MIT | in use (dev) |
+| json-schema-to-typescript | generate `src/gen/contracts.ts` | MIT | in use (dev) |
+| `@types/node`, `@types/react`, `@types/react-dom` | typings | MIT | in use (dev) |
+Fonts (self-hosted woff2 in `frontend/public/fonts`, taken from the Fontsource packages built from the upstream releases; license texts are saved next to the files):
+| Font | Used for | License | Source |
+|---|---|---|---|
+| Cinzel (latin 400, 700) | display headings | SIL OFL 1.1 | github.com/NDISCOVER/Cinzel via `@fontsource/cinzel` 5.3.0 |
+| Noto Sans (latin 400, 700) | body text, numerals | SIL OFL 1.1 | github.com/notofonts/latin-greek-cyrillic via `@fontsource/noto-sans` 5.3.0 |
+| Noto Nastaliq Urdu (arabic 400, 700) | Urdu display text | SIL OFL 1.1 | github.com/notofonts/nastaliq via `@fontsource/noto-nastaliq-urdu` 5.3.0 |
+| Noto Naskh Arabic (arabic 400, 700) | Urdu body text | SIL OFL 1.1 | github.com/notofonts/arabic via `@fontsource/noto-naskh-arabic` 5.3.0 |
+Frontend sounds are synthesized at runtime with Web Audio; there are no audio files. Map geometry in `frontend/public/map/` is a labelled placeholder until `data/demo/boundaries/pk_districts.geojson` lands (see `docs/decisions.md`).
