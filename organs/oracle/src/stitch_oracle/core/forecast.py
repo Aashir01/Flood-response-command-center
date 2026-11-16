@@ -141,6 +141,10 @@ def forecast(
         wide, gaps = fill_window(to_wide(frames.until(as_of)), as_of, needed)
     except GapError as exc:
         raise ForecastError("UPSTREAM_UNAVAILABLE", str(exc), retryable=True) from exc
+    except (ValueError, KeyError) as exc:
+        raise ForecastError(
+            "UPSTREAM_UNAVAILABLE", f"no usable history before {as_of.isoformat()}", True
+        ) from exc
     gap_note = gaps.warning()
     if gap_note:
         warnings.append(gap_note)
