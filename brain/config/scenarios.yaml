@@ -1,0 +1,64 @@
+# Scenario catalogue (brain design 7.1, 8). Station id, scene date, basin districts and guidance
+# questions are placeholders until the Eyes, Oracle and Library data are final (design 20.9).
+# Every severity parameter, commodity need and cost is an ASSUMPTION, shown in the briefing's
+# caveat.assumptions claim. Costs are in illustrative cost units labelled USD; they are not
+# procurement prices.
+version: 1
+scenarios:
+  demo-sindh-2022:
+    region: pk-sindh
+    label: {en: "Sindh, August 2022 floods (demo)", ur: "سندھ، اگست 2022 کا سیلاب (ڈیمو)"}
+    fixture_set: demo-sindh-2022
+    ledger_scenario_id: demo-sindh-2022
+    eyes: {date: "2022-08-30"}
+    oracle: {station_id: indus-kotri, horizon_days: 7, as_of: "2022-08-25", coverage: 0.8}
+    basin_districts:
+      - pk-sindh-dadu
+      - pk-sindh-jamshoro
+      - pk-sindh-hyderabad
+      - pk-sindh-matiari
+      - pk-sindh-thatta
+      - pk-sindh-tando-muhammad-khan
+    period_days: 7
+    commodities:
+      - id: water
+        name: {en: drinking water, ur: پینے کا پانی}
+        unit: litre
+        unit_cost: 0.02
+        per_person_need_per_day: 15
+      - id: food
+        name: {en: food rations, ur: خوراک کا راشن}
+        unit: kg
+        unit_cost: 0.8
+        per_person_need_per_day: 0.5
+      - id: shelter
+        name: {en: shelter kits, ur: پناہ گاہ کٹ}
+        unit: kit
+        unit_cost: 35
+        per_person_need: 0.2   # one kit per household of five; not a daily need
+    supply: {water: 400000000, food: 12000000, shelter: 600000}
+    budget: null
+    equity_floor: 0.2
+    integer: true
+    severity: {f_noise: 0.01, f_sat: 0.30, lambda: 0.25, pi: 0.10, kappa: 0.5}
+    guidance_questions:
+      - id: water
+        query:
+          en: "How much drinking water does each person need per day in a flood emergency?"
+          ur: "سیلاب کی ہنگامی صورتحال میں ہر شخص کو روزانہ کتنا پینے کا پانی چاہیے؟"
+        quantity: {commodity_id: water, units: [litres, litre, liters, liter, L, لیٹر]}
+      - id: food
+        query:
+          en: "What food ration should displaced flood-affected families receive?"
+          ur: "سیلاب سے بے گھر خاندانوں کو کتنا خوراک کا راشن ملنا چاہیے؟"
+      - id: shelter
+        query:
+          en: "What emergency shelter should be provided to families displaced by floods?"
+          ur: "سیلاب سے بے گھر خاندانوں کو کیسی ہنگامی پناہ گاہ دی جائے؟"
+  demo-sindh-2022-conflicts:
+    # Same request, seeded fixtures (design 20.8): one basin district mapped dry while the Oracle
+    # risk is high (R2, reconciled by a single Ledger re-run) and a Library water quantity that
+    # disagrees with the Ledger need (R3, flagged).
+    extends: demo-sindh-2022
+    label: {en: "Sindh 2022, seeded conflicts (demo)", ur: "سندھ 2022، جان بوجھ کر شامل تضادات (ڈیمو)"}
+    fixture_set: demo-sindh-2022-conflicts
