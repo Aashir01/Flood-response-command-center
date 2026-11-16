@@ -100,3 +100,12 @@ Fonts (self-hosted woff2 in `frontend/public/fonts`, taken from the Fontsource p
 | Noto Nastaliq Urdu (arabic 400, 700) | Urdu display text | SIL OFL 1.1 | github.com/notofonts/nastaliq via `@fontsource/noto-nastaliq-urdu` 5.3.0 |
 | Noto Naskh Arabic (arabic 400, 700) | Urdu body text | SIL OFL 1.1 | github.com/notofonts/arabic via `@fontsource/noto-naskh-arabic` 5.3.0 |
 Frontend sounds are synthesized at runtime with Web Audio; there are no audio files. Map geometry in `frontend/public/map/` is a labelled placeholder until `data/demo/boundaries/pk_districts.geojson` lands (see `docs/decisions.md`).
+## brain code libraries
+Libraries the Brain (rain/, package stitch_brain) adds beyond the workspace baseline.
+| Library | Used for | License | Status |
+|---|---|---|---|
+| FastAPI (and Starlette, its ASGI toolkit) | Brain HTTP/SSE API | MIT, BSD-3-Clause | in use |
+| Uvicorn | ASGI server for the Brain | BSD-3-Clause | in use |
+| DuckDB | Brain RunStore (runs, events, evidence, traces) | MIT | in use |
+| PyYAML | Brain config files (scenarios, organs, conflict rules, i18n) | MIT | in use |
+| MCP Python SDK client (mcp.Client, stdio and streamable HTTP) | Brain to organ calls | MIT | in use |

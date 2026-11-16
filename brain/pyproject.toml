@@ -1,0 +1,22 @@
+[project]
+name = "stitch-brain"
+version = "0.1.0"
+description = "Brain of Stitch: task-graph orchestrator, evidence store, conflict rules, critic and HTTP/SSE API"
+requires-python = ">=3.12"
+dependencies = [
+    "stitch-common[mcp]",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "duckdb>=1.0",
+    "pyyaml>=6.0",
+]
+
+[tool.uv.sources]
+stitch-common = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/stitch_brain"]

@@ -26,7 +26,7 @@ package = false
 default-groups = ["dev"]
 
 [tool.uv.workspace]
-members = ["packages/*", "organs/*"]
+members = ["packages/*", "organs/*", "brain"]
 # uv rejects member dirs without a pyproject.toml. scripts/scaffold_organ.py removes an organ
 # from this list when it creates the organ.
 exclude = [
@@ -57,6 +57,7 @@ known-first-party = [
     "stitch_library",
     "stitch_ledger",
     "stitch_voice",
+    "stitch_brain",
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -66,7 +67,7 @@ known-first-party = [
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "scripts", "scripts/hooks"]
+mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "brain/src", "scripts", "scripts/hooks"]
 explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 
@@ -76,12 +77,13 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 addopts = "-ra --import-mode=importlib"
-testpaths = ["packages", "tests", "organs", "evals"]
+testpaths = ["packages", "tests", "organs", "evals", "brain"]
 pythonpath = ["scripts", "scripts/hooks", "."]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 markers = [
     "allow_loopback: permit 127.0.0.1 sockets (HTTP smoke tests)",
     "live: needs the network; excluded from CI",
+    "integration: drives real organ servers (stdio); skipped when unavailable",
 ]
 
