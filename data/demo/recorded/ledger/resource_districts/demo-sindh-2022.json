@@ -1,0 +1,211 @@
+{
+  "match": {
+    "args": {
+      "uri": "ledger://scenario/demo-sindh-2022/districts"
+    }
+  },
+  "authoring": "captured",
+  "captured_from": {
+    "organ_version": "0.1.0",
+    "transport": "inproc"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "uri": "ledger://scenario/demo-sindh-2022/districts",
+      "items": [
+        {
+          "district_id": "pk-sindh-badin",
+          "name": "Badin",
+          "population": 1726965,
+          "road_access": 0.4185,
+          "alt_delivery_fraction": 0.05,
+          "default_severity": 0.75
+        },
+        {
+          "district_id": "pk-sindh-dadu",
+          "name": "Dadu",
+          "population": 1864149,
+          "road_access": 0.5,
+          "alt_delivery_fraction": 0.05,
+          "default_severity": 0.9
+        },
+        {
+          "district_id": "pk-sindh-ghotki",
+          "name": "Ghotki",
+          "population": 1421073,
+          "road_access": 0.5963,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        },
+        {
+          "district_id": "pk-sindh-hyderabad",
+          "name": "Hyderabad",
+          "population": 2880820,
+          "road_access": 1.0,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        },
+        {
+          "district_id": "pk-sindh-jacobabad",
+          "name": "Jacobabad",
+          "population": 1102391,
+          "road_access": 0.5975,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.75
+        },
+        {
+          "district_id": "pk-sindh-jamshoro",
+          "name": "Jamshoro",
+          "population": 1345150,
+          "road_access": 0.3621,
+          "alt_delivery_fraction": 0.05,
+          "default_severity": 0.9
+        },
+        {
+          "district_id": "pk-sindh-karachi",
+          "name": "Karachi",
+          "population": 15962764,
+          "road_access": 1.0,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.1
+        },
+        {
+          "district_id": "pk-sindh-kashmore",
+          "name": "Kashmore",
+          "population": 1161462,
+          "road_access": 0.4977,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        },
+        {
+          "district_id": "pk-sindh-khairpur",
+          "name": "Khairpur",
+          "population": 2411606,
+          "road_access": 0.2843,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.9
+        },
+        {
+          "district_id": "pk-sindh-matiari",
+          "name": "Matiari",
+          "population": 408316,
+          "road_access": 0.8636,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        },
+        {
+          "district_id": "pk-sindh-mirpur-khas",
+          "name": "Mirpur Khas",
+          "population": 1465706,
+          "road_access": 0.6742,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.75
+        },
+        {
+          "district_id": "pk-sindh-naushahro-feroze",
+          "name": "Naushahro Feroze",
+          "population": 1869398,
+          "road_access": 1.0,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.75
+        },
+        {
+          "district_id": "pk-sindh-nawabshah",
+          "name": "Nawabshah (Shaheed Benazirabad)",
+          "population": 1839002,
+          "road_access": 0.8822,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.75
+        },
+        {
+          "district_id": "pk-sindh-qambar-shahdadkot",
+          "name": "Qambar Shahdadkot",
+          "population": 3303541,
+          "road_access": 0.6716,
+          "alt_delivery_fraction": 0.05,
+          "default_severity": 0.9
+        },
+        {
+          "district_id": "pk-sindh-sanghar",
+          "name": "Sanghar",
+          "population": 2451925,
+          "road_access": 0.3869,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.75
+        },
+        {
+          "district_id": "pk-sindh-shikarpur",
+          "name": "Shikarpur",
+          "population": 1516326,
+          "road_access": 0.6836,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.75
+        },
+        {
+          "district_id": "pk-sindh-sukkur",
+          "name": "Sukkur",
+          "population": 1349684,
+          "road_access": 0.5846,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        },
+        {
+          "district_id": "pk-sindh-tando-allahyar",
+          "name": "Tando Allahyar",
+          "population": 775687,
+          "road_access": 0.8522,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        },
+        {
+          "district_id": "pk-sindh-tando-muhammad-khan",
+          "name": "Tando Muhammad Khan",
+          "population": 405815,
+          "road_access": 0.4289,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        },
+        {
+          "district_id": "pk-sindh-tharparkar",
+          "name": "Tharparkar",
+          "population": 1428423,
+          "road_access": 0.3778,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.3
+        },
+        {
+          "district_id": "pk-sindh-thatta",
+          "name": "Thatta",
+          "population": 1733912,
+          "road_access": 0.2358,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.3
+        },
+        {
+          "district_id": "pk-sindh-umerkot",
+          "name": "Umerkot",
+          "population": 1089637,
+          "road_access": 0.528,
+          "alt_delivery_fraction": 0.0,
+          "default_severity": 0.5
+        }
+      ]
+    },
+    "error": null,
+    "provenance": {
+      "organ": "ledger",
+      "tool": "resource:districts",
+      "tool_version": "resource",
+      "contract_version": "0.4",
+      "run_id": "d961f71a-9af6-4a66-8a11-a1ae4163ec10",
+      "inputs_hash": "3e4379277ae0ae439a3f583c9e911cbec2db9eccd737cb6c4a05cb20e0e74ed9",
+      "mode": "demo",
+      "data_sources": [],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-16T20:48:09.019265+00:00"
+    },
+    "warnings": []
+  }
+}
