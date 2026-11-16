@@ -1,0 +1,266 @@
+{
+  "dataset": "oracle-demo",
+  "built_at": "2026-11-16T20:39:09Z",
+  "start": "1997-01-01",
+  "end": "2023-12-31",
+  "target_kind": "modeled_glofas",
+  "stations": [
+    {
+      "station_id": "indus-kalabagh",
+      "name": "Indus near Kalabagh",
+      "river": "Indus",
+      "label": "GloFAS grid cell nearest to Indus near Kalabagh",
+      "requested_lat": 32.96,
+      "requested_lon": 71.55,
+      "cell_lat": 32.925003,
+      "cell_lon": 71.425,
+      "role": "feature",
+      "upstream": [],
+      "danger_threshold_m3s": 16128.7,
+      "threshold_method": "modeled_5yr_return_level",
+      "published_warning_cusecs": null,
+      "note": "Feature only: upstream input for Taunsa."
+    },
+    {
+      "station_id": "kabul-nowshera",
+      "name": "Kabul near Nowshera",
+      "river": "Kabul",
+      "label": "GloFAS grid cell nearest to Kabul near Nowshera",
+      "requested_lat": 34.0,
+      "requested_lon": 71.98,
+      "cell_lat": 34.025,
+      "cell_lon": 72.02501,
+      "role": "feature",
+      "upstream": [],
+      "danger_threshold_m3s": 2327.6,
+      "threshold_method": "modeled_5yr_return_level",
+      "published_warning_cusecs": null,
+      "note": "Feature only: Kabul river inflow above the Indus confluence."
+    },
+    {
+      "station_id": "chenab-trimmu",
+      "name": "Chenab near Trimmu",
+      "river": "Chenab",
+      "label": "GloFAS grid cell nearest to Chenab near Trimmu",
+      "requested_lat": 31.15,
+      "requested_lon": 72.15,
+      "cell_lat": 31.175003,
+      "cell_lon": 72.07501,
+      "role": "forecast",
+      "upstream": [],
+      "danger_threshold_m3s": 5679.2,
+      "threshold_method": "modeled_5yr_return_level",
+      "published_warning_cusecs": null,
+      "note": "Tributary; joins the Indus above Guddu via the Panjnad."
+    },
+    {
+      "station_id": "indus-taunsa",
+      "name": "Indus near Taunsa",
+      "river": "Indus",
+      "label": "GloFAS grid cell nearest to Indus near Taunsa",
+      "requested_lat": 30.51,
+      "requested_lon": 70.85,
+      "cell_lat": 30.575005,
+      "cell_lon": 70.77501,
+      "role": "forecast",
+      "upstream": [
+        "indus-kalabagh",
+        "kabul-nowshera"
+      ],
+      "danger_threshold_m3s": 16061.3,
+      "threshold_method": "modeled_5yr_return_level",
+      "published_warning_cusecs": null,
+      "note": ""
+    },
+    {
+      "station_id": "indus-guddu",
+      "name": "Indus near Guddu",
+      "river": "Indus",
+      "label": "GloFAS grid cell nearest to Indus near Guddu",
+      "requested_lat": 28.42,
+      "requested_lon": 69.72,
+      "cell_lat": 28.525002,
+      "cell_lon": 69.82501,
+      "role": "forecast",
+      "upstream": [
+        "indus-taunsa",
+        "chenab-trimmu"
+      ],
+      "danger_threshold_m3s": 21085.2,
+      "threshold_method": "modeled_5yr_return_level",
+      "published_warning_cusecs": null,
+      "note": ""
+    },
+    {
+      "station_id": "indus-sukkur",
+      "name": "Indus near Sukkur",
+      "river": "Indus",
+      "label": "GloFAS grid cell nearest to Indus near Sukkur",
+      "requested_lat": 27.69,
+      "requested_lon": 68.85,
+      "cell_lat": 27.775002,
+      "cell_lon": 68.875015,
+      "role": "forecast",
+      "upstream": [
+        "indus-guddu",
+        "indus-taunsa"
+      ],
+      "danger_threshold_m3s": 20931.2,
+      "threshold_method": "modeled_5yr_return_level",
+      "published_warning_cusecs": null,
+      "note": ""
+    },
+    {
+      "station_id": "indus-kotri",
+      "name": "Indus near Kotri",
+      "river": "Indus",
+      "label": "GloFAS grid cell nearest to Indus near Kotri",
+      "requested_lat": 25.37,
+      "requested_lon": 68.31,
+      "cell_lat": 25.475006,
+      "cell_lon": 68.27501,
+      "role": "forecast",
+      "upstream": [
+        "indus-sukkur",
+        "indus-guddu"
+      ],
+      "danger_threshold_m3s": 20575.2,
+      "threshold_method": "modeled_5yr_return_level",
+      "published_warning_cusecs": null,
+      "note": "Kotri flow is shaped by barrage operation and canal withdrawals that GloFAS does not model."
+    }
+  ],
+  "points": [
+    {
+      "point_id": "rain-swat",
+      "name": "Swat / lower Kabul basin",
+      "kind": "rain",
+      "requested_lat": 34.8,
+      "requested_lon": 72.3,
+      "cell_lat": 34.83304,
+      "cell_lon": 72.31939
+    },
+    {
+      "point_id": "rain-jhelum",
+      "name": "Upper Jhelum (Muzaffarabad)",
+      "kind": "rain",
+      "requested_lat": 34.3,
+      "requested_lon": 73.7,
+      "cell_lat": 34.27065,
+      "cell_lon": 73.851944
+    },
+    {
+      "point_id": "rain-chenab",
+      "name": "Chenab foothills (Jammu)",
+      "kind": "rain",
+      "requested_lat": 32.9,
+      "requested_lon": 74.9,
+      "cell_lat": 32.864674,
+      "cell_lon": 74.9082
+    },
+    {
+      "point_id": "rain-sulaiman",
+      "name": "Sulaiman range hill torrents",
+      "kind": "rain",
+      "requested_lat": 30.3,
+      "requested_lon": 69.8,
+      "cell_lat": 30.263618,
+      "cell_lon": 69.76581
+    },
+    {
+      "point_id": "temp-gilgit",
+      "name": "Upper Indus (Gilgit), snowmelt proxy",
+      "kind": "temp",
+      "requested_lat": 35.9,
+      "requested_lon": 74.3,
+      "cell_lat": 35.95782,
+      "cell_lon": 74.28201
+    }
+  ],
+  "continuity": {
+    "indus-kalabagh": {
+      "no_gaps_2022_06_to_2023_12": true,
+      "jump_at_join_abs_dlog": 0.0023,
+      "max_abs_dlog_join_window": 0.03914,
+      "p99_abs_dlog_2012_2022": 0.22029,
+      "median_abs_dlog_2012_2022": 0.02303,
+      "median_abs_dlog_after_join": 0.02303,
+      "repeated_days_after_join": 7,
+      "repeated_days_2012_2022": 98
+    },
+    "kabul-nowshera": {
+      "no_gaps_2022_06_to_2023_12": true,
+      "jump_at_join_abs_dlog": 0.0,
+      "max_abs_dlog_join_window": 0.06218,
+      "p99_abs_dlog_2012_2022": 0.31237,
+      "median_abs_dlog_2012_2022": 0.02989,
+      "median_abs_dlog_after_join": 0.02992,
+      "repeated_days_after_join": 10,
+      "repeated_days_2012_2022": 70
+    },
+    "chenab-trimmu": {
+      "no_gaps_2022_06_to_2023_12": true,
+      "jump_at_join_abs_dlog": 0.0,
+      "max_abs_dlog_join_window": 0.00921,
+      "p99_abs_dlog_2012_2022": 0.25484,
+      "median_abs_dlog_2012_2022": 0.01612,
+      "median_abs_dlog_after_join": 0.01381,
+      "repeated_days_after_join": 27,
+      "repeated_days_2012_2022": 160
+    },
+    "indus-taunsa": {
+      "no_gaps_2022_06_to_2023_12": true,
+      "jump_at_join_abs_dlog": 0.0,
+      "max_abs_dlog_join_window": 0.05526,
+      "p99_abs_dlog_2012_2022": 0.19726,
+      "median_abs_dlog_2012_2022": 0.02302,
+      "median_abs_dlog_after_join": 0.02303,
+      "repeated_days_after_join": 5,
+      "repeated_days_2012_2022": 93
+    },
+    "indus-guddu": {
+      "no_gaps_2022_06_to_2023_12": true,
+      "jump_at_join_abs_dlog": 0.0,
+      "max_abs_dlog_join_window": 0.03454,
+      "p99_abs_dlog_2012_2022": 0.18421,
+      "median_abs_dlog_2012_2022": 0.01842,
+      "median_abs_dlog_after_join": 0.01842,
+      "repeated_days_after_join": 17,
+      "repeated_days_2012_2022": 107
+    },
+    "indus-sukkur": {
+      "no_gaps_2022_06_to_2023_12": true,
+      "jump_at_join_abs_dlog": 0.0,
+      "max_abs_dlog_join_window": 0.03454,
+      "p99_abs_dlog_2012_2022": 0.23026,
+      "median_abs_dlog_2012_2022": 0.01842,
+      "median_abs_dlog_after_join": 0.01842,
+      "repeated_days_after_join": 17,
+      "repeated_days_2012_2022": 111
+    },
+    "indus-kotri": {
+      "no_gaps_2022_06_to_2023_12": true,
+      "jump_at_join_abs_dlog": 0.0,
+      "max_abs_dlog_join_window": 0.10131,
+      "p99_abs_dlog_2012_2022": 0.2794,
+      "median_abs_dlog_2012_2022": 0.01842,
+      "median_abs_dlog_after_join": 0.01842,
+      "repeated_days_after_join": 20,
+      "repeated_days_2012_2022": 137
+    }
+  },
+  "sources": {
+    "indus-kalabagh": "https://flood-api.open-meteo.com/v1/flood?latitude=32.9250&longitude=71.4250&daily=river_discharge&start_date=1984-01-01&end_date=2023-12-31&cell_selection=nearest&timezone=GMT",
+    "kabul-nowshera": "https://flood-api.open-meteo.com/v1/flood?latitude=34.0250&longitude=72.0250&daily=river_discharge&start_date=1984-01-01&end_date=2023-12-31&cell_selection=nearest&timezone=GMT",
+    "chenab-trimmu": "https://flood-api.open-meteo.com/v1/flood?latitude=31.1750&longitude=72.0750&daily=river_discharge&start_date=1984-01-01&end_date=2023-12-31&cell_selection=nearest&timezone=GMT",
+    "indus-taunsa": "https://flood-api.open-meteo.com/v1/flood?latitude=30.5750&longitude=70.7750&daily=river_discharge&start_date=1984-01-01&end_date=2023-12-31&cell_selection=nearest&timezone=GMT",
+    "indus-guddu": "https://flood-api.open-meteo.com/v1/flood?latitude=28.5250&longitude=69.8250&daily=river_discharge&start_date=1984-01-01&end_date=2023-12-31&cell_selection=nearest&timezone=GMT",
+    "indus-sukkur": "https://flood-api.open-meteo.com/v1/flood?latitude=27.7750&longitude=68.8750&daily=river_discharge&start_date=1984-01-01&end_date=2023-12-31&cell_selection=nearest&timezone=GMT",
+    "indus-kotri": "https://flood-api.open-meteo.com/v1/flood?latitude=25.4750&longitude=68.2750&daily=river_discharge&start_date=1984-01-01&end_date=2023-12-31&cell_selection=nearest&timezone=GMT",
+    "rain-swat": "https://archive-api.open-meteo.com/v1/archive?latitude=34.800&longitude=72.300&daily=precipitation_sum,temperature_2m_mean&start_date=1984-01-01&end_date=2023-12-31&timezone=GMT",
+    "rain-jhelum": "https://archive-api.open-meteo.com/v1/archive?latitude=34.300&longitude=73.700&daily=precipitation_sum,temperature_2m_mean&start_date=1984-01-01&end_date=2023-12-31&timezone=GMT",
+    "rain-chenab": "https://archive-api.open-meteo.com/v1/archive?latitude=32.900&longitude=74.900&daily=precipitation_sum,temperature_2m_mean&start_date=1984-01-01&end_date=2023-12-31&timezone=GMT",
+    "rain-sulaiman": "https://archive-api.open-meteo.com/v1/archive?latitude=30.300&longitude=69.800&daily=precipitation_sum,temperature_2m_mean&start_date=1984-01-01&end_date=2023-12-31&timezone=GMT",
+    "temp-gilgit": "https://archive-api.open-meteo.com/v1/archive?latitude=35.900&longitude=74.300&daily=precipitation_sum,temperature_2m_mean&start_date=1984-01-01&end_date=2023-12-31&timezone=GMT"
+  }
+}

@@ -40,3 +40,12 @@ No district has `road_access` below the usable-access threshold (0.1), so the de
 ### Limits
 
 Population, road length and area were computed on the geoBoundaries "simplified" geometry. The committed GeoJSON is simplified once more (about 300 m), so overlaying it on those numbers is approximate. Populations are 2020 modelled estimates, before the 2022 displacement. The demo scenario does not describe real 2022 flood extents.
+## Oracle (`data/demo/oracle/`)
+Built by `scripts/build_oracle_demo.py` (dev time, needs the network once; raw responses go to the git-ignored `data/raw/oracle/`). Full detail, request URLs, grid-cell coordinates, continuity report and SHA-256 of each file: `data/demo/oracle/MANIFEST.md`.
+| File | Content | Source | License |
+|---|---|---|---|
+| `oracle/discharge_daily.parquet` | modeled GloFAS v4 river discharge, 7 grid cells, daily 1997-2023 | Open-Meteo Flood API | CC BY 4.0 (Open-Meteo), GloFAS (Copernicus/ECMWF) |
+| `oracle/rain_daily.parquet` | ERA5 daily precipitation and mean temperature, 5 points, daily 1997-2023 | Open-Meteo Historical Weather API | CC BY 4.0 (Open-Meteo), ERA5 (Copernicus C3S) |
+| `oracle/stations.json` | station table (GloFAS grid cell nearest to each named place), danger thresholds (modeled 5-year return level, an assumption) | derived | CC BY 4.0 |
+| `oracle/MANIFEST.md` | build record | derived | - |
+The discharge values are modeled, not gauge records. Demo data, not a live feed.

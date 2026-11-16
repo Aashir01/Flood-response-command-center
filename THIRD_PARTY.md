@@ -7,9 +7,9 @@ Every third-party library, dataset, and model used by Stitch is listed here with
 | Name | Used by | License / terms | Status |
 |---|---|---|---|
 | Sen1Floods11 (Cloud to Street / Bonafilia et al.) | eyes | CC BY 4.0 | planned |
-| Open-Meteo forecast + flood APIs | oracle, brain (live mode) | CC BY 4.0 (non-commercial free tier) | planned |
-| ERA5 (Copernicus C3S) | oracle | Copernicus licence | planned |
-| GloFAS modeled discharge via Open-Meteo flood API (the Oracle target, always labeled "modeled") | oracle | CC BY 4.0 (Open-Meteo) / Copernicus | planned |
+| Open-Meteo Flood API and Historical Weather API (request URLs in `data/demo/oracle/stations.json`) | oracle (demo data build, optional live mode), brain (live mode) | CC BY 4.0, attribution "Weather data by Open-Meteo.com"; free non-commercial tier, accepted by the owner for this demo | in use |
+| ERA5 reanalysis daily precipitation and mean temperature (Copernicus C3S), via the Open-Meteo Historical Weather API, 5 points, 1997-2023, in `data/demo/oracle/rain_daily.parquet` | oracle | Copernicus licence; CC BY 4.0 via Open-Meteo | in use |
+| GloFAS v4 modeled river discharge (Copernicus Emergency Management Service, ECMWF) via the Open-Meteo Flood API, 7 grid cells, 1997-2023, in `data/demo/oracle/discharge_daily.parquet` (the Oracle target, always labeled "modeled") | oracle | CC BY 4.0 (Open-Meteo) / Copernicus | in use |
 | Public gauge readings, Indus at Guddu/Sukkur/Kotri (optional small validation set) | oracle eval | TBD, included only if redistributable | planned |
 | Sentinel-1 scene of Sindh, Aug 2022 (one clipped scene, demo only) | eyes | Copernicus Sentinel data terms (free, full, open); attribution required | planned |
 | UNOSAT / Copernicus EMS Sindh 2022 reference extent (qualitative overlay) | eyes | TBD, included only if redistributable | planned |

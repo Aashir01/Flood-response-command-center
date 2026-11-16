@@ -71,7 +71,7 @@ explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 
 [[tool.mypy.overrides]]
-module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*"]
+module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*", "pandas", "pandas.*", "lightgbm", "lightgbm.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
