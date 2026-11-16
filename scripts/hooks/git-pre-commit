@@ -1,0 +1,13 @@
+#!/bin/sh
+# stitch-managed pre-commit hook. Installed by scripts/install_git_hooks.py.
+# Runs ruff and the secret scan on staged files. Works with the sh bundled in Git for Windows.
+root="$(git rev-parse --show-toplevel)" || exit 1
+cd "$root" || exit 1
+if command -v uv >/dev/null 2>&1; then
+    exec uv run python scripts/hooks/pre_commit_guard.py --git
+fi
+echo "stitch pre-commit: uv not found, falling back to python" >&2
+if command -v python >/dev/null 2>&1; then
+    exec python scripts/hooks/pre_commit_guard.py --git
+fi
+exec python3 scripts/hooks/pre_commit_guard.py --git

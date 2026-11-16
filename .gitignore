@@ -23,3 +23,5 @@ evals/results/*.tmp
 *.log
 .DS_Store
 Thumbs.db
+# Kiro hook payload debug log (scripts/hooks/hook_io.py). Never add .kiro/ here.
+.stitch-hook-debug/

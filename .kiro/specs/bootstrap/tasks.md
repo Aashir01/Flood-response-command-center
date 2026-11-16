@@ -23,7 +23,7 @@ Target: about half a day. Do first. `core` unless marked.
   - Tests: P5 (clean tree passes, deliberate schema edit fails, version mismatch fails). Refs: BOOT-R3.
   - Also: fix the change-log order in `mcp-contracts.md` (0.1, 0.2, 0.3 ascending) if the check requires it.
 
-- [ ] **6. Secret scanner and git pre-commit** `core`
+- [x] **6. Secret scanner and git pre-commit** `core`
   - `secret_scan.py` with ruleset and fixtures (positive and clean). `install_git_hooks.py`, `git-pre-commit`, `pre_commit_guard.py`.
   - Tests: P7. Refs: BOOT-R6.3, R6.4.
 
