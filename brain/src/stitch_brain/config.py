@@ -156,6 +156,62 @@ def load_organs(path: str | None = None) -> OrgansCfg:
     return OrgansCfg.model_validate(_read_yaml(p))
 
 
+# --- i18n ----------------------------------------------------------------------------------------
+class LangPack(_M):
+    lang: Literal["en", "ur"]
+    list_sep: str
+    disputed_suffix: str
+    section_titles: dict[str, str]
+    tables: dict[str, dict[str, str]]
+    units: dict[str, list[str]]
+    modeled_terms: list[str]
+    forbidden_oracle_terms: list[str]
+    templates: dict[str, str]
+    conflicts: dict[str, str]
+    assumptions: dict[str, str]
+    disclaimer: str
+
+
+class I18n(_M):
+    packs: dict[str, LangPack]
+
+    def pack(self, lang: str) -> LangPack:
+        return self.packs.get(lang) or self.packs["en"]
+
+    def pattern(self, template_id: str, lang: str) -> str:
+        return self.pack(lang).templates[template_id]
+
+    def unit_aliases(self) -> dict[str, list[str]]:
+        out: dict[str, list[str]] = {}
+        for p in self.packs.values():
+            for k, al in p.units.items():
+                out.setdefault(k, [])
+                out[k] += [a for a in al if a not in out[k]]
+        return out
+
+    def lookup_tables(self) -> dict[str, dict[str, dict[str, str]]]:
+        out: dict[str, dict[str, dict[str, str]]] = {}
+        for lang, p in self.packs.items():
+            for name, table in p.tables.items():
+                out.setdefault(name, {})[lang] = dict(table)
+        return out
+
+
+@lru_cache(maxsize=2)
+def load_i18n(path: str | None = None) -> I18n:
+    d = Path(path) if path else config_dir() / "i18n"
+    packs = {}
+    for lang in ("en", "ur"):
+        f = d / f"{lang}.yaml"
+        if f.exists():
+            packs[lang] = LangPack.model_validate(_read_yaml(f))
+    i18n = I18n(packs=packs)
+    from stitch_brain.core.derive import set_lookups
+
+    set_lookups(i18n.lookup_tables())
+    return i18n
+
+
 @lru_cache(maxsize=8)
 def load_yaml(name: str) -> Any:
     return _read_yaml(config_dir() / name)

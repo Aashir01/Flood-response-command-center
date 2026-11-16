@@ -184,10 +184,6 @@ def scan(
         if not _overlaps(m.start(), m.end(), masks):
             masks.append(Mask(m.start(), m.end(), kind, value))
 
-    for ex in sorted(set(exempt), key=len, reverse=True):
-        if ex:
-            for m in re.finditer(re.escape(ex), norm):
-                add(m, "exempt", ex)
     for m in _DATE_RE.finditer(norm):
         add(m, "date", m.group(0)[:10])
     for t in terms:
@@ -201,6 +197,10 @@ def scan(
                 add(m, "unit", key)
     for m in _QUANTILE_RE.finditer(norm):
         add(m, "quantile", m.group(0))
+    for ex in sorted(set(exempt), key=len, reverse=True):
+        if ex:
+            for m in re.finditer(re.escape(normalize_digits(ex)), norm):
+                add(m, "exempt", ex)
     for m in _IDENT_RE.finditer(norm):
         add(m, "ident", m.group(0))
     masks.sort(key=lambda m: m.start)

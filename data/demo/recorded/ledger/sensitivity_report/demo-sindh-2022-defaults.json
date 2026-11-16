@@ -588,8 +588,8 @@
       "tool": "sensitivity_report",
       "tool_version": "0.1.0",
       "contract_version": "0.4",
-      "run_id": "45cc594c-0d60-4c49-aeda-97d93a1176f4",
-      "inputs_hash": "30531675863e44e1a85490d65526d319e3e4be7fc84d5b07dff3f821a96206b7",
+      "run_id": "8c77d480-1c7a-4828-8f6c-e07538c1b4a0",
+      "inputs_hash": "d6bd3f9a366c2e189faf89ffdce26b64ed2dde49373382dbdc7858d6e2edc672",
       "mode": "demo",
       "data_sources": [
         {
@@ -619,7 +619,7 @@
       ],
       "model": null,
       "models": [],
-      "generated_at": "2026-11-16T20:48:09.257047Z"
+      "generated_at": "2026-11-16T21:06:07.188141Z"
     },
     "warnings": []
   }

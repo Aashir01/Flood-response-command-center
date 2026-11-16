@@ -1,0 +1,103 @@
+# English claim patterns (brain design 5.3). Rules, enforced by tests:
+# - patterns contain no digits and no number words, so every number comes from a slot;
+# - only {name} fields (no attribute access, indexing or format specs);
+# - every template id here also exists in ur.yaml.
+lang: en
+list_sep: ", "
+disputed_suffix: " (disputed, see conflict {cid})"
+section_titles:
+  extent: Flood extent
+  forecast: River forecast (modeled)
+  guidance: Guidance from the library
+  allocation: Aid allocation
+  caveats: Caveats
+tables:
+  organ:
+    eyes: Eyes (flood mapping)
+    oracle: Oracle (river forecast)
+    library: Library (guidance)
+    ledger: Ledger (allocation)
+    voice: Voice
+  solver_status:
+    optimal: optimal
+    feasible: feasible, not proven optimal
+    infeasible: infeasible
+  refusal:
+    INSUFFICIENT_EVIDENCE: no sufficiently supported passage was found
+    OUT_OF_SCOPE: the question is outside flood-response guidance
+    CONFLICTING_EVIDENCE: sources disagree on this quantity
+  unit:
+    litre: litres
+    kg: kg
+    kit: kits
+    km2: km2
+    m3/s: m3/s
+    people: people
+    usd: USD
+units:
+  km2: [km2, km², square kilometres, square kilometers]
+  m3/s: [m3/s, m³/s, cubic metres per second, cubic meters per second]
+  people: [people, persons]
+  litre: [litres, litre, liters, liter]
+  kg: [kg, kilograms, kilogram]
+  kit: [kits, kit]
+  usd: [USD]
+modeled_terms: [Modeled, modeled]
+forbidden_oracle_terms: [gauge, gauged, observed, measured, observation, observations]
+templates:
+  extent.flood_area: "New flood water covers {new} km2 ({total} km2 total water, {perm} km2 permanent water) in the scene acquired {date}."
+  extent.top_districts: "Largest flooded areas: {items}."
+  extent.top_districts.item: "{name} {km} km2 ({pct} of the district)"
+  extent.confidence: "Mean segmentation confidence over flood pixels: {conf}."
+  extent.scene: "Scene: {sensor}, {scene_id}, acquired {date}."
+  forecast.peak: "Modeled river discharge (GloFAS via Open-Meteo) near {station}: peak median {p50} m3/s on {date} (p10 {p10} m3/s, p90 {p90} m3/s)."
+  forecast.exceedance: "Modeled probability of exceeding {thr} m3/s peaks at {pct} on {date}."
+  forecast.calibration: "Modeled intervals are {cov} split-conformal bands from {n} calibration points."
+  forecast.drivers: "Modeled forecast drivers: {narrative}"
+  guidance.claim: "{text}"
+  guidance.refusal: "The guidance library declined to answer \"{query}\": {reason}. No guidance is given from memory."
+  allocation.summary: "The plan covers {people} people at {cpp} USD per person ({cost} USD in total); solver status: {status}."
+  allocation.summary_none: "The plan covers no people with the given inputs ({cost} USD in total); solver status: {status}."
+  allocation.gap: "The solver reports an optimality gap of {gap}."
+  allocation.line: "Send {qty} {unit} of {commodity} to {district}."
+  allocation.others: "Send {qty} {unit} of {commodity} across {n} other districts."
+  allocation.uncovered: "{people} people in need are not covered by this plan with the given supply."
+  allocation.unreachable: "{people} people in {n} districts cannot be reached by road, air or boat with the given inputs."
+  allocation.equity: "Equity floor requested {req}, applied {app} (highest feasible {max}); coverage given up for equity: {cost} (coverage-weighted people)."
+  allocation.equity_nocost: "Equity floor requested {req}, applied {app} (highest feasible {max})."
+  allocation.shadow: "Each extra unit of {commodity} would raise weighted coverage by {v} ({unit})."
+  caveat.disclaimer: "{text}"
+  caveat.mode.demo: "Demo mode: figures come from committed demo data ({label}), not live feeds."
+  caveat.mode.live: "Live mode: Eyes and Oracle figures come from live organ calls."
+  caveat.mode.fallback: "Live data was unavailable, so figures come from committed demo data ({label}), not live feeds."
+  caveat.eyes_unvalidated: "Demo scene. The flood-mapping model was validated on {eval_dataset}, not on this region. Treat the extent as unvalidated."
+  caveat.oracle_modeled: "River figures are model output ({label}), not instrument readings."
+  caveat.recorded: "{organ} output is a recorded fixture, not a live organ call."
+  caveat.missing.extent: "{organ} did not answer ({code}); the flood extent section is incomplete."
+  caveat.missing.forecast: "{organ} did not answer ({code}); the river forecast section is incomplete."
+  caveat.missing.guidance: "{organ} did not answer ({code}); the guidance section is incomplete."
+  caveat.missing.allocation: "{organ} did not answer ({code}); the allocation section is incomplete."
+  caveat.assumptions: "The allocation rests on assumptions: {items}."
+  caveat.conflict.flagged: "Unresolved disagreement: {description} Neither side is treated as settled."
+  caveat.conflict.escalated: "Unresolved disagreement that needs a human decision: {description} Neither side is treated as settled."
+  caveat.conflict.reconciled: "Reconciled disagreement: {description} The Ledger was re-run once with satellite-only severity, and both runs are cited."
+  caveat.critic_failed: "Automated checks found {n} unresolved issues. Treat this briefing with care."
+  caveat.verbatim_foreign: "Some organ-authored text is shown in its original language because no checked translation was available."
+conflicts:
+  r1: "The modeled chance of exceeding the danger threshold stays below {p_low} (peak {p}), while satellite mapping shows {fl} of the basin districts' area flooded. The forecast and the observation cannot both be the full picture."
+  r2: "The Ledger allocated aid to {districts}, which satellite mapping shows as unflooded (flooded fraction below {ff_max})."
+  r3: "Library guidance gives {lib} per person per day for {commodity}, while the Ledger used {led} (difference above {tol})."
+assumptions:
+  intro: "severity mapping parameters are judgement values"
+  f_noise: "flooded fraction below {v} is treated as segmentation noise"
+  f_sat: "a district with {v} of its area flooded counts as fully affected"
+  lambda: "forecast risk adds at most {v} severity"
+  pi: "{v} of the population of a dry district on the forecast river is treated as at risk"
+  kappa: "road access falls by {v} in a fully affected district (flooded area stands in for flooded roads)"
+  need: "needs per person: {items}"
+  need_item: "{commodity} {qty} {unit} over {days} days"
+  need_item_total: "{commodity} {qty} {unit} per person"
+  no_eyes: "the plan is not informed by satellite data (Eyes unavailable); the Ledger used its dataset defaults"
+  no_oracle: "the plan is not informed by the river forecast (Oracle unavailable or no threshold)"
+  no_districts: "district base data was unavailable, so the Ledger used its dataset defaults"
+disclaimer: "Stitch is decision support, not an operational warning system or authority. Verify every figure with local responders before acting."
