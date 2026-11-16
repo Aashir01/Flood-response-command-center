@@ -1,0 +1,21 @@
+# Organ endpoints (brain design 3.1, 18). Local default: stdio, the Brain spawns each organ
+# with `python -m stitch_<organ>.server --stdio` in demo mode (pipes only, no sockets).
+# Compose uses deploy/brain.organs.yaml with transport http and the service urls, or set
+# STITCH_BRAIN_ORGANS_FILE to another file.
+organs:
+  eyes:
+    transport: stdio
+    command: [python, -m, stitch_eyes.server, --stdio]
+  oracle:
+    transport: stdio
+    command: [python, -m, stitch_oracle.server, --stdio]
+  library:
+    transport: stdio
+    command: [python, -m, stitch_library.server, --stdio]
+    connect_timeout_s: 60
+  ledger:
+    transport: stdio
+    command: [python, -m, stitch_ledger.server, --stdio]
+  voice:
+    transport: stdio
+    command: [python, -m, stitch_voice.server, --stdio]

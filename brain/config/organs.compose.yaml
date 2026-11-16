@@ -1,0 +1,23 @@
+# Organ endpoints inside Docker Compose (streamable HTTP, service names as hosts). Select with
+# STITCH_BRAIN_ORGANS_FILE=/app/brain/config/organs.compose.yaml.
+organs:
+  eyes:
+    transport: http
+    url: http://eyes:8000/mcp
+    healthz_url: http://eyes:8000/healthz
+  oracle:
+    transport: http
+    url: http://oracle:8000/mcp
+    healthz_url: http://oracle:8000/healthz
+  library:
+    transport: http
+    url: http://library:8000/mcp
+    healthz_url: http://library:8000/healthz
+  ledger:
+    transport: http
+    url: http://ledger:8000/mcp
+    healthz_url: http://ledger:8000/healthz
+  voice:
+    transport: http
+    url: http://voice:8000/mcp
+    healthz_url: http://voice:8000/healthz

@@ -28,7 +28,8 @@ REPO = Path(__file__).resolve().parents[1]
 
 def _write(path: Path, doc: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    text = json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
+    path.write_text(text, encoding="utf-8", newline="\n")
     print(f"wrote {path.relative_to(REPO).as_posix()}")
 
 
