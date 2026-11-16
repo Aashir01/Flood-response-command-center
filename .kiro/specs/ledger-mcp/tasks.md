@@ -45,7 +45,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Tests: round-trip, expiry with an injected clock, cap eviction, concurrent writes. Refs: LED-R8.2, R6.4.
   - Done when: a restart keeps runs within the TTL (file mode).
 
-- [ ] **9. Sensitivity report** `core`
+- [x] **9. Sensitivity report** `core`
   - `core/sensitivity.py`: LP-relaxation duals, reduced costs, `binding`, per-district and aggregate floor duals, units, `basis`, notes.
   - Property test P6. Unit tests against hand-derived duals from task 3. Refs: LED-R6.
   - Done when: P6 passes and duals match hand-derived values.
