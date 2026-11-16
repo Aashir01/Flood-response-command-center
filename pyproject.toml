@@ -33,7 +33,6 @@ exclude = [
     "organs/eyes",
     "organs/oracle",
     "organs/library",
-    "organs/ledger",
     "organs/voice",
 ]
 

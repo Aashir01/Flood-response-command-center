@@ -42,6 +42,14 @@ def make_repo(dest: Path) -> Path:
     dest.mkdir(parents=True, exist_ok=True)
     for name in ("pyproject.toml", "THIRD_PARTY.md"):
         shutil.copy2(REPO_ROOT / name, dest / name)
+    # Organs that were already scaffolded in the real repo are put back into the uv exclude list,
+    # so the copy looks like a fresh repository.
+    text = (dest / "pyproject.toml").read_text(encoding="utf-8")
+    for organ in ORGANS:
+        line = f'    "organs/{organ}",\n'
+        if line not in text:
+            text = text.replace("exclude = [\n", "exclude = [\n" + line, 1)
+    (dest / "pyproject.toml").write_text(text, encoding="utf-8", newline="\n")
     shutil.copytree(REPO_ROOT / ".kiro" / "templates", dest / ".kiro" / "templates")
     steering = dest / ".kiro" / "steering"
     steering.mkdir(parents=True)
@@ -147,7 +155,6 @@ def test_generated_organ_passes_its_own_tests_and_contract_check(tmp_path: Path)
     assert tree_hash(REPO_ROOT / "organs") == real_before
     assert (REPO_ROOT / "pyproject.toml").read_bytes() == pyproject_before
     assert (REPO_ROOT / "THIRD_PARTY.md").read_bytes() == third_before
-    assert not (REPO_ROOT / "organs" / "ledger" / "src").exists()
 
 
 def test_side_edits_are_applied(tmp_path: Path) -> None:
@@ -173,6 +180,16 @@ def test_mcp_entry_is_added_when_missing(tmp_path: Path) -> None:
     ]["eyes-mcp"]
     assert entry["disabled"] is False and entry["command"] == "uv"
     assert entry["args"][-2:] == ["stitch_eyes.server", "--stdio"]
+
+
+def test_missing_mcp_json_warns_and_scaffold_still_succeeds(tmp_path: Path) -> None:
+    root = make_repo(tmp_path)
+    (root / ".kiro/settings/mcp.json").unlink()
+    res = scaffold_cli(root, "--organ", "eyes")
+    assert res.returncode == 0, res.stderr
+    assert "warning" in res.stderr and ".kiro/settings/mcp.json" in res.stderr
+    assert (root / "organs/eyes/pyproject.toml").exists()
+    assert not (root / ".kiro/settings/mcp.json").exists()
 
 
 def test_dry_run_writes_nothing(tmp_path: Path) -> None:

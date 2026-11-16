@@ -62,3 +62,11 @@ Only documents with `redistributable = true` are committed. The rest are fetched
 
 ## Training compute (no third-party code)
 Training runs on Google Colab (free) and Modal. These are services, not redistributed code.
+## ledger-mcp code libraries
+Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it.
+| Library | Used for | License | Status |
+|---|---|---|---|
+| OR-Tools (GLOP, SCIP via `pywraplp`) | LP/MIP allocation solver | Apache-2.0 (SCIP bundled under Apache-2.0 since SCIP 9) | in use |
+| DuckDB | RunStore (run results for `sensitivity_report`) | MIT | in use |
+| PyArrow | read the committed district Parquet | Apache-2.0 | in use |
+| NumPy, pandas, protobuf, absl-py | transitive dependencies of OR-Tools | BSD-3-Clause, BSD-3-Clause, BSD-3-Clause, Apache-2.0 | in use (transitive) |

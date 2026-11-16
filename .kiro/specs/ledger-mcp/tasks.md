@@ -4,7 +4,7 @@ Tags: `core` (must ship), `stretch`. Each task lists the requirements and proper
 
 Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `surgeon` agent, hooks, and shared test helpers.
 
-- [ ] **1. Scaffold the organ with `surgeon`** `core`
+- [x] **1. Scaffold the organ with `surgeon`** `core`
   - Generate `organs/ledger/` from the surgeon template (pyproject, `src/stitch_ledger`, `tests/{unit,property,contract}`, README).
   - Confirm the `no_network` fixture is on by default, Hypothesis profiles `dev` and `ci` are available, ruff and mypy config applies.
   - Verify the OR-Tools wheel (GLOP and SCIP) imports in the target Docker base image.

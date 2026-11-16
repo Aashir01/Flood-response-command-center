@@ -275,6 +275,13 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     for a in actions:
         print(("would " if args.dry_run else "") + str(a))
+    for a in actions:
+        if a.kind == "missing":
+            print(
+                f"scaffold_organ: warning: {a.path} not found, skipped that edit. "
+                "Register the server there by hand.",
+                file=sys.stderr,
+            )
     skipped = sum(1 for a in actions if a.kind == "skip")
     changed = sum(1 for a in actions if a.kind in ("create", "overwrite", "edit"))
     print(
