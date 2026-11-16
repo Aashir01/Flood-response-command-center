@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import dataclasses
 import itertools
+import math
 
 import pytest
 
 from stitch_ledger.core.baseline import proportional_baseline
+from stitch_ledger.core.instances import random_spec
 from stitch_ledger.core.optimize import optimize
 from stitch_ledger.core.problem import CommoditySpec, DistrictSpec, ProblemSpec, normalize
 from stitch_ledger.core.tradeoff import sweep
@@ -131,3 +134,34 @@ def test_regression_tiny_budget_tradeoff_step_is_solver_noise_p10() -> None:
     values = [p.total_coverage for p in t.points if p.total_coverage is not None]
     scale = sum(d.weight for d in problem.districts)
     assert all(b <= a + 1e-6 * scale for a, b in itertools.pairwise(values))
+
+
+def test_regression_scip_varbound_upgrade_returned_zero_plan() -> None:
+    """Found by the Ledger eval (seed 0, instance 96). SCIP upgraded ``R f - x <= 0`` with
+    R ~ 1.9e7 to varbound constraints and reported an all-zero plan as optimal, while the LP
+    relaxation is worth 1.64e6. Fix: ``optimize`` checks the plan against the rounded LP plan and
+    re-solves without the varbound upgrade (``formulate.build(no_varbound=True)``)."""
+    spec = random_spec(96, 100, 1, equity_floor=0.0, integer=True)
+    mip = optimize(spec)
+    lp = optimize(dataclasses.replace(spec, integer=False))
+    assert mip.status in ("optimal", "feasible")
+    assert any("re-solved with safer settings" in w for w in mip.warnings)
+    assert mip.total_coverage >= lp.total_coverage * (1 - 1e-3)
+    assert mip.total_coverage <= lp.total_coverage * (1 + 1e-9)
+
+
+def test_regression_integer_budget_repair_kept_the_floor() -> None:
+    """Found by the Ledger eval (seed 0, instance 76). Rounding SCIP's solution put the cost over
+    the budget by float noise, and the budget repair removed a unit from a district at its
+    integer floor (910 < ceil(910.27)). Fix: repairs never go below ``ceil(floor * share)``."""
+    spec = random_spec(76, 200, 1, equity_floor=0.5, integer=True)
+    result = optimize(spec)
+    problem = normalize(spec)
+    for i, d in enumerate(problem.districts):
+        if i not in problem.active:
+            continue
+        need_floor = math.ceil(result.floor_applied * problem.share[i][0] - 1e-9)
+        assert result.quantity(d.district_id, problem.commodities[0].commodity_id) >= need_floor
+    # floors are accepted within 1e-9 of the budget (floors.BUDGET_TOL), so a plan at its floors
+    # may exceed the budget by that much and no more
+    assert result.total_cost <= spec.budget * (1 + 1e-9)  # type: ignore[operator]

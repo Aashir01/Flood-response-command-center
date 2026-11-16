@@ -41,6 +41,7 @@ from stitch_ledger.core.problem import Problem
 INT_EPS = 1e-9
 OBJ_DROP = 1e-12
 ROW_DROP = 1e-13
+NO_VARBOUND = "constraints/linear/upgrade/varbound = FALSE\n"
 
 
 @dataclass
@@ -68,8 +69,14 @@ def integer_floor(phi: float, share: float) -> float:
     return float(max(0, math.ceil(phi * share - INT_EPS)))
 
 
-def build(problem: Problem, floor: float, *, integer: bool) -> Model:
-    """Build the model at the given (already feasible) equity floor."""
+def build(problem: Problem, floor: float, *, integer: bool, no_varbound: bool = False) -> Model:
+    """Build the model at the given (already feasible) equity floor.
+
+    ``no_varbound`` (MIP only) stops SCIP from upgrading ``R f - x <= 0`` to varbound
+    constraints. With ``R`` around 1e7 SCIP then once reported an all-zero plan as optimal (found
+    by the Ledger eval). It is slower on other instances, so it is only the retry setting of
+    ``optimize`` when the rounded LP plan beats the SCIP result.
+    """
     solver = pywraplp.Solver.CreateSolver("SCIP" if integer else "GLOP")
     if solver is None:  # pragma: no cover - the ortools wheel ships both
         raise RuntimeError("OR-Tools solver backend unavailable")
@@ -78,7 +85,7 @@ def build(problem: Problem, floor: float, *, integer: bool) -> Model:
         solver.SetSolverSpecificParametersAsString(
             "randomization/randomseedshift = 0\n"
             "randomization/permutationseed = 0\n"
-            "randomization/lpseed = 0\n"
+            "randomization/lpseed = 0\n" + (NO_VARBOUND if no_varbound else "")
         )
     inf = solver.infinity()
     m = Model(solver=solver, problem=problem, floor=floor, integer=integer)

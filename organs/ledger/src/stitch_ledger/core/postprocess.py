@@ -116,7 +116,7 @@ def repair(problem: Problem, raw: Allocation, floor: float = 0.0) -> Allocation:
         total = math.fsum(x[key] for key in keys)
         if total > c.supply:
             if problem.integer:
-                _drop_units(problem, x, keys, total - math.floor(c.supply + CLAMP_EPS), k)
+                _drop_units(problem, x, keys, total - math.floor(c.supply + CLAMP_EPS), k, floor)
             else:
                 factor = c.supply / total
                 for key in keys:
@@ -125,7 +125,7 @@ def repair(problem: Problem, raw: Allocation, floor: float = 0.0) -> Allocation:
         cost = cost_of(problem, x)
         if cost > problem.budget:
             if problem.integer:
-                _drop_for_budget(problem, x)
+                _drop_for_budget(problem, x, floor)
             else:
                 # Only items that cost something are scaled (their cost is the whole cost), so
                 # free goods are never taken away to fix a budget overshoot.
@@ -136,33 +136,57 @@ def repair(problem: Problem, raw: Allocation, floor: float = 0.0) -> Allocation:
     return x
 
 
+def _spare(problem: Problem, x: Allocation, key: tuple[int, int], floor: float) -> float:
+    """Whole units above the integer floor ``ceil(floor * share)`` that can be removed."""
+    lb = integer_floor(floor, problem.share[key[0]][key[1]])
+    return max(0.0, math.floor(x[key] - lb + CLAMP_EPS))
+
+
 def _drop_units(
-    problem: Problem, x: Allocation, keys: list[tuple[int, int]], excess: float, k: int
+    problem: Problem,
+    x: Allocation,
+    keys: list[tuple[int, int]],
+    excess: float,
+    k: int,
+    floor: float = 0.0,
 ) -> None:
-    """Integer mode: remove ``excess`` units of commodity k where they are worth least."""
-    for _ in range(math.ceil(excess)):
-        candidates = [key for key in keys if x[key] >= 1.0]
-        if not candidates:
+    """Integer mode: remove ``excess`` units of commodity k where they are worth least, never
+    below the integer floor (the floor plan checked that the floors fit the supply).
+
+    Units are removed from the least valuable district first, in batches: a district's value per
+    unit is constant, so one-at-a-time removal would pick the same district until it runs out.
+    """
+    need = float(math.ceil(excess - CLAMP_EPS))
+    order = sorted(keys, key=lambda key: (_units_value(problem, key[0], k), -key[0]))
+    for key in order:
+        if need <= 0:
             return
-        victim = min(candidates, key=lambda key: (_units_value(problem, key[0], k), -key[0]))
-        x[victim] -= 1.0
+        take = min(need, _spare(problem, x, key, floor))
+        x[key] -= take
+        need -= take
 
 
-def _drop_for_budget(problem: Problem, x: Allocation) -> None:
-    """Integer mode: remove the least valuable units (per currency unit) until within budget."""
+def _drop_for_budget(problem: Problem, x: Allocation, floor: float = 0.0) -> None:
+    """Integer mode: remove the least valuable units (per currency unit) until within budget,
+    never below the integer floor (found by the Ledger eval: rounding SCIP's solution pushed the
+    cost over the budget by float noise and the repair took a unit below the floor). Batched
+    like ``_drop_units``; free items are never removed (that cannot lower the cost)."""
     assert problem.budget is not None
-    while cost_of(problem, x) > problem.budget:
-        candidates = [key for key, q in x.items() if q >= 1.0]
-        if not candidates:
+
+    def density(key: tuple[int, int]) -> float:
+        return _units_value(problem, *key) / problem.unit_cost(*key)
+
+    paid = [key for key in x if problem.unit_cost(*key) > 0.0]
+    for key in sorted(paid, key=lambda key: (density(key), key)):
+        over = cost_of(problem, x) - problem.budget
+        if over <= 0:
             return
-
-        def density(key: tuple[int, int]) -> float:
-            cost = problem.unit_cost(*key)
-            value = _units_value(problem, *key)
-            return value / cost if cost > 0 else math.inf
-
-        victim = min(candidates, key=lambda key: (density(key), key))
-        x[victim] -= 1.0
+        unit = problem.unit_cost(*key)
+        take = min(_spare(problem, x, key, floor), float(math.ceil(over / unit - CLAMP_EPS)))
+        x[key] -= take
+        # float noise: the ceiling above can leave the cost a hair over; one more unit fixes it
+        if cost_of(problem, x) > problem.budget and _spare(problem, x, key, floor) >= 1.0:
+            x[key] -= 1.0
 
 
 def assemble(
