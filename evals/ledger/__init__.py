@@ -28,6 +28,7 @@ import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Literal
 
 from evals.models import MetricResult
 
@@ -211,11 +212,11 @@ def run(fast: bool = False, seed: int = 0, write_details: bool = True) -> list[M
         label: str,
         value: float,
         *,
-        direction: str,
+        direction: Literal["higher", "lower"],
         target: float | None = None,
         unit: str = "",
         dataset: str = synth,
-        mode: str = "synthetic",
+        mode: Literal["demo", "live", "synthetic"] = "synthetic",
         notes: str = "",
     ) -> MetricResult:
         return MetricResult(
@@ -224,9 +225,9 @@ def run(fast: bool = False, seed: int = 0, write_details: bool = True) -> list[M
             value=value,
             target=target,
             unit=unit,
-            direction=direction,  # type: ignore[arg-type]
+            direction=direction,
             dataset=dataset,
-            mode=mode,  # type: ignore[arg-type]
+            mode=mode,
             timestamp=now,
             git_sha=sha,
             seed=seed,
@@ -333,7 +334,7 @@ def run(fast: bool = False, seed: int = 0, write_details: bool = True) -> list[M
         m(
             "ledger.demo.equity_cost_full_floor",
             "Demo: coverage given up at the highest feasible floor",
-            1.0 - float(last["coverage_vs_floor0"] or 0.0) if last else 0.0,  # type: ignore[arg-type]
+            1.0 - float(last["coverage_vs_floor0"] or 0.0) if last else 0.0,
             direction="lower",
             unit="fraction",
             dataset=DEMO_SCENARIO,
