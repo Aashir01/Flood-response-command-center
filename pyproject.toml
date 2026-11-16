@@ -31,7 +31,6 @@ members = ["packages/*", "organs/*", "brain"]
 # from this list when it creates the organ.
 exclude = [
     "organs/eyes",
-    "organs/oracle",
     "organs/library",
     "organs/voice",
 ]
@@ -67,7 +66,7 @@ known-first-party = [
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "brain/src", "scripts", "scripts/hooks"]
+mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "organs/oracle/src", "brain/src", "scripts", "scripts/hooks"]
 explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 

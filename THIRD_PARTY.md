@@ -100,6 +100,16 @@ Fonts (self-hosted woff2 in `frontend/public/fonts`, taken from the Fontsource p
 | Noto Nastaliq Urdu (arabic 400, 700) | Urdu display text | SIL OFL 1.1 | github.com/notofonts/nastaliq via `@fontsource/noto-nastaliq-urdu` 5.3.0 |
 | Noto Naskh Arabic (arabic 400, 700) | Urdu body text | SIL OFL 1.1 | github.com/notofonts/arabic via `@fontsource/noto-naskh-arabic` 5.3.0 |
 Frontend sounds are synthesized at runtime with Web Audio; there are no audio files. Map geometry in `frontend/public/map/` is a labelled placeholder until `data/demo/boundaries/pk_districts.geojson` lands (see `docs/decisions.md`).
+## oracle-mcp code libraries
+Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it.
+| Library | Used for | License | Status |
+|---|---|---|---|
+| LightGBM 4.x | quantile gradient boosting, TreeSHAP contributions (text model files, no pickle) | MIT | in use |
+| SciPy (LightGBM dependency) | sparse matrix support inside LightGBM | BSD-3-Clause | in use |
+| NumPy | arrays in the pure core | BSD-3-Clause | in use |
+| pandas | feature tables, Parquet I/O | BSD-3-Clause | in use |
+| pyarrow | Parquet engine for the demo dataset and conformity scores | Apache-2.0 | in use |
+| DuckDB | run store for `explain_forecast` | MIT | in use |
 ## brain code libraries
 Libraries the Brain (rain/, package stitch_brain) adds beyond the workspace baseline.
 | Library | Used for | License | Status |
