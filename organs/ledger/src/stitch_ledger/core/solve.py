@@ -31,6 +31,11 @@ def solve(model: Model, time_limit_s: float) -> RawSolution:
         solver.SetTimeLimit(max(1, int(time_limit_s * 1000)))
     start = time.perf_counter()
     code = solver.Solve()
+    if not model.integer and code not in (pywraplp.Solver.OPTIMAL, pywraplp.Solver.INFEASIBLE):
+        # GLOP's presolve returns ABNORMAL on some degenerate models (found by the property
+        # tests: a budget row with rhs 1e-9); the same model solves without presolve.
+        solver.SetSolverSpecificParametersAsString("use_preprocessing:false")
+        code = solver.Solve()
     wall = time.perf_counter() - start
     name = "SCIP" if model.integer else "GLOP"
     version = str(solver.SolverVersion())
@@ -46,9 +51,15 @@ def solve(model: Model, time_limit_s: float) -> RawSolution:
     else:
         status = "error"
     if status in ("optimal", "feasible"):
-        x = {key: var.solution_value() for key, var in model.x.items()}
+        if model.integer:
+            x = {key: var.solution_value() for key, var in model.x.items()}
+        else:
+            need = model.problem.need
+            x = {key: need[key[0]][key[1]] * var.solution_value() for key, var in model.f.items()}
         objective = float(solver.Objective().Value())
-        bound = float(solver.Objective().BestBound()) if model.integer else objective
+        scale = model.objective_scale
+        objective *= scale
+        bound = float(solver.Objective().BestBound()) * scale if model.integer else objective
     else:
         x, objective, bound = {}, None, None
     return RawSolution(status, x, objective, bound, name, version, wall)

@@ -31,7 +31,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Property tests: P15, P19. Unit tests for both policies and reason text. Refs: LED-R3.2 to R3.4.
   - Done when: a floor above `max_feasible_floor` returns the relaxed allocation by default and `infeasible` under `error`.
 
-- [ ] **6. Integer mode, time limit, gap, determinism** `core`
+- [x] **6. Integer mode, time limit, gap, determinism** `core`
   - SCIP path with `U = ceil(R)` and integer floors, time limit, gap from `BestBound`, status mapping, fixed seed.
   - Property tests: P14, P9. Unit test: tiny time limit returns `feasible` with a gap, or `TIMEOUT` with no incumbent. Refs: LED-R1.1, R3.5 to R3.7, R4.3.
   - Done when: integrality and determinism hold and time-limit behavior is covered.

@@ -11,10 +11,11 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from stitch_ledger.core.formulate import integer_upper
+from stitch_ledger.core.formulate import integer_floor, integer_upper
 from stitch_ledger.core.problem import AccessMode, Problem
 
-CLAMP_EPS = 1e-9
+CLAMP_EPS = 1e-9  # absolute, for float noise in supply and in integer rounding
+CLAMP_REL = 1e-12  # relative to the need R_dk, for solver noise in x = R f
 Allocation = dict[tuple[int, int], float]
 
 
@@ -96,14 +97,20 @@ def evaluate(problem: Problem, x: Allocation) -> Evaluation:
     return Evaluation(tuple(cov), total, cost_of(problem, x), people)
 
 
-def repair(problem: Problem, raw: Allocation) -> Allocation:
-    """Clamp tiny values, bound by ``U``, round integers, and enforce supply and budget exactly."""
+def repair(problem: Problem, raw: Allocation, floor: float = 0.0) -> Allocation:
+    """Clamp solver noise, bound by ``U``, round integers, enforce supply and budget exactly.
+
+    Noise is clamped relative to the need (a need of 5e-10 units must not be wiped out by an
+    absolute threshold) and never below the equity floor ``floor * share``.
+    """
     x: Allocation = {}
     for (d, k), q in raw.items():
-        q = 0.0 if abs(q) < CLAMP_EPS else max(0.0, q)
+        demand = floor * problem.share[d][k]
         if problem.integer:
-            q = float(round(q))
-        x[d, k] = min(q, _upper(problem, d, k))
+            q = max(float(round(max(q, 0.0))), integer_floor(floor, problem.share[d][k]))
+        elif q < CLAMP_REL * problem.need[d][k]:
+            q = demand
+        x[d, k] = min(max(q, 0.0), _upper(problem, d, k))
     for k, c in enumerate(problem.commodities):
         keys = [(d, k) for d in problem.active]
         total = math.fsum(x[key] for key in keys)
@@ -120,9 +127,12 @@ def repair(problem: Problem, raw: Allocation) -> Allocation:
             if problem.integer:
                 _drop_for_budget(problem, x)
             else:
+                # Only items that cost something are scaled (their cost is the whole cost), so
+                # free goods are never taken away to fix a budget overshoot.
                 factor = problem.budget / cost
                 for key in x:
-                    x[key] *= factor
+                    if problem.unit_cost(*key) > 0.0:
+                        x[key] *= factor
     return x
 
 

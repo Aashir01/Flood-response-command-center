@@ -60,7 +60,7 @@ def optimize_problem(problem: Problem) -> Result:
         raise SolverTimeout(f"no feasible solution within {spec.solver_time_limit_s:g} s")
     if raw.status not in ("optimal", "feasible"):
         raise SolverError(f"solver returned status {raw.status}")
-    x = repair(problem, raw.x)
+    x = repair(problem, raw.x, plan.applied)
     gap: float | None
     if raw.status == "optimal":
         gap = 0.0

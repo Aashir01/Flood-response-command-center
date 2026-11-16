@@ -49,7 +49,10 @@ def test_p15_floor_is_feasible_at_the_maximum_and_infeasible_just_above(
         if spec.integer:
             assert violated_constraint(problem, above) is not None
         else:
-            assert lp_required_cost(spec, above) > spec.budget  # type: ignore[operator]
+            # B / full_cost < phi, written as a ratio: phi * full_cost underflows when the
+            # reachable population is subnormal (5e-324).
+            full = lp_required_cost(spec, 1.0)
+            assert full > 0 and spec.budget / full < above  # type: ignore[operator]
 
 
 @settings(deadline=None)

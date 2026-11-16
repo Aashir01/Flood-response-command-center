@@ -39,3 +39,51 @@ def test_regression_subnormal_severity_made_glop_return_abnormal() -> None:
     result = optimize(spec)
     assert result.status == "optimal"
     assert result.quantity("d00", "food") >= 0.5 * (1 - 1e-9)
+
+
+def test_regression_tiny_need_made_supply_rhs_huge_and_glop_abnormal() -> None:
+    """Found by LED-P12 (ci). Reachable population 1.2e-38 against supply 1: the scaled supply
+    row had rhs 8.5e37 and GLOP returned ABNORMAL. Fix: the LP supply limit is capped at the
+    total need (the row can never exceed it) so the rhs stays bounded."""
+    spec = ProblemSpec(
+        districts=(DistrictSpec("d02", 1.0, 0.0, 0.0, 1.175494351e-38),),
+        commodities=(CommoditySpec("food", 0.0, 1.0, 1.0),),
+    )
+    assert optimize(spec).status == "optimal"
+
+
+def test_regression_budget_repair_wiped_out_free_goods() -> None:
+    """Found by LED-P3 (ci). With budget 0, a 1e-83 overshoot from a dropped coefficient was
+    repaired by scaling every quantity by 0 / 1e-83 = 0, including the free shelter kits, so
+    more supply gave less coverage. Fix: the budget repair only scales items that cost money."""
+    spec = ProblemSpec(
+        districts=(
+            DistrictSpec("d00", 1.0, 0.0, 0.0, 1.1498307467095183e-83),
+            DistrictSpec("d02", 1.0, 1.0, 0.1),
+        ),
+        commodities=(
+            CommoditySpec("food", 0.0, 1.0, 0.0),
+            CommoditySpec("medical", 1.0, 1.0, 1.0),
+            CommoditySpec("shelter", 0.0, 1.0, 2.0),
+        ),
+        budget=0.0,
+    )
+    result = optimize(spec)
+    assert result.total_coverage == pytest.approx(0.1 / 3)  # shelter covers d02 (w = 0.1)
+    assert result.total_cost <= 0.0
+
+
+def test_regression_glop_presolve_abnormal_on_degenerate_budget_row() -> None:
+    """Found by LED-P13 (ci). Budget 8e-4 with unit cost 48: the scaled budget row had rhs 1e-9
+    and GLOP's presolve returned ABNORMAL. Fix: LP solves are retried without presolve."""
+    spec = ProblemSpec(
+        districts=(
+            DistrictSpec("d00", 0.0, 0.0, 0.0),
+            DistrictSpec("d01", 1.0, 1.0, 0.1),
+            DistrictSpec("d02", 16816.0, 0.0, 1.0),
+        ),
+        commodities=(CommoditySpec("food", 48.0, 1.0, 0.0),),
+        budget=0.0008071302404979907,
+    )
+    result = optimize(spec)
+    assert result.status == "optimal" and result.total_coverage == 0.0  # no supply at all
