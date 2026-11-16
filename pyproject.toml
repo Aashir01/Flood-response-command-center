@@ -42,7 +42,7 @@ stitch-common = { workspace = true }
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-exclude = [".kiro/templates"]
+extend-exclude = [".kiro", "*.md"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]

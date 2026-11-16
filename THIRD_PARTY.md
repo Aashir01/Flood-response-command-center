@@ -41,7 +41,7 @@ Bootstrap tooling (added with the bootstrap spec; versions pinned in `uv.lock`):
 |---|---|---|---|
 | uv | workspace, lockfile | MIT / Apache-2.0 | in use |
 | Pydantic v2 | stitch_common | MIT | in use |
-| pytest, pytest-asyncio, pytest-socket | tests, no_network plugin | MIT | in use |
+| pytest, pytest-asyncio | tests | MIT | in use |
 | Hypothesis | property tests | MPL-2.0 | in use |
 | jsonschema | schema round-trip tests | MIT | in use |
 | ruff, mypy | lint, type-check | MIT | in use |

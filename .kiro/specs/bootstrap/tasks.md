@@ -14,7 +14,7 @@ Target: about half a day. Do first. `core` unless marked.
   - Models for all five organs (v0.3 contracts) and Brain `Briefing`, `Claim`, `Conflict`, `TaskEvent`.
   - Tests: construct each from a valid fixture, reject unknown fields, P4 round trip through exported schema. Refs: BOOT-R2.1.
 
-- [ ] **4. Testing plugin** `core`
+- [x] **4. Testing plugin** `core`
   - `no_network` autouse, `allow_loopback` marker, Hypothesis profiles `dev` and `ci`, registered through the `pytest11` entry point. Verify on Windows with a stdio subprocess test.
   - Done when: a test that opens an outbound socket fails, a stdio pipe test passes. Refs: BOOT-R2.4.
 
