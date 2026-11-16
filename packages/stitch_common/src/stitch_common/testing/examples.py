@@ -37,7 +37,7 @@ PROVENANCE: dict[str, Any] = {
     "organ": "ledger",
     "tool": "optimize_allocation",
     "tool_version": "0.1.0",
-    "contract_version": "0.3",
+    "contract_version": "0.4",
     "run_id": "2f5e2b0e-6b36-4b3c-8a55-5d7a1f2f9c11",
     "inputs_hash": "0" * 64,
     "mode": "demo",
@@ -260,6 +260,112 @@ RESOURCE_EXAMPLES: dict[str, Any] = {
         "road_access": 0.6,
         "alt_delivery_fraction": 0.1,
         "default_severity": 0.8,
+    },
+}
+
+# --- contract v0.4 -----------------------------------------------------------------------------
+# Shallow overlays: ``{**TOOL_EXAMPLES[key][side], **V04_*[key]}`` is the example with every new
+# optional field set. ``TOOL_EXAMPLES`` itself stays v0.3-shaped, which proves compatibility.
+V04_IN: dict[str, dict[str, Any]] = {
+    "eyes.segment_flood": {"mode": "demo"},
+    "eyes.compare_with_permanent_water": {"mode": "live"},
+    "oracle.forecast_river": {"mode": "demo"},
+    "ledger.optimize_allocation": {"mode": "demo"},
+    "library.search_guidance": {
+        "filters": {"publisher": ["NDMA"], "lang": ["en", "ur"], "doc_id": ["ndma-2022-01"]}
+    },
+    "library.answer_with_citations": {"answer_lang": "ur"},
+}
+V04_OUT: dict[str, dict[str, Any]] = {
+    "eyes.segment_flood": {
+        "reference_overlay_note": "UNOSAT product 2022-09-02, CC BY 4.0, qualitative only.",
+        "valid_fraction": 0.97,
+        "model_variant": "unet-resnet18-s1-int8",
+    },
+    "eyes.compare_with_permanent_water": {
+        "by_district": [
+            {
+                "district_id": "d1",
+                "name": "Dadu",
+                "flooded_km2": 60.0,
+                "flooded_fraction": 0.3,
+                "district_area_km2": 200.0,
+                "flooded_roads_km": 41.5,
+            }
+        ]
+    },
+    "oracle.forecast_river": {
+        "calibration": {
+            "method": "split_conformal",
+            "nominal_coverage": 0.8,
+            "n_calibration": 200,
+            "interval_lower_q": 0.1,
+            "interval_upper_q": 0.9,
+        },
+        "station": {
+            "name": "Guddu Barrage",
+            "river": "Indus",
+            "cell_lat": 28.425,
+            "cell_lon": 69.725,
+            "requested_lat": 28.42,
+            "requested_lon": 69.72,
+        },
+        "quantile_correction_applied": True,
+    },
+    "oracle.explain_forecast": {
+        "drivers": [
+            {
+                "feature": "rain_3d",
+                "contribution_m3s": 120.0,
+                "direction": "up",
+                "feature_group": "rainfall",
+            }
+        ],
+        "lead_days_explained": 3,
+    },
+    "library.search_guidance": {
+        "hits": [
+            {
+                "doc_id": "ndma-2022-01",
+                "page": 3,
+                "score": 0.9,
+                "bm25": 4.2,
+                "dense": 0.8,
+                "rerank": None,
+                "text": "Evacuate households within 500 m.",
+                "lang": "en",
+                "chunk_id": "ndma-2022-01:p3:c1",
+                "span": [0, 33],
+                "title": "Flood contingency plan",
+                "publisher": "NDMA",
+            }
+        ]
+    },
+    "library.answer_with_citations": {
+        "generation": {"mode": "extractive", "provider": "fake", "model": None},
+        "quantities": [{"value": 500.0, "unit": "m", "per": None, "claim_idx": 0}],
+    },
+    "voice.speak": {"voice": "ur-PK-UzmaNeural"},
+}
+V04_RESOURCES: dict[str, Any] = {
+    "oracle.resource.stations.json": {
+        "station_id": "guddu",
+        "name": "Guddu Barrage",
+        "river": "Indus",
+        "role": "primary",
+        "cell_lat": 28.425,
+        "cell_lon": 69.725,
+        "danger_threshold_m3s": 1100.0,
+        "threshold_method": "reanalysis p95",
+        "as_of_min": "2022-06-01",
+        "as_of_max": "2022-09-30",
+    },
+    "eyes.resource.scenes.json": {
+        "region_id": "pk-sindh",
+        "date": "2022-08-30",
+        "scene_id": "S1A_demo",
+        "sensor": "Sentinel-1",
+        "validated_for_region": False,
     },
 }
 

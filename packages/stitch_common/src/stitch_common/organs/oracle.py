@@ -13,7 +13,7 @@ from typing import Literal
 from pydantic import Field
 
 from stitch_common.base import Contract
-from stitch_common.types import Interval, Unit
+from stitch_common.types import Interval, Mode, Unit
 
 TARGET_LABEL = "Modeled river discharge (GloFAS via Open-Meteo)"
 
@@ -23,6 +23,7 @@ class ForecastRiverIn(Contract):
     horizon_days: int = Field(ge=1, le=14)
     as_of: date | None = None
     coverage: float = Field(default=0.8, gt=0.0, lt=1.0)
+    mode: Mode | None = None  # v0.4
 
 
 class ForecastPoint(Contract):
@@ -41,6 +42,21 @@ class Calibration(Contract):
     method: Literal["split_conformal"]
     nominal_coverage: Unit
     n_calibration: int = Field(ge=0)
+    # v0.4: quantile levels that Interval.p10 / p90 represent at the requested coverage
+    # (for example 0.05 and 0.95 at coverage 0.9). Absent means unknown.
+    interval_lower_q: Unit | None = None
+    interval_upper_q: Unit | None = None
+
+
+class Station(Contract):
+    """v0.4: the station and the GloFAS grid cell that was actually read (ORA-R8.3)."""
+
+    name: str
+    river: str
+    cell_lat: float = Field(ge=-90.0, le=90.0)
+    cell_lon: float = Field(ge=-180.0, le=180.0)
+    requested_lat: float = Field(ge=-90.0, le=90.0)
+    requested_lon: float = Field(ge=-180.0, le=180.0)
 
 
 class ForecastRiverOut(Contract):
@@ -53,6 +69,8 @@ class ForecastRiverOut(Contract):
     danger_threshold_m3s: float | None
     exceedance_prob: list[ExceedancePoint]
     calibration: Calibration
+    station: Station | None = None  # v0.4
+    quantile_correction_applied: bool | None = None  # v0.4
 
 
 class ExplainForecastIn(Contract):
@@ -63,9 +81,26 @@ class Driver(Contract):
     feature: str
     contribution_m3s: float
     direction: Literal["up", "down"]
+    feature_group: str | None = None  # v0.4
 
 
 class ExplainForecastOut(Contract):
     drivers: list[Driver]
     narrative: str
     baseline_m3s: float
+    lead_days_explained: int | None = Field(default=None, ge=0)  # v0.4
+
+
+class StationInfo(Contract):
+    """One item of the read-only resource ``oracle://stations`` (v0.4)."""
+
+    station_id: str = Field(min_length=1)
+    name: str
+    river: str
+    role: str
+    cell_lat: float = Field(ge=-90.0, le=90.0)
+    cell_lon: float = Field(ge=-180.0, le=180.0)
+    danger_threshold_m3s: float | None
+    threshold_method: str | None
+    as_of_min: date
+    as_of_max: date

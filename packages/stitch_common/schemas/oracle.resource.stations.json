@@ -1,0 +1,81 @@
+{
+  "additionalProperties": false,
+  "description": "One item of the read-only resource ``oracle://stations`` (v0.4).",
+  "properties": {
+    "as_of_max": {
+      "format": "date",
+      "title": "As Of Max",
+      "type": "string"
+    },
+    "as_of_min": {
+      "format": "date",
+      "title": "As Of Min",
+      "type": "string"
+    },
+    "cell_lat": {
+      "maximum": 90.0,
+      "minimum": -90.0,
+      "title": "Cell Lat",
+      "type": "number"
+    },
+    "cell_lon": {
+      "maximum": 180.0,
+      "minimum": -180.0,
+      "title": "Cell Lon",
+      "type": "number"
+    },
+    "danger_threshold_m3s": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Danger Threshold M3S"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "river": {
+      "title": "River",
+      "type": "string"
+    },
+    "role": {
+      "title": "Role",
+      "type": "string"
+    },
+    "station_id": {
+      "minLength": 1,
+      "title": "Station Id",
+      "type": "string"
+    },
+    "threshold_method": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Threshold Method"
+    }
+  },
+  "required": [
+    "station_id",
+    "name",
+    "river",
+    "role",
+    "cell_lat",
+    "cell_lon",
+    "danger_threshold_m3s",
+    "threshold_method",
+    "as_of_min",
+    "as_of_max"
+  ],
+  "title": "StationInfo",
+  "type": "object"
+}

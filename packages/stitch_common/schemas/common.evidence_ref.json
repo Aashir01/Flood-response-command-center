@@ -1,6 +1,6 @@
 {
   "additionalProperties": false,
-  "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.",
+  "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.\n\nv0.4 clarification: ``run_id`` is the call-level ``provenance.run_id`` of the ToolResult the\npointer points into (or the Brain-generated id for Brain-origin evidence). It is the key of\n``GET /evidence/{run_id}``.",
   "properties": {
     "json_pointer": {
       "pattern": "^(/([^~/]|~[01])*)*$",

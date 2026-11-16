@@ -3,6 +3,19 @@
     "DistrictFlood": {
       "additionalProperties": false,
       "properties": {
+        "district_area_km2": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "District Area Km2"
+        },
         "district_id": {
           "title": "District Id",
           "type": "string"
@@ -17,6 +30,19 @@
           "minimum": 0.0,
           "title": "Flooded Km2",
           "type": "number"
+        },
+        "flooded_roads_km": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Flooded Roads Km"
         },
         "name": {
           "title": "Name",

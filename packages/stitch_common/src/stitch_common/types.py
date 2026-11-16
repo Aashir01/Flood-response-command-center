@@ -80,7 +80,12 @@ class Citation(Contract):
 
 
 class EvidenceRef(Contract):
-    """What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer."""
+    """What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.
+
+    v0.4 clarification: ``run_id`` is the call-level ``provenance.run_id`` of the ToolResult the
+    pointer points into (or the Brain-generated id for Brain-origin evidence). It is the key of
+    ``GET /evidence/{run_id}``.
+    """
 
     run_id: str = Field(min_length=1)
     organ: str = Field(min_length=1)

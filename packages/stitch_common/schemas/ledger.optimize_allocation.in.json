@@ -157,6 +157,22 @@
       "title": "Min Road Access",
       "type": "number"
     },
+    "mode": {
+      "anyOf": [
+        {
+          "enum": [
+            "demo",
+            "live"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Mode"
+    },
     "on_infeasible_floor": {
       "default": "relax",
       "enum": [

@@ -136,6 +136,13 @@
             }
           ]
         },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/ModelInfo"
+          },
+          "title": "Models",
+          "type": "array"
+        },
         "organ": {
           "enum": [
             "eyes",

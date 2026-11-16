@@ -1,4 +1,4 @@
-"""ledger-mcp tool I/O (mcp-contracts.md section 6 and resource in 8b), contract v0.3.
+"""ledger-mcp tool I/O (mcp-contracts.md section 6 and resource in 8b), contract v0.4.
 
 Ambiguities and the reading chosen:
 
@@ -18,7 +18,7 @@ from typing import Literal
 from pydantic import Field, model_validator
 
 from stitch_common.base import Contract
-from stitch_common.types import NonNeg, Unit
+from stitch_common.types import Mode, NonNeg, Unit
 
 Status = Literal["optimal", "feasible", "infeasible"]
 CONSTRAINT_PATTERN = r"^(supply:.+|budget|equity_floor|min_coverage:.+)$"
@@ -52,6 +52,7 @@ class OptimizeAllocationIn(Contract):
     on_infeasible_floor: Literal["relax", "error"] = "relax"
     integer: bool = True
     solver_time_limit_s: float = Field(default=10.0, gt=0.0)
+    mode: Mode | None = None  # v0.4: optional, the Brain passes the requested mode
 
     @model_validator(mode="after")
     def _consistent(self) -> OptimizeAllocationIn:

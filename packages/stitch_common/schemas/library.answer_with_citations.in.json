@@ -1,6 +1,22 @@
 {
   "additionalProperties": false,
   "properties": {
+    "answer_lang": {
+      "anyOf": [
+        {
+          "enum": [
+            "en",
+            "ur"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Answer Lang"
+    },
     "lang": {
       "anyOf": [
         {

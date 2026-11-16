@@ -1,0 +1,26 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "lang": {
+      "default": "auto",
+      "enum": [
+        "en",
+        "ur",
+        "auto"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "question": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    }
+  },
+  "required": [
+    "question"
+  ],
+  "title": "AskRequest",
+  "type": "object"
+}

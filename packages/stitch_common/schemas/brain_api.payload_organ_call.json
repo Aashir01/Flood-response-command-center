@@ -1,0 +1,42 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "attempt": {
+      "minimum": 1,
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "max_attempts": {
+      "minimum": 1,
+      "title": "Max Attempts",
+      "type": "integer"
+    },
+    "served_by": {
+      "enum": [
+        "real",
+        "recorded"
+      ],
+      "title": "Served By",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "timeout_s": {
+      "exclusiveMinimum": 0.0,
+      "title": "Timeout S",
+      "type": "number"
+    }
+  },
+  "required": [
+    "attempt",
+    "max_attempts",
+    "timeout_s",
+    "served_by",
+    "started_at"
+  ],
+  "title": "OrganCallPayload",
+  "type": "object"
+}

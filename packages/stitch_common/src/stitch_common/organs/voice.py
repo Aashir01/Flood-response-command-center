@@ -80,3 +80,4 @@ class SpeakOut(Contract):
     lang: Lang
     provider: Provider
     synthesized: Synthesized
+    voice: str | None = None  # v0.4: resolved voice name

@@ -1,0 +1,550 @@
+{
+  "$defs": {
+    "ApiErrorBody": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_INPUT",
+            "NOT_FOUND",
+            "RATE_LIMITED",
+            "BUSY",
+            "CANCELLED",
+            "PAYLOAD_TOO_LARGE",
+            "UPSTREAM_UNAVAILABLE",
+            "INTERNAL"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "details": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Details"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ApiErrorBody",
+      "type": "object"
+    },
+    "Briefing": {
+      "additionalProperties": false,
+      "properties": {
+        "briefing_id": {
+          "minLength": 1,
+          "title": "Briefing Id",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "conflicts": {
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          },
+          "title": "Conflicts",
+          "type": "array"
+        },
+        "critic": {
+          "$ref": "#/$defs/CriticVerdict"
+        },
+        "disclaimer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Disclaimer"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "lang": {
+          "enum": [
+            "en",
+            "ur"
+          ],
+          "title": "Lang",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "demo",
+            "live"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "organs": {
+          "items": {
+            "$ref": "#/$defs/BriefingOrgan"
+          },
+          "title": "Organs",
+          "type": "array"
+        },
+        "scenario": {
+          "title": "Scenario",
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "$ref": "#/$defs/Section"
+          },
+          "title": "Sections",
+          "type": "array"
+        }
+      },
+      "required": [
+        "briefing_id",
+        "scenario",
+        "lang",
+        "mode",
+        "sections",
+        "conflicts",
+        "critic",
+        "confidence",
+        "generated_at"
+      ],
+      "title": "Briefing",
+      "type": "object"
+    },
+    "BriefingOrgan": {
+      "additionalProperties": false,
+      "description": "v0.4: which organ served the briefing, and whether it was a real call or a recording.",
+      "properties": {
+        "organ": {
+          "enum": [
+            "eyes",
+            "oracle",
+            "library",
+            "ledger",
+            "voice"
+          ],
+          "title": "Organ",
+          "type": "string"
+        },
+        "served_by": {
+          "anyOf": [
+            {
+              "enum": [
+                "real",
+                "recorded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Served By"
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "degraded",
+            "unwell",
+            "disabled",
+            "incompatible"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "organ",
+        "status"
+      ],
+      "title": "BriefingOrgan",
+      "type": "object"
+    },
+    "BriefingRequest": {
+      "additionalProperties": false,
+      "description": "``POST /briefings`` body. ``region`` and ``scenario`` must exist in the Brain's config.",
+      "properties": {
+        "lang": {
+          "default": "en",
+          "enum": [
+            "en",
+            "ur"
+          ],
+          "title": "Lang",
+          "type": "string"
+        },
+        "mode": {
+          "default": "demo",
+          "enum": [
+            "demo",
+            "live"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "region": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "title": "Region",
+          "type": "string"
+        },
+        "scenario": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Scenario",
+          "type": "string"
+        }
+      },
+      "required": [
+        "region",
+        "scenario"
+      ],
+      "title": "BriefingRequest",
+      "type": "object"
+    },
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "number",
+            "statement",
+            "recommendation"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "labels": {
+          "items": {
+            "enum": [
+              "modeled",
+              "unvalidated",
+              "recorded",
+              "demo",
+              "refusal",
+              "disputed"
+            ],
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "array"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "evidence",
+        "kind"
+      ],
+      "title": "Claim",
+      "type": "object"
+    },
+    "Conflict": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "organs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Organs",
+          "type": "array"
+        },
+        "resolution": {
+          "enum": [
+            "flagged",
+            "reconciled",
+            "escalated"
+          ],
+          "title": "Resolution",
+          "type": "string"
+        },
+        "rule_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rule Id"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "detected",
+                "reconciling",
+                "final"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "subjects": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Subjects",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "organs",
+        "resolution",
+        "evidence"
+      ],
+      "title": "Conflict",
+      "type": "object"
+    },
+    "CriticVerdict": {
+      "additionalProperties": false,
+      "properties": {
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "removed_claims": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Removed Claims",
+          "type": "array"
+        }
+      },
+      "required": [
+        "passed",
+        "removed_claims",
+        "notes"
+      ],
+      "title": "CriticVerdict",
+      "type": "object"
+    },
+    "EvidenceRef": {
+      "additionalProperties": false,
+      "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.\n\nv0.4 clarification: ``run_id`` is the call-level ``provenance.run_id`` of the ToolResult the\npointer points into (or the Brain-generated id for Brain-origin evidence). It is the key of\n``GET /evidence/{run_id}``.",
+      "properties": {
+        "json_pointer": {
+          "pattern": "^(/([^~/]|~[01])*)*$",
+          "title": "Json Pointer",
+          "type": "string"
+        },
+        "organ": {
+          "minLength": 1,
+          "title": "Organ",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "organ",
+        "tool",
+        "json_pointer"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "Section": {
+      "additionalProperties": false,
+      "properties": {
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Claims",
+          "type": "array"
+        },
+        "id": {
+          "enum": [
+            "extent",
+            "forecast",
+            "guidance",
+            "allocation",
+            "caveats"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "missing": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "status",
+        "claims"
+      ],
+      "title": "Section",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "``GET /briefings/{id}`` body. ``DELETE /briefings/{id}`` is an idempotent cancel (202).",
+  "properties": {
+    "briefing": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Briefing"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "briefing_id": {
+      "minLength": 1,
+      "title": "Briefing Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApiErrorBody"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finished At"
+    },
+    "request": {
+      "$ref": "#/$defs/BriefingRequest"
+    },
+    "status": {
+      "enum": [
+        "running",
+        "done",
+        "failed",
+        "cancelled"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "briefing_id",
+    "status",
+    "request",
+    "created_at"
+  ],
+  "title": "BriefingState",
+  "type": "object"
+}

@@ -42,6 +42,9 @@ class Provenance(Contract):
     mode: Mode
     data_sources: list[DataSource]
     model: ModelInfo | None
+    # v0.4: organs that use several models (Library: embedder, reranker, LLM) list them here.
+    # ``model`` stays the primary model (or null). Absent means [].
+    models: list[ModelInfo] = Field(default_factory=list)
     generated_at: AwareDatetime
 
 

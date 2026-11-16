@@ -1,8 +1,8 @@
 """JSON Schema export. Inputs use validation mode, outputs use serialization mode.
 
 File names: ``<organ>.<tool>.in.json`` / ``.out.json`` (the output file describes ``data``, not the
-envelope), ``ledger.resource.districts.json`` for the resource item, and ``common.*.json`` /
-``brain.*.json`` for shared models.
+envelope), ``<organ>.resource.<name>.json`` for resource items, ``brain_api.<name>.json`` for the
+Brain HTTP/SSE models, and ``common.*.json`` / ``brain.*.json`` for shared models.
 """
 
 from __future__ import annotations
@@ -14,9 +14,12 @@ from typing import Any
 from pydantic import BaseModel
 
 from stitch_common.brain import Briefing, TaskEvent
+from stitch_common.brain_api import API_MODELS
 from stitch_common.envelope import ToolResult
 from stitch_common.organs import ORGAN_TOOLS
+from stitch_common.organs.eyes import SceneInfo
 from stitch_common.organs.ledger import ScenarioDistrict
+from stitch_common.organs.oracle import StationInfo
 from stitch_common.provenance import Provenance
 from stitch_common.types import Citation, EvidenceRef, Interval
 
@@ -33,6 +36,8 @@ def all_schemas() -> dict[str, dict[str, Any]]:
             out[f"{organ}.{tool}.in.json"] = _schema(spec.input, "validation")
             out[f"{organ}.{tool}.out.json"] = _schema(spec.output, "serialization")
     out["ledger.resource.districts.json"] = _schema(ScenarioDistrict, "serialization")
+    out["oracle.resource.stations.json"] = _schema(StationInfo, "serialization")
+    out["eyes.resource.scenes.json"] = _schema(SceneInfo, "serialization")
     out["common.tool_result.json"] = _schema(ToolResult[dict[str, Any]], "serialization")
     out["common.provenance.json"] = _schema(Provenance, "serialization")
     out["common.interval.json"] = _schema(Interval, "serialization")
@@ -40,6 +45,8 @@ def all_schemas() -> dict[str, dict[str, Any]]:
     out["common.evidence_ref.json"] = _schema(EvidenceRef, "serialization")
     out["brain.briefing.json"] = _schema(Briefing, "serialization")
     out["brain.task_event.json"] = _schema(TaskEvent, "serialization")
+    for api_name, api_model in API_MODELS.items():
+        out[f"brain_api.{api_name}.json"] = _schema(api_model, "serialization")
     return dict(sorted(out.items()))
 
 

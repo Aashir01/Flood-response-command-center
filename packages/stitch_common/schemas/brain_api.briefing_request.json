@@ -1,0 +1,43 @@
+{
+  "additionalProperties": false,
+  "description": "``POST /briefings`` body. ``region`` and ``scenario`` must exist in the Brain's config.",
+  "properties": {
+    "lang": {
+      "default": "en",
+      "enum": [
+        "en",
+        "ur"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "mode": {
+      "default": "demo",
+      "enum": [
+        "demo",
+        "live"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "region": {
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "title": "Region",
+      "type": "string"
+    },
+    "scenario": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Scenario",
+      "type": "string"
+    }
+  },
+  "required": [
+    "region",
+    "scenario"
+  ],
+  "title": "BriefingRequest",
+  "type": "object"
+}

@@ -184,7 +184,7 @@ def test_p5_any_schema_change_is_caught_and_update_accepts_it(name: str, how: in
         assert run_checks(root, CONTRACT_VERSION, mutated) == []
 
 
-@pytest.mark.parametrize("version", ["0.4", "1.0"])
+@pytest.mark.parametrize("version", ["0.5", "1.0"])
 def test_in_process_version_mismatch(version: str, tmp_path: Path) -> None:
     root = make_root(tmp_path)
     problems = run_checks(root, version, SCHEMAS)

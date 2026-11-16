@@ -1,0 +1,30 @@
+{
+  "additionalProperties": false,
+  "description": "``error`` event. ``fatal: true`` is the last event of a run (failure or cancellation).",
+  "properties": {
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "fatal": {
+      "title": "Fatal",
+      "type": "boolean"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    },
+    "retryable": {
+      "default": false,
+      "title": "Retryable",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "fatal"
+  ],
+  "title": "ErrorPayload",
+  "type": "object"
+}

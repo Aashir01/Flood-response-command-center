@@ -1,0 +1,101 @@
+{
+  "$defs": {
+    "EvidenceRef": {
+      "additionalProperties": false,
+      "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.\n\nv0.4 clarification: ``run_id`` is the call-level ``provenance.run_id`` of the ToolResult the\npointer points into (or the Brain-generated id for Brain-origin evidence). It is the key of\n``GET /evidence/{run_id}``.",
+      "properties": {
+        "json_pointer": {
+          "pattern": "^(/([^~/]|~[01])*)*$",
+          "title": "Json Pointer",
+          "type": "string"
+        },
+        "organ": {
+          "minLength": 1,
+          "title": "Organ",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "organ",
+        "tool",
+        "json_pointer"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "``GET /evidence/{run_id}?pointer=<RFC 6901>``: one resolved value.",
+  "properties": {
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "demo",
+        "live"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "node_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Node Id"
+    },
+    "organ": {
+      "title": "Organ",
+      "type": "string"
+    },
+    "ref": {
+      "$ref": "#/$defs/EvidenceRef"
+    },
+    "served_by": {
+      "enum": [
+        "real",
+        "recorded",
+        "brain"
+      ],
+      "title": "Served By",
+      "type": "string"
+    },
+    "tool": {
+      "title": "Tool",
+      "type": "string"
+    },
+    "value": {
+      "title": "Value"
+    }
+  },
+  "required": [
+    "ref",
+    "value",
+    "organ",
+    "tool",
+    "served_by",
+    "mode",
+    "generated_at"
+  ],
+  "title": "EvidenceValue",
+  "type": "object"
+}

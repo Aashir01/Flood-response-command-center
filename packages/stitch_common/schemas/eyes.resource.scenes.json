@@ -1,0 +1,52 @@
+{
+  "additionalProperties": false,
+  "description": "One item of the read-only resource ``eyes://scenes`` (v0.4).",
+  "properties": {
+    "date": {
+      "format": "date",
+      "title": "Date",
+      "type": "string"
+    },
+    "region_id": {
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "title": "Region Id",
+      "type": "string"
+    },
+    "scene_id": {
+      "title": "Scene Id",
+      "type": "string"
+    },
+    "sensor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sensor"
+    },
+    "validated_for_region": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validated For Region"
+    }
+  },
+  "required": [
+    "region_id",
+    "date",
+    "scene_id"
+  ],
+  "title": "SceneInfo",
+  "type": "object"
+}

@@ -50,6 +50,18 @@
       ],
       "title": "Synthesized",
       "type": "string"
+    },
+    "voice": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Voice"
     }
   },
   "required": [

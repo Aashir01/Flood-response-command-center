@@ -1,0 +1,136 @@
+{
+  "$defs": {
+    "PlanNode": {
+      "additionalProperties": false,
+      "properties": {
+        "deps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Deps",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "optional": {
+          "default": false,
+          "title": "Optional",
+          "type": "boolean"
+        },
+        "organ": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organ"
+        },
+        "tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool"
+        }
+      },
+      "required": [
+        "id",
+        "kind"
+      ],
+      "title": "PlanNode",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "added": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Added"
+    },
+    "lang": {
+      "enum": [
+        "en",
+        "ur"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "mode_requested": {
+      "enum": [
+        "demo",
+        "live"
+      ],
+      "title": "Mode Requested",
+      "type": "string"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/PlanNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "plan_id": {
+      "title": "Plan Id",
+      "type": "string"
+    },
+    "planner": {
+      "title": "Planner",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "scenario": {
+      "title": "Scenario",
+      "type": "string"
+    },
+    "stub_organs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Stub Organs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "plan_id",
+    "revision",
+    "planner",
+    "scenario",
+    "lang",
+    "mode_requested",
+    "nodes"
+  ],
+  "title": "PlanPayload",
+  "type": "object"
+}

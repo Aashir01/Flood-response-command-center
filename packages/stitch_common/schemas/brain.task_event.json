@@ -9,7 +9,8 @@
         "conflict",
         "critic",
         "briefing",
-        "error"
+        "error",
+        "notice"
       ],
       "title": "Event",
       "type": "string"

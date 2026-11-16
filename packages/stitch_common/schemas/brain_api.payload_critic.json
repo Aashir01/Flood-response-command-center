@@ -1,0 +1,67 @@
+{
+  "$defs": {
+    "CriticIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "check": {
+          "title": "Check",
+          "type": "string"
+        },
+        "claim_id": {
+          "title": "Claim Id",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "claim_id",
+        "check",
+        "detail"
+      ],
+      "title": "CriticIssue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/CriticIssue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "pass": {
+      "minimum": 1,
+      "title": "Pass",
+      "type": "integer"
+    },
+    "passed": {
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "removed": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Removed",
+      "type": "array"
+    },
+    "reverted": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reverted",
+      "type": "array"
+    }
+  },
+  "required": [
+    "pass",
+    "passed"
+  ],
+  "title": "CriticPayload",
+  "type": "object"
+}

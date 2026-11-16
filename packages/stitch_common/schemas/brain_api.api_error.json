@@ -1,0 +1,58 @@
+{
+  "$defs": {
+    "ApiErrorBody": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_INPUT",
+            "NOT_FOUND",
+            "RATE_LIMITED",
+            "BUSY",
+            "CANCELLED",
+            "PAYLOAD_TOO_LARGE",
+            "UPSTREAM_UNAVAILABLE",
+            "INTERNAL"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "details": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Details"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ApiErrorBody",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Body of every non-2xx Brain response, including 429 and 413.",
+  "properties": {
+    "error": {
+      "$ref": "#/$defs/ApiErrorBody"
+    }
+  },
+  "required": [
+    "error"
+  ],
+  "title": "ApiError",
+  "type": "object"
+}

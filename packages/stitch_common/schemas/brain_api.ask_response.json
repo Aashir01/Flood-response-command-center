@@ -1,0 +1,665 @@
+{
+  "$defs": {
+    "AnswerClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "citation_idx": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Citation Idx",
+          "type": "array"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "citation_idx"
+      ],
+      "title": "AnswerClaim",
+      "type": "object"
+    },
+    "AnswerWithCitationsOut": {
+      "additionalProperties": false,
+      "properties": {
+        "answer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Answer"
+        },
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Citations",
+          "type": "array"
+        },
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/AnswerClaim"
+          },
+          "title": "Claims",
+          "type": "array"
+        },
+        "generation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Generation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "quantities": {
+          "items": {
+            "$ref": "#/$defs/Quantity"
+          },
+          "title": "Quantities",
+          "type": "array"
+        },
+        "refusal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Refusal"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "answered",
+            "refused"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "answer",
+        "citations",
+        "refusal",
+        "claims"
+      ],
+      "title": "AnswerWithCitationsOut",
+      "type": "object"
+    },
+    "Citation": {
+      "additionalProperties": false,
+      "properties": {
+        "doc_id": {
+          "minLength": 1,
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "lang": {
+          "enum": [
+            "en",
+            "ur"
+          ],
+          "title": "Lang",
+          "type": "string"
+        },
+        "page": {
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "publisher": {
+          "title": "Publisher",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 400,
+          "title": "Quote",
+          "type": "string"
+        },
+        "span": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "minimum": 0,
+              "type": "integer"
+            }
+          ],
+          "title": "Span",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Url"
+        }
+      },
+      "required": [
+        "doc_id",
+        "title",
+        "publisher",
+        "page",
+        "span",
+        "quote",
+        "lang",
+        "url"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "number",
+            "statement",
+            "recommendation"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "labels": {
+          "items": {
+            "enum": [
+              "modeled",
+              "unvalidated",
+              "recorded",
+              "demo",
+              "refusal",
+              "disputed"
+            ],
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "array"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "evidence",
+        "kind"
+      ],
+      "title": "Claim",
+      "type": "object"
+    },
+    "DataSource": {
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "As Of"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "license": {
+          "title": "License",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "license",
+        "as_of"
+      ],
+      "title": "DataSource",
+      "type": "object"
+    },
+    "ErrorInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_INPUT",
+            "NOT_FOUND",
+            "NO_EVIDENCE",
+            "INFEASIBLE",
+            "UPSTREAM_UNAVAILABLE",
+            "TIMEOUT",
+            "INTERNAL"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "title": "ErrorInfo",
+      "type": "object"
+    },
+    "EvidenceRef": {
+      "additionalProperties": false,
+      "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.\n\nv0.4 clarification: ``run_id`` is the call-level ``provenance.run_id`` of the ToolResult the\npointer points into (or the Brain-generated id for Brain-origin evidence). It is the key of\n``GET /evidence/{run_id}``.",
+      "properties": {
+        "json_pointer": {
+          "pattern": "^(/([^~/]|~[01])*)*$",
+          "title": "Json Pointer",
+          "type": "string"
+        },
+        "organ": {
+          "minLength": 1,
+          "title": "Organ",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "organ",
+        "tool",
+        "json_pointer"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "Generation": {
+      "additionalProperties": false,
+      "description": "v0.4: how the answer text was produced.",
+      "properties": {
+        "mode": {
+          "enum": [
+            "llm",
+            "extractive"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Model"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "provider",
+        "model"
+      ],
+      "title": "Generation",
+      "type": "object"
+    },
+    "ModelInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "sha256"
+      ],
+      "title": "ModelInfo",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "data_sources": {
+          "items": {
+            "$ref": "#/$defs/DataSource"
+          },
+          "title": "Data Sources",
+          "type": "array"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "inputs_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Inputs Hash",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "demo",
+            "live"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelInfo"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/ModelInfo"
+          },
+          "title": "Models",
+          "type": "array"
+        },
+        "organ": {
+          "enum": [
+            "eyes",
+            "oracle",
+            "library",
+            "ledger",
+            "voice"
+          ],
+          "title": "Organ",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "tool_version": {
+          "title": "Tool Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "organ",
+        "tool",
+        "tool_version",
+        "contract_version",
+        "run_id",
+        "inputs_hash",
+        "mode",
+        "data_sources",
+        "model",
+        "generated_at"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "description": "v0.4: a quantity found in a claim, so consumers need no regex extraction.\n\n``per`` is the denominator, for example ``\"person_day\"``; null for a plain amount.",
+      "properties": {
+        "claim_idx": {
+          "minimum": 0,
+          "title": "Claim Idx",
+          "type": "integer"
+        },
+        "per": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Per"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "claim_idx"
+      ],
+      "title": "Quantity",
+      "type": "object"
+    },
+    "Refusal": {
+      "additionalProperties": false,
+      "properties": {
+        "closest_hits": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Closest Hits",
+          "type": "array"
+        },
+        "reason": {
+          "enum": [
+            "INSUFFICIENT_EVIDENCE",
+            "OUT_OF_SCOPE",
+            "CONFLICTING_EVIDENCE"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason",
+        "closest_hits"
+      ],
+      "title": "Refusal",
+      "type": "object"
+    },
+    "ToolResult_AnswerWithCitationsOut_": {
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AnswerWithCitationsOut"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ErrorInfo"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "ok",
+        "data",
+        "error",
+        "provenance"
+      ],
+      "title": "ToolResult[AnswerWithCitationsOut]",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "``POST /ask``. ``claims`` carry provenance like briefing claims; ``result`` is the full\nLibrary ToolResult for the UI. Both come from the same single Library call.",
+  "properties": {
+    "ask_id": {
+      "minLength": 1,
+      "title": "Ask Id",
+      "type": "string"
+    },
+    "claims": {
+      "items": {
+        "$ref": "#/$defs/Claim"
+      },
+      "title": "Claims",
+      "type": "array"
+    },
+    "library_run_id": {
+      "minLength": 1,
+      "title": "Library Run Id",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "demo",
+        "live"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "refusal_claim": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Claim"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "result": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ToolResult_AnswerWithCitationsOut_"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "status": {
+      "enum": [
+        "answered",
+        "refused"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "ask_id",
+    "status",
+    "claims",
+    "mode",
+    "library_run_id"
+  ],
+  "title": "AskResponse",
+  "type": "object"
+}

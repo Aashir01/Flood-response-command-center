@@ -1,0 +1,87 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "audio_b64": {
+      "title": "Audio B64",
+      "type": "string"
+    },
+    "duration_s": {
+      "minimum": 0.0,
+      "title": "Duration S",
+      "type": "number"
+    },
+    "format": {
+      "enum": [
+        "wav",
+        "mp3"
+      ],
+      "title": "Format",
+      "type": "string"
+    },
+    "lang": {
+      "enum": [
+        "en",
+        "ur"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "provider": {
+      "enum": [
+        "azure",
+        "google",
+        "prerendered",
+        "local-mms",
+        "fake"
+      ],
+      "title": "Provider",
+      "type": "string"
+    },
+    "sample_rate": {
+      "exclusiveMinimum": 0,
+      "title": "Sample Rate",
+      "type": "integer"
+    },
+    "served_by": {
+      "enum": [
+        "real",
+        "recorded"
+      ],
+      "title": "Served By",
+      "type": "string"
+    },
+    "synthesized": {
+      "enum": [
+        "live",
+        "cache",
+        "prerendered"
+      ],
+      "title": "Synthesized",
+      "type": "string"
+    },
+    "voice": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Voice"
+    }
+  },
+  "required": [
+    "audio_b64",
+    "format",
+    "duration_s",
+    "sample_rate",
+    "lang",
+    "provider",
+    "synthesized",
+    "served_by"
+  ],
+  "title": "VoiceSpeakResponse",
+  "type": "object"
+}

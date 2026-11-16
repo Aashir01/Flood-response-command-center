@@ -1,0 +1,208 @@
+{
+  "$defs": {
+    "OrganInfo": {
+      "additionalProperties": false,
+      "description": "One organ in ``GET /organs``. ``status`` has five values: ``incompatible`` is also a\n``compat`` flag, and the frontend accepts either spelling.",
+      "properties": {
+        "compat": {
+          "anyOf": [
+            {
+              "enum": [
+                "compatible",
+                "incompatible",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compat"
+        },
+        "last_check": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Check"
+        },
+        "last_error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Error"
+        },
+        "meta": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meta"
+        },
+        "organ": {
+          "enum": [
+            "eyes",
+            "oracle",
+            "library",
+            "ledger",
+            "voice"
+          ],
+          "title": "Organ",
+          "type": "string"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "served_by": {
+          "anyOf": [
+            {
+              "enum": [
+                "real",
+                "recorded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Served By"
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "degraded",
+            "unwell",
+            "disabled",
+            "incompatible"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "stub": {
+          "default": false,
+          "title": "Stub",
+          "type": "boolean"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "required": [
+        "organ",
+        "status"
+      ],
+      "title": "OrganInfo",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "brain_version": {
+      "title": "Brain Version",
+      "type": "string"
+    },
+    "build_sha": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Build Sha"
+    },
+    "contract_version": {
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "default_mode": {
+      "enum": [
+        "demo",
+        "live"
+      ],
+      "title": "Default Mode",
+      "type": "string"
+    },
+    "live_available": {
+      "title": "Live Available",
+      "type": "boolean"
+    },
+    "llm_provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Llm Provider"
+    },
+    "organs": {
+      "items": {
+        "$ref": "#/$defs/OrganInfo"
+      },
+      "title": "Organs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "organs",
+    "live_available",
+    "default_mode",
+    "brain_version",
+    "contract_version"
+  ],
+  "title": "OrganList",
+  "type": "object"
+}

@@ -1,0 +1,30 @@
+{
+  "additionalProperties": false,
+  "description": "``GET /healthz`` on the Brain.",
+  "properties": {
+    "db_ok": {
+      "title": "Db Ok",
+      "type": "boolean"
+    },
+    "organs_ready": {
+      "minimum": 0,
+      "title": "Organs Ready",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "degraded"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "organs_ready",
+    "db_ok"
+  ],
+  "title": "BrainHealth",
+  "type": "object"
+}

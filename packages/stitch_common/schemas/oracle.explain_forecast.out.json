@@ -18,6 +18,18 @@
         "feature": {
           "title": "Feature",
           "type": "string"
+        },
+        "feature_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Feature Group"
         }
       },
       "required": [
@@ -41,6 +53,19 @@
       },
       "title": "Drivers",
       "type": "array"
+    },
+    "lead_days_explained": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lead Days Explained"
     },
     "narrative": {
       "title": "Narrative",

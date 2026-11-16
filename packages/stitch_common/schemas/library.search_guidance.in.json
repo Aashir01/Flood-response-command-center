@@ -3,6 +3,21 @@
     "Filters": {
       "additionalProperties": false,
       "properties": {
+        "doc_id": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doc Id"
+        },
         "doc_type": {
           "anyOf": [
             {
@@ -17,6 +32,25 @@
           ],
           "default": null,
           "title": "Doc Type"
+        },
+        "lang": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "en",
+                  "ur"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lang"
         },
         "publisher": {
           "anyOf": [

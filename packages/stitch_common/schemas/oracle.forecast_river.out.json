@@ -3,6 +3,34 @@
     "Calibration": {
       "additionalProperties": false,
       "properties": {
+        "interval_lower_q": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interval Lower Q"
+        },
+        "interval_upper_q": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interval Upper Q"
+        },
         "method": {
           "const": "split_conformal",
           "title": "Method",
@@ -110,6 +138,54 @@
       ],
       "title": "Interval",
       "type": "object"
+    },
+    "Station": {
+      "additionalProperties": false,
+      "description": "v0.4: the station and the GloFAS grid cell that was actually read (ORA-R8.3).",
+      "properties": {
+        "cell_lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "title": "Cell Lat",
+          "type": "number"
+        },
+        "cell_lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "title": "Cell Lon",
+          "type": "number"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "requested_lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "title": "Requested Lat",
+          "type": "number"
+        },
+        "requested_lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "title": "Requested Lon",
+          "type": "number"
+        },
+        "river": {
+          "title": "River",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "river",
+        "cell_lat",
+        "cell_lon",
+        "requested_lat",
+        "requested_lon"
+      ],
+      "title": "Station",
+      "type": "object"
     }
   },
   "additionalProperties": false,
@@ -147,6 +223,29 @@
       "minItems": 1,
       "title": "Forecast",
       "type": "array"
+    },
+    "quantile_correction_applied": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Quantile Correction Applied"
+    },
+    "station": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Station"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "station_id": {
       "title": "Station Id",

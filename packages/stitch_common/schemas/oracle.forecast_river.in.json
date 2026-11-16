@@ -27,6 +27,22 @@
       "title": "Horizon Days",
       "type": "integer"
     },
+    "mode": {
+      "anyOf": [
+        {
+          "enum": [
+            "demo",
+            "live"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Mode"
+    },
     "station_id": {
       "minLength": 1,
       "title": "Station Id",

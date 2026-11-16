@@ -1,0 +1,74 @@
+{
+  "additionalProperties": false,
+  "description": "``POST /voice/speak``. Exactly one of ``briefing_id`` (the Brain builds the script from\nthe stored briefing) or ``text`` (only when ``STITCH_ALLOW_ARBITRARY_TTS=1``).",
+  "properties": {
+    "briefing_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Briefing Id"
+    },
+    "format": {
+      "anyOf": [
+        {
+          "enum": [
+            "wav",
+            "mp3"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Format"
+    },
+    "lang": {
+      "enum": [
+        "en",
+        "ur"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "text": {
+      "anyOf": [
+        {
+          "maxLength": 4000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Text"
+    },
+    "voice": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Voice"
+    }
+  },
+  "required": [
+    "lang"
+  ],
+  "title": "SpeakRequest",
+  "type": "object"
+}

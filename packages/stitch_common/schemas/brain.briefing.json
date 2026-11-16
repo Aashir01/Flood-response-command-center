@@ -1,5 +1,55 @@
 {
   "$defs": {
+    "BriefingOrgan": {
+      "additionalProperties": false,
+      "description": "v0.4: which organ served the briefing, and whether it was a real call or a recording.",
+      "properties": {
+        "organ": {
+          "enum": [
+            "eyes",
+            "oracle",
+            "library",
+            "ledger",
+            "voice"
+          ],
+          "title": "Organ",
+          "type": "string"
+        },
+        "served_by": {
+          "anyOf": [
+            {
+              "enum": [
+                "real",
+                "recorded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Served By"
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "degraded",
+            "unwell",
+            "disabled",
+            "incompatible"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "organ",
+        "status"
+      ],
+      "title": "BriefingOrgan",
+      "type": "object"
+    },
     "Claim": {
       "additionalProperties": false,
       "properties": {
@@ -24,6 +74,21 @@
           ],
           "title": "Kind",
           "type": "string"
+        },
+        "labels": {
+          "items": {
+            "enum": [
+              "modeled",
+              "unvalidated",
+              "recorded",
+              "demo",
+              "refusal",
+              "disputed"
+            ],
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "array"
         },
         "text": {
           "title": "Text",
@@ -73,6 +138,42 @@
           ],
           "title": "Resolution",
           "type": "string"
+        },
+        "rule_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rule Id"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "detected",
+                "reconciling",
+                "final"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "subjects": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Subjects",
+          "type": "array"
         }
       },
       "required": [
@@ -117,7 +218,7 @@
     },
     "EvidenceRef": {
       "additionalProperties": false,
-      "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.",
+      "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.\n\nv0.4 clarification: ``run_id`` is the call-level ``provenance.run_id`` of the ToolResult the\npointer points into (or the Brain-generated id for Brain-origin evidence). It is the key of\n``GET /evidence/{run_id}``.",
       "properties": {
         "json_pointer": {
           "pattern": "^(/([^~/]|~[01])*)*$",
@@ -170,6 +271,13 @@
           "title": "Id",
           "type": "string"
         },
+        "missing": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing",
+          "type": "array"
+        },
         "status": {
           "enum": [
             "ok",
@@ -217,6 +325,18 @@
     "critic": {
       "$ref": "#/$defs/CriticVerdict"
     },
+    "disclaimer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Disclaimer"
+    },
     "generated_at": {
       "format": "date-time",
       "title": "Generated At",
@@ -237,6 +357,13 @@
       ],
       "title": "Mode",
       "type": "string"
+    },
+    "organs": {
+      "items": {
+        "$ref": "#/$defs/BriefingOrgan"
+      },
+      "title": "Organs",
+      "type": "array"
     },
     "scenario": {
       "title": "Scenario",

@@ -1,0 +1,33 @@
+{
+  "additionalProperties": false,
+  "description": "``notice`` event: a non-fatal fallback, for example ``MODE_FALLBACK`` (live to demo).",
+  "properties": {
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "details": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Details"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "message"
+  ],
+  "title": "NoticePayload",
+  "type": "object"
+}

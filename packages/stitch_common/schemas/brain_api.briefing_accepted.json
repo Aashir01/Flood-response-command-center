@@ -1,0 +1,44 @@
+{
+  "additionalProperties": false,
+  "description": "``POST /briefings`` 202 body. ``task_id`` equals ``briefing_id`` (frontend alias).",
+  "properties": {
+    "briefing_id": {
+      "minLength": 1,
+      "title": "Briefing Id",
+      "type": "string"
+    },
+    "events_url": {
+      "title": "Events Url",
+      "type": "string"
+    },
+    "result_url": {
+      "title": "Result Url",
+      "type": "string"
+    },
+    "status": {
+      "const": "running",
+      "default": "running",
+      "title": "Status",
+      "type": "string"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Id"
+    }
+  },
+  "required": [
+    "briefing_id",
+    "events_url",
+    "result_url"
+  ],
+  "title": "BriefingAccepted",
+  "type": "object"
+}

@@ -7,11 +7,14 @@ Ambiguities: ``reference_overlay_geojson`` and ``validation`` are required in th
 from __future__ import annotations
 
 from datetime import date
+from typing import Literal
 
 from pydantic import AwareDatetime, Field
 
 from stitch_common.base import Contract
-from stitch_common.types import BBox, FeatureCollection, NonNeg, Slug, Unit
+from stitch_common.types import BBox, FeatureCollection, Mode, NonNeg, Slug, Unit
+
+ModelVariant = Literal["unet-resnet18-s1-int8", "vh-threshold-baseline"]
 
 
 class SegmentFloodIn(Contract):
@@ -19,6 +22,7 @@ class SegmentFloodIn(Contract):
     date: date
     bbox: BBox | None = None
     tile_size: int = Field(default=256, gt=0)
+    mode: Mode | None = None  # v0.4: optional, the Brain passes the requested mode
 
 
 class SourceScene(Contract):
@@ -37,17 +41,22 @@ class SegmentFloodOut(Contract):
     flood_extent_km2: NonNeg
     extent_geojson: FeatureCollection
     permanent_water_km2: NonNeg
-    confidence: Unit
+    confidence: Unit | None  # v0.4: null when no flood pixels exist
     tiles_processed: int = Field(ge=0)
     source_scene: SourceScene
     validation: Validation
     reference_overlay_geojson: FeatureCollection | None
+    # v0.4 (all optional, absent means unknown):
+    reference_overlay_note: str | None = None  # source, product date, licence, "qualitative only"
+    valid_fraction: Unit | None = None  # share of window pixels with valid data
+    model_variant: ModelVariant | None = None  # honest fallback reporting
 
 
 class CompareWithPermanentWaterIn(Contract):
     region_id: Slug
     date: date
     bbox: BBox | None = None
+    mode: Mode | None = None  # v0.4
 
 
 class DistrictFlood(Contract):
@@ -55,6 +64,8 @@ class DistrictFlood(Contract):
     name: str
     flooded_km2: NonNeg
     flooded_fraction: Unit
+    district_area_km2: NonNeg | None = None  # v0.4: district area inside the window
+    flooded_roads_km: NonNeg | None = None  # v0.4: flooded road length in the district
 
 
 class CompareWithPermanentWaterOut(Contract):
@@ -62,3 +73,13 @@ class CompareWithPermanentWaterOut(Contract):
     permanent_water_km2: NonNeg
     new_flood_km2: NonNeg
     by_district: list[DistrictFlood]
+
+
+class SceneInfo(Contract):
+    """One item of the read-only resource ``eyes://scenes`` (v0.4)."""
+
+    region_id: Slug
+    date: date
+    scene_id: str
+    sensor: str | None = None
+    validated_for_region: bool | None = None

@@ -98,6 +98,81 @@
       "title": "Citation",
       "type": "object"
     },
+    "Generation": {
+      "additionalProperties": false,
+      "description": "v0.4: how the answer text was produced.",
+      "properties": {
+        "mode": {
+          "enum": [
+            "llm",
+            "extractive"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Model"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "provider",
+        "model"
+      ],
+      "title": "Generation",
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "description": "v0.4: a quantity found in a claim, so consumers need no regex extraction.\n\n``per`` is the denominator, for example ``\"person_day\"``; null for a plain amount.",
+      "properties": {
+        "claim_idx": {
+          "minimum": 0,
+          "title": "Claim Idx",
+          "type": "integer"
+        },
+        "per": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Per"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "claim_idx"
+      ],
+      "title": "Quantity",
+      "type": "object"
+    },
     "Refusal": {
       "additionalProperties": false,
       "properties": {
@@ -151,6 +226,24 @@
         "$ref": "#/$defs/AnswerClaim"
       },
       "title": "Claims",
+      "type": "array"
+    },
+    "generation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Generation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "quantities": {
+      "items": {
+        "$ref": "#/$defs/Quantity"
+      },
+      "title": "Quantities",
       "type": "array"
     },
     "refusal": {
