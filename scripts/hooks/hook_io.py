@@ -134,3 +134,22 @@ def find_command(payload: Any) -> str | None:
 
 def is_git_commit(command: str | None) -> bool:
     return bool(command and GIT_COMMIT.search(command))
+
+
+ORGAN_PATH = re.compile(r"(?:^|/)(?:organs/([a-z]+)/|evals/([a-z]+)(?:/|\.py$))")
+
+
+def organs_from_paths(paths: list[str], root: Path = REPO_ROOT) -> list[str]:
+    """Organ names (directories under ``organs/`` or ``evals/``) mentioned in ``paths``."""
+    found: dict[str, None] = {}
+    for path in paths:
+        m = ORGAN_PATH.search(path.replace("\\", "/"))
+        name = (m.group(1) or m.group(2)) if m else None
+        if name and (root / "organs" / name).is_dir():
+            found.setdefault(name, None)
+    return list(found)
+
+
+def tail(text: str, lines: int = 40) -> str:
+    """Last ``lines`` lines of ``text`` (hook output goes back to the agent, keep it short)."""
+    return "\n".join(text.strip().splitlines()[-lines:])

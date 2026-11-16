@@ -15,6 +15,7 @@ import pytest
 from check_contracts import REPO_ROOT, run_checks
 from hypothesis import given, settings
 from hypothesis import strategies as st
+
 from stitch_common import CONTRACT_VERSION
 from stitch_common.schemas import all_schemas
 

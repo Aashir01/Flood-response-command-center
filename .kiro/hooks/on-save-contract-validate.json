@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "on-save-contract-validate",
+      "description": "Validate MCP schemas against the contract lock when a server, model, stitch_common or contract file changes.",
+      "trigger": "PostFileSave",
+      "matcher": "(^|[/\\\\])organs[/\\\\][^/\\\\]+[/\\\\]src[/\\\\].*[/\\\\](server|models)\\.py$|(^|[/\\\\])packages[/\\\\]stitch_common[/\\\\].*\\.py$|mcp-contracts\\.md$",
+      "timeout": 30,
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "uv run python scripts/hooks/on_save_contracts.py"
+      }
+    }
+  ]
+}

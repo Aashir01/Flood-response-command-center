@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "on-spec-change-tasks",
+      "description": "Regenerate a spec's tasks.md when its requirements.md or design.md changes.",
+      "trigger": "PostFileSave",
+      "matcher": "(^|[/\\\\])\\.kiro[/\\\\]specs[/\\\\][^/\\\\]+[/\\\\](requirements|design)\\.md$",
+      "timeout": 300,
+      "enabled": true,
+      "action": {
+        "type": "agent",
+        "prompt": "A requirements.md or design.md under .kiro/specs/<spec>/ was just saved. Identify the spec directory that changed (use the saved file path from the event, or `git status --short .kiro/specs`). Regenerate only that spec's tasks.md from its requirements.md and design.md: keep every completed checkbox and every existing task ID, add tasks for new requirements, mark tasks whose requirement was removed as obsolete instead of deleting them, and update the traceability table (requirement to tasks). Follow the format of .kiro/specs/bootstrap/tasks.md. Do not edit requirements.md, design.md, steering files or other specs. Finish with a two-line summary of what changed."
+      }
+    }
+  ]
+}

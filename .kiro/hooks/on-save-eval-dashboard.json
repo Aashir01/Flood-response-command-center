@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "on-save-eval-dashboard",
+      "description": "Run the fast eval subset for the touched organ and refresh evals/results/latest.json.",
+      "trigger": "PostFileSave",
+      "matcher": "(^|[/\\\\])(organs|evals)[/\\\\].*\\.py$",
+      "timeout": 120,
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "uv run python scripts/hooks/on_save_eval.py"
+      }
+    }
+  ]
+}

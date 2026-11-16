@@ -35,7 +35,7 @@ Target: about half a day. Do first. `core` unless marked.
   - `.kiro/agents/surgeon.md` per the design. Verify the file loads in the IDE (agent list) and, if the CLI is installed, `kiro-cli chat --v3 --agent surgeon --no-interactive`.
   - Done when: the agent appears in Kiro and a dry run through it lists the planned files. Refs: BOOT-R5.1, R5.6.
 
-- [ ] **9. Hooks** `core`
+- [x] **9. Hooks** `core`
   - Five hook JSON files, `hook_io.py` and the four helper scripts. Log the first real payload to `.kiro/hooks/.last-event.json`-style debug output (git-ignored path) to learn the shape.
   - Done when: each hook is visible in the Kiro hooks panel, and each script runs by hand. Refs: BOOT-R6.
 

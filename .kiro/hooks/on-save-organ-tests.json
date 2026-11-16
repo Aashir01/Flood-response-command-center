@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "on-save-organ-tests",
+      "description": "Run the touched organ's tests (Hypothesis dev profile) after an agent edit.",
+      "trigger": "PostFileSave",
+      "matcher": "(^|[/\\\\])organs[/\\\\][^/\\\\]+[/\\\\].*\\.py$",
+      "timeout": 120,
+      "enabled": true,
+      "action": {
+        "type": "command",
+        "command": "uv run python scripts/hooks/run_organ_tests.py"
+      }
+    }
+  ]
+}
