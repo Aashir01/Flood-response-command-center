@@ -1,0 +1,420 @@
+{
+  "name": "lightgbm-cqr",
+  "version": "0.1.0",
+  "target": "ln(Q[t+h]+1) - ln(Q[t]+1), Q = modeled GloFAS discharge (m3/s)",
+  "target_kind": "modeled_glofas",
+  "quantiles": [
+    0.1,
+    0.5,
+    0.9
+  ],
+  "leads": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "features": [
+    "lnq",
+    "dlnq_1",
+    "dlnq_3",
+    "dlnq_7",
+    "dlnq_14",
+    "dlnq_30",
+    "max7_rel",
+    "min7_rel",
+    "up1_rel",
+    "up1_d1",
+    "up1_d3",
+    "up1_d7",
+    "up2_rel",
+    "up2_d1",
+    "up2_d3",
+    "up2_d7",
+    "rain_1",
+    "rain_3",
+    "rain_7",
+    "rain_14",
+    "rain_30",
+    "rain_max7",
+    "temp_7",
+    "temp_d14",
+    "doy_sin",
+    "doy_cos",
+    "monsoon",
+    "station"
+  ],
+  "categorical": [
+    "station"
+  ],
+  "station_codes": {
+    "chenab-trimmu": 0,
+    "indus-guddu": 1,
+    "indus-kotri": 2,
+    "indus-sukkur": 3,
+    "indus-taunsa": 4
+  },
+  "stations": [
+    "chenab-trimmu",
+    "indus-guddu",
+    "indus-kotri",
+    "indus-sukkur",
+    "indus-taunsa"
+  ],
+  "feature_ranges": {
+    "lnq": [
+      0.0,
+      10.327094455375038
+    ],
+    "dlnq_1": [
+      -2.839633244172243,
+      5.240688269875371
+    ],
+    "dlnq_3": [
+      -5.022583101078845,
+      7.1195951446184
+    ],
+    "dlnq_7": [
+      -6.507098599155363,
+      7.941615655690918
+    ],
+    "dlnq_14": [
+      -7.213996602082444,
+      8.548257104114894
+    ],
+    "dlnq_30": [
+      -7.7106532917454125,
+      9.1520714651174
+    ],
+    "max7_rel": [
+      0.0,
+      6.127174846234142
+    ],
+    "min7_rel": [
+      -7.690633472775431,
+      0.0
+    ],
+    "up1_rel": [
+      -4.519939061565044,
+      6.983743579726249
+    ],
+    "up1_d1": [
+      -2.839633244172243,
+      5.240688269875371
+    ],
+    "up1_d3": [
+      -5.022583101078845,
+      7.1195951446184
+    ],
+    "up1_d7": [
+      -6.507098599155363,
+      7.941615655690918
+    ],
+    "up2_rel": [
+      -4.205128318244447,
+      7.488008074444339
+    ],
+    "up2_d1": [
+      -2.839633244172243,
+      1.7717187053212944
+    ],
+    "up2_d3": [
+      -5.022583101078845,
+      4.150414816592885
+    ],
+    "up2_d7": [
+      -6.279140401583889,
+      6.275707800766262
+    ],
+    "rain_1": [
+      0.0,
+      69.1499999165535
+    ],
+    "rain_3": [
+      0.0,
+      165.22499936819077
+    ],
+    "rain_7": [
+      0.0,
+      209.6999992132187
+    ],
+    "rain_14": [
+      0.0,
+      322.6749981492758
+    ],
+    "rain_30": [
+      0.0,
+      473.3749978579581
+    ],
+    "rain_max7": [
+      0.0,
+      466.19999623298645
+    ],
+    "temp_7": [
+      -16.542857306344168,
+      26.85714258466448
+    ],
+    "temp_d14": [
+      -17.428571505205973,
+      11.742857189050742
+    ],
+    "doy_sin": [
+      -0.9999994220246925,
+      0.9999855506507186
+    ],
+    "doy_cos": [
+      -0.9999791929590823,
+      1.0
+    ],
+    "monsoon": [
+      0.0,
+      1.0
+    ],
+    "station": [
+      0.0,
+      4.0
+    ]
+  },
+  "min_cal": 500,
+  "n_calibration": {
+    "chenab-trimmu:1": 1826,
+    "chenab-trimmu:2": 1825,
+    "chenab-trimmu:3": 1824,
+    "chenab-trimmu:4": 1823,
+    "chenab-trimmu:5": 1822,
+    "chenab-trimmu:6": 1821,
+    "chenab-trimmu:7": 1820,
+    "chenab-trimmu:8": 1819,
+    "chenab-trimmu:9": 1818,
+    "chenab-trimmu:10": 1817,
+    "chenab-trimmu:11": 1816,
+    "chenab-trimmu:12": 1815,
+    "chenab-trimmu:13": 1814,
+    "chenab-trimmu:14": 1813,
+    "indus-guddu:1": 1826,
+    "indus-guddu:2": 1825,
+    "indus-guddu:3": 1824,
+    "indus-guddu:4": 1823,
+    "indus-guddu:5": 1822,
+    "indus-guddu:6": 1821,
+    "indus-guddu:7": 1820,
+    "indus-guddu:8": 1819,
+    "indus-guddu:9": 1818,
+    "indus-guddu:10": 1817,
+    "indus-guddu:11": 1816,
+    "indus-guddu:12": 1815,
+    "indus-guddu:13": 1814,
+    "indus-guddu:14": 1813,
+    "indus-kotri:1": 1826,
+    "indus-kotri:2": 1825,
+    "indus-kotri:3": 1824,
+    "indus-kotri:4": 1823,
+    "indus-kotri:5": 1822,
+    "indus-kotri:6": 1821,
+    "indus-kotri:7": 1820,
+    "indus-kotri:8": 1819,
+    "indus-kotri:9": 1818,
+    "indus-kotri:10": 1817,
+    "indus-kotri:11": 1816,
+    "indus-kotri:12": 1815,
+    "indus-kotri:13": 1814,
+    "indus-kotri:14": 1813,
+    "indus-sukkur:1": 1826,
+    "indus-sukkur:2": 1825,
+    "indus-sukkur:3": 1824,
+    "indus-sukkur:4": 1823,
+    "indus-sukkur:5": 1822,
+    "indus-sukkur:6": 1821,
+    "indus-sukkur:7": 1820,
+    "indus-sukkur:8": 1819,
+    "indus-sukkur:9": 1818,
+    "indus-sukkur:10": 1817,
+    "indus-sukkur:11": 1816,
+    "indus-sukkur:12": 1815,
+    "indus-sukkur:13": 1814,
+    "indus-sukkur:14": 1813,
+    "indus-taunsa:1": 1826,
+    "indus-taunsa:2": 1825,
+    "indus-taunsa:3": 1824,
+    "indus-taunsa:4": 1823,
+    "indus-taunsa:5": 1822,
+    "indus-taunsa:6": 1821,
+    "indus-taunsa:7": 1820,
+    "indus-taunsa:8": 1819,
+    "indus-taunsa:9": 1818,
+    "indus-taunsa:10": 1817,
+    "indus-taunsa:11": 1816,
+    "indus-taunsa:12": 1815,
+    "indus-taunsa:13": 1814,
+    "indus-taunsa:14": 1813
+  },
+  "n_trees": {
+    "lgbm/q10_l01.txt.gz": 400,
+    "lgbm/q50_l01.txt.gz": 400,
+    "lgbm/q90_l01.txt.gz": 400,
+    "lgbm/q10_l02.txt.gz": 400,
+    "lgbm/q50_l02.txt.gz": 400,
+    "lgbm/q90_l02.txt.gz": 391,
+    "lgbm/q10_l03.txt.gz": 399,
+    "lgbm/q50_l03.txt.gz": 400,
+    "lgbm/q90_l03.txt.gz": 395,
+    "lgbm/q10_l04.txt.gz": 399,
+    "lgbm/q50_l04.txt.gz": 399,
+    "lgbm/q90_l04.txt.gz": 393,
+    "lgbm/q10_l05.txt.gz": 400,
+    "lgbm/q50_l05.txt.gz": 400,
+    "lgbm/q90_l05.txt.gz": 233,
+    "lgbm/q10_l06.txt.gz": 380,
+    "lgbm/q50_l06.txt.gz": 400,
+    "lgbm/q90_l06.txt.gz": 179,
+    "lgbm/q10_l07.txt.gz": 289,
+    "lgbm/q50_l07.txt.gz": 385,
+    "lgbm/q90_l07.txt.gz": 172,
+    "lgbm/q10_l08.txt.gz": 304,
+    "lgbm/q50_l08.txt.gz": 395,
+    "lgbm/q90_l08.txt.gz": 162,
+    "lgbm/q10_l09.txt.gz": 290,
+    "lgbm/q50_l09.txt.gz": 132,
+    "lgbm/q90_l09.txt.gz": 123,
+    "lgbm/q10_l10.txt.gz": 362,
+    "lgbm/q50_l10.txt.gz": 289,
+    "lgbm/q90_l10.txt.gz": 112,
+    "lgbm/q10_l11.txt.gz": 332,
+    "lgbm/q50_l11.txt.gz": 294,
+    "lgbm/q90_l11.txt.gz": 117,
+    "lgbm/q10_l12.txt.gz": 253,
+    "lgbm/q50_l12.txt.gz": 245,
+    "lgbm/q90_l12.txt.gz": 148,
+    "lgbm/q10_l13.txt.gz": 273,
+    "lgbm/q50_l13.txt.gz": 290,
+    "lgbm/q90_l13.txt.gz": 139,
+    "lgbm/q10_l14.txt.gz": 282,
+    "lgbm/q50_l14.txt.gz": 249,
+    "lgbm/q90_l14.txt.gz": 114
+  },
+  "val_pinball": {
+    "lgbm/q10_l01.txt.gz": 0.0015274920528976779,
+    "lgbm/q50_l01.txt.gz": 0.003230325736563621,
+    "lgbm/q90_l01.txt.gz": 0.0017184423347008555,
+    "lgbm/q10_l02.txt.gz": 0.0035796118682317074,
+    "lgbm/q50_l02.txt.gz": 0.0076260769067934935,
+    "lgbm/q90_l02.txt.gz": 0.004259107658248482,
+    "lgbm/q10_l03.txt.gz": 0.0057435562180012945,
+    "lgbm/q50_l03.txt.gz": 0.012841262632428158,
+    "lgbm/q90_l03.txt.gz": 0.007569539399443759,
+    "lgbm/q10_l04.txt.gz": 0.008027336332446967,
+    "lgbm/q50_l04.txt.gz": 0.018400229306341803,
+    "lgbm/q90_l04.txt.gz": 0.01069820668651772,
+    "lgbm/q10_l05.txt.gz": 0.01032963460705324,
+    "lgbm/q50_l05.txt.gz": 0.024447292872204148,
+    "lgbm/q90_l05.txt.gz": 0.014415836003954328,
+    "lgbm/q10_l06.txt.gz": 0.012545024945035264,
+    "lgbm/q50_l06.txt.gz": 0.030192727961809235,
+    "lgbm/q90_l06.txt.gz": 0.018134012165491934,
+    "lgbm/q10_l07.txt.gz": 0.015258450122734036,
+    "lgbm/q50_l07.txt.gz": 0.036525434653595555,
+    "lgbm/q90_l07.txt.gz": 0.021878150062974104,
+    "lgbm/q10_l08.txt.gz": 0.01684652563376344,
+    "lgbm/q50_l08.txt.gz": 0.041930422952836194,
+    "lgbm/q90_l08.txt.gz": 0.02644286867640822,
+    "lgbm/q10_l09.txt.gz": 0.018877516418747475,
+    "lgbm/q50_l09.txt.gz": 0.04920184411985637,
+    "lgbm/q90_l09.txt.gz": 0.029298450586849337,
+    "lgbm/q10_l10.txt.gz": 0.02087093474445828,
+    "lgbm/q50_l10.txt.gz": 0.05235511315925824,
+    "lgbm/q90_l10.txt.gz": 0.032479747693328,
+    "lgbm/q10_l11.txt.gz": 0.022461351934407413,
+    "lgbm/q50_l11.txt.gz": 0.05603362616849635,
+    "lgbm/q90_l11.txt.gz": 0.03625899094897376,
+    "lgbm/q10_l12.txt.gz": 0.02486575778521746,
+    "lgbm/q50_l12.txt.gz": 0.05961359174533243,
+    "lgbm/q90_l12.txt.gz": 0.03699845119345783,
+    "lgbm/q10_l13.txt.gz": 0.02652093758363855,
+    "lgbm/q50_l13.txt.gz": 0.06331333199308359,
+    "lgbm/q90_l13.txt.gz": 0.03977409294868593,
+    "lgbm/q10_l14.txt.gz": 0.027613537649659244,
+    "lgbm/q50_l14.txt.gz": 0.06749121164020887,
+    "lgbm/q90_l14.txt.gz": 0.041306525325882
+  },
+  "splits": {
+    "train_fit": [
+      "1997-01-01",
+      "2008-12-31"
+    ],
+    "train_val": [
+      "2009-01-01",
+      "2011-12-31"
+    ],
+    "refit": [
+      "1997-01-01",
+      "2011-12-31"
+    ],
+    "calibration": [
+      "2012-01-01",
+      "2016-12-31"
+    ]
+  },
+  "config_hash": "a7a8482d8102a8d2ce0bab19feaa8ced751895090911642949d6481738bf6fc2",
+  "data_sha256": {
+    "discharge_daily.parquet": "c887b8aae3b3caa2ba2bbb1508ac5f1f78b0e710fbba690c9d3f9ab34a8e7e57",
+    "rain_daily.parquet": "3df57a1a7d27d5b047b40966193a98a8ee3a15ab0b025b85e0a8b016bcd90b80"
+  },
+  "lightgbm_version": "4.7.0",
+  "git_commit": "cc60041",
+  "files": {
+    "lgbm/q10_l01.txt.gz": "be10c01a8da6eda8a3556001f92df0fc1b37cb69078dbb73a842608c579a50ee",
+    "lgbm/q10_l02.txt.gz": "993349e5ad0e2c3e432c843cb94db78b562fa9fd2e0f73be4612f3ee11f1bf06",
+    "lgbm/q10_l03.txt.gz": "4a4849e40b1752ba84c21b918f5d9c886b9d64c69581dc1dbea40323edb6d31d",
+    "lgbm/q10_l04.txt.gz": "355daa0c80cfe714ecf5c575d5532058db8aa209ce54cc25d9d09a001f6bca71",
+    "lgbm/q10_l05.txt.gz": "84a0011248996088b5172c1513998b8efc54dd391f0f44647713c2241d3065f7",
+    "lgbm/q10_l06.txt.gz": "1c945934a7ecce6c52eb0eae4c53814dc98bed78df87e5121ffebc654dfe0a63",
+    "lgbm/q10_l07.txt.gz": "98157e144cd9e902e4ad66ec259e9ca12fc00c98cedf1d4c2bbd1a226bbe5e27",
+    "lgbm/q10_l08.txt.gz": "9fd60a9c22d01770204cba74bfc834ceb494508f315e03e264fb89da61b444f7",
+    "lgbm/q10_l09.txt.gz": "60494b92730bc8b42ac93994fb410ea9f44871416b419307331cee05db89c062",
+    "lgbm/q10_l10.txt.gz": "4c3da7e5205d86ec47f0d6fcf5686246a5f37d83da3aeed00af66e789112783d",
+    "lgbm/q10_l11.txt.gz": "a4323ffd41d0ffe8c3c47b5f9c2ebad80c4397d56406e85587736b88cb2b4ed8",
+    "lgbm/q10_l12.txt.gz": "b91939ac4b5039e8debc190cba874810b580e7b4a57047aed0d60030e5ec5230",
+    "lgbm/q10_l13.txt.gz": "50e9639b076389012319a3dc19ca9cb982d4c93e7b6c6fb7a2dbbfe303ddc5d3",
+    "lgbm/q10_l14.txt.gz": "3938d43168a3454e5e61f16e7f426d395a5d9ee69b43c33204660e119aa032ee",
+    "lgbm/q50_l01.txt.gz": "e2b5818c56756e65e98cd7774255f08f932b1e5117de50efcec5d55830864f9a",
+    "lgbm/q50_l02.txt.gz": "d93daf6ab2174d0e1bf072c39d1b4924867cf016181c6e1c4944ca1c3ac0ff62",
+    "lgbm/q50_l03.txt.gz": "699630206feb96e8f3a9458d6510a3bed36f7ec294ee4d7d1253329d83161706",
+    "lgbm/q50_l04.txt.gz": "7d0709595763e04fee00adc708542b19c164ba395d523536362995df2fcc1058",
+    "lgbm/q50_l05.txt.gz": "de86e90a959bd3ea9f091cf5d4a6a3144c19f0ed4875b3455f7e5b6bb4f03720",
+    "lgbm/q50_l06.txt.gz": "adf1b961bad775f84a3356c5c0f774609b5e0d357a41a6aa84b99bb7073d7691",
+    "lgbm/q50_l07.txt.gz": "23d1e06d182003ac1bf706fc86834663a377eeb158df8f0d5570d074afd3ad4b",
+    "lgbm/q50_l08.txt.gz": "3152dae1c27dfff7879dc4108d11523444c74fee9695175908c16bf59787e2f0",
+    "lgbm/q50_l09.txt.gz": "0eb74b2d9a98dd449bea763770624d808471bbb3263e046fddfcc7b24484e9f6",
+    "lgbm/q50_l10.txt.gz": "52ed06be8db144924ef09d524efd9896cc3ad6b5b79740c61de1aea7a21f5d96",
+    "lgbm/q50_l11.txt.gz": "b05ff7e7036c76b1b1c71804a6ea622d94473d6d73f947a29806d685d736ec58",
+    "lgbm/q50_l12.txt.gz": "59c8a418a1d377059118ac9eb9c278058565f0507bb25ee3d65f744f59b5ef7f",
+    "lgbm/q50_l13.txt.gz": "4182f5e4f7d8b09964f38277df0757a8fffbfc8177da98aa16a61da9ab518be6",
+    "lgbm/q50_l14.txt.gz": "d40676d755fafc6d1d28b142a1af978078d6c25090e08ff7e7b3d0d37451959a",
+    "lgbm/q90_l01.txt.gz": "dcf6457394544b8c026642db670a8dcdd4d68b45c06c5483df1c9ac0c74c07ce",
+    "lgbm/q90_l02.txt.gz": "3f05c65e0b782662e05e07f423182df575e230d063c27e66eb3fa8f82f40d30b",
+    "lgbm/q90_l03.txt.gz": "c724df1a1837110828dd36f8eeafd02011c856f104f6386eef093e3f9730a1a7",
+    "lgbm/q90_l04.txt.gz": "78ebf1d3ff0f91a0b4b71687b7a2dc31450fcfea1230c467ca3e9122f2796c5e",
+    "lgbm/q90_l05.txt.gz": "e2bbd5c81f1c9b8a224a4395e721aa2b0ab387f6d02dabd1dc58e2f5f31dfc3c",
+    "lgbm/q90_l06.txt.gz": "f3b84b50606bb8b7b8ea354d4b87d8bba9c659c26e9d45c14c639f39ac9ee363",
+    "lgbm/q90_l07.txt.gz": "bc21cfcda8b2b8d1217b83d1964d06cf8d580128e6a85ff325fc8f3ed4d53bcf",
+    "lgbm/q90_l08.txt.gz": "1cc7127464242a7830f2269cce1dc3db9aa8d327fef4973dcbf4c2ea8fb5d6f4",
+    "lgbm/q90_l09.txt.gz": "61510159e053dad272b3bd976e4a0cc3e24f7ce817401332b668051341e0e8c4",
+    "lgbm/q90_l10.txt.gz": "a15ec12fec14b8eaa313512341555327db45035a22e86090c078962326eecea8",
+    "lgbm/q90_l11.txt.gz": "380a2c70fc6c217495a1b747fd94db6f91542784055753fc784d4e02bcaf72b6",
+    "lgbm/q90_l12.txt.gz": "45e2621cf2801941339bf2dde784074ac2e7aedc7886062df9de5eb385d366d9",
+    "lgbm/q90_l13.txt.gz": "b9cf8bcf11290c08092f4513d47f560744f752924d4bb5cf20f11e76752ed7cd",
+    "lgbm/q90_l14.txt.gz": "45e2c0718646e6e91d8e8efea338655dcdd543b5669598c6baed840c49cf74b4",
+    "conformity.parquet": "9aa628b0f6ff2e3a717966bbeec199b1b6ade0dc8cb213d7a9416b912e0f8ca4"
+  },
+  "root_sha256": "a333a4218acee2098a4be20dbadd55de5a731cf11c78d5bc7ae2511c7fa7c679"
+}

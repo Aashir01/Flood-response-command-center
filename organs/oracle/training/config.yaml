@@ -1,0 +1,25 @@
+# Oracle LightGBM quantile models (oracle-mcp design section 4.2). Seed 0, single thread, so a
+# rerun on the same data writes byte-identical model files.
+model_name: lightgbm-cqr
+model_version: "0.1.0"
+seed: 0
+quantiles: [0.1, 0.5, 0.9]
+leads: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+min_cal: 500
+lightgbm:
+  num_leaves: 15
+  learning_rate: 0.05
+  min_child_samples: 50
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 1
+  lambda_l2: 1.0
+  max_bin: 255
+  deterministic: true
+  force_row_wise: true
+  num_threads: 1
+  verbosity: -1
+n_estimators_max: 400
+early_stopping_rounds: 30
+# Rows need a full 30-day history (dlnq_30 not NaN) to enter training or calibration.
+require_feature: dlnq_30
