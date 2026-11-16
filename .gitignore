@@ -1,0 +1,25 @@
+# NOTE: .kiro/ must NEVER be listed here (hackathon rule). CI checks this.
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+.mypy_cache/
+node_modules/
+.next/
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example
+*.pt
+*.pth
+*.ckpt
+# large model/data caches (demo artifacts under data/demo and organs/*/models/*.onnx are committed)
+data/cache/
+data/raw/
+evals/results/*.tmp
+*.log
+.DS_Store
+Thumbs.db
