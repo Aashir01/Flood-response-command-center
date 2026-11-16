@@ -10,7 +10,7 @@ Target: about half a day. Do first. `core` unless marked.
   - `types.py`, `envelope.py`, `provenance.py`, `version.py`, `logging.py`.
   - Tests: P1 (envelope invariant), P2 (hash canonical), P3 (Interval ordering, Hypothesis). Refs: BOOT-R2.1 to R2.3, R2.5.
 
-- [ ] **3. Organ and Brain models** `core`
+- [x] **3. Organ and Brain models** `core`
   - Models for all five organs (v0.3 contracts) and Brain `Briefing`, `Claim`, `Conflict`, `TaskEvent`.
   - Tests: construct each from a valid fixture, reject unknown fields, P4 round trip through exported schema. Refs: BOOT-R2.1.
 
