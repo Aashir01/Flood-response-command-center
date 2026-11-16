@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "eyes-mcp": {
+      "command": "uv",
+      "args": ["run", "--package", "stitch-eyes", "python", "-m", "stitch_eyes.server", "--stdio"],
+      "env": { "STITCH_MODE": "demo" },
+      "disabled": true
+    },
+    "oracle-mcp": {
+      "command": "uv",
+      "args": ["run", "--package", "stitch-oracle", "python", "-m", "stitch_oracle.server", "--stdio"],
+      "env": { "STITCH_MODE": "demo" },
+      "disabled": true
+    },
+    "library-mcp": {
+      "command": "uv",
+      "args": ["run", "--package", "stitch-library", "python", "-m", "stitch_library.server", "--stdio"],
+      "env": { "STITCH_MODE": "demo", "STITCH_LLM_PROVIDER": "fake" },
+      "disabled": true
+    },
+    "ledger-mcp": {
+      "command": "uv",
+      "args": ["run", "--package", "stitch-ledger", "python", "-m", "stitch_ledger.server", "--stdio"],
+      "env": { "STITCH_MODE": "demo" },
+      "disabled": true
+    },
+    "voice-mcp": {
+      "command": "uv",
+      "args": ["run", "--package", "stitch-voice", "python", "-m", "stitch_voice.server", "--stdio"],
+      "env": { "STITCH_MODE": "demo", "STITCH_TTS_PROVIDER": "prerendered" },
+      "disabled": true
+    },
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GITHUB_TOKEN}" },
+      "disabled": true
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "disabled": false
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "disabled": false
+    }
+  }
+}
