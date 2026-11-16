@@ -110,6 +110,21 @@ Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond 
 | pandas | feature tables, Parquet I/O | BSD-3-Clause | in use |
 | pyarrow | Parquet engine for the demo dataset and conformity scores | Apache-2.0 | in use |
 | DuckDB | run store for `explain_forecast` | MIT | in use |
+## library-mcp code libraries
+Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it. Licenses below were read from the installed package metadata (`importlib.metadata`) on 2026-11-17.
+| Library | Used for | License | Status |
+|---|---|---|---|
+| NumPy | vectors, dense search in `MemoryStore` | BSD-3-Clause (bundled parts 0BSD, MIT, Zlib, CC0-1.0) | in use |
+| ONNX Runtime | CPU inference of the embedder and reranker | MIT | in use |
+| Hugging Face `tokenizers` | tokenization without PyTorch or `transformers` | Apache-2.0 | in use |
+| pypdfium2 (PDFium) | PDF text extraction for fetched documents | BSD-3-Clause or Apache-2.0 (PDFium binaries carry their own notices) | in use |
+| pdfminer.six | fallback PDF text extraction | MIT | in use |
+| PyArrow | Parquet pack (`pages.parquet`, `chunks.parquet`) | Apache-2.0 | in use |
+| PyYAML | manifest, demo questions, scope anchors | MIT | in use |
+| psycopg 3 (`psycopg[binary]`) | `PgVectorStore` (Postgres + pgvector) | LGPL-3.0-only, used unmodified as a dynamically loaded library | in use |
+| ONNX (`onnx`, extra `export`, dev-time only) | int8 export of the embedding model (`scripts/export_models.py`) | Apache-2.0 | dev-time |
+| PyMuPDF | not used: AGPL-3.0 is incompatible with the MIT repo | AGPL-3.0 | rejected |
+
 ## brain code libraries
 Libraries the Brain (rain/, package stitch_brain) adds beyond the workspace baseline.
 | Library | Used for | License | Status |

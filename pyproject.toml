@@ -31,7 +31,6 @@ members = ["packages/*", "organs/*", "brain"]
 # from this list when it creates the organ.
 exclude = [
     "organs/eyes",
-    "organs/library",
     "organs/voice",
 ]
 
@@ -66,12 +65,12 @@ known-first-party = [
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "organs/oracle/src", "brain/src", "scripts", "scripts/hooks"]
+mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "organs/oracle/src", "organs/library/src", "brain/src", "scripts", "scripts/hooks"]
 explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 
 [[tool.mypy.overrides]]
-module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*", "pandas", "pandas.*", "lightgbm", "lightgbm.*"]
+module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*", "pandas", "pandas.*", "lightgbm", "lightgbm.*", "onnxruntime", "onnxruntime.*", "onnx", "onnx.*", "pypdfium2", "pypdfium2.*", "pdfminer", "pdfminer.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
@@ -84,5 +83,8 @@ markers = [
     "allow_loopback: permit 127.0.0.1 sockets (HTTP smoke tests)",
     "live: needs the network; excluded from CI",
     "integration: drives real organ servers (stdio); skipped when unavailable",
+    "models: needs the local model cache (STITCH_MODEL_DIR); skipped when absent",
+    "pg: needs Postgres with pgvector (STITCH_TEST_PG_DSN or Docker); skipped when absent",
+    "perf: latency smoke tests with loose margins",
 ]
 
