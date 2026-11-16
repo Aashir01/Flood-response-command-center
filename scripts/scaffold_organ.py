@@ -45,12 +45,14 @@ SPEC_FILES = ("requirements.md", "design.md", "tasks.md")
 
 @dataclass(frozen=True)
 class Action:
-    kind: str  # create | overwrite | skip | edit | unchanged
+    kind: str  # create | overwrite | skip | edit | unchanged | missing
     path: str  # repo-relative, POSIX
     content: str | None = None  # None for skip/unchanged
 
     def __str__(self) -> str:
-        note = {"skip": " (exists)", "unchanged": " (already done)"}.get(self.kind, "")
+        note = {"skip": " (exists)", "unchanged": " (already done)", "missing": " (not found)"}.get(
+            self.kind, ""
+        )
         return f"{self.kind:<9} {self.path}{note}"
 
 
@@ -178,7 +180,7 @@ def _third_party(root: Path, ctx: dict[str, str]) -> Action:
     heading = section.splitlines()[0]
     existing = _read(root, rel)
     if existing is None:
-        return Action("skip", rel)
+        return Action("missing", rel)
     if heading in existing.splitlines():
         return Action("unchanged", rel)
     return Action("edit", rel, existing.rstrip("\n") + "\n" + section.rstrip("\n") + "\n")
@@ -188,7 +190,7 @@ def _mcp_json(root: Path, organ: str, package: str) -> Action:
     rel = ".kiro/settings/mcp.json"
     existing = _read(root, rel)
     if existing is None:
-        return Action("skip", rel)
+        return Action("missing", rel)
     data = json.loads(existing)
     servers = data.setdefault("mcpServers", {})
     entry = servers.get(f"{organ}-mcp") or {
@@ -214,7 +216,7 @@ def _root_pyproject(root: Path, organ: str) -> Action:
     rel = "pyproject.toml"
     existing = _read(root, rel)
     if existing is None:
-        return Action("skip", rel)
+        return Action("missing", rel)
     pattern = re.compile(rf'^[ \t]*"organs/{re.escape(organ)}",?[ \t]*\n', re.MULTILINE)
     new = pattern.sub("", existing)
     return Action("unchanged", rel) if new == existing else Action("edit", rel, new)

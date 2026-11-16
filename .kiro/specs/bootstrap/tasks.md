@@ -31,7 +31,7 @@ Target: about half a day. Do first. `core` unless marked.
   - `.kiro/templates/organ/**`, `scaffold_organ.py` (`--dry-run`, `--force`, idempotent, flips `mcp.json`).
   - Tests: P6, scaffold a throwaway organ into a temp copy and run its generated tests and `check_contracts.py`. Refs: BOOT-R5.2 to R5.5.
 
-- [ ] **8. Surgeon agent definition** `core`
+- [x] **8. Surgeon agent definition** `core`
   - `.kiro/agents/surgeon.md` per the design. Verify the file loads in the IDE (agent list) and, if the CLI is installed, `kiro-cli chat --v3 --agent surgeon --no-interactive`.
   - Done when: the agent appears in Kiro and a dry run through it lists the planned files. Refs: BOOT-R5.1, R5.6.
 

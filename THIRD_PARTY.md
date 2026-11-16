@@ -44,6 +44,7 @@ Bootstrap tooling (added with the bootstrap spec; versions pinned in `uv.lock`):
 | pytest, pytest-asyncio | tests | MIT | in use |
 | Hypothesis | property tests | MPL-2.0 | in use |
 | jsonschema | schema round-trip tests | MIT | in use |
+| PyYAML | parse agent front matter in tests | MIT | in use |
 | ruff, mypy | lint, type-check | MIT | in use |
 | MCP Python SDK (`mcp`) | organ template and its smoke test | MIT | in use |
 | hatchling | build backend for workspace packages | MIT | in use |
