@@ -25,6 +25,20 @@ One spec per component under `.kiro/specs/<name>/` (requirements, design, tasks)
 
 Hypothesis tests for BOOT-P1 to P7: envelope invariant, canonical `inputs_hash`, `Interval` ordering, schema round trip, contract check on a clean and a deliberately changed tree, scaffold idempotence, secret scanner fixtures. The pytest plugin in `stitch_common.testing` blocks outbound network (a Windows-safe guard, because `pytest-socket` breaks asyncio's `socketpair` on Windows) and registers the Hypothesis profiles `dev` (30 examples) and `ci` (200).
 
+### Ledger: what the properties caught, and what they missed
+
+The ledger spec lists properties LED-P1 to P19 in `design.md` section 7; task 16 added P20 (shadow prices are exact on their allowable range). They live in `organs/ledger/tests/property/` (32 `@given` tests) on shared strategies in `tests/strategies.py` (1 to 12 districts, 1 to 4 commodities, edge cases such as zero population, access just below the threshold, zero supply, tiny budgets). The full Ledger suite runs about 180 tests in about 2 minutes under `ci`.
+
+Found by the properties and kept as named tests in `organs/ledger/tests/unit/test_regressions.py`:
+- P15: a floor of about 1e-9 written as a row was satisfied by GLOP within tolerance with nothing allocated. Fix: the floor became an exact variable bound in a scale-free form (`x = R f`).
+- P15 and P12: subnormal severities and a need of 1e-38 made GLOP return `ABNORMAL`. Fix: objective and rows are scaled by their largest coefficient and negligible coefficients dropped.
+- P3: the budget repair removed free goods to fix a 1e-83 overshoot. Fix: only paid items are scaled.
+- P13: GLOP presolve returned `ABNORMAL` on a budget row with right-hand side 1e-9. Fix: retry without presolve.
+- P10 and P13 (found while finishing task 12): with budgets near 1e-3, GLOP returns coverage 0 where the baseline has 2e-5. That is 1e-9 of the objective scale, inside the solver's tolerance. This was a test tolerance problem, not a solver bug: the tolerance is now relative to `sum_d w_d`, and both cases are regression tests that say so.
+- P18 surfaced a spec conflict (integer rounding can send up to one unit more than a road-denied district's air/boat capacity). The owner resolved it by amending LED-R1.6 and P18.
+
+Missed by the properties and found by the seeded eval (`evals/ledger`, 200 instances up to 200 districts): SCIP reported an all-zero plan as optimal on a 100-district problem with needs around 1.9e7 (varbound upgrade numerics), and the integer budget repair broke the equity floor by one unit. The property strategies stop at 12 districts and small populations, so neither shape was generated. Both are fixed (a rounded-LP guard with a safer retry, and floor-aware batched repairs) with regression tests. The honest lesson: the properties are strong on small instances and numerically extreme inputs, but they did not cover realistic sizes, so the eval is a necessary second check rather than a formality.
+
 ## Hooks
 
 Five hooks in `.kiro/hooks/`: `on-save-organ-tests`, `on-save-contract-validate`, `on-spec-change-tasks` (agent action), `on-save-eval-dashboard`, `pre-commit-lint-secrets` (PreToolUse on `shell`, runs only for `git commit`). Each script was run by hand and tested. Not verified: that the Kiro hooks panel loads the files and that the events fire. A git `pre-commit` hook (`scripts/install_git_hooks.py`) runs the same guard for manual commits.

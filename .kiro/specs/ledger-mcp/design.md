@@ -1,6 +1,6 @@
 # ledger-mcp: Design
 
-Implements `requirements.md` (LED-R1..R11). Contract: `mcp-contracts.md` §6, §8b (v0.3).
+Implements `requirements.md` (LED-R1..R11). Contract: `mcp-contracts.md` §6, §8b (v0.4: v0.3 plus the optional mode input of optimize_allocation).
 
 ## 1. Overview
 
@@ -116,7 +116,7 @@ Runtime never touches the network (LED-R11). Tests run with sockets disabled.
 
 ## 6. Interfaces
 
-Tool I/O follows `mcp-contracts.md` §6 (v0.3). Resource: `ledger://scenario/{scenario_id}/districts` (§8b). An unknown `scenario_id` returns `NOT_FOUND`.
+Tool I/O follows `mcp-contracts.md` §6 (v0.4). Resource: `ledger://scenario/{scenario_id}/districts` (§8b). An unknown `scenario_id` returns `NOT_FOUND`.
 
 | Condition | Result | retryable |
 |---|---|---|

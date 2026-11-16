@@ -74,7 +74,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - `evals/ledger/`: seeded instance generator, solver vs proportional baseline, feasibility rate, gap distribution, solve time, coverage uplift, and the equity curve for the demo scenario. Write results in the dashboard schema. Refs: LED-R9.
   - Done when: `python -m evals.run --organ ledger --seed 0` is reproducible.
 
-- [ ] **15. Documentation** `core`
+- [x] **15. Documentation** `core`
   - `organs/ledger/README.md`, `docs/ledger-model.md` (formulation, assumptions, shadow price meaning, efficiency-equity trade-off, limitations). Add the property-testing story to `docs/kiro-writeup.md`.
   - Done when: a reader can reproduce §2 from the doc.
 
