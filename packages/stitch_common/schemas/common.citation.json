@@ -1,0 +1,75 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "doc_id": {
+      "minLength": 1,
+      "title": "Doc Id",
+      "type": "string"
+    },
+    "lang": {
+      "enum": [
+        "en",
+        "ur"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "page": {
+      "minimum": 1,
+      "title": "Page",
+      "type": "integer"
+    },
+    "publisher": {
+      "title": "Publisher",
+      "type": "string"
+    },
+    "quote": {
+      "maxLength": 400,
+      "title": "Quote",
+      "type": "string"
+    },
+    "span": {
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "minimum": 0,
+          "type": "integer"
+        }
+      ],
+      "title": "Span",
+      "type": "array"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Url"
+    }
+  },
+  "required": [
+    "doc_id",
+    "title",
+    "publisher",
+    "page",
+    "span",
+    "quote",
+    "lang",
+    "url"
+  ],
+  "title": "Citation",
+  "type": "object"
+}

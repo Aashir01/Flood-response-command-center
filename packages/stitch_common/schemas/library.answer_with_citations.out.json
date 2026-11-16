@@ -1,0 +1,184 @@
+{
+  "$defs": {
+    "AnswerClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "citation_idx": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Citation Idx",
+          "type": "array"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "citation_idx"
+      ],
+      "title": "AnswerClaim",
+      "type": "object"
+    },
+    "Citation": {
+      "additionalProperties": false,
+      "properties": {
+        "doc_id": {
+          "minLength": 1,
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "lang": {
+          "enum": [
+            "en",
+            "ur"
+          ],
+          "title": "Lang",
+          "type": "string"
+        },
+        "page": {
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "publisher": {
+          "title": "Publisher",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 400,
+          "title": "Quote",
+          "type": "string"
+        },
+        "span": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "minimum": 0,
+              "type": "integer"
+            }
+          ],
+          "title": "Span",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Url"
+        }
+      },
+      "required": [
+        "doc_id",
+        "title",
+        "publisher",
+        "page",
+        "span",
+        "quote",
+        "lang",
+        "url"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "Refusal": {
+      "additionalProperties": false,
+      "properties": {
+        "closest_hits": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Closest Hits",
+          "type": "array"
+        },
+        "reason": {
+          "enum": [
+            "INSUFFICIENT_EVIDENCE",
+            "OUT_OF_SCOPE",
+            "CONFLICTING_EVIDENCE"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason",
+        "closest_hits"
+      ],
+      "title": "Refusal",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "answer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Answer"
+    },
+    "citations": {
+      "items": {
+        "$ref": "#/$defs/Citation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "claims": {
+      "items": {
+        "$ref": "#/$defs/AnswerClaim"
+      },
+      "title": "Claims",
+      "type": "array"
+    },
+    "refusal": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Refusal"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "answered",
+        "refused"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "answer",
+    "citations",
+    "refusal",
+    "claims"
+  ],
+  "title": "AnswerWithCitationsOut",
+  "type": "object"
+}

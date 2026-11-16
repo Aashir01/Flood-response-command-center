@@ -1,0 +1,25 @@
+{
+  "additionalProperties": false,
+  "description": "Predictive interval. Invariant (BOOT-P3): ``p10 <= p50 <= p90``.",
+  "properties": {
+    "p10": {
+      "title": "P10",
+      "type": "number"
+    },
+    "p50": {
+      "title": "P50",
+      "type": "number"
+    },
+    "p90": {
+      "title": "P90",
+      "type": "number"
+    }
+  },
+  "required": [
+    "p10",
+    "p50",
+    "p90"
+  ],
+  "title": "Interval",
+  "type": "object"
+}

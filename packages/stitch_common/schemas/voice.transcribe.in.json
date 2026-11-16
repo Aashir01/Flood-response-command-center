@@ -1,0 +1,42 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "audio_b64": {
+      "title": "Audio B64",
+      "type": "string"
+    },
+    "format": {
+      "enum": [
+        "wav",
+        "webm",
+        "mp3",
+        "ogg"
+      ],
+      "title": "Format",
+      "type": "string"
+    },
+    "lang_hint": {
+      "anyOf": [
+        {
+          "enum": [
+            "en",
+            "ur",
+            "auto"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lang Hint"
+    }
+  },
+  "required": [
+    "audio_b64",
+    "format"
+  ],
+  "title": "TranscribeIn",
+  "type": "object"
+}

@@ -1,0 +1,196 @@
+{
+  "$defs": {
+    "Commodity": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "per_person_need": {
+          "exclusiveMinimum": 0.0,
+          "title": "Per Person Need",
+          "type": "number"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        },
+        "unit_cost": {
+          "minimum": 0.0,
+          "title": "Unit Cost",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "unit",
+        "unit_cost",
+        "per_person_need"
+      ],
+      "title": "Commodity",
+      "type": "object"
+    },
+    "DistrictInput": {
+      "additionalProperties": false,
+      "properties": {
+        "alt_delivery_fraction": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Alt Delivery Fraction",
+          "type": "number"
+        },
+        "district_id": {
+          "minLength": 1,
+          "title": "District Id",
+          "type": "string"
+        },
+        "population_affected": {
+          "minimum": 0,
+          "title": "Population Affected",
+          "type": "integer"
+        },
+        "road_access": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Road Access",
+          "type": "number"
+        },
+        "severity": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Severity",
+          "type": "number"
+        },
+        "unit_cost_multiplier": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit Cost Multiplier"
+        }
+      },
+      "required": [
+        "district_id",
+        "population_affected",
+        "severity",
+        "road_access"
+      ],
+      "title": "DistrictInput",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "budget": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Budget"
+    },
+    "commodities": {
+      "items": {
+        "$ref": "#/$defs/Commodity"
+      },
+      "minItems": 1,
+      "title": "Commodities",
+      "type": "array"
+    },
+    "districts": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/DistrictInput"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Districts"
+    },
+    "equity_floor": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Equity Floor"
+    },
+    "integer": {
+      "default": true,
+      "title": "Integer",
+      "type": "boolean"
+    },
+    "min_road_access": {
+      "default": 0.1,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Min Road Access",
+      "type": "number"
+    },
+    "on_infeasible_floor": {
+      "default": "relax",
+      "enum": [
+        "relax",
+        "error"
+      ],
+      "title": "On Infeasible Floor",
+      "type": "string"
+    },
+    "scenario_id": {
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "solver_time_limit_s": {
+      "default": 10.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Solver Time Limit S",
+      "type": "number"
+    },
+    "supply": {
+      "additionalProperties": {
+        "minimum": 0.0,
+        "type": "number"
+      },
+      "title": "Supply",
+      "type": "object"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "commodities",
+    "supply"
+  ],
+  "title": "OptimizeAllocationIn",
+  "type": "object"
+}

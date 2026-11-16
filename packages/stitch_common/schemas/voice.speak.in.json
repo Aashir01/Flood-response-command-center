@@ -1,0 +1,53 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "anyOf": [
+        {
+          "enum": [
+            "wav",
+            "mp3"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Format"
+    },
+    "lang": {
+      "enum": [
+        "en",
+        "ur"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "voice": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Voice"
+    }
+  },
+  "required": [
+    "text",
+    "lang"
+  ],
+  "title": "SpeakIn",
+  "type": "object"
+}

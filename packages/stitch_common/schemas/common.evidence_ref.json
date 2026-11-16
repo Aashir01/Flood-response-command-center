@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.",
+  "properties": {
+    "json_pointer": {
+      "pattern": "^(/([^~/]|~[01])*)*$",
+      "title": "Json Pointer",
+      "type": "string"
+    },
+    "organ": {
+      "minLength": 1,
+      "title": "Organ",
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "tool": {
+      "minLength": 1,
+      "title": "Tool",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "organ",
+    "tool",
+    "json_pointer"
+  ],
+  "title": "EvidenceRef",
+  "type": "object"
+}

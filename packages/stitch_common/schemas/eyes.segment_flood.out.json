@@ -1,0 +1,148 @@
+{
+  "$defs": {
+    "FeatureCollection": {
+      "additionalProperties": false,
+      "description": "Minimal GeoJSON FeatureCollection (WGS84). Features are kept as plain dicts.",
+      "properties": {
+        "bbox": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bbox"
+        },
+        "features": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Features",
+          "type": "array"
+        },
+        "type": {
+          "const": "FeatureCollection",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "features"
+      ],
+      "title": "FeatureCollection",
+      "type": "object"
+    },
+    "SourceScene": {
+      "additionalProperties": false,
+      "properties": {
+        "acquired": {
+          "format": "date-time",
+          "title": "Acquired",
+          "type": "string"
+        },
+        "scene_id": {
+          "title": "Scene Id",
+          "type": "string"
+        },
+        "sensor": {
+          "title": "Sensor",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sensor",
+        "acquired",
+        "scene_id"
+      ],
+      "title": "SourceScene",
+      "type": "object"
+    },
+    "Validation": {
+      "additionalProperties": false,
+      "properties": {
+        "eval_dataset": {
+          "title": "Eval Dataset",
+          "type": "string"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        },
+        "validated_for_region": {
+          "title": "Validated For Region",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "validated_for_region",
+        "eval_dataset",
+        "note"
+      ],
+      "title": "Validation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "extent_geojson": {
+      "$ref": "#/$defs/FeatureCollection"
+    },
+    "flood_extent_km2": {
+      "minimum": 0.0,
+      "title": "Flood Extent Km2",
+      "type": "number"
+    },
+    "permanent_water_km2": {
+      "minimum": 0.0,
+      "title": "Permanent Water Km2",
+      "type": "number"
+    },
+    "reference_overlay_geojson": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FeatureCollection"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_scene": {
+      "$ref": "#/$defs/SourceScene"
+    },
+    "tiles_processed": {
+      "minimum": 0,
+      "title": "Tiles Processed",
+      "type": "integer"
+    },
+    "validation": {
+      "$ref": "#/$defs/Validation"
+    }
+  },
+  "required": [
+    "flood_extent_km2",
+    "extent_geojson",
+    "permanent_water_km2",
+    "confidence",
+    "tiles_processed",
+    "source_scene",
+    "validation",
+    "reference_overlay_geojson"
+  ],
+  "title": "SegmentFloodOut",
+  "type": "object"
+}

@@ -55,13 +55,14 @@ ignore = ["RUF012"]
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages/stitch_common/src", "scripts"]
+mypy_path = ["packages/stitch_common/src", "scripts", "scripts/hooks"]
 explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --import-mode=importlib"
 testpaths = ["packages", "tests", "organs", "evals"]
+pythonpath = ["scripts", "scripts/hooks", "."]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 markers = [

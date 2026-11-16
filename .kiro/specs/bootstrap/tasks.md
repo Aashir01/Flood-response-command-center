@@ -18,7 +18,7 @@ Target: about half a day. Do first. `core` unless marked.
   - `no_network` autouse, `allow_loopback` marker, Hypothesis profiles `dev` and `ci`, registered through the `pytest11` entry point. Verify on Windows with a stdio subprocess test.
   - Done when: a test that opens an outbound socket fails, a stdio pipe test passes. Refs: BOOT-R2.4.
 
-- [ ] **5. Schema export and contract checker** `core`
+- [x] **5. Schema export and contract checker** `core`
   - `export_schemas.py`, `contracts.lock.json`, `check_contracts.py` with `--update`.
   - Tests: P5 (clean tree passes, deliberate schema edit fails, version mismatch fails). Refs: BOOT-R3.
   - Also: fix the change-log order in `mcp-contracts.md` (0.1, 0.2, 0.3 ascending) if the check requires it.

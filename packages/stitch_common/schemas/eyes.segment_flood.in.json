@@ -1,0 +1,56 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "bbox": {
+      "anyOf": [
+        {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Bbox"
+    },
+    "date": {
+      "format": "date",
+      "title": "Date",
+      "type": "string"
+    },
+    "region_id": {
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "title": "Region Id",
+      "type": "string"
+    },
+    "tile_size": {
+      "default": 256,
+      "exclusiveMinimum": 0,
+      "title": "Tile Size",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "region_id",
+    "date"
+  ],
+  "title": "SegmentFloodIn",
+  "type": "object"
+}

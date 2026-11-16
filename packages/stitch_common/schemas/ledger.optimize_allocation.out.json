@@ -1,0 +1,224 @@
+{
+  "$defs": {
+    "AllocationLine": {
+      "additionalProperties": false,
+      "properties": {
+        "commodity_id": {
+          "title": "Commodity Id",
+          "type": "string"
+        },
+        "district_id": {
+          "title": "District Id",
+          "type": "string"
+        },
+        "quantity": {
+          "minimum": 0.0,
+          "title": "Quantity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "district_id",
+        "commodity_id",
+        "quantity"
+      ],
+      "title": "AllocationLine",
+      "type": "object"
+    },
+    "CostBenefit": {
+      "additionalProperties": false,
+      "properties": {
+        "cost_per_person_covered": {
+          "minimum": 0.0,
+          "title": "Cost Per Person Covered",
+          "type": "number"
+        },
+        "people_covered": {
+          "minimum": 0.0,
+          "title": "People Covered",
+          "type": "number"
+        }
+      },
+      "required": [
+        "cost_per_person_covered",
+        "people_covered"
+      ],
+      "title": "CostBenefit",
+      "type": "object"
+    },
+    "CoverageLine": {
+      "additionalProperties": false,
+      "properties": {
+        "access_mode": {
+          "enum": [
+            "road",
+            "air_boat",
+            "unreachable"
+          ],
+          "title": "Access Mode",
+          "type": "string"
+        },
+        "district_id": {
+          "title": "District Id",
+          "type": "string"
+        },
+        "fraction": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Fraction",
+          "type": "number"
+        },
+        "unreached_people": {
+          "minimum": 0.0,
+          "title": "Unreached People",
+          "type": "number"
+        }
+      },
+      "required": [
+        "district_id",
+        "fraction",
+        "access_mode",
+        "unreached_people"
+      ],
+      "title": "CoverageLine",
+      "type": "object"
+    },
+    "Equity": {
+      "additionalProperties": false,
+      "properties": {
+        "floor_applied": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Floor Applied",
+          "type": "number"
+        },
+        "floor_requested": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Floor Requested",
+          "type": "number"
+        },
+        "max_feasible_floor": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Max Feasible Floor",
+          "type": "number"
+        }
+      },
+      "required": [
+        "floor_requested",
+        "floor_applied",
+        "max_feasible_floor"
+      ],
+      "title": "Equity",
+      "type": "object"
+    },
+    "SolverInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "wall_time_s": {
+          "minimum": 0.0,
+          "title": "Wall Time S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "wall_time_s"
+      ],
+      "title": "SolverInfo",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allocation": {
+      "items": {
+        "$ref": "#/$defs/AllocationLine"
+      },
+      "title": "Allocation",
+      "type": "array"
+    },
+    "cost_benefit": {
+      "$ref": "#/$defs/CostBenefit"
+    },
+    "coverage": {
+      "items": {
+        "$ref": "#/$defs/CoverageLine"
+      },
+      "title": "Coverage",
+      "type": "array"
+    },
+    "equity": {
+      "$ref": "#/$defs/Equity"
+    },
+    "infeasibility_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Infeasibility Reason"
+    },
+    "optimality_gap": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Optimality Gap"
+    },
+    "solver": {
+      "$ref": "#/$defs/SolverInfo"
+    },
+    "status": {
+      "enum": [
+        "optimal",
+        "feasible",
+        "infeasible"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "total_cost": {
+      "minimum": 0.0,
+      "title": "Total Cost",
+      "type": "number"
+    },
+    "total_coverage": {
+      "minimum": 0.0,
+      "title": "Total Coverage",
+      "type": "number"
+    }
+  },
+  "required": [
+    "status",
+    "allocation",
+    "coverage",
+    "equity",
+    "total_coverage",
+    "total_cost",
+    "optimality_gap",
+    "cost_benefit",
+    "solver"
+  ],
+  "title": "OptimizeAllocationOut",
+  "type": "object"
+}

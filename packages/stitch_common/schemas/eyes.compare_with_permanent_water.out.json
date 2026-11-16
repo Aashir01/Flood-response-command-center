@@ -1,0 +1,69 @@
+{
+  "$defs": {
+    "DistrictFlood": {
+      "additionalProperties": false,
+      "properties": {
+        "district_id": {
+          "title": "District Id",
+          "type": "string"
+        },
+        "flooded_fraction": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Flooded Fraction",
+          "type": "number"
+        },
+        "flooded_km2": {
+          "minimum": 0.0,
+          "title": "Flooded Km2",
+          "type": "number"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "district_id",
+        "name",
+        "flooded_km2",
+        "flooded_fraction"
+      ],
+      "title": "DistrictFlood",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "by_district": {
+      "items": {
+        "$ref": "#/$defs/DistrictFlood"
+      },
+      "title": "By District",
+      "type": "array"
+    },
+    "new_flood_km2": {
+      "minimum": 0.0,
+      "title": "New Flood Km2",
+      "type": "number"
+    },
+    "permanent_water_km2": {
+      "minimum": 0.0,
+      "title": "Permanent Water Km2",
+      "type": "number"
+    },
+    "total_water_km2": {
+      "minimum": 0.0,
+      "title": "Total Water Km2",
+      "type": "number"
+    }
+  },
+  "required": [
+    "total_water_km2",
+    "permanent_water_km2",
+    "new_flood_km2",
+    "by_district"
+  ],
+  "title": "CompareWithPermanentWaterOut",
+  "type": "object"
+}

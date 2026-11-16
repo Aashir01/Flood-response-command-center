@@ -1,0 +1,57 @@
+{
+  "$defs": {
+    "Driver": {
+      "additionalProperties": false,
+      "properties": {
+        "contribution_m3s": {
+          "title": "Contribution M3S",
+          "type": "number"
+        },
+        "direction": {
+          "enum": [
+            "up",
+            "down"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "feature": {
+          "title": "Feature",
+          "type": "string"
+        }
+      },
+      "required": [
+        "feature",
+        "contribution_m3s",
+        "direction"
+      ],
+      "title": "Driver",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "baseline_m3s": {
+      "title": "Baseline M3S",
+      "type": "number"
+    },
+    "drivers": {
+      "items": {
+        "$ref": "#/$defs/Driver"
+      },
+      "title": "Drivers",
+      "type": "array"
+    },
+    "narrative": {
+      "title": "Narrative",
+      "type": "string"
+    }
+  },
+  "required": [
+    "drivers",
+    "narrative",
+    "baseline_m3s"
+  ],
+  "title": "ExplainForecastOut",
+  "type": "object"
+}

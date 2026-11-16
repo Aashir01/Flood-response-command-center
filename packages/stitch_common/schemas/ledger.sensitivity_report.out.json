@@ -1,0 +1,197 @@
+{
+  "$defs": {
+    "ConstraintRange": {
+      "additionalProperties": false,
+      "properties": {
+        "allowable_decrease": {
+          "title": "Allowable Decrease",
+          "type": "number"
+        },
+        "allowable_increase": {
+          "title": "Allowable Increase",
+          "type": "number"
+        },
+        "constraint": {
+          "title": "Constraint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "constraint",
+        "allowable_increase",
+        "allowable_decrease"
+      ],
+      "title": "ConstraintRange",
+      "type": "object"
+    },
+    "ReducedCost": {
+      "additionalProperties": false,
+      "properties": {
+        "commodity_id": {
+          "title": "Commodity Id",
+          "type": "string"
+        },
+        "district_id": {
+          "title": "District Id",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "district_id",
+        "commodity_id",
+        "value"
+      ],
+      "title": "ReducedCost",
+      "type": "object"
+    },
+    "ShadowPrice": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "title": "Binding",
+          "type": "boolean"
+        },
+        "constraint": {
+          "pattern": "^(supply:.+|budget|equity_floor|min_coverage:.+)$",
+          "title": "Constraint",
+          "type": "string"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "constraint",
+        "value",
+        "unit",
+        "binding"
+      ],
+      "title": "ShadowPrice",
+      "type": "object"
+    },
+    "TradeoffPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "min_coverage_floor": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Coverage Floor",
+          "type": "number"
+        },
+        "people_covered": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "People Covered"
+        },
+        "status": {
+          "enum": [
+            "optimal",
+            "feasible",
+            "infeasible"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "total_coverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Total Coverage"
+        }
+      },
+      "required": [
+        "min_coverage_floor",
+        "status",
+        "total_coverage",
+        "people_covered"
+      ],
+      "title": "TradeoffPoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "basis": {
+      "const": "lp_relaxation",
+      "title": "Basis",
+      "type": "string"
+    },
+    "equity_cost": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Equity Cost"
+    },
+    "equity_tradeoff": {
+      "items": {
+        "$ref": "#/$defs/TradeoffPoint"
+      },
+      "title": "Equity Tradeoff",
+      "type": "array"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "ranges": {
+      "items": {
+        "$ref": "#/$defs/ConstraintRange"
+      },
+      "title": "Ranges",
+      "type": "array"
+    },
+    "reduced_costs": {
+      "items": {
+        "$ref": "#/$defs/ReducedCost"
+      },
+      "title": "Reduced Costs",
+      "type": "array"
+    },
+    "shadow_prices": {
+      "items": {
+        "$ref": "#/$defs/ShadowPrice"
+      },
+      "title": "Shadow Prices",
+      "type": "array"
+    }
+  },
+  "required": [
+    "shadow_prices",
+    "reduced_costs",
+    "ranges",
+    "basis",
+    "equity_tradeoff",
+    "equity_cost",
+    "notes"
+  ],
+  "title": "SensitivityReportOut",
+  "type": "object"
+}

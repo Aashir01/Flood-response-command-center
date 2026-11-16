@@ -1,0 +1,76 @@
+{
+  "$defs": {
+    "Hit": {
+      "additionalProperties": false,
+      "properties": {
+        "bm25": {
+          "title": "Bm25",
+          "type": "number"
+        },
+        "dense": {
+          "title": "Dense",
+          "type": "number"
+        },
+        "doc_id": {
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "lang": {
+          "title": "Lang",
+          "type": "string"
+        },
+        "page": {
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "rerank": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rerank"
+        },
+        "score": {
+          "title": "Score",
+          "type": "number"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "doc_id",
+        "page",
+        "score",
+        "bm25",
+        "dense",
+        "rerank",
+        "text",
+        "lang"
+      ],
+      "title": "Hit",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "hits": {
+      "items": {
+        "$ref": "#/$defs/Hit"
+      },
+      "title": "Hits",
+      "type": "array"
+    }
+  },
+  "required": [
+    "hits"
+  ],
+  "title": "SearchGuidanceOut",
+  "type": "object"
+}

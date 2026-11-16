@@ -1,0 +1,22 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "floor_steps": {
+      "default": 11,
+      "maximum": 21,
+      "minimum": 2,
+      "title": "Floor Steps",
+      "type": "integer"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id"
+  ],
+  "title": "SensitivityReportIn",
+  "type": "object"
+}

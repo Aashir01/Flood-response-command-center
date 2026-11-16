@@ -1,0 +1,266 @@
+{
+  "$defs": {
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "number",
+            "statement",
+            "recommendation"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "evidence",
+        "kind"
+      ],
+      "title": "Claim",
+      "type": "object"
+    },
+    "Conflict": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "organs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Organs",
+          "type": "array"
+        },
+        "resolution": {
+          "enum": [
+            "flagged",
+            "reconciled",
+            "escalated"
+          ],
+          "title": "Resolution",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "organs",
+        "resolution",
+        "evidence"
+      ],
+      "title": "Conflict",
+      "type": "object"
+    },
+    "CriticVerdict": {
+      "additionalProperties": false,
+      "properties": {
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "removed_claims": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Removed Claims",
+          "type": "array"
+        }
+      },
+      "required": [
+        "passed",
+        "removed_claims",
+        "notes"
+      ],
+      "title": "CriticVerdict",
+      "type": "object"
+    },
+    "EvidenceRef": {
+      "additionalProperties": false,
+      "description": "What the Brain stores for provenance. ``json_pointer`` is an RFC 6901 pointer.",
+      "properties": {
+        "json_pointer": {
+          "pattern": "^(/([^~/]|~[01])*)*$",
+          "title": "Json Pointer",
+          "type": "string"
+        },
+        "organ": {
+          "minLength": 1,
+          "title": "Organ",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "organ",
+        "tool",
+        "json_pointer"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "Section": {
+      "additionalProperties": false,
+      "properties": {
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Claims",
+          "type": "array"
+        },
+        "id": {
+          "enum": [
+            "extent",
+            "forecast",
+            "guidance",
+            "allocation",
+            "caveats"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "status",
+        "claims"
+      ],
+      "title": "Section",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "briefing_id": {
+      "minLength": 1,
+      "title": "Briefing Id",
+      "type": "string"
+    },
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "conflicts": {
+      "items": {
+        "$ref": "#/$defs/Conflict"
+      },
+      "title": "Conflicts",
+      "type": "array"
+    },
+    "critic": {
+      "$ref": "#/$defs/CriticVerdict"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "lang": {
+      "enum": [
+        "en",
+        "ur"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "demo",
+        "live"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "scenario": {
+      "title": "Scenario",
+      "type": "string"
+    },
+    "sections": {
+      "items": {
+        "$ref": "#/$defs/Section"
+      },
+      "title": "Sections",
+      "type": "array"
+    }
+  },
+  "required": [
+    "briefing_id",
+    "scenario",
+    "lang",
+    "mode",
+    "sections",
+    "conflicts",
+    "critic",
+    "confidence",
+    "generated_at"
+  ],
+  "title": "Briefing",
+  "type": "object"
+}

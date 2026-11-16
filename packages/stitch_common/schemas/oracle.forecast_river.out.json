@@ -1,0 +1,184 @@
+{
+  "$defs": {
+    "Calibration": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "const": "split_conformal",
+          "title": "Method",
+          "type": "string"
+        },
+        "n_calibration": {
+          "minimum": 0,
+          "title": "N Calibration",
+          "type": "integer"
+        },
+        "nominal_coverage": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Nominal Coverage",
+          "type": "number"
+        }
+      },
+      "required": [
+        "method",
+        "nominal_coverage",
+        "n_calibration"
+      ],
+      "title": "Calibration",
+      "type": "object"
+    },
+    "ExceedancePoint": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "p_exceed": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "P Exceed",
+          "type": "number"
+        }
+      },
+      "required": [
+        "date",
+        "p_exceed"
+      ],
+      "title": "ExceedancePoint",
+      "type": "object"
+    },
+    "ForecastPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "discharge": {
+          "$ref": "#/$defs/Interval"
+        },
+        "lead_days": {
+          "minimum": 0,
+          "title": "Lead Days",
+          "type": "integer"
+        },
+        "rainfall_mm": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Interval"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "date",
+        "lead_days",
+        "discharge"
+      ],
+      "title": "ForecastPoint",
+      "type": "object"
+    },
+    "Interval": {
+      "additionalProperties": false,
+      "description": "Predictive interval. Invariant (BOOT-P3): ``p10 <= p50 <= p90``.",
+      "properties": {
+        "p10": {
+          "title": "P10",
+          "type": "number"
+        },
+        "p50": {
+          "title": "P50",
+          "type": "number"
+        },
+        "p90": {
+          "title": "P90",
+          "type": "number"
+        }
+      },
+      "required": [
+        "p10",
+        "p50",
+        "p90"
+      ],
+      "title": "Interval",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "calibration": {
+      "$ref": "#/$defs/Calibration"
+    },
+    "danger_threshold_m3s": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Danger Threshold M3S"
+    },
+    "exceedance_prob": {
+      "items": {
+        "$ref": "#/$defs/ExceedancePoint"
+      },
+      "title": "Exceedance Prob",
+      "type": "array"
+    },
+    "forecast": {
+      "items": {
+        "$ref": "#/$defs/ForecastPoint"
+      },
+      "minItems": 1,
+      "title": "Forecast",
+      "type": "array"
+    },
+    "station_id": {
+      "title": "Station Id",
+      "type": "string"
+    },
+    "target_kind": {
+      "const": "modeled_glofas",
+      "title": "Target Kind",
+      "type": "string"
+    },
+    "target_label": {
+      "const": "Modeled river discharge (GloFAS via Open-Meteo)",
+      "title": "Target Label",
+      "type": "string"
+    },
+    "unit": {
+      "const": "m3/s",
+      "title": "Unit",
+      "type": "string"
+    }
+  },
+  "required": [
+    "station_id",
+    "unit",
+    "as_of",
+    "target_kind",
+    "target_label",
+    "forecast",
+    "danger_threshold_m3s",
+    "exceedance_prob",
+    "calibration"
+  ],
+  "title": "ForecastRiverOut",
+  "type": "object"
+}

@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "Filters": {
+      "additionalProperties": false,
+      "properties": {
+        "doc_type": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doc Type"
+        },
+        "publisher": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Publisher"
+        }
+      },
+      "title": "Filters",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "filters": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Filters"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "lang": {
+      "anyOf": [
+        {
+          "enum": [
+            "en",
+            "ur",
+            "auto"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lang"
+    },
+    "query": {
+      "minLength": 1,
+      "title": "Query",
+      "type": "string"
+    },
+    "top_k": {
+      "default": 8,
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Top K",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "query"
+  ],
+  "title": "SearchGuidanceIn",
+  "type": "object"
+}

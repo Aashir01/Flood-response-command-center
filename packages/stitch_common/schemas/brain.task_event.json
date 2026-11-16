@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "event": {
+      "enum": [
+        "plan",
+        "organ_call",
+        "organ_result",
+        "conflict",
+        "critic",
+        "briefing",
+        "error"
+      ],
+      "title": "Event",
+      "type": "string"
+    },
+    "organ": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Organ"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "task_id": {
+      "minLength": 1,
+      "title": "Task Id",
+      "type": "string"
+    },
+    "tool": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool"
+    },
+    "ts": {
+      "format": "date-time",
+      "title": "Ts",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event",
+    "ts",
+    "task_id",
+    "payload"
+  ],
+  "title": "TaskEvent",
+  "type": "object"
+}

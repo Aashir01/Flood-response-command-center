@@ -1,0 +1,48 @@
+{
+  "additionalProperties": false,
+  "description": "Item of the resource ``ledger://scenario/{scenario_id}/districts``.",
+  "properties": {
+    "alt_delivery_fraction": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Alt Delivery Fraction",
+      "type": "number"
+    },
+    "default_severity": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Default Severity",
+      "type": "number"
+    },
+    "district_id": {
+      "minLength": 1,
+      "title": "District Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "population": {
+      "minimum": 0,
+      "title": "Population",
+      "type": "integer"
+    },
+    "road_access": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Road Access",
+      "type": "number"
+    }
+  },
+  "required": [
+    "district_id",
+    "name",
+    "population",
+    "road_access",
+    "alt_delivery_fraction",
+    "default_severity"
+  ],
+  "title": "ScenarioDistrict",
+  "type": "object"
+}
