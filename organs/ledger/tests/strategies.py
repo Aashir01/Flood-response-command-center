@@ -67,8 +67,10 @@ def districts_strategy(
     alt: st.SearchStrategy[float] = alt_fractions,
     severity: st.SearchStrategy[float] = severities,
     population: st.SearchStrategy[float] = populations,
+    id_pool: list[str] | None = None,
 ) -> tuple[DistrictSpec, ...]:
-    ids = draw(st.lists(st.sampled_from(IDS), min_size=min_size, max_size=max_size, unique=True))
+    pool = id_pool or IDS
+    ids = draw(st.lists(st.sampled_from(pool), min_size=min_size, max_size=max_size, unique=True))
     return tuple(
         DistrictSpec(
             district_id=i,
@@ -154,9 +156,11 @@ def mip_specs(**kw: Any) -> st.SearchStrategy[ProblemSpec]:
 def unreachable_district_specs() -> st.SearchStrategy[ProblemSpec]:
     """Districts with no usable road access and no air/boat capacity (LED-P17)."""
     dead = districts_strategy(
+        min_size=1,
         access=st.one_of(st.just(0.0), st.floats(0.0, math.nextafter(TAU, 0.0))),
         alt=st.just(0.0),
         population=st.integers(1, 100_000).map(float),
+        id_pool=[f"x{i:02d}" for i in range(5)],
     )
     return st.tuples(valid_specs(), dead).map(_merge_dead)
 
@@ -165,18 +169,16 @@ def _merge_dead(pair: tuple[ProblemSpec, tuple[DistrictSpec, ...]]) -> ProblemSp
     from dataclasses import replace
 
     spec, dead = pair
-    taken = {d.district_id for d in spec.districts}
-    extra = tuple(d for d in dead if d.district_id not in taken)
-    return replace(spec, districts=spec.districts + extra)
+    return replace(spec, districts=spec.districts + dead)
 
 
-def road_denied_specs() -> st.SearchStrategy[ProblemSpec]:
+def road_denied_specs(integer: bool | None = None) -> st.SearchStrategy[ProblemSpec]:
     """Every district road-denied, with air/boat capacity (LED-P18)."""
     denied = districts_strategy(
         access=st.floats(0.0, math.nextafter(TAU, 0.0), allow_nan=False),
         alt=st.floats(0.01, 1.0, allow_nan=False),
     )
-    return valid_specs(districts=denied)
+    return valid_specs(districts=denied, integer=integer)
 
 
 _BAD = [

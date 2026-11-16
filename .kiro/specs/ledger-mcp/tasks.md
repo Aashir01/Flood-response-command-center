@@ -21,7 +21,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Tests: three hand-solved instances (single commodity; two commodities with budget; floor binding), derivations in docstrings. Differential test against greedy-by-severity. Refs: LED-R1.1 to R1.3, R3.1. P12, P16.
   - Done when: hand-solved, greedy, and `φ = 1` proportional checks pass.
 
-- [ ] **4. Postprocess, safety invariants, cost-benefit** `core`
+- [x] **4. Postprocess, safety invariants, cost-benefit** `core`
   - `core/postprocess.py`: clamp, repair, recompute `f`, `cov_d`, totals, cost per person with null on zero, `access_mode` and `unreached_people`.
   - Property tests: P1, P2, P4, P5, P17, P18. Unit test: zero people covered. Refs: LED-R4, R5.
   - Done when: all pass under `ci`.
