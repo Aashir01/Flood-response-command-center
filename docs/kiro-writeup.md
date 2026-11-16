@@ -1,4 +1,4 @@
-﻿# Kiro write-up
+# Kiro write-up
 
 Running log of how Stitch uses each Kiro feature. Only facts that were checked are stated as facts. Anything not yet shown says so.
 
@@ -19,7 +19,7 @@ Six files in `.kiro/steering/` (`product`, `tech`, `structure`, `testing`, `ui-s
 
 ## Specs
 
-One spec per component under `.kiro/specs/<name>/` (requirements, design, tasks). Bootstrap tasks 1 to 13 are done; tasks are ticked in `tasks.md` as they finish. The `on-spec-change-tasks` agent hook is meant to regenerate `tasks.md` when requirements or design change. It has not fired yet.
+One spec per component under `.kiro/specs/<name>/` (requirements, design, tasks). Bootstrap tasks 1 to 9 and 11 to 13 are done; task 10 (`mcp.json`) is blocked on the permission rule noted above; tasks are ticked in `tasks.md` as they finish. The `on-spec-change-tasks` agent hook is meant to regenerate `tasks.md` when requirements or design change. It has not fired yet.
 
 ## Property tests
 
