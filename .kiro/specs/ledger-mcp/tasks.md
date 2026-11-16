@@ -36,7 +36,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Property tests: P14, P9. Unit test: tiny time limit returns `feasible` with a gap, or `TIMEOUT` with no incumbent. Refs: LED-R1.1, R3.5 to R3.7, R4.3.
   - Done when: integrality and determinism hold and time-limit behavior is covered.
 
-- [ ] **7. Monotonicity, symmetry, scale, baseline properties** `core`
+- [x] **7. Monotonicity, symmetry, scale, baseline properties** `core`
   - `core/baseline.py` (proportional share). Property tests P3 (as stated in the design), P7, P8, P13.
   - Done when: all pass under `ci`. Any failing example becomes a named regression test.
 
