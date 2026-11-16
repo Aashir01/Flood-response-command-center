@@ -257,7 +257,9 @@ def train(
         "files": files,
         "root_sha256": root_hash(files),
     }
-    (out / MANIFEST).write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    (out / MANIFEST).write_text(
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     return manifest
 
 
