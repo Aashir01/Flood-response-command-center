@@ -8,10 +8,11 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from stitch_brain.config import I18n, ScenarioCfg, load_i18n, load_scenarios
+from stitch_brain.config import I18n, ScenarioCfg, load_i18n, load_rules, load_scenarios
 from stitch_brain.core.briefing import StatusInputs, assemble, labels_for, section_status
 from stitch_brain.core.claims import SECTION_ORDER, ClaimDraft
 from stitch_brain.core.confidence import ConfidenceParams, confidence, organ_confidences
+from stitch_brain.core.conflicts import ConflictRecord, apply_disputed, entry_data, records_from
 from stitch_brain.core.evidence import (
     EvidenceEntry,
     EvidenceStore,
@@ -19,8 +20,16 @@ from stitch_brain.core.evidence import (
     det_uuid,
     sha256_json,
 )
+from stitch_brain.core.facts import FactCtx
 from stitch_brain.core.graph import Node, Plan
-from stitch_brain.core.plans import BUILDERS, BuildContext, default_plan, organ_phase_nodes
+from stitch_brain.core.plans import (
+    BUILDERS,
+    BuildContext,
+    default_plan,
+    organ_phase_nodes,
+    with_rerun,
+)
+from stitch_brain.core.rules import RuleSet, evaluate, evaluate_rule
 from stitch_brain.core.severity import build_ledger_input
 from stitch_brain.core.synth import render_all
 from stitch_brain.core.templates.common import RenderCtx
@@ -91,6 +100,7 @@ class BriefingRunner:
         scenarios: Mapping[str, ScenarioCfg] | None = None,
         i18n: I18n | None = None,
         conf_params: ConfidenceParams | None = None,
+        rules: RuleSet | None = None,
         llm: Any = None,
     ) -> None:
         self.registry = registry
@@ -99,6 +109,7 @@ class BriefingRunner:
         self.scenarios = dict(scenarios or load_scenarios())
         self.i18n = i18n or load_i18n()
         self.conf_params = conf_params or ConfidenceParams()
+        self.rules: RuleSet = rules or load_rules()
         self.llm = llm
 
     # --- entries -----------------------------------------------------------------------------
@@ -154,6 +165,8 @@ class _Run:
         self.calls: list[dict[str, Any]] = []
         self.started_at = r.clock.now()
         self.health_at_start = r.registry.health()
+        self.reruns = 0
+        self.rule_trace: list[str] = []
 
     # --- events ------------------------------------------------------------------------------
     def emit(
@@ -404,11 +417,11 @@ class _Run:
             limits=limits,
         )
         outcomes = await ex.run(organ_phase_nodes(plan))
-        if self.store.ok_node("ledger.optimize") is not None:
-            final = self.store.ok_node("ledger.optimize")
-            assert final is not None
+        final = self.store.ok_node("ledger.optimize")
+        if final is not None:
             self.store.alias("ledger.final", final.call_run_id)
-        conflicts: list[Conflict] = []
+        plan, records = await self.conflict_stage(plan, ex, outcomes)
+        conflicts: list[Conflict] = [r.to_contract(self.req.lang) for r in records]
         mode, fallback = self._effective_mode()
         if fallback:
             self.emit("notice", "run", {"code": "MODE_FALLBACK", "message": fallback})
@@ -438,6 +451,9 @@ class _Run:
         )
         organ_entries = [e for e in self.store.entries() if e.served_by != "brain"]
         drafts = render_all(ctx, organ_entries)
+        apply_disputed(
+            drafts, records, self.r.i18n.pack(self.req.lang).disputed_suffix, self.req.lang
+        )
         critic = CriticVerdict(passed=True, removed_claims=[], notes=[])
         briefing = self._assemble(drafts, outcomes, conflicts, critic, mode)
         self.emit("briefing", "briefing", briefing.model_dump(mode="json"))
@@ -449,6 +465,57 @@ class _Run:
             drafts=drafts,
             trace={"calls": self.calls},
         )
+
+    # --- conflicts and the single reconciliation (design 9.4) ---------------------------------
+    def _conflict_event(self, rec: ConflictRecord) -> None:
+        self.emit("conflict", "conflicts", rec.to_contract(self.req.lang).model_dump(mode="json"))
+
+    async def conflict_stage(
+        self, plan: Plan, ex: Executor, outcomes: dict[str, NodeOutcome]
+    ) -> tuple[Plan, list[ConflictRecord]]:
+        rs = self.r.rules
+        fctx = FactCtx(store=self.store, scenario=self.scenario)
+        pass1 = evaluate(rs, fctx)
+        records = records_from(pass1, rs.params, self.r.i18n, self.scenario)
+        budget = 1  # per run, not per rule (BRN-P20)
+        for rec in records:
+            rule = rec.outcome.rule
+            if rule.reconcile is None or budget == 0:
+                continue
+            budget -= 1
+            rec.status = "reconciling"
+            self._conflict_event(rec)
+            plan = with_rerun(plan)
+            self.plan_event(plan, added=["ledger.rerun"])
+            self.derive(plan.node("derive.ledger_input"), mode="eyes_only")
+            node = plan.node("ledger.rerun")
+            rerun = await ex.run([node], prior=outcomes, deadline_s=node.timeout_s * 3)
+            outcomes.update(rerun)
+            self.reruns += 1
+            new = self.store.ok_node("ledger.rerun")
+            if new is None:
+                rec.resolution = "escalated"
+                continue
+            self.store.alias("ledger.final", new.call_run_id)
+            again = evaluate_rule(rule, fctx, rs.params)  # pass 2 cannot schedule nodes
+            rec.evidence += [new.ref("/data/status"), new.ref("/data/allocation")]
+            rec.resolution = "escalated" if again.fired else "reconciled"
+        for rec in records:
+            rec.status = "final"
+            self._conflict_event(rec)
+        trace = [*fctx.trace, *(f"{o.rule.id} skipped: {o.skipped}" for o in pass1 if o.skipped)]
+        self.store.put(
+            brain_entry(
+                briefing_id=self.bid,
+                node_id="conflicts",
+                tool="conflicts",
+                data=entry_data(records, pass1, trace),
+                at=self.r.clock.now(),
+                mode=self.req.mode,
+            )
+        )
+        self.rule_trace = trace
+        return plan, records
 
     def _assemble(
         self,

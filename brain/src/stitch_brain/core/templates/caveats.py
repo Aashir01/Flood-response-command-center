@@ -170,6 +170,34 @@ def render_caveats_head(ctx: RenderCtx, organ_entries: Iterable[EvidenceEntry]) 
     return out
 
 
+def render_conflict_caveats(ctx: RenderCtx) -> list[ClaimDraft]:
+    """One caveat per conflict, citing the ``conflicts`` entry and both sides' evidence."""
+    from stitch_common.types import EvidenceRef
+
+    entry = ctx.ok("conflicts")
+    if entry is None:
+        return []
+    out: list[ClaimDraft] = []
+    for i, c in enumerate(entry.data().get("conflicts", [])):
+        desc = leaf("description", entry, ["data", "conflicts", i, "description", ctx.lang], "text")
+        res = str(c.get("resolution", "flagged"))
+        refs = [EvidenceRef.model_validate(r) for r in c.get("evidence", [])]
+        refs.append(entry.ref(pointer_for(["data", "conflicts", i, "resolution"])))
+        out.append(
+            claim(
+                ctx,
+                cid=f"caveat.conflict.{id_token(str(c['id']))}",
+                section="caveats",
+                kind="statement",
+                template_id=f"caveat.conflict.{res}",
+                slots={"description": desc},
+                order=40 + i,
+                extra_refs=refs,
+            )
+        )
+    return out
+
+
 def render_assumptions(ctx: RenderCtx) -> list[ClaimDraft]:
     derive = ctx.ok("derive.ledger_input")
     if derive is None:

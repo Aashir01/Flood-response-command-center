@@ -7,7 +7,11 @@ from collections.abc import Callable, Iterable
 from stitch_brain.core.claims import ClaimDraft
 from stitch_brain.core.evidence import EvidenceEntry
 from stitch_brain.core.templates.allocation import render_allocation
-from stitch_brain.core.templates.caveats import render_assumptions, render_caveats_head
+from stitch_brain.core.templates.caveats import (
+    render_assumptions,
+    render_caveats_head,
+    render_conflict_caveats,
+)
 from stitch_brain.core.templates.common import RenderCtx
 from stitch_brain.core.templates.extent import render_extent
 from stitch_brain.core.templates.forecast import render_forecast
@@ -20,6 +24,7 @@ RENDERERS: list[Renderer] = [
     render_guidance,
     render_allocation,
     render_assumptions,
+    render_conflict_caveats,
 ]
 
 
