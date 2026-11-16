@@ -58,7 +58,8 @@ Every organ runs from `data/demo/` with no network calls. Live mode (Open-Meteo 
 | `STITCH_WHISPER_MODEL` | Whisper size | `base` |
 | `STITCH_EMBED_MODEL` | Library embedding model | small multilingual |
 | `STITCH_RERANK_MODEL` | Library reranker | small |
-| `STITCH_TTS_PROVIDER` | `hosted`, `prerendered`, `local-mms` | `hosted` (falls back to `prerendered`) |
-| `STITCH_TTS_API_KEY` | hosted TTS key (name finalized in design) | unset |
+| `STITCH_TTS_PROVIDER` | `azure`, `google`, `prerendered`, `local-mms` | `azure` (falls back to `prerendered`) |
+| `AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION` | Azure Neural TTS | unset |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Google TTS fallback | unset |
 
 Defaults are sized for a 2 vCPU / 4 GB host.

@@ -78,6 +78,11 @@ The Brain discovers organs over MCP, plans a task graph for a scenario, runs org
 ### BRN-R13 Design write-up
 1. THE repo SHALL document the planner, executor, conflict rules, critic, and provenance design in `docs/brain-design.md`, since the architecture is the demonstration of the "Frankenstein" idea.
 
+### BRN-R14 Ask the creature
+1. THE Brain SHALL expose `POST /ask` that routes a free-text question (typed, or transcribed by Voice when available) to the Library only, and returns the Library's answer with citations or its refusal.
+2. THE Brain SHALL NOT call other organs for `/ask`, SHALL NOT add text to the Library answer, and SHALL apply the same provenance and refusal display rules as a briefing.
+3. THE endpoint SHALL be rate-limited and validate input length (at most 500 characters).
+
 ## Correctness properties (formalized in design)
 - BRN-P1: every claim in an emitted briefing has at least one `EvidenceRef`, and each resolves.
 - BRN-P2: every number in claim text appears in (or is derivable by a named pure function from) its evidence.
@@ -93,5 +98,5 @@ User accounts. Persistent multi-user history beyond the last N runs. Autonomous 
 ## Decisions (resolved)
 1. Planner: a plain asyncio task graph. LangGraph is not added just to name a framework.
 
-## Remaining question
-Is an "ask the creature" box (free text routed to the Library only) in scope? Assumed yes, minimal, unless you say otherwise.
+## Decision
+The "ask the creature" box is in scope, minimal, routed to the Library only (BRN-R14).

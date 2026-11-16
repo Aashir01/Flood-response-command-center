@@ -38,16 +38,16 @@ The Voice transcribes spoken questions (Whisper) and speaks the briefing (TTS) i
 1. THE Voice eval SHALL report word error rate (WER) for English and Urdu on a small recorded or public test set, and a TTS intelligibility check by round-trip (TTS then ASR) WER.
 
 ### VOX-R7 Pluggable TTS providers
-1. THE Voice SHALL define a `TTSProvider` interface and select the provider with `STITCH_TTS_PROVIDER`. Values: `hosted` (default), `prerendered`, and `local-mms` (optional, off by default).
-2. THE `hosted` provider SHALL call a hosted TTS API with Urdu and English voices. The key is read from env and never committed. The specific vendor is chosen in design (see decisions).
+1. THE Voice SHALL define a `TTSProvider` interface and select the provider with `STITCH_TTS_PROVIDER`. Values: `azure` (default), `google` (fallback), `prerendered`, and `local-mms` (optional, off by default).
+2. THE `azure` provider SHALL call Azure Neural TTS with `ur-PK-UzmaNeural` (default Urdu voice, `ur-PK-AsadNeural` as the male alternative) and an English neural voice. THE `google` provider SHALL implement the same interface as a fallback. Keys are read from env (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`, and Google application credentials) and never committed. Vendors other than these two are out of scope.
 3. THE `prerendered` provider SHALL serve only the cached demo audio and return `NOT_FOUND` for other text, so the offline demo works with no key or network.
 4. THE `local-mms` provider (non-commercial model license) SHALL be disabled unless explicitly enabled, SHALL NOT be bundled in default images, and SHALL be listed in `THIRD_PARTY.md` as an optional non-commercial mode.
-5. WHEN the provider changes, THE `speak` output schema SHALL NOT change, and `provider` and `synthesized` (`live`, `cache`, or `prerendered`) SHALL be reported.
+5. WHEN the provider changes, THE `speak` output schema SHALL NOT change, and `provider` (`azure`, `google`, `prerendered`, `local-mms`, or `fake`) and `synthesized` (`live`, `cache`, or `prerendered`) SHALL be reported.
 6. IF the hosted provider fails or no key is set, THEN THE Voice SHALL fall back to `prerendered` for demo text, otherwise return `UPSTREAM_UNAVAILABLE` and the Brain SHALL show Voice as unwell.
 
 ### VOX-R8 Time-box
-1. THE Voice work SHALL start only after Brain, Library, Ledger, Oracle, and Eyes core tasks are complete.
-2. THE tasks SHALL define a fixed time budget and a go/no-go checkpoint. IF the checkpoint is missed, THEN THE Voice SHALL be cut to: pre-rendered briefing playback plus Whisper transcribe, or removed entirely, with the UI showing Voice as disabled.
+1. THE Voice work SHALL start only after Brain, Library, Ledger, Oracle, and Eyes core tasks are complete, and the total Voice effort SHALL be capped at about 8 hours.
+2. THE go/no-go checkpoint is **Nov 28**. IF Voice is not working end to end by then (transcribe plus speak through the Brain and UI), THEN THE team SHALL switch to pre-rendered audio for the demo briefing (Whisper transcribe kept only if already working), or disable Voice entirely, with the UI showing Voice as disabled.
 3. Cutting Voice SHALL NOT break any other spec's tests or the demo.
 
 ### VOX-R9 Demo-first
@@ -67,8 +67,14 @@ Voice cloning. Real-time streaming conversation. Speaker diarization.
 
 ## Decisions (resolved)
 1. Default TTS is a hosted API behind a pluggable interface. A non-commercial local model would create a license mismatch with the MIT repo, so it is an optional local mode, off by default, listed in THIRD_PARTY.md.
-2. Whisper `base` by default, `tiny` allowed, size set by env.
+2. Azure Neural TTS is the default vendor and Google Cloud TTS the fallback. ElevenLabs is excluded (cost). Whisper `base` by default, `tiny` allowed, size set by env.
 3. Voice is time-boxed and the first thing cut if the schedule slips.
 
-## Remaining question
-Which hosted vendor? Candidates with Urdu voices: Google Cloud TTS, Azure Speech (ur-PK), ElevenLabs. Design will compare Urdu quality, price, and terms on redistributing generated audio, then recommend one. You choose.
+## Verified facts (Microsoft Learn language-support and Azure pricing pages, checked Nov 2026)
+- `ur-PK` has Neural voices `ur-PK-UzmaNeural` (female) and `ur-PK-AsadNeural` (male), category Standard.
+- The Free (F0) Speech tier includes 0.5 million Neural TTS characters per month. A demo briefing is a few thousand characters, so pre-rendering demo audio and light live use fit the free tier.
+- The pay-as-you-go per-character price did not render on the fetched pricing page. Confirm it in the Azure portal before enabling paid use.
+
+## Open checks (before committing pre-rendered audio)
+1. Confirm Azure's terms allow committing generated audio to a public MIT repo. If they do not, the pre-rendered files are generated at image build time from a key, or the demo falls back to text with live synthesis only.
+2. Confirm a Pakistan-accessible Azure account can use the Speech resource, and pick a region.

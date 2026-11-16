@@ -8,28 +8,36 @@ The Ledger decides how much of each relief commodity goes to each district, give
 ## Glossary
 - **Coverage** of a district: fraction of its affected population whose need is met, `min(1, delivered_need / required_need)` across commodities, as defined in design.
 - **Effective weight**: `population_affected × severity × road_access` (exact form fixed in design).
+- **Proportional share** of district d for commodity k: `share_dk = need_dk × min(1, supply_k / total_need_k)`. The allocation a naive pro-rata rule would give.
+- **Equity floor** `φ ∈ [0,1]`: each district must receive at least `φ × share_dk` of every commodity. `φ = 0` is pure efficiency, `φ = 1` is the proportional allocation.
+- **Road-denied district**: `road_access` below the usable-access threshold (default 0.1). Trucks cannot be relied on. Only air or boat delivery can reach it.
 - **Shadow price**: marginal value of one more unit of a constrained resource (from the LP relaxation).
 
 ## Requirements
 
 ### LED-R1 Model formulation
 1. THE Ledger SHALL formulate allocation as a linear program, or a mixed-integer program when `integer = true`, using OR-Tools or PuLP.
-2. THE Ledger SHALL maximize total effective-weighted coverage subject to per-commodity supply limits, an optional budget, and an optional minimum coverage floor per district.
+2. THE Ledger SHALL maximize total effective-weighted coverage subject to per-commodity supply limits, an optional budget, and an optional equity floor (a fraction `equity_floor` of each district's proportional share of each commodity).
 3. THE Ledger SHALL cap each district's allocation at its required need (no over-delivery beyond need).
-4. THE Ledger SHALL account for road access by scaling the deliverable quantity or cost per district, as defined in design.
+4. THE Ledger SHALL scale each district's reachable population by its usable road access, and SHALL add the district's optional air/boat capacity `alt_delivery_fraction` (share of the population that air or boat delivery can carry, default 0).
+5. WHERE a district is road-denied, THE Ledger SHALL cap its allocation at what air/boat delivery can carry. IF that capacity is zero, THEN THE Ledger SHALL mark the district `unreachable`, allocate nothing to it, and list it and its unreached people in `warnings` and in the output.
+6. THE Ledger SHALL NOT allocate to a road-denied district beyond its air/boat capacity under any input, and SHALL expose each district's `access_mode` (`road`, `air_boat`, `unreachable`) in the output.
 
 ### LED-R2 Inputs
 1. WHEN `optimize_allocation` is called, THE Ledger SHALL validate that populations, supplies, costs, and budget are non-negative and that `severity` and `road_access` lie in [0,1].
 2. IF input validation fails, THEN THE Ledger SHALL return `INVALID_INPUT` and not run the solver.
 3. THE Ledger SHALL source population from WorldPop aggregates and road access from OSM-derived scores in the demo dataset, with provenance for each.
-4. WHERE the caller supplies explicit district data, THE Ledger SHALL use it instead of the dataset.
+4. WHERE the caller supplies explicit district data (the optional `districts` override), THE Ledger SHALL use it instead of the dataset, with no merging, so tests and what-if runs can inject their own data.
+5. THE Ledger SHALL expose the static district attributes of a scenario as the MCP resource `ledger://scenario/{scenario_id}/districts` for the Brain.
 
 ### LED-R3 Solving
 1. THE Ledger SHALL return `status` as `optimal`, `feasible` (time limit reached with an incumbent), or `infeasible`.
-2. IF the problem is infeasible (e.g. the minimum coverage floors exceed supply), THEN THE Ledger SHALL return `status = infeasible` with an `infeasibility_reason` naming the conflicting constraints.
-3. WHEN `status = feasible`, THE Ledger SHALL report `optimality_gap` from the solver bound.
-4. THE Ledger SHALL enforce `solver_time_limit_s` and return the best incumbent when the limit is reached.
-5. THE Ledger SHALL produce identical output for identical input (deterministic tie-breaking).
+2. THE Ledger SHALL compute `max_feasible_floor`, the highest equity floor that can be satisfied.
+3. IF the requested `equity_floor` exceeds `max_feasible_floor`, THEN, by default (`on_infeasible_floor = "relax"`), THE Ledger SHALL solve at `max_feasible_floor` and return that allocation with `floor_requested`, `floor_applied`, `max_feasible_floor`, and a warning.
+4. WHERE `on_infeasible_floor = "error"`, THE Ledger SHALL instead return `status = infeasible` with an `infeasibility_reason` naming the binding constraint and the `max_feasible_floor`.
+5. WHEN `status = feasible`, THE Ledger SHALL report `optimality_gap` from the solver bound.
+6. THE Ledger SHALL enforce `solver_time_limit_s` and return the best incumbent when the limit is reached.
+7. THE Ledger SHALL produce identical output for identical input (deterministic tie-breaking).
 
 ### LED-R4 Safety constraints on output
 1. THE Ledger SHALL NOT allocate more of any commodity than its supply.
@@ -81,6 +89,14 @@ The Ledger decides how much of each relief commodity goes to each district, give
 
 - LED-P10: along the equity trade-off, `total_coverage` is non-increasing as the floor increases.
 - LED-P11: the trade-off point at floor 0 equals the unconstrained optimum within solver tolerance.
+- LED-P12: single commodity, no budget, no floor: the LP optimum equals the greedy-by-severity value.
+- LED-P13: the optimum is at least the coverage of the proportional baseline.
+- LED-P14: with `integer = true`, outputs are integral and at most `ceil(need)`.
+- LED-P15: `max_feasible_floor` is tight: feasible at the value, infeasible just above it when it is below 1.
+- LED-P16: with `equity_floor = 1` and no budget, the allocation equals each district's proportional share.
+- LED-P17: an `unreachable` district receives zero of every commodity and appears in the output and warnings.
+- LED-P18: a road-denied district never receives more than its air/boat capacity allows.
+- LED-P19: with `relax`, `floor_applied = min(floor_requested, max_feasible_floor)`.
 
 ## Out of scope
 Vehicle routing and last-mile logistics. Multi-period dynamic allocation. Prices as real market data.

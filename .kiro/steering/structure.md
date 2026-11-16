@@ -7,8 +7,8 @@ inclusion: always
 ```
 .kiro/
   steering/            product, tech, structure, mcp-contracts, ui-style, testing
-  specs/<name>/        requirements.md, design.md, tasks.md  (eyes-mcp, oracle-mcp, library-mcp,
-                       ledger-mcp, voice-mcp, brain, frontend, deployment)
+  specs/<name>/        requirements.md, design.md, tasks.md  (bootstrap, eyes-mcp, oracle-mcp,
+                       library-mcp, ledger-mcp, voice-mcp, brain, frontend, deployment)
   hooks/               automation hooks (see testing.md)
   agents/              custom agents (surgeon)
   settings/mcp.json    MCP registrations
@@ -36,7 +36,7 @@ scripts/                 data fetchers, training entry points, dev helpers
 - Organs: package `stitch_eyes`, `stitch_oracle`, `stitch_library`, `stitch_ledger`, `stitch_voice`. MCP server names: `eyes-mcp`, etc.
 - Spec directory names match MCP server names. Brain and frontend use `brain`, `frontend`.
 - Requirement IDs: `<SPEC>-R<n>` (e.g. `LIB-R4`). Properties: `<SPEC>-P<n>` (e.g. `LED-P2`). Tasks reference the IDs they satisfy. Tests carry the ID in their name or a marker.
-- ID prefixes: EYE, ORA, LIB, LED, VOX, BRN, FRN, DEP.
+- ID prefixes: BOOT, EYE, ORA, LIB, LED, VOX, BRN, FRN, DEP.
 
 ## Rules
 - Do not edit another spec's files when working on one spec, except to log a contract change in `mcp-contracts.md`.

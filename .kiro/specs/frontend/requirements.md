@@ -86,6 +86,11 @@ A polished mad-scientist lab bench where the user chooses a region and scenario,
 1. THE UI SHALL work fully against a Brain running in demo mode with no network.
 2. THE UI SHALL render Voice as disabled (not broken) when Voice is cut or unavailable, and no other feature SHALL depend on it.
 
+### FRN-R16 Ask the creature
+1. THE UI SHALL provide a single text box ("ask the creature") that sends the question to `POST /ask` and shows the Library's answer with citations, or its refusal, in the same style as a briefing's guidance section.
+2. WHERE Voice is available, THE UI SHALL offer a microphone button that fills the box from `transcribe`, and otherwise hide it.
+3. THE box SHALL show loading, error ("the organ is unwell"), and refusal states, and be fully keyboard operable.
+
 ## Correctness properties (formalized in design)
 - FRN-P1: every organ has exactly one visible state at any time, derived from the event stream via a pure reducer.
 - FRN-P2: replaying the same event sequence yields the same UI state (reducer is deterministic).

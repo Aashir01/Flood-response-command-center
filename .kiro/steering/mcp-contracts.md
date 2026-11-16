@@ -2,7 +2,7 @@
 inclusion: always
 ---
 
-# MCP contracts (v0.2)
+# MCP contracts (v0.3)
 
 Single source of truth for organ tool I/O. `packages/stitch_common` mirrors these as Pydantic v2 models; the contract hook validates both directions. Schemas are written as compact JSON Schema (`?` = optional). Any change bumps `contract_version` and is logged at the bottom.
 
@@ -123,19 +123,25 @@ Invariant: `(status=answered ∧ citations≠∅ ∧ every claim has ≥1 valid 
 `optimize_allocation`
 ```jsonc
 in:  { "scenario_id": str,
-       "districts": [ { "district_id": str, "population_affected": int >= 0,
-                        "severity": number [0,1], "road_access": number [0,1],
-                        "unit_cost_multiplier"?: number > 0 } ],
+       "districts"?: [ { "district_id": str, "population_affected": int >= 0,   // override; omitted => dataset for scenario_id
+                         "severity": number [0,1], "road_access": number [0,1],
+                         "alt_delivery_fraction"?: number [0,1] (default 0),     // share carried by air/boat
+                         "unit_cost_multiplier"?: number > 0 } ],
+       "min_road_access"?: number [0,1] (default 0.1),                        // below this a district is road-denied
        "commodities": [ { "id": str, "name": str, "unit": str, "unit_cost": number >= 0,
                           "per_person_need": number > 0 } ],
        "supply": { "<commodity_id>": number >= 0 },
        "budget"?: number >= 0,
-       "min_coverage_fraction"?: number [0,1],    // optional equity floor per district
+       "equity_floor"?: number [0,1],             // fraction of each district's proportional share
+       "on_infeasible_floor"?: "relax|error" (default "relax"),
        "integer"?: bool (default true),           // trucks/pallets as integers
        "solver_time_limit_s"?: number (default 10) }
 out: { "status": "optimal|feasible|infeasible",
        "allocation": [ { "district_id": str, "commodity_id": str, "quantity": number >= 0 } ],
-       "coverage": [ { "district_id": str, "fraction": number [0,1] } ],
+       "coverage": [ { "district_id": str, "fraction": number [0,1],
+                       "access_mode": "road|air_boat|unreachable",
+                       "unreached_people": number >= 0 } ],
+       "equity": { "floor_requested": number, "floor_applied": number, "max_feasible_floor": number },
        "total_coverage": number,                  // objective value (severity/access-weighted people covered)
        "total_cost": number,
        "optimality_gap": number | null,           // from solver bound; 0 for LP optimal
@@ -146,7 +152,7 @@ out: { "status": "optimal|feasible|infeasible",
 `sensitivity_report`
 ```jsonc
 in:  { "run_id": str, "floor_steps"?: int [2,21] (default 11) }
-out: { "shadow_prices": [ { "constraint": "supply:<commodity_id>|budget|min_coverage:<district_id>",
+out: { "shadow_prices": [ { "constraint": "supply:<commodity_id>|budget|equity_floor|min_coverage:<district_id>",
                             "value": number, "unit": str, "binding": bool } ],
        "reduced_costs": [ { "district_id": str, "commodity_id": str, "value": number } ],
        "ranges": [ { "constraint": str, "allowable_increase": number, "allowable_decrease": number } ],
@@ -171,7 +177,7 @@ out: { "text": str, "lang": "en|ur", "segments": [ { "start": number, "end": num
 ```jsonc
 in:  { "text": str (<= 4000 chars), "lang": "en|ur", "voice"?: str, "format"?: "wav|mp3" }
 out: { "audio_b64": str, "format": str, "duration_s": number, "sample_rate": int, "lang": str,
-       "provider": "hosted|prerendered|local-mms|fake", "synthesized": "live|cache|prerendered" }
+       "provider": "azure|google|prerendered|local-mms|fake", "synthesized": "live|cache|prerendered" }
 ```
 
 ## 8. Brain API (browser-facing, not MCP)
@@ -194,6 +200,14 @@ Defined in the brain spec. Streams `TaskEvent`s over SSE:
 ```
 Invariant (BRN-P1): every claim has `evidence.length >= 1` and every `EvidenceRef` resolves in the run's evidence store.
 
+## 8b. Resources (read-only, MCP resources, not tools)
+```
+ledger://scenario/{scenario_id}/districts
+-> [ { "district_id": str, "name": str, "population": int >= 0, "road_access": number [0,1],
+       "alt_delivery_fraction": number [0,1], "default_severity": number [0,1] } ]
+```
+
 ## 9. Change log
 - 0.1 draft: initial contracts.
 - 0.2: eyes `validation` and `reference_overlay_geojson`; oracle `target_kind`/`target_label`; ledger `equity_tradeoff`, `equity_cost`, `floor_steps`; voice `provider`, `synthesized`.
+- 0.3: ledger `districts` optional override, `alt_delivery_fraction`, `min_road_access`, `access_mode`, `unreached_people`; `min_coverage_fraction` replaced by `equity_floor` (fraction of proportional share) with `on_infeasible_floor` and `equity` output; resource `ledger://scenario/{id}/districts`.

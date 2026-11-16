@@ -81,4 +81,4 @@ Kubernetes, multi-region, autoscaling, managed databases.
 3. Model sizes: small by default, env-configurable.
 
 ## Remaining question
-The VPS size was not stated. I assumed a floor of 2 vCPU / 4 GB RAM and sized defaults for it. Confirm or give the real plan.
+The Vultr plan size is not known to the assistant, which cannot read the Vultr dashboard. The owner reads vCPU and RAM from the dashboard and records it in `deploy/README.md`. The design keeps the 2 vCPU / 4 GB floor and scales model sizes by env var.

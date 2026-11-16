@@ -27,7 +27,8 @@ Every third-party library, dataset, and model used by Stitch is listed here with
 | Embedding model (TBD, multilingual) | library | TBD | planned |
 | Reranker model (TBD) | library | TBD | planned |
 | Whisper `tiny` / `base` (size set by `STITCH_WHISPER_MODEL`) | voice | MIT | planned |
-| Hosted TTS API (default; vendor chosen in voice design) | voice | Vendor terms. Generated audio is committed only if terms allow | planned |
+| Azure Neural TTS (default; `ur-PK-UzmaNeural`) | voice | Microsoft service terms. Generated audio is committed only if the terms allow | planned |
+| Google Cloud Text-to-Speech (fallback provider) | voice | Google service terms | planned |
 | Meta MMS-TTS (optional local mode, OFF by default, not bundled) | voice | CC BY-NC 4.0 (non-commercial) | optional |
 | Coqui XTTS (not used; noted as a non-commercial alternative) | voice | CPML (non-commercial) | not used |
 
