@@ -16,7 +16,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Tests: unit tests per validation rule; access-mode table tests at the threshold boundary. Refs: LED-R1.4 to R1.6, R2.1, R2.2.
   - Done when: every invalid class returns `INVALID_INPUT` with no model built, and access modes match the table.
 
-- [ ] **3. LP formulation and solve** `core`
+- [x] **3. LP formulation and solve** `core`
   - `core/formulate.py`, `core/solve.py` (GLOP, one thread), model per §2.4 including the equity floor `f ≥ φρ`.
   - Tests: three hand-solved instances (single commodity; two commodities with budget; floor binding), derivations in docstrings. Differential test against greedy-by-severity. Refs: LED-R1.1 to R1.3, R3.1. P12, P16.
   - Done when: hand-solved, greedy, and `φ = 1` proportional checks pass.

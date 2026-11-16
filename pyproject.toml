@@ -66,9 +66,13 @@ known-first-party = [
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages/stitch_common/src", "scripts", "scripts/hooks"]
+mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "scripts", "scripts/hooks"]
 explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
+
+[[tool.mypy.overrides]]
+module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 addopts = "-ra --import-mode=importlib"
