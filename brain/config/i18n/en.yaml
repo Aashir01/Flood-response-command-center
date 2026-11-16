@@ -46,11 +46,12 @@ modeled_terms: [Modeled, modeled]
 forbidden_oracle_terms: [gauge, gauged, observed, measured, observation, observations]
 templates:
   extent.flood_area: "New flood water covers {new} km2 ({total} km2 total water, {perm} km2 permanent water) in the scene acquired {date}."
+  extent.flood_area_nodate: "New flood water covers {new} km2 ({total} km2 total water, {perm} km2 permanent water)."
   extent.top_districts: "Largest flooded areas: {items}."
   extent.top_districts.item: "{name} {km} km2 ({pct} of the district)"
   extent.confidence: "Mean segmentation confidence over flood pixels: {conf}."
   extent.scene: "Scene: {sensor}, {scene_id}, acquired {date}."
-  forecast.peak: "Modeled river discharge (GloFAS via Open-Meteo) near {station}: peak median {p50} m3/s on {date} (p10 {p10} m3/s, p90 {p90} m3/s)."
+  forecast.peak: "Modeled river discharge (GloFAS via Open-Meteo) for {station}: peak median {p50} m3/s on {date} (p10 {p10} m3/s, p90 {p90} m3/s)."
   forecast.exceedance: "Modeled probability of exceeding {thr} m3/s peaks at {pct} on {date}."
   forecast.calibration: "Modeled intervals are {cov} split-conformal bands from {n} calibration points."
   forecast.drivers: "Modeled forecast drivers: {narrative}"

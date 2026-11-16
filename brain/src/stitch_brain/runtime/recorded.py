@@ -8,7 +8,10 @@ Fixture file ``data/demo/recorded/<organ>/<tool>/<name>.json``::
      "result": {...a complete ToolResult...}}
 
 Matching: ``match.scenario`` (if present) must equal the call's fixture set; ``match.args`` is a
-deep subset of the call arguments (objects match recursively, lists and scalars must be equal).
+deep subset of the call arguments (objects match recursively, lists and scalars must be equal),
+or equal to them when ``match.exact`` is true (captured fixtures: a fixture never answers a
+call it was not computed for). ``match.run_id_of`` ties a follow-up call (``sensitivity_report``,
+``explain_forecast``) to the fixture whose rewritten run id it cites.
 The most specific match wins (more matched leaves); ties break by file name. No match returns a
 ``NOT_FOUND`` ToolResult: a recorded organ never invents a result.
 
@@ -54,6 +57,7 @@ class Fixture:
     authoring: str
     result: dict[str, Any]
     run_id_of: str | None = None  # path of the fixture whose served run id this call cites
+    exact: bool = False  # args must equal match.args (captured fixtures)
 
 
 class FixtureSource(Protocol):
@@ -80,6 +84,7 @@ def load_fixture(path: Path, organ: str, tool: str, rel_root: Path) -> Fixture:
         authoring=str(raw.get("authoring", "hand_authored")),
         result=result,
         run_id_of=match.get("run_id_of"),
+        exact=bool(match.get("exact", False)),
     )
 
 
@@ -152,6 +157,8 @@ def select(
         if f.match_scenario is not None and f.match_scenario != scenario:
             continue
         if f.run_id_of is not None and f.run_id_of != cited_path:
+            continue
+        if f.exact and f.match_args != args:
             continue
         if not deep_subset(f.match_args, args):
             continue

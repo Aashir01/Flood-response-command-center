@@ -1,0 +1,80 @@
+{
+  "match": {
+    "args": {
+      "query": "سیلاب کی ہنگامی صورتحال میں ہر شخص کو روزانہ کتنا پینے کا پانی چاہیے؟",
+      "answer_lang": "ur"
+    }
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "status": "answered",
+      "answer": "پینے، کھانا پکانے اور ذاتی صفائی کے لیے ہر شخص کو روزانہ کم از کم 15 لیٹر پانی درکار ہے۔",
+      "citations": [
+        {
+          "doc_id": "fixture-sphere-2018",
+          "title": "The Sphere Handbook 2018 (hand-authored demo fixture)",
+          "publisher": "Sphere Association",
+          "page": 106,
+          "span": [
+            0,
+            29
+          ],
+          "quote": "کم از کم 15 لیٹر فی شخص فی دن",
+          "lang": "ur",
+          "url": null
+        }
+      ],
+      "refusal": null,
+      "claims": [
+        {
+          "text": "پینے، کھانا پکانے اور ذاتی صفائی کے لیے ہر شخص کو روزانہ کم از کم 15 لیٹر پانی درکار ہے۔",
+          "citation_idx": [
+            0
+          ]
+        }
+      ],
+      "generation": {
+        "mode": "extractive",
+        "provider": "fixture",
+        "model": null
+      },
+      "quantities": [
+        {
+          "value": 15.0,
+          "unit": "litre",
+          "per": "person_day",
+          "claim_idx": 0
+        }
+      ]
+    },
+    "error": null,
+    "provenance": {
+      "organ": "library",
+      "tool": "answer_with_citations",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "cb32d88c-c7af-45b6-913e-387cd304e0af",
+      "inputs_hash": "cf3cef5c7cfe38e69ec483e1ee47f50425fb91246e645affca4a3fb35fd6589d",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

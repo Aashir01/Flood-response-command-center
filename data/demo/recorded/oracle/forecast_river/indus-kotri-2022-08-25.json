@@ -1,0 +1,159 @@
+{
+  "match": {
+    "args": {
+      "station_id": "indus-kotri",
+      "horizon_days": 7,
+      "as_of": "2022-08-25"
+    }
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "station_id": "indus-kotri",
+      "unit": "m3/s",
+      "as_of": "2022-08-25",
+      "target_kind": "modeled_glofas",
+      "target_label": "Modeled river discharge (GloFAS via Open-Meteo)",
+      "forecast": [
+        {
+          "date": "2022-08-26",
+          "lead_days": 1,
+          "discharge": {
+            "p10": 10384,
+            "p50": 11800,
+            "p90": 13216
+          }
+        },
+        {
+          "date": "2022-08-27",
+          "lead_days": 2,
+          "discharge": {
+            "p10": 11220,
+            "p50": 13200,
+            "p90": 15180
+          }
+        },
+        {
+          "date": "2022-08-28",
+          "lead_days": 3,
+          "discharge": {
+            "p10": 11972,
+            "p50": 14600,
+            "p90": 17228
+          }
+        },
+        {
+          "date": "2022-08-29",
+          "lead_days": 4,
+          "discharge": {
+            "p10": 12561,
+            "p50": 15900,
+            "p90": 19239
+          }
+        },
+        {
+          "date": "2022-08-30",
+          "lead_days": 5,
+          "discharge": {
+            "p10": 12464,
+            "p50": 16400,
+            "p90": 20336
+          }
+        },
+        {
+          "date": "2022-08-31",
+          "lead_days": 6,
+          "discharge": {
+            "p10": 11461,
+            "p50": 15700,
+            "p90": 19939
+          }
+        },
+        {
+          "date": "2022-09-01",
+          "lead_days": 7,
+          "discharge": {
+            "p10": 10010,
+            "p50": 14300,
+            "p90": 18590
+          }
+        }
+      ],
+      "danger_threshold_m3s": 14000.0,
+      "exceedance_prob": [
+        {
+          "date": "2022-08-26",
+          "p_exceed": 0.08
+        },
+        {
+          "date": "2022-08-27",
+          "p_exceed": 0.31
+        },
+        {
+          "date": "2022-08-28",
+          "p_exceed": 0.58
+        },
+        {
+          "date": "2022-08-29",
+          "p_exceed": 0.74
+        },
+        {
+          "date": "2022-08-30",
+          "p_exceed": 0.79
+        },
+        {
+          "date": "2022-08-31",
+          "p_exceed": 0.69
+        },
+        {
+          "date": "2022-09-01",
+          "p_exceed": 0.52
+        }
+      ],
+      "calibration": {
+        "method": "split_conformal",
+        "nominal_coverage": 0.8,
+        "n_calibration": 412,
+        "interval_lower_q": 0.1,
+        "interval_upper_q": 0.9
+      },
+      "station": {
+        "name": "Indus near Kotri",
+        "river": "Indus",
+        "cell_lat": 25.375,
+        "cell_lon": 68.325,
+        "requested_lat": 25.37,
+        "requested_lon": 68.31
+      },
+      "quantile_correction_applied": false
+    },
+    "error": null,
+    "provenance": {
+      "organ": "oracle",
+      "tool": "forecast_river",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "e6b20893-803e-460a-b92f-c42ff2fe130b",
+      "inputs_hash": "0a370078a20d88fbddbc2afac1e7c032fa9b33bfe78230dcbc1fba68b3f12980",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

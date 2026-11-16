@@ -1,0 +1,62 @@
+{
+  "match": {
+    "run_id_of": "data/demo/recorded/oracle/forecast_river/indus-kotri-2022-08-25.json",
+    "args": {}
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "drivers": [
+        {
+          "feature": "upstream_discharge_sukkur_lag2",
+          "contribution_m3s": 2100.0,
+          "direction": "up",
+          "feature_group": "upstream"
+        },
+        {
+          "feature": "rain_7d_basin",
+          "contribution_m3s": 900.0,
+          "direction": "up",
+          "feature_group": "rainfall"
+        },
+        {
+          "feature": "day_of_year",
+          "contribution_m3s": -350.0,
+          "direction": "down",
+          "feature_group": "season"
+        }
+      ],
+      "narrative": "Upstream modeled discharge near Sukkur and recent basin rainfall push the forecast up; the seasonal baseline pulls it down slightly.",
+      "baseline_m3s": 13750.0,
+      "lead_days_explained": 4
+    },
+    "error": null,
+    "provenance": {
+      "organ": "oracle",
+      "tool": "explain_forecast",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "614f219e-853b-4135-95b5-4f4c8132ff0f",
+      "inputs_hash": "0fdea3d416ff22edbf6a4b8fd6f53394aabf3b8f75e88a4b992127a9fce17ff7",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

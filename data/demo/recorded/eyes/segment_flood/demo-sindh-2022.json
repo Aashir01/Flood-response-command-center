@@ -1,0 +1,693 @@
+{
+  "match": {
+    "scenario": "demo-sindh-2022",
+    "args": {
+      "region_id": "pk-sindh",
+      "date": "2022-08-30"
+    }
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "flood_extent_km2": 16896.0,
+      "extent_geojson": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-badin",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.7857,
+                    24.6117
+                  ],
+                  [
+                    68.9589,
+                    24.6117
+                  ],
+                  [
+                    68.9589,
+                    24.7849
+                  ],
+                  [
+                    68.7857,
+                    24.7849
+                  ],
+                  [
+                    68.7857,
+                    24.6117
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-dadu",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    67.5163,
+                    26.6549
+                  ],
+                  [
+                    67.7809,
+                    26.6549
+                  ],
+                  [
+                    67.7809,
+                    26.9195
+                  ],
+                  [
+                    67.5163,
+                    26.9195
+                  ],
+                  [
+                    67.5163,
+                    26.6549
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-ghotki",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    69.4784,
+                    27.7904
+                  ],
+                  [
+                    69.5902,
+                    27.7904
+                  ],
+                  [
+                    69.5902,
+                    27.9022
+                  ],
+                  [
+                    69.4784,
+                    27.9022
+                  ],
+                  [
+                    69.4784,
+                    27.7904
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-jacobabad",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.3644,
+                    27.98
+                  ],
+                  [
+                    68.5989,
+                    27.98
+                  ],
+                  [
+                    68.5989,
+                    28.2145
+                  ],
+                  [
+                    68.3644,
+                    28.2145
+                  ],
+                  [
+                    68.3644,
+                    27.98
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-jamshoro",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    67.802,
+                    25.5829
+                  ],
+                  [
+                    68.02,
+                    25.5829
+                  ],
+                  [
+                    68.02,
+                    25.8008
+                  ],
+                  [
+                    67.802,
+                    25.8008
+                  ],
+                  [
+                    67.802,
+                    25.5829
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-kashmore",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    69.3005,
+                    28.0953
+                  ],
+                  [
+                    69.4505,
+                    28.0953
+                  ],
+                  [
+                    69.4505,
+                    28.2453
+                  ],
+                  [
+                    69.3005,
+                    28.2453
+                  ],
+                  [
+                    69.3005,
+                    28.0953
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-khairpur",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.882,
+                    26.7735
+                  ],
+                  [
+                    69.1111,
+                    26.7735
+                  ],
+                  [
+                    69.1111,
+                    27.0027
+                  ],
+                  [
+                    68.882,
+                    27.0027
+                  ],
+                  [
+                    68.882,
+                    26.7735
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-matiari",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.3482,
+                    25.7654
+                  ],
+                  [
+                    68.4707,
+                    25.7654
+                  ],
+                  [
+                    68.4707,
+                    25.8879
+                  ],
+                  [
+                    68.3482,
+                    25.8879
+                  ],
+                  [
+                    68.3482,
+                    25.7654
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-mirpur-khas",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    69.1088,
+                    25.1266
+                  ],
+                  [
+                    69.2746,
+                    25.1266
+                  ],
+                  [
+                    69.2746,
+                    25.2925
+                  ],
+                  [
+                    69.1088,
+                    25.2925
+                  ],
+                  [
+                    69.1088,
+                    25.1266
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-naushahro-feroze",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.0463,
+                    26.7152
+                  ],
+                  [
+                    68.2334,
+                    26.7152
+                  ],
+                  [
+                    68.2334,
+                    26.9023
+                  ],
+                  [
+                    68.0463,
+                    26.9023
+                  ],
+                  [
+                    68.0463,
+                    26.7152
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-nawabshah",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.3124,
+                    26.1877
+                  ],
+                  [
+                    68.4927,
+                    26.1877
+                  ],
+                  [
+                    68.4927,
+                    26.3679
+                  ],
+                  [
+                    68.3124,
+                    26.3679
+                  ],
+                  [
+                    68.3124,
+                    26.1877
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-qambar-shahdadkot",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    67.8162,
+                    27.3415
+                  ],
+                  [
+                    68.0946,
+                    27.3415
+                  ],
+                  [
+                    68.0946,
+                    27.6199
+                  ],
+                  [
+                    67.8162,
+                    27.6199
+                  ],
+                  [
+                    67.8162,
+                    27.3415
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-sanghar",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    69.1162,
+                    25.8561
+                  ],
+                  [
+                    69.3162,
+                    25.8561
+                  ],
+                  [
+                    69.3162,
+                    26.0561
+                  ],
+                  [
+                    69.1162,
+                    26.0561
+                  ],
+                  [
+                    69.1162,
+                    25.8561
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-shikarpur",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.564,
+                    27.7596
+                  ],
+                  [
+                    68.7576,
+                    27.7596
+                  ],
+                  [
+                    68.7576,
+                    27.9533
+                  ],
+                  [
+                    68.564,
+                    27.9533
+                  ],
+                  [
+                    68.564,
+                    27.7596
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-sukkur",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    69.0694,
+                    27.4349
+                  ],
+                  [
+                    69.2017,
+                    27.4349
+                  ],
+                  [
+                    69.2017,
+                    27.5672
+                  ],
+                  [
+                    69.0694,
+                    27.5672
+                  ],
+                  [
+                    69.0694,
+                    27.4349
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-tando-allahyar",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.7094,
+                    25.3493
+                  ],
+                  [
+                    68.8508,
+                    25.3493
+                  ],
+                  [
+                    68.8508,
+                    25.4907
+                  ],
+                  [
+                    68.7094,
+                    25.4907
+                  ],
+                  [
+                    68.7094,
+                    25.3493
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-tando-muhammad-khan",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    68.4089,
+                    24.809
+                  ],
+                  [
+                    68.5412,
+                    24.809
+                  ],
+                  [
+                    68.5412,
+                    24.9413
+                  ],
+                  [
+                    68.4089,
+                    24.9413
+                  ],
+                  [
+                    68.4089,
+                    24.809
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "district_id": "pk-sindh-thatta",
+              "synthetic": true,
+              "note": "hand-authored illustrative shape, not a segmentation"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    67.9162,
+                    24.4806
+                  ],
+                  [
+                    68.028,
+                    24.4806
+                  ],
+                  [
+                    68.028,
+                    24.5924
+                  ],
+                  [
+                    67.9162,
+                    24.5924
+                  ],
+                  [
+                    67.9162,
+                    24.4806
+                  ]
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "permanent_water_km2": 1469.2,
+      "confidence": 0.82,
+      "tiles_processed": 64,
+      "source_scene": {
+        "sensor": "Sentinel-1 IW GRD",
+        "acquired": "2022-08-30T13:41:00Z",
+        "scene_id": "demo-s1-sindh-20220830"
+      },
+      "validation": {
+        "validated_for_region": false,
+        "eval_dataset": "sen1floods11_test",
+        "note": "Demo scene. Validated on the Sen1Floods11 test split only."
+      },
+      "reference_overlay_geojson": null,
+      "valid_fraction": 0.97
+    },
+    "error": null,
+    "provenance": {
+      "organ": "eyes",
+      "tool": "segment_flood",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "49b6aec3-0f1f-439a-93b7-24b4fe469b25",
+      "inputs_hash": "c8ab151f6749ab91fe5e17b0c9ea2f397e0201abb5d9422d4fd4d8ae4a8a21ed",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

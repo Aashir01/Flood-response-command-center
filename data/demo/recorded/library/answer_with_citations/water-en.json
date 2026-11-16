@@ -1,0 +1,80 @@
+{
+  "match": {
+    "args": {
+      "query": "How much drinking water does each person need per day in a flood emergency?",
+      "answer_lang": "en"
+    }
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "status": "answered",
+      "answer": "Each person needs at least 15 litres of water per day for drinking, cooking and personal hygiene.",
+      "citations": [
+        {
+          "doc_id": "fixture-sphere-2018",
+          "title": "The Sphere Handbook 2018 (hand-authored demo fixture)",
+          "publisher": "Sphere Association",
+          "page": 106,
+          "span": [
+            0,
+            114
+          ],
+          "quote": "Average volume of water used for drinking and domestic hygiene per household: minimum 15 litres per person per day",
+          "lang": "en",
+          "url": null
+        }
+      ],
+      "refusal": null,
+      "claims": [
+        {
+          "text": "Each person needs at least 15 litres of water per day for drinking, cooking and personal hygiene.",
+          "citation_idx": [
+            0
+          ]
+        }
+      ],
+      "generation": {
+        "mode": "extractive",
+        "provider": "fixture",
+        "model": null
+      },
+      "quantities": [
+        {
+          "value": 15.0,
+          "unit": "litre",
+          "per": "person_day",
+          "claim_idx": 0
+        }
+      ]
+    },
+    "error": null,
+    "provenance": {
+      "organ": "library",
+      "tool": "answer_with_citations",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "0fc7fcc4-9d79-4e08-93ac-b9d8fc869bce",
+      "inputs_hash": "fb48d9d53bf217679b8ecd421dff8bf0fe0877f34bcf2220edc2390fa5744b5d",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "match": {
+    "args": {
+      "query": "سیلاب سے بے گھر خاندانوں کو کتنا خوراک کا راشن ملنا چاہیے؟",
+      "answer_lang": "ur"
+    }
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "status": "answered",
+      "answer": "A general food ration should provide at least 2,100 kcal per person per day, with protein and fat in the planned ration.",
+      "citations": [
+        {
+          "doc_id": "fixture-sphere-2018",
+          "title": "The Sphere Handbook 2018 (hand-authored demo fixture)",
+          "publisher": "Sphere Association",
+          "page": 199,
+          "span": [
+            0,
+            135
+          ],
+          "quote": "The average requirement is 2,100 kcal per person per day, with 10 to 12 per cent of total energy from protein and 17 per cent from fat.",
+          "lang": "en",
+          "url": null
+        }
+      ],
+      "refusal": null,
+      "claims": [
+        {
+          "text": "A general food ration should provide at least 2,100 kcal per person per day, with protein and fat in the planned ration.",
+          "citation_idx": [
+            0
+          ]
+        }
+      ],
+      "generation": {
+        "mode": "extractive",
+        "provider": "fixture",
+        "model": null
+      },
+      "quantities": []
+    },
+    "error": null,
+    "provenance": {
+      "organ": "library",
+      "tool": "answer_with_citations",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "29b8171d-e7fb-4a78-9d7d-809f8beae39f",
+      "inputs_hash": "8550bd430d8cc4700c070a3ac27d7d803acdf75d9409c53adcc79812ac2ce223",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

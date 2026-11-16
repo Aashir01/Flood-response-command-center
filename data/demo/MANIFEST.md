@@ -49,3 +49,18 @@ Built by `scripts/build_oracle_demo.py` (dev time, needs the network once; raw r
 | `oracle/stations.json` | station table (GloFAS grid cell nearest to each named place), danger thresholds (modeled 5-year return level, an assumption) | derived | CC BY 4.0 |
 | `oracle/MANIFEST.md` | build record | derived | - |
 The discharge values are modeled, not gauge records. Demo data, not a live feed.
+
+## Brain recorded fixtures (
+ecorded/)
+Replayed by the Brain's recorded organs (STITCH_RECORDED_ORGANS, brain design 3.3). Every replayed result is labelled in the briefing (caveat.recorded.<organ>, served_by: recorded, a RECORDED_FIXTURE warning) and the briefing mode is demo.
+| Path | Authoring | Content | Source and license |
+|---|---|---|---|
+| 
+ecorded/ledger/** | captured | Real Ledger results (optimize_allocation, sensitivity_report, districts resource) for the exact arguments the Brain sends (match.exact). Written by scripts/record_organ_fixture.py. | Ledger demo dataset above (WorldPop CC BY 4.0, OSM ODbL 1.0, geoBoundaries CC BY 4.0) |
+| 
+ecorded/eyes/** | hand-authored | Per-district flooded fractions for Sindh, 2022-08-30, chosen by hand to resemble the 2022 pattern; district areas from ledger/districts.parquet; square placeholder shapes marked synthetic. Not a segmentation output. The -conflicts variant maps Thatta as dry on purpose. | Written by scripts/build_brain_fixtures.py, MIT (Stitch); data source id ixture-hand-authored |
+| 
+ecorded/oracle/** | hand-authored | A seven-day modeled discharge curve, exceedance probabilities and an explanation for the Indus near Kotri. Illustrative values, labelled modeled; the danger threshold is illustrative. | Same script, MIT (Stitch) |
+| 
+ecorded/library/** | hand-authored | Answers and a refusal paraphrasing well-known Sphere Handbook 2018 minimum standards (15 litres of water and 2,100 kcal per person per day). Quotes are paraphrases and page numbers are not verified. Used in tests and the all-recorded CLI only; the Compose demo uses the real Library. The -conflicts variant states 7.5 litres on purpose (seeded conflict R3). | Same script, MIT (Stitch) |
+| llm/brain.jsonl | recorded | FakeLLM replay file for the Brain's phrasing, translation and judge steps. Empty until recorded with a provider key by the owner; the Brain then uses template text. | n/a |

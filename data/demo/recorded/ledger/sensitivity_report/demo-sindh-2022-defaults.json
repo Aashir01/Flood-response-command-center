@@ -504,7 +504,23 @@
           "value": -0.0012698412698412688
         }
       ],
-      "ranges": [],
+      "ranges": [
+        {
+          "constraint": "supply:food",
+          "allowable_increase": 6364815.239173403,
+          "allowable_decrease": 9600000.0
+        },
+        {
+          "constraint": "supply:shelter",
+          "allowable_increase": 434467.58786866855,
+          "allowable_decrease": 480000.0
+        },
+        {
+          "constraint": "supply:water",
+          "allowable_increase": 157921322.5477773,
+          "allowable_decrease": 320000000.0
+        }
+      ],
       "basis": "lp_relaxation",
       "equity_tradeoff": [
         {
@@ -579,7 +595,7 @@
         "Shadow prices come from the LP relaxation at the applied equity floor (0.2); with integer = true they are approximations of the integer problem.",
         "Reduced costs are per unit of commodity: positive at full coverage (an extra unit would have been worth that much), negative at the floor or at zero (a unit sent there costs that much objective).",
         "Equity trade-off: LP relaxation re-solved at each floor; floors above f_max (1) are infeasible by the budget and are not solved.",
-        "Allowable ranges are not computed (ranges is empty)."
+        "Allowable ranges: for binding supply and budget constraints with a positive shadow price, the change of the right-hand side over which that shadow price stays the same (LP relaxation, other constraints and floor bounds fixed, found by parametric re-solves). Other constraints are not ranged."
       ]
     },
     "error": null,
@@ -588,8 +604,8 @@
       "tool": "sensitivity_report",
       "tool_version": "0.1.0",
       "contract_version": "0.4",
-      "run_id": "8c77d480-1c7a-4828-8f6c-e07538c1b4a0",
-      "inputs_hash": "d6bd3f9a366c2e189faf89ffdce26b64ed2dde49373382dbdc7858d6e2edc672",
+      "run_id": "a7d13fc0-ded9-4b8d-9d29-0b6689b2f53c",
+      "inputs_hash": "d50e952ad07685d8ece1ecf6f62c6adc579d54dd35186fdcf03be4d17cc0171b",
       "mode": "demo",
       "data_sources": [
         {
@@ -619,7 +635,7 @@
       ],
       "model": null,
       "models": [],
-      "generated_at": "2026-11-16T21:06:07.188141Z"
+      "generated_at": "2026-11-16T21:19:59.209273Z"
     },
     "warnings": []
   }

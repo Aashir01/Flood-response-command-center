@@ -41,7 +41,7 @@ def _fixture(
     run_id_of: str | None = None,
     organ: str = "ledger",
 ) -> dict[str, Any]:
-    match: dict[str, Any] = {"scenario": scenario, "args": args}
+    match: dict[str, Any] = {"scenario": scenario, "exact": True, "args": args}
     if run_id_of is not None:
         match = {"scenario": scenario, "run_id_of": run_id_of, "args": {}}
     return {
@@ -104,9 +104,10 @@ class LedgerCaller:
         return [d.model_dump(mode="json") for d in self._service.scenario_districts(scenario_id)]
 
 
-async def record_ledger(scenario_id: str, transport: str, variants: list[str]) -> None:
+async def record_ledger(
+    scenario_id: str, transport: str, variants: dict[str, dict[str, Any] | None]
+) -> None:
     from stitch_brain.config import load_scenarios
-    from stitch_brain.offline import ledger_variant_args
     from stitch_brain.runtime.organs import wrap_resource
 
     scenario = load_scenarios()[scenario_id]
@@ -123,8 +124,7 @@ async def record_ledger(scenario_id: str, transport: str, variants: list[str]) -
                 "result": res,
             },
         )
-        for variant in variants:
-            args = ledger_variant_args(scenario, variant)
+        for variant, args in variants.items():
             if args is None:
                 print(f"skip {variant}: inputs unavailable")
                 continue
@@ -149,7 +149,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--variants", default="defaults,full,eyes_only")
     args = parser.parse_args(argv)
     os.environ.setdefault("STITCH_MODE", "demo")
-    asyncio.run(record_ledger(args.scenario, args.transport, args.variants.split(",")))
+    from stitch_brain.config import load_scenarios
+    from stitch_brain.offline import ledger_variant_args
+
+    scenario = load_scenarios()[args.scenario]
+    variants = {v: ledger_variant_args(scenario, v) for v in args.variants.split(",")}
+    asyncio.run(record_ledger(args.scenario, args.transport, variants))
     return 0
 
 

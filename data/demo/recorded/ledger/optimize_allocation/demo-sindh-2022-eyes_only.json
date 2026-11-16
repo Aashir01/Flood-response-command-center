@@ -1,0 +1,686 @@
+{
+  "match": {
+    "scenario": "demo-sindh-2022",
+    "exact": true,
+    "args": {
+      "scenario_id": "demo-sindh-2022",
+      "commodities": [
+        {
+          "id": "water",
+          "name": "drinking water",
+          "unit": "litre",
+          "unit_cost": 0.02,
+          "per_person_need": 105.0
+        },
+        {
+          "id": "food",
+          "name": "food rations",
+          "unit": "kg",
+          "unit_cost": 0.8,
+          "per_person_need": 3.5
+        },
+        {
+          "id": "shelter",
+          "name": "emergency shelter",
+          "unit": "kit",
+          "unit_cost": 35.0,
+          "per_person_need": 0.2
+        }
+      ],
+      "supply": {
+        "water": 400000000.0,
+        "food": 12000000.0,
+        "shelter": 600000.0
+      },
+      "integer": true,
+      "mode": "demo",
+      "equity_floor": 0.2,
+      "districts": [
+        {
+          "district_id": "pk-sindh-badin",
+          "population_affected": 690786,
+          "severity": 0.4,
+          "road_access": 0.3348,
+          "alt_delivery_fraction": 0.05
+        },
+        {
+          "district_id": "pk-sindh-dadu",
+          "population_affected": 1739872,
+          "severity": 0.9333,
+          "road_access": 0.2667,
+          "alt_delivery_fraction": 0.05
+        },
+        {
+          "district_id": "pk-sindh-ghotki",
+          "population_affected": 236846,
+          "severity": 0.1667,
+          "road_access": 0.5466,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-hyderabad",
+          "population_affected": 384109,
+          "severity": 0.1333,
+          "road_access": 0.9333,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-jacobabad",
+          "population_affected": 808420,
+          "severity": 0.7333,
+          "road_access": 0.3784,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-jamshoro",
+          "population_affected": 851928,
+          "severity": 0.6333,
+          "road_access": 0.2474,
+          "alt_delivery_fraction": 0.05
+        },
+        {
+          "district_id": "pk-sindh-karachi",
+          "population_affected": 0,
+          "severity": 0.0,
+          "road_access": 1.0,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-kashmore",
+          "population_affected": 348439,
+          "severity": 0.3,
+          "road_access": 0.423,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-khairpur",
+          "population_affected": 1688124,
+          "severity": 0.7,
+          "road_access": 0.1848,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-matiari",
+          "population_affected": 81663,
+          "severity": 0.2,
+          "road_access": 0.7772,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-mirpur-khas",
+          "population_affected": 537426,
+          "severity": 0.3667,
+          "road_access": 0.5506,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-naushahro-feroze",
+          "population_affected": 872386,
+          "severity": 0.4667,
+          "road_access": 0.7667,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-nawabshah",
+          "population_affected": 796901,
+          "severity": 0.4333,
+          "road_access": 0.6911,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-qambar-shahdadkot",
+          "population_affected": 3303541,
+          "severity": 1.0,
+          "road_access": 0.3358,
+          "alt_delivery_fraction": 0.05
+        },
+        {
+          "district_id": "pk-sindh-sanghar",
+          "population_affected": 1307693,
+          "severity": 0.5333,
+          "road_access": 0.2837,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-shikarpur",
+          "population_affected": 758163,
+          "severity": 0.5,
+          "road_access": 0.5127,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-sukkur",
+          "population_affected": 314926,
+          "severity": 0.2333,
+          "road_access": 0.5164,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-tando-allahyar",
+          "population_affected": 206850,
+          "severity": 0.2667,
+          "road_access": 0.7386,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-tando-muhammad-khan",
+          "population_affected": 94690,
+          "severity": 0.2333,
+          "road_access": 0.3789,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-tharparkar",
+          "population_affected": 0,
+          "severity": 0.0,
+          "road_access": 0.3778,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-thatta",
+          "population_affected": 288985,
+          "severity": 0.1667,
+          "road_access": 0.2162,
+          "alt_delivery_fraction": 0.0
+        },
+        {
+          "district_id": "pk-sindh-umerkot",
+          "population_affected": 108964,
+          "severity": 0.1,
+          "road_access": 0.5016,
+          "alt_delivery_fraction": 0.0
+        }
+      ]
+    }
+  },
+  "authoring": "captured",
+  "captured_from": {
+    "organ_version": "0.1.0",
+    "transport": "inproc",
+    "date": "2026-11-16",
+    "mode": "demo"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "status": "feasible",
+      "allocation": [
+        {
+          "district_id": "pk-sindh-badin",
+          "commodity_id": "food",
+          "quantity": 99603.0
+        },
+        {
+          "district_id": "pk-sindh-badin",
+          "commodity_id": "shelter",
+          "quantity": 4981.0
+        },
+        {
+          "district_id": "pk-sindh-badin",
+          "commodity_id": "water",
+          "quantity": 3320084.0
+        },
+        {
+          "district_id": "pk-sindh-dadu",
+          "commodity_id": "food",
+          "quantity": 1928561.0
+        },
+        {
+          "district_id": "pk-sindh-dadu",
+          "commodity_id": "shelter",
+          "quantity": 110203.0
+        },
+        {
+          "district_id": "pk-sindh-dadu",
+          "commodity_id": "water",
+          "quantity": 57856833.0
+        },
+        {
+          "district_id": "pk-sindh-ghotki",
+          "commodity_id": "food",
+          "quantity": 48510.0
+        },
+        {
+          "district_id": "pk-sindh-ghotki",
+          "commodity_id": "shelter",
+          "quantity": 2426.0
+        },
+        {
+          "district_id": "pk-sindh-ghotki",
+          "commodity_id": "water",
+          "quantity": 1616986.0
+        },
+        {
+          "district_id": "pk-sindh-hyderabad",
+          "commodity_id": "food",
+          "quantity": 134329.0
+        },
+        {
+          "district_id": "pk-sindh-hyderabad",
+          "commodity_id": "shelter",
+          "quantity": 6717.0
+        },
+        {
+          "district_id": "pk-sindh-hyderabad",
+          "commodity_id": "water",
+          "quantity": 4477610.0
+        },
+        {
+          "district_id": "pk-sindh-jacobabad",
+          "commodity_id": "food",
+          "quantity": 1070671.0
+        },
+        {
+          "district_id": "pk-sindh-jacobabad",
+          "commodity_id": "shelter",
+          "quantity": 61181.0
+        },
+        {
+          "district_id": "pk-sindh-jacobabad",
+          "commodity_id": "water",
+          "quantity": 32120143.0
+        },
+        {
+          "district_id": "pk-sindh-jamshoro",
+          "commodity_id": "food",
+          "quantity": 886771.0
+        },
+        {
+          "district_id": "pk-sindh-jamshoro",
+          "commodity_id": "shelter",
+          "quantity": 41838.0
+        },
+        {
+          "district_id": "pk-sindh-jamshoro",
+          "commodity_id": "water",
+          "quantity": 26603155.0
+        },
+        {
+          "district_id": "pk-sindh-kashmore",
+          "commodity_id": "food",
+          "quantity": 55228.0
+        },
+        {
+          "district_id": "pk-sindh-kashmore",
+          "commodity_id": "shelter",
+          "quantity": 2762.0
+        },
+        {
+          "district_id": "pk-sindh-kashmore",
+          "commodity_id": "water",
+          "quantity": 1840932.0
+        },
+        {
+          "district_id": "pk-sindh-khairpur",
+          "commodity_id": "food",
+          "quantity": 1091878.0
+        },
+        {
+          "district_id": "pk-sindh-khairpur",
+          "commodity_id": "shelter",
+          "quantity": 62393.0
+        },
+        {
+          "district_id": "pk-sindh-khairpur",
+          "commodity_id": "water",
+          "quantity": 32756358.0
+        },
+        {
+          "district_id": "pk-sindh-matiari",
+          "commodity_id": "food",
+          "quantity": 23783.0
+        },
+        {
+          "district_id": "pk-sindh-matiari",
+          "commodity_id": "shelter",
+          "quantity": 1190.0
+        },
+        {
+          "district_id": "pk-sindh-matiari",
+          "commodity_id": "water",
+          "quantity": 792736.0
+        },
+        {
+          "district_id": "pk-sindh-mirpur-khas",
+          "commodity_id": "food",
+          "quantity": 110879.0
+        },
+        {
+          "district_id": "pk-sindh-mirpur-khas",
+          "commodity_id": "shelter",
+          "quantity": 5544.0
+        },
+        {
+          "district_id": "pk-sindh-mirpur-khas",
+          "commodity_id": "water",
+          "quantity": 3695944.0
+        },
+        {
+          "district_id": "pk-sindh-naushahro-feroze",
+          "commodity_id": "food",
+          "quantity": 250626.0
+        },
+        {
+          "district_id": "pk-sindh-naushahro-feroze",
+          "commodity_id": "shelter",
+          "quantity": 12532.0
+        },
+        {
+          "district_id": "pk-sindh-naushahro-feroze",
+          "commodity_id": "water",
+          "quantity": 8597773.0
+        },
+        {
+          "district_id": "pk-sindh-nawabshah",
+          "commodity_id": "food",
+          "quantity": 206366.0
+        },
+        {
+          "district_id": "pk-sindh-nawabshah",
+          "commodity_id": "shelter",
+          "quantity": 10319.0
+        },
+        {
+          "district_id": "pk-sindh-nawabshah",
+          "commodity_id": "water",
+          "quantity": 6878848.0
+        },
+        {
+          "district_id": "pk-sindh-qambar-shahdadkot",
+          "commodity_id": "food",
+          "quantity": 4460771.0
+        },
+        {
+          "district_id": "pk-sindh-qambar-shahdadkot",
+          "commodity_id": "shelter",
+          "quantity": 254901.0
+        },
+        {
+          "district_id": "pk-sindh-qambar-shahdadkot",
+          "commodity_id": "water",
+          "quantity": 133823142.0
+        },
+        {
+          "district_id": "pk-sindh-sanghar",
+          "commodity_id": "food",
+          "quantity": 1298473.0
+        },
+        {
+          "district_id": "pk-sindh-sanghar",
+          "commodity_id": "shelter",
+          "quantity": 6951.0
+        },
+        {
+          "district_id": "pk-sindh-sanghar",
+          "commodity_id": "water",
+          "quantity": 38954212.0
+        },
+        {
+          "district_id": "pk-sindh-shikarpur",
+          "commodity_id": "food",
+          "quantity": 158028.0
+        },
+        {
+          "district_id": "pk-sindh-shikarpur",
+          "commodity_id": "shelter",
+          "quantity": 7283.0
+        },
+        {
+          "district_id": "pk-sindh-shikarpur",
+          "commodity_id": "water",
+          "quantity": 40814567.0
+        },
+        {
+          "district_id": "pk-sindh-sukkur",
+          "commodity_id": "food",
+          "quantity": 60938.0
+        },
+        {
+          "district_id": "pk-sindh-sukkur",
+          "commodity_id": "shelter",
+          "quantity": 3047.0
+        },
+        {
+          "district_id": "pk-sindh-sukkur",
+          "commodity_id": "water",
+          "quantity": 2031259.0
+        },
+        {
+          "district_id": "pk-sindh-tando-allahyar",
+          "commodity_id": "food",
+          "quantity": 57248.0
+        },
+        {
+          "district_id": "pk-sindh-tando-allahyar",
+          "commodity_id": "shelter",
+          "quantity": 2863.0
+        },
+        {
+          "district_id": "pk-sindh-tando-allahyar",
+          "commodity_id": "water",
+          "quantity": 1908250.0
+        },
+        {
+          "district_id": "pk-sindh-tando-muhammad-khan",
+          "commodity_id": "food",
+          "quantity": 13444.0
+        },
+        {
+          "district_id": "pk-sindh-tando-muhammad-khan",
+          "commodity_id": "shelter",
+          "quantity": 673.0
+        },
+        {
+          "district_id": "pk-sindh-tando-muhammad-khan",
+          "commodity_id": "water",
+          "quantity": 448125.0
+        },
+        {
+          "district_id": "pk-sindh-thatta",
+          "commodity_id": "food",
+          "quantity": 23412.0
+        },
+        {
+          "district_id": "pk-sindh-thatta",
+          "commodity_id": "shelter",
+          "quantity": 1171.0
+        },
+        {
+          "district_id": "pk-sindh-thatta",
+          "commodity_id": "water",
+          "quantity": 780372.0
+        },
+        {
+          "district_id": "pk-sindh-umerkot",
+          "commodity_id": "food",
+          "quantity": 20481.0
+        },
+        {
+          "district_id": "pk-sindh-umerkot",
+          "commodity_id": "shelter",
+          "quantity": 1025.0
+        },
+        {
+          "district_id": "pk-sindh-umerkot",
+          "commodity_id": "water",
+          "quantity": 682671.0
+        }
+      ],
+      "coverage": [
+        {
+          "district_id": "pk-sindh-badin",
+          "fraction": 0.10656913337338245,
+          "access_mode": "road",
+          "unreached_people": 424971.54720000003
+        },
+        {
+          "district_id": "pk-sindh-dadu",
+          "fraction": 0.9999984867474656,
+          "access_mode": "road",
+          "unreached_people": 1188854.5376
+        },
+        {
+          "district_id": "pk-sindh-ghotki",
+          "fraction": 0.10657052145186091,
+          "access_mode": "road",
+          "unreached_people": 107385.9764
+        },
+        {
+          "district_id": "pk-sindh-hyderabad",
+          "fraction": 0.10656639536356935,
+          "access_mode": "road",
+          "unreached_people": 25620.07030000002
+        },
+        {
+          "district_id": "pk-sindh-jacobabad",
+          "fraction": 0.9999986268222384,
+          "access_mode": "road",
+          "unreached_people": 502513.872
+        },
+        {
+          "district_id": "pk-sindh-jamshoro",
+          "fraction": 0.9418836869332843,
+          "access_mode": "road",
+          "unreached_people": 598564.6128
+        },
+        {
+          "district_id": "pk-sindh-karachi",
+          "fraction": 0.0,
+          "access_mode": "road",
+          "unreached_people": 0.0
+        },
+        {
+          "district_id": "pk-sindh-kashmore",
+          "fraction": 0.10657034886618588,
+          "access_mode": "road",
+          "unreached_people": 201049.303
+        },
+        {
+          "district_id": "pk-sindh-khairpur",
+          "fraction": 0.9999994780860572,
+          "access_mode": "road",
+          "unreached_people": 1376158.6848
+        },
+        {
+          "district_id": "pk-sindh-matiari",
+          "fraction": 0.10658838514621727,
+          "access_mode": "road",
+          "unreached_people": 18194.5164
+        },
+        {
+          "district_id": "pk-sindh-mirpur-khas",
+          "fraction": 0.10656417848089278,
+          "access_mode": "road",
+          "unreached_people": 241519.24440000003
+        },
+        {
+          "district_id": "pk-sindh-naushahro-feroze",
+          "fraction": 0.10772135444443226,
+          "access_mode": "road",
+          "unreached_people": 203527.65379999997
+        },
+        {
+          "district_id": "pk-sindh-nawabshah",
+          "fraction": 0.10656577326789131,
+          "access_mode": "road",
+          "unreached_people": 246162.71889999998
+        },
+        {
+          "district_id": "pk-sindh-qambar-shahdadkot",
+          "fraction": 0.9999996759230187,
+          "access_mode": "road",
+          "unreached_people": 2029034.8822
+        },
+        {
+          "district_id": "pk-sindh-sanghar",
+          "fraction": 0.6978935085105411,
+          "access_mode": "road",
+          "unreached_people": 936700.4959
+        },
+        {
+          "district_id": "pk-sindh-shikarpur",
+          "fraction": 0.4032790625867727,
+          "access_mode": "road",
+          "unreached_people": 369452.82989999995
+        },
+        {
+          "district_id": "pk-sindh-sukkur",
+          "fraction": 0.10656477613344463,
+          "access_mode": "road",
+          "unreached_people": 152298.21360000002
+        },
+        {
+          "district_id": "pk-sindh-tando-allahyar",
+          "fraction": 0.10657060169818465,
+          "access_mode": "road",
+          "unreached_people": 54070.59
+        },
+        {
+          "district_id": "pk-sindh-tando-muhammad-khan",
+          "fraction": 0.10660188126399281,
+          "access_mode": "road",
+          "unreached_people": 58811.958999999995
+        },
+        {
+          "district_id": "pk-sindh-tharparkar",
+          "fraction": 0.0,
+          "access_mode": "road",
+          "unreached_people": 0.0
+        },
+        {
+          "district_id": "pk-sindh-thatta",
+          "fraction": 0.10657660324889354,
+          "access_mode": "road",
+          "unreached_people": 226506.443
+        },
+        {
+          "district_id": "pk-sindh-umerkot",
+          "fraction": 0.10659539277392784,
+          "access_mode": "road",
+          "unreached_people": 54307.6576
+        }
+      ],
+      "equity": {
+        "floor_requested": 0.2,
+        "floor_applied": 0.2,
+        "max_feasible_floor": 0.9999893737731327
+      },
+      "total_coverage": 2705431.969785714,
+      "total_cost": 38600000.0,
+      "optimality_gap": 2.115012168409768e-06,
+      "cost_benefit": {
+        "cost_per_person_covered": 11.310697674418606,
+        "people_covered": 3412698.4126984123
+      },
+      "solver": {
+        "name": "SCIP",
+        "version": "SCIP 10.0.0 [LP solver: SoPlex 8.0.0]",
+        "wall_time_s": 0.42600149998907
+      },
+      "infeasibility_reason": null
+    },
+    "error": null,
+    "provenance": {
+      "organ": "ledger",
+      "tool": "optimize_allocation",
+      "tool_version": "0.1.0",
+      "contract_version": "0.4",
+      "run_id": "202e3603-b6af-494a-9ba8-6250be7f07dc",
+      "inputs_hash": "b59502bbf10d86e249d8464ef35e3cd5f05457a6fb981e808ad2d229316d610d",
+      "mode": "demo",
+      "data_sources": [],
+      "model": {
+        "name": "OR-Tools SCIP",
+        "version": "SCIP 10.0.0 [LP solver: SoPlex 8.0.0]",
+        "sha256": "n/a"
+      },
+      "models": [],
+      "generated_at": "2026-11-16T21:20:00.539709Z"
+    },
+    "warnings": [
+      "districts supplied by the caller; the demo dataset was not used",
+      "the MIP solver's plan was worse than the LP plan rounded to whole units; re-solved with safer settings (feasible)",
+      "time limit reached; best incumbent has gap 2.12e-06"
+    ]
+  }
+}

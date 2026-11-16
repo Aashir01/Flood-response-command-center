@@ -1,0 +1,69 @@
+{
+  "match": {
+    "args": {
+      "query": "سیلاب سے بے گھر خاندانوں کو کیسی ہنگامی پناہ گاہ دی جائے؟",
+      "answer_lang": "ur"
+    }
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "status": "refused",
+      "answer": null,
+      "citations": [],
+      "refusal": {
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "closest_hits": [
+          {
+            "doc_id": "fixture-sphere-2018",
+            "title": "The Sphere Handbook 2018 (hand-authored demo fixture)",
+            "publisher": "Sphere Association",
+            "page": 246,
+            "span": [
+              0,
+              85
+            ],
+            "quote": "Shelter and settlement responses aim to provide a safe and secure living environment.",
+            "lang": "en",
+            "url": null
+          }
+        ]
+      },
+      "claims": [],
+      "generation": {
+        "mode": "extractive",
+        "provider": "fixture",
+        "model": null
+      },
+      "quantities": []
+    },
+    "error": null,
+    "provenance": {
+      "organ": "library",
+      "tool": "answer_with_citations",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "848f46ec-0263-4d37-81f6-fc1f10d49ee7",
+      "inputs_hash": "599f82ec1b68fe30b322805fc2bd85e2088bbc4b07eaa758a320f5deae83017c",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

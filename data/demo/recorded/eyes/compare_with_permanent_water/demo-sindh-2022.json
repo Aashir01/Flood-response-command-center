@@ -1,0 +1,201 @@
+{
+  "match": {
+    "scenario": "demo-sindh-2022",
+    "args": {
+      "region_id": "pk-sindh",
+      "date": "2022-08-30"
+    }
+  },
+  "authoring": "hand_authored",
+  "captured_from": {
+    "script": "scripts/build_brain_fixtures.py"
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "total_water_km2": 18365.2,
+      "permanent_water_km2": 1469.2,
+      "new_flood_km2": 16896.0,
+      "by_district": [
+        {
+          "district_id": "pk-sindh-badin",
+          "name": "Badin",
+          "flooded_km2": 793.0,
+          "flooded_fraction": 0.12,
+          "district_area_km2": 6608.3
+        },
+        {
+          "district_id": "pk-sindh-dadu",
+          "name": "Dadu",
+          "flooded_km2": 2171.8,
+          "flooded_fraction": 0.28,
+          "district_area_km2": 7756.5
+        },
+        {
+          "district_id": "pk-sindh-ghotki",
+          "name": "Ghotki",
+          "flooded_km2": 280.3,
+          "flooded_fraction": 0.05,
+          "district_area_km2": 5606.3
+        },
+        {
+          "district_id": "pk-sindh-hyderabad",
+          "name": "Hyderabad",
+          "flooded_km2": 84.0,
+          "flooded_fraction": 0.04,
+          "district_area_km2": 2100.0
+        },
+        {
+          "district_id": "pk-sindh-jacobabad",
+          "name": "Jacobabad",
+          "flooded_km2": 600.5,
+          "flooded_fraction": 0.22,
+          "district_area_km2": 2729.4
+        },
+        {
+          "district_id": "pk-sindh-jamshoro",
+          "name": "Jamshoro",
+          "flooded_km2": 2131.4,
+          "flooded_fraction": 0.19,
+          "district_area_km2": 11218.0
+        },
+        {
+          "district_id": "pk-sindh-karachi",
+          "name": "Karachi",
+          "flooded_km2": 14.3,
+          "flooded_fraction": 0.004,
+          "district_area_km2": 3565.6
+        },
+        {
+          "district_id": "pk-sindh-kashmore",
+          "name": "Kashmore",
+          "flooded_km2": 271.8,
+          "flooded_fraction": 0.09,
+          "district_area_km2": 3020.2
+        },
+        {
+          "district_id": "pk-sindh-khairpur",
+          "name": "Khairpur",
+          "flooded_km2": 3206.7,
+          "flooded_fraction": 0.21,
+          "district_area_km2": 15270.2
+        },
+        {
+          "district_id": "pk-sindh-matiari",
+          "name": "Matiari",
+          "flooded_km2": 43.7,
+          "flooded_fraction": 0.06,
+          "district_area_km2": 728.6
+        },
+        {
+          "district_id": "pk-sindh-mirpur-khas",
+          "name": "Mirpur Khas",
+          "flooded_km2": 325.3,
+          "flooded_fraction": 0.11,
+          "district_area_km2": 2956.9
+        },
+        {
+          "district_id": "pk-sindh-naushahro-feroze",
+          "name": "Naushahro Feroze",
+          "flooded_km2": 420.4,
+          "flooded_fraction": 0.14,
+          "district_area_km2": 3002.6
+        },
+        {
+          "district_id": "pk-sindh-nawabshah",
+          "name": "Nawabshah (Shaheed Benazirabad)",
+          "flooded_km2": 582.9,
+          "flooded_fraction": 0.13,
+          "district_area_km2": 4483.9
+        },
+        {
+          "district_id": "pk-sindh-qambar-shahdadkot",
+          "name": "Qambar Shahdadkot",
+          "flooded_km2": 2269.7,
+          "flooded_fraction": 0.31,
+          "district_area_km2": 7321.7
+        },
+        {
+          "district_id": "pk-sindh-sanghar",
+          "name": "Sanghar",
+          "flooded_km2": 1681.3,
+          "flooded_fraction": 0.16,
+          "district_area_km2": 10508.0
+        },
+        {
+          "district_id": "pk-sindh-shikarpur",
+          "name": "Shikarpur",
+          "flooded_km2": 379.0,
+          "flooded_fraction": 0.15,
+          "district_area_km2": 2526.8
+        },
+        {
+          "district_id": "pk-sindh-sukkur",
+          "name": "Sukkur",
+          "flooded_km2": 333.8,
+          "flooded_fraction": 0.07,
+          "district_area_km2": 4768.6
+        },
+        {
+          "district_id": "pk-sindh-tando-allahyar",
+          "name": "Tando Allahyar",
+          "flooded_km2": 120.6,
+          "flooded_fraction": 0.08,
+          "district_area_km2": 1507.3
+        },
+        {
+          "district_id": "pk-sindh-tando-muhammad-khan",
+          "name": "Tando Muhammad Khan",
+          "flooded_km2": 88.2,
+          "flooded_fraction": 0.07,
+          "district_area_km2": 1260.3
+        },
+        {
+          "district_id": "pk-sindh-tharparkar",
+          "name": "Tharparkar",
+          "flooded_km2": 115.4,
+          "flooded_fraction": 0.006,
+          "district_area_km2": 19237.3
+        },
+        {
+          "district_id": "pk-sindh-thatta",
+          "name": "Thatta",
+          "flooded_km2": 819.0,
+          "flooded_fraction": 0.05,
+          "district_area_km2": 16380.5
+        },
+        {
+          "district_id": "pk-sindh-umerkot",
+          "name": "Umerkot",
+          "flooded_km2": 162.9,
+          "flooded_fraction": 0.03,
+          "district_area_km2": 5428.4
+        }
+      ]
+    },
+    "error": null,
+    "provenance": {
+      "organ": "eyes",
+      "tool": "compare_with_permanent_water",
+      "tool_version": "fixture",
+      "contract_version": "0.4",
+      "run_id": "5aca2fc2-c09d-47d4-bdd2-a8618c150568",
+      "inputs_hash": "c8ab151f6749ab91fe5e17b0c9ea2f397e0201abb5d9422d4fd4d8ae4a8a21ed",
+      "mode": "demo",
+      "data_sources": [
+        {
+          "id": "fixture-hand-authored",
+          "name": "Hand-authored Brain demo fixture (illustrative values)",
+          "license": "MIT (Stitch)",
+          "as_of": null
+        }
+      ],
+      "model": null,
+      "models": [],
+      "generated_at": "2026-11-17T00:00:00Z"
+    },
+    "warnings": [
+      "hand-authored demo fixture: illustrative values, not a model output"
+    ]
+  }
+}

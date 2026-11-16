@@ -1,6 +1,7 @@
 {
   "match": {
     "scenario": "demo-sindh-2022",
+    "exact": true,
     "args": {
       "scenario_id": "demo-sindh-2022",
       "commodities": [
@@ -528,7 +529,7 @@
       "solver": {
         "name": "SCIP",
         "version": "SCIP 10.0.0 [LP solver: SoPlex 8.0.0]",
-        "wall_time_s": 0.05125039996346459
+        "wall_time_s": 0.07778519997373223
       },
       "infeasibility_reason": null
     },
@@ -538,7 +539,7 @@
       "tool": "optimize_allocation",
       "tool_version": "0.1.0",
       "contract_version": "0.4",
-      "run_id": "66d435d9-e816-4ee8-96a8-81b190044ffe",
+      "run_id": "de15d856-359b-4de0-adb9-e98e745d644c",
       "inputs_hash": "3865653cfd02450d562e3553796596a2a9b0dd027bd5a50097266d873d697e83",
       "mode": "demo",
       "data_sources": [
@@ -573,7 +574,7 @@
         "sha256": "n/a"
       },
       "models": [],
-      "generated_at": "2026-11-16T21:06:07.146137Z"
+      "generated_at": "2026-11-16T21:19:59.143991Z"
     },
     "warnings": [
       "demo scenario data: severity and air/boat share are illustrative assumptions, population is a modelled estimate"

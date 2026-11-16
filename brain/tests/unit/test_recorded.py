@@ -72,7 +72,9 @@ def test_every_committed_fixture_validates_against_stitch_common() -> None:
 async def test_recorded_organ_labels_and_rewrites_run_id() -> None:
     organ = RecordedOrgan("ledger", DirectoryFixtureSource(recorded_dir()), ["optimize_allocation"])
     src = DirectoryFixtureSource(recorded_dir())
-    fx = src.fixtures("ledger", "optimize_allocation")[0]
+    fx = next(
+        f for f in src.fixtures("ledger", "optimize_allocation") if f.match_scenario == CTX.scenario
+    )
     out = await organ.call_tool("optimize_allocation", fx.match_args, timeout_s=1, ctx=CTX)
     assert out.result is not None and out.result["ok"]
     assert out.result["warnings"][-1].startswith(RECORDED_PREFIX)
