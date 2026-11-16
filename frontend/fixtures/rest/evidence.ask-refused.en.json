@@ -1,0 +1,61 @@
+{
+ "2c69f1cb-d57b-4c06-8d89-5e77c1667792": {
+  "organ": "library",
+  "tool": "answer_with_citations",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "ask",
+  "generated_at": "2026-11-20T10:00:00Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "status": "refused",
+    "answer": null,
+    "citations": [],
+    "claims": [],
+    "refusal": {
+     "reason": "INSUFFICIENT_EVIDENCE",
+     "closest_hits": [
+      {
+       "doc_id": "demo-excerpt-shelter",
+       "publisher": "Demo fixture (excerpt authored for UI development)",
+       "url": null,
+       "lang": "en",
+       "title": "Demo excerpt: shelter and settlement guidance",
+       "page": 12,
+       "span": [
+        210,
+        330
+       ],
+       "quote": "People have at least 3.5 square metres of covered living space per person."
+      }
+     ]
+    },
+    "quantities": []
+   },
+   "error": null,
+   "provenance": {
+    "organ": "library",
+    "tool": "answer_with_citations",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "2c69f1cb-d57b-4c06-8d89-5e77c1667792",
+    "inputs_hash": "f514ece6f70e3e511cd2ddb33030297c227a1fbe622ee8db1c8596674c3f6233",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:00Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ }
+}

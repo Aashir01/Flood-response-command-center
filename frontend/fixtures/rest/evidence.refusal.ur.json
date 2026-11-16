@@ -1,0 +1,3281 @@
+{
+ "abde0ca3-1ab2-403f-88a7-d2942d1ea895": {
+  "organ": "eyes",
+  "tool": "segment_flood",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "eyes.segment",
+  "generated_at": "2026-11-20T10:00:02.600Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "flood_extent_km2": 16630.2,
+    "extent_geojson": {
+     "type": "FeatureCollection",
+     "features": [
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-badin",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.8291,
+           24.5327
+          ],
+          [
+           68.7397,
+           24.5735
+          ],
+          [
+           68.7243,
+           24.6571
+          ],
+          [
+           68.7543,
+           24.7266
+          ],
+          [
+           68.7843,
+           24.7404
+          ],
+          [
+           68.8214,
+           24.7933
+          ],
+          [
+           68.7719,
+           24.8692
+          ],
+          [
+           68.8392,
+           24.9376
+          ],
+          [
+           68.9304,
+           24.8847
+          ],
+          [
+           68.9887,
+           24.8105
+          ],
+          [
+           69.0253,
+           24.7692
+          ],
+          [
+           69.007,
+           24.7091
+          ],
+          [
+           68.9825,
+           24.6639
+          ],
+          [
+           68.9383,
+           24.5913
+          ],
+          [
+           68.9257,
+           24.5137
+          ],
+          [
+           68.8754,
+           24.4811
+          ],
+          [
+           68.8291,
+           24.5327
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-dadu",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           67.3006,
+           26.6491
+          ],
+          [
+           67.3749,
+           26.977
+          ],
+          [
+           67.4743,
+           27.0955
+          ],
+          [
+           67.5687,
+           27.0404
+          ],
+          [
+           67.6947,
+           26.9895
+          ],
+          [
+           67.8386,
+           27.0025
+          ],
+          [
+           67.8883,
+           26.9629
+          ],
+          [
+           67.887,
+           26.9304
+          ],
+          [
+           67.8844,
+           26.8438
+          ],
+          [
+           67.7887,
+           26.7412
+          ],
+          [
+           67.787,
+           26.6076
+          ],
+          [
+           67.685,
+           26.6185
+          ],
+          [
+           67.6433,
+           26.5321
+          ],
+          [
+           67.5965,
+           26.4783
+          ],
+          [
+           67.5327,
+           26.462
+          ],
+          [
+           67.4111,
+           26.6077
+          ],
+          [
+           67.3006,
+           26.6491
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-jacobabad",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.1991,
+           28.0081
+          ],
+          [
+           68.3435,
+           28.1011
+          ],
+          [
+           68.4551,
+           28.146
+          ],
+          [
+           68.4789,
+           28.1673
+          ],
+          [
+           68.504,
+           28.1896
+          ],
+          [
+           68.6521,
+           28.179
+          ],
+          [
+           68.6424,
+           28.1306
+          ],
+          [
+           68.6388,
+           28.0784
+          ],
+          [
+           68.5947,
+           28.0908
+          ],
+          [
+           68.5287,
+           28.1016
+          ],
+          [
+           68.4938,
+           28.0768
+          ],
+          [
+           68.4229,
+           27.9893
+          ],
+          [
+           68.3476,
+           27.9862
+          ],
+          [
+           68.2973,
+           28.0078
+          ],
+          [
+           68.1991,
+           28.0081
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-jamshoro",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           67.6914,
+           25.6702
+          ],
+          [
+           67.7118,
+           25.8886
+          ],
+          [
+           67.8251,
+           25.9102
+          ],
+          [
+           67.8704,
+           26.0001
+          ],
+          [
+           67.9186,
+           25.9772
+          ],
+          [
+           67.9712,
+           25.8602
+          ],
+          [
+           68.0291,
+           25.737
+          ],
+          [
+           68.1166,
+           25.6858
+          ],
+          [
+           68.1481,
+           25.6049
+          ],
+          [
+           68.0463,
+           25.5724
+          ],
+          [
+           68.0492,
+           25.5169
+          ],
+          [
+           67.8893,
+           25.426
+          ],
+          [
+           67.8021,
+           25.3979
+          ],
+          [
+           67.7068,
+           25.5023
+          ],
+          [
+           67.6754,
+           25.5505
+          ],
+          [
+           67.6914,
+           25.6702
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-khairpur",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.9166,
+           27.0952
+          ],
+          [
+           68.9422,
+           27.1309
+          ],
+          [
+           68.9619,
+           26.984
+          ],
+          [
+           69.0778,
+           26.9882
+          ],
+          [
+           69.1196,
+           26.8466
+          ],
+          [
+           69.4602,
+           26.7459
+          ],
+          [
+           69.2119,
+           26.7116
+          ],
+          [
+           69.2024,
+           26.5953
+          ],
+          [
+           69.0159,
+           26.7229
+          ],
+          [
+           68.9528,
+           26.6995
+          ],
+          [
+           68.8307,
+           26.8081
+          ],
+          [
+           68.7822,
+           26.9018
+          ],
+          [
+           68.803,
+           26.9742
+          ],
+          [
+           68.7435,
+           27.1017
+          ],
+          [
+           68.872,
+           27.0928
+          ],
+          [
+           68.9166,
+           27.0952
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-matiari",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.4249,
+           25.7722
+          ],
+          [
+           68.3982,
+           25.7505
+          ],
+          [
+           68.3859,
+           25.7911
+          ],
+          [
+           68.3794,
+           25.7892
+          ],
+          [
+           68.3946,
+           25.8066
+          ],
+          [
+           68.3892,
+           25.8166
+          ],
+          [
+           68.3758,
+           25.8229
+          ],
+          [
+           68.3658,
+           25.8366
+          ],
+          [
+           68.3585,
+           25.8654
+          ],
+          [
+           68.3726,
+           25.8602
+          ],
+          [
+           68.381,
+           25.896
+          ],
+          [
+           68.4078,
+           25.8851
+          ],
+          [
+           68.4313,
+           25.9069
+          ],
+          [
+           68.4396,
+           25.877
+          ],
+          [
+           68.4641,
+           25.8872
+          ],
+          [
+           68.4409,
+           25.8592
+          ],
+          [
+           68.4411,
+           25.8337
+          ],
+          [
+           68.4354,
+           25.8144
+          ],
+          [
+           68.4259,
+           25.8018
+          ],
+          [
+           68.4475,
+           25.7736
+          ],
+          [
+           68.4249,
+           25.7722
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-mirpur-khas",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           69.282,
+           25.1041
+          ],
+          [
+           69.233,
+           25.068
+          ],
+          [
+           69.2282,
+           25.0892
+          ],
+          [
+           69.1813,
+           25.0986
+          ],
+          [
+           69.1656,
+           25.1232
+          ],
+          [
+           69.1362,
+           25.147
+          ],
+          [
+           69.1162,
+           25.2236
+          ],
+          [
+           69.1136,
+           25.2737
+          ],
+          [
+           69.1148,
+           25.3007
+          ],
+          [
+           69.1125,
+           25.3257
+          ],
+          [
+           69.163,
+           25.327
+          ],
+          [
+           69.1853,
+           25.305
+          ],
+          [
+           69.1806,
+           25.2952
+          ],
+          [
+           69.2061,
+           25.2652
+          ],
+          [
+           69.2755,
+           25.2168
+          ],
+          [
+           69.2716,
+           25.1751
+          ],
+          [
+           69.283,
+           25.1443
+          ],
+          [
+           69.3037,
+           25.098
+          ],
+          [
+           69.282,
+           25.1041
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-naushahro-feroze",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.1689,
+           26.9499
+          ],
+          [
+           68.227,
+           26.914
+          ],
+          [
+           68.227,
+           26.8416
+          ],
+          [
+           68.2542,
+           26.8431
+          ],
+          [
+           68.2112,
+           26.7564
+          ],
+          [
+           68.1895,
+           26.7369
+          ],
+          [
+           68.1462,
+           26.6772
+          ],
+          [
+           68.0987,
+           26.7155
+          ],
+          [
+           68.0584,
+           26.7105
+          ],
+          [
+           68.0335,
+           26.7229
+          ],
+          [
+           68.0554,
+           26.7871
+          ],
+          [
+           68.0759,
+           26.8209
+          ],
+          [
+           68.0778,
+           26.8627
+          ],
+          [
+           68.1253,
+           26.863
+          ],
+          [
+           68.1422,
+           26.9241
+          ],
+          [
+           68.1689,
+           26.9499
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-nawabshah",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.3745,
+           26.4006
+          ],
+          [
+           68.511,
+           26.3442
+          ],
+          [
+           68.5527,
+           26.325
+          ],
+          [
+           68.5811,
+           26.2912
+          ],
+          [
+           68.4742,
+           26.2644
+          ],
+          [
+           68.5155,
+           26.2357
+          ],
+          [
+           68.4399,
+           26.246
+          ],
+          [
+           68.4112,
+           26.2274
+          ],
+          [
+           68.4264,
+           26.1612
+          ],
+          [
+           68.3706,
+           26.1807
+          ],
+          [
+           68.2886,
+           26.2154
+          ],
+          [
+           68.2338,
+           26.2392
+          ],
+          [
+           68.2886,
+           26.29
+          ],
+          [
+           68.2406,
+           26.3638
+          ],
+          [
+           68.3117,
+           26.3499
+          ],
+          [
+           68.3798,
+           26.3543
+          ],
+          [
+           68.3745,
+           26.4006
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-qambar-shahdadkot",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           67.5388,
+           27.4521
+          ],
+          [
+           67.7074,
+           27.5549
+          ],
+          [
+           67.8202,
+           27.6187
+          ],
+          [
+           68.0161,
+           27.6874
+          ],
+          [
+           68.1636,
+           27.7039
+          ],
+          [
+           68.2411,
+           27.6398
+          ],
+          [
+           68.3078,
+           27.5423
+          ],
+          [
+           68.1435,
+           27.4667
+          ],
+          [
+           68.1229,
+           27.4077
+          ],
+          [
+           68.0861,
+           27.3385
+          ],
+          [
+           68.0275,
+           27.2385
+          ],
+          [
+           68.0035,
+           27.3058
+          ],
+          [
+           67.7943,
+           27.3399
+          ],
+          [
+           67.7199,
+           27.4024
+          ],
+          [
+           67.6712,
+           27.4281
+          ],
+          [
+           67.5388,
+           27.4521
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-sanghar",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           69.1224,
+           26.0876
+          ],
+          [
+           69.1488,
+           26.0821
+          ],
+          [
+           69.2461,
+           26.0365
+          ],
+          [
+           69.3146,
+           26.0072
+          ],
+          [
+           69.4763,
+           26.0419
+          ],
+          [
+           69.5596,
+           25.9435
+          ],
+          [
+           69.4196,
+           25.8894
+          ],
+          [
+           69.4072,
+           25.8373
+          ],
+          [
+           69.3677,
+           25.746
+          ],
+          [
+           69.1865,
+           25.8582
+          ],
+          [
+           69.0801,
+           25.8722
+          ],
+          [
+           68.9318,
+           25.8842
+          ],
+          [
+           68.9553,
+           25.9671
+          ],
+          [
+           69.0351,
+           26.0145
+          ],
+          [
+           69.018,
+           26.0472
+          ],
+          [
+           69.0809,
+           26.1354
+          ],
+          [
+           69.1224,
+           26.0876
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-shikarpur",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.6684,
+           27.8123
+          ],
+          [
+           68.6434,
+           27.7999
+          ],
+          [
+           68.6183,
+           27.7866
+          ],
+          [
+           68.5751,
+           27.798
+          ],
+          [
+           68.5444,
+           27.8108
+          ],
+          [
+           68.5185,
+           27.8396
+          ],
+          [
+           68.5234,
+           27.8579
+          ],
+          [
+           68.5352,
+           27.9392
+          ],
+          [
+           68.6157,
+           27.9524
+          ],
+          [
+           68.6854,
+           27.9353
+          ],
+          [
+           68.7288,
+           27.9184
+          ],
+          [
+           68.771,
+           27.9021
+          ],
+          [
+           68.7764,
+           27.8851
+          ],
+          [
+           68.7362,
+           27.861
+          ],
+          [
+           68.7349,
+           27.8437
+          ],
+          [
+           68.6946,
+           27.8228
+          ],
+          [
+           68.6684,
+           27.8123
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-sukkur",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           69.2347,
+           27.3764
+          ],
+          [
+           69.1572,
+           27.4128
+          ],
+          [
+           69.104,
+           27.4155
+          ],
+          [
+           69.0542,
+           27.44
+          ],
+          [
+           69.0578,
+           27.4723
+          ],
+          [
+           69.0302,
+           27.5127
+          ],
+          [
+           69.0227,
+           27.5517
+          ],
+          [
+           68.961,
+           27.5914
+          ],
+          [
+           69.0542,
+           27.622
+          ],
+          [
+           69.1247,
+           27.6437
+          ],
+          [
+           69.1554,
+           27.603
+          ],
+          [
+           69.1529,
+           27.5489
+          ],
+          [
+           69.1714,
+           27.5266
+          ],
+          [
+           69.2402,
+           27.4933
+          ],
+          [
+           69.3022,
+           27.4633
+          ],
+          [
+           69.3049,
+           27.3766
+          ],
+          [
+           69.2347,
+           27.3764
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-tando-allahyar",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.7554,
+           25.3476
+          ],
+          [
+           68.7524,
+           25.3721
+          ],
+          [
+           68.7451,
+           25.392
+          ],
+          [
+           68.7385,
+           25.403
+          ],
+          [
+           68.7201,
+           25.4383
+          ],
+          [
+           68.7423,
+           25.4604
+          ],
+          [
+           68.7567,
+           25.4819
+          ],
+          [
+           68.7779,
+           25.4872
+          ],
+          [
+           68.8118,
+           25.4944
+          ],
+          [
+           68.8364,
+           25.4879
+          ],
+          [
+           68.8329,
+           25.4604
+          ],
+          [
+           68.8357,
+           25.4182
+          ],
+          [
+           68.8296,
+           25.3853
+          ],
+          [
+           68.8068,
+           25.3598
+          ],
+          [
+           68.7724,
+           25.3466
+          ],
+          [
+           68.7554,
+           25.3476
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-tando-muhammad-khan",
+        "kind": "flood"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.4298,
+           24.7957
+          ],
+          [
+           68.4169,
+           24.8279
+          ],
+          [
+           68.4237,
+           24.853
+          ],
+          [
+           68.4285,
+           24.8754
+          ],
+          [
+           68.4048,
+           24.8931
+          ],
+          [
+           68.3745,
+           24.9339
+          ],
+          [
+           68.3946,
+           24.9602
+          ],
+          [
+           68.4921,
+           24.944
+          ],
+          [
+           68.5122,
+           24.9224
+          ],
+          [
+           68.5477,
+           24.9064
+          ],
+          [
+           68.6052,
+           24.8731
+          ],
+          [
+           68.5653,
+           24.8661
+          ],
+          [
+           68.5291,
+           24.854
+          ],
+          [
+           68.5055,
+           24.8642
+          ],
+          [
+           68.4865,
+           24.8524
+          ],
+          [
+           68.4687,
+           24.8167
+          ],
+          [
+           68.4298,
+           24.7957
+          ]
+         ]
+        ]
+       }
+      }
+     ]
+    },
+    "permanent_water_km2": 2073.8,
+    "confidence": 0.87,
+    "tiles_processed": 96,
+    "source_scene": {
+     "sensor": "Sentinel-1A IW GRDH (VV+VH)",
+     "acquired": "2022-08-30T01:07:12Z",
+     "scene_id": "S1A_IW_GRDH_1SDV_20220830T010712_DEMO"
+    },
+    "validation": {
+     "validated_for_region": false,
+     "eval_dataset": "sen1floods11_test",
+     "note": "The model is validated on the Sen1Floods11 test split only. This Sindh scene is a demo scene and is not validated."
+    },
+    "reference_overlay_geojson": {
+     "type": "FeatureCollection",
+     "features": [
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-badin",
+        "kind": "reference",
+        "note": "placeholder outline"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.8239,
+           24.5126
+          ],
+          [
+           68.6717,
+           24.508
+          ],
+          [
+           68.6078,
+           24.6218
+          ],
+          [
+           68.6718,
+           24.7436
+          ],
+          [
+           68.7558,
+           24.7526
+          ],
+          [
+           68.8241,
+           24.7886
+          ],
+          [
+           68.8005,
+           24.822
+          ],
+          [
+           68.8511,
+           24.855
+          ],
+          [
+           68.9153,
+           24.8363
+          ],
+          [
+           68.9856,
+           24.8075
+          ],
+          [
+           69.0769,
+           24.792
+          ],
+          [
+           69.1004,
+           24.7141
+          ],
+          [
+           69.0676,
+           24.6341
+          ],
+          [
+           68.9705,
+           24.5365
+          ],
+          [
+           68.9306,
+           24.496
+          ],
+          [
+           68.875,
+           24.5262
+          ],
+          [
+           68.8239,
+           24.5126
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-dadu",
+        "kind": "reference",
+        "note": "placeholder outline"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           67.4045,
+           26.6904
+          ],
+          [
+           67.3954,
+           26.9631
+          ],
+          [
+           67.4248,
+           27.1805
+          ],
+          [
+           67.5151,
+           27.2002
+          ],
+          [
+           67.7257,
+           27.1383
+          ],
+          [
+           67.9284,
+           27.1058
+          ],
+          [
+           67.9099,
+           26.9789
+          ],
+          [
+           67.8381,
+           26.9009
+          ],
+          [
+           67.8027,
+           26.8244
+          ],
+          [
+           67.7419,
+           26.7577
+          ],
+          [
+           67.762,
+           26.6414
+          ],
+          [
+           67.6887,
+           26.5989
+          ],
+          [
+           67.6386,
+           26.4047
+          ],
+          [
+           67.5546,
+           26.2474
+          ],
+          [
+           67.4569,
+           26.2562
+          ],
+          [
+           67.3487,
+           26.5609
+          ],
+          [
+           67.4045,
+           26.6904
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-jacobabad",
+        "kind": "reference",
+        "note": "placeholder outline"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           68.2965,
+           28.0388
+          ],
+          [
+           68.3766,
+           28.1009
+          ],
+          [
+           68.4557,
+           28.1453
+          ],
+          [
+           68.4754,
+           28.1857
+          ],
+          [
+           68.5111,
+           28.2416
+          ],
+          [
+           68.7767,
+           28.2401
+          ],
+          [
+           68.7541,
+           28.153
+          ],
+          [
+           68.7129,
+           28.0674
+          ],
+          [
+           68.6152,
+           28.0889
+          ],
+          [
+           68.5262,
+           28.1016
+          ],
+          [
+           68.4933,
+           28.0827
+          ],
+          [
+           68.4464,
+           28.0273
+          ],
+          [
+           68.3968,
+           28.0252
+          ],
+          [
+           68.3453,
+           28.0307
+          ],
+          [
+           68.2965,
+           28.0388
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-jamshoro",
+        "kind": "reference",
+        "note": "placeholder outline"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           67.6986,
+           25.6709
+          ],
+          [
+           67.7744,
+           25.828
+          ],
+          [
+           67.7783,
+           26.0241
+          ],
+          [
+           67.8532,
+           26.1196
+          ],
+          [
+           67.9172,
+           25.8791
+          ],
+          [
+           67.9767,
+           25.8763
+          ],
+          [
+           68.1151,
+           25.7707
+          ],
+          [
+           68.0782,
+           25.687
+          ],
+          [
+           68.0973,
+           25.6239
+          ],
+          [
+           68.1393,
+           25.4878
+          ],
+          [
+           68.0703,
+           25.4894
+          ],
+          [
+           67.8981,
+           25.5189
+          ],
+          [
+           67.7668,
+           25.3055
+          ],
+          [
+           67.5833,
+           25.3893
+          ],
+          [
+           67.7458,
+           25.5922
+          ],
+          [
+           67.6986,
+           25.6709
+          ]
+         ]
+        ]
+       }
+      },
+      {
+       "type": "Feature",
+       "properties": {
+        "district_id": "pk-sindh-qambar-shahdadkot",
+        "kind": "reference",
+        "note": "placeholder outline"
+       },
+       "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+         [
+          [
+           67.4884,
+           27.4486
+          ],
+          [
+           67.5696,
+           27.5948
+          ],
+          [
+           67.7443,
+           27.6925
+          ],
+          [
+           68.0165,
+           27.6889
+          ],
+          [
+           68.1037,
+           27.6378
+          ],
+          [
+           68.1758,
+           27.6027
+          ],
+          [
+           68.3375,
+           27.5475
+          ],
+          [
+           68.2371,
+           27.4592
+          ],
+          [
+           68.2139,
+           27.3663
+          ],
+          [
+           68.0921,
+           27.3316
+          ],
+          [
+           68.0086,
+           27.3083
+          ],
+          [
+           67.9931,
+           27.3495
+          ],
+          [
+           67.7853,
+           27.3323
+          ],
+          [
+           67.6025,
+           27.3641
+          ],
+          [
+           67.5005,
+           27.3969
+          ],
+          [
+           67.4884,
+           27.4486
+          ]
+         ]
+        ]
+       }
+      }
+     ]
+    },
+    "reference_overlay_note": "Placeholder outline standing in for a UNOSAT/CEMS reference extent. Qualitative only.",
+    "valid_fraction": 0.97,
+    "model_variant": "unet-resnet18-s1-int8"
+   },
+   "error": null,
+   "provenance": {
+    "organ": "eyes",
+    "tool": "segment_flood",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "abde0ca3-1ab2-403f-88a7-d2942d1ea895",
+    "inputs_hash": "952064c1a20cc359790e7e72db469298e37e86644c37b4a85da720c1d53b129d",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     },
+     {
+      "id": "sentinel-1-demo",
+      "name": "Sentinel-1 scene, Sindh Aug 2022 (clipped, demo)",
+      "license": "Copernicus Sentinel data terms",
+      "as_of": "2022-08-30"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:02.600Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "15b9cd04-22ba-4fb1-8ff3-485575adfea2": {
+  "organ": "eyes",
+  "tool": "compare_with_permanent_water",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "eyes.compare",
+  "generated_at": "2026-11-20T10:00:01.900Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "total_water_km2": 18704,
+    "permanent_water_km2": 2073.8,
+    "new_flood_km2": 16630.2,
+    "by_district": [
+     {
+      "district_id": "pk-sindh-badin",
+      "name": "Badin",
+      "flooded_km2": 1189.5,
+      "flooded_fraction": 0.18,
+      "district_area_km2": 6608.3
+     },
+     {
+      "district_id": "pk-sindh-dadu",
+      "name": "Dadu",
+      "flooded_km2": 3257.7,
+      "flooded_fraction": 0.42,
+      "district_area_km2": 7756.5
+     },
+     {
+      "district_id": "pk-sindh-ghotki",
+      "name": "Ghotki",
+      "flooded_km2": 336.4,
+      "flooded_fraction": 0.06,
+      "district_area_km2": 5606.3
+     },
+     {
+      "district_id": "pk-sindh-hyderabad",
+      "name": "Hyderabad",
+      "flooded_km2": 42,
+      "flooded_fraction": 0.02,
+      "district_area_km2": 2100
+     },
+     {
+      "district_id": "pk-sindh-jacobabad",
+      "name": "Jacobabad",
+      "flooded_km2": 545.9,
+      "flooded_fraction": 0.2,
+      "district_area_km2": 2729.4
+     },
+     {
+      "district_id": "pk-sindh-jamshoro",
+      "name": "Jamshoro",
+      "flooded_km2": 2243.6,
+      "flooded_fraction": 0.2,
+      "district_area_km2": 11218
+     },
+     {
+      "district_id": "pk-sindh-karachi",
+      "name": "Karachi",
+      "flooded_km2": 3.6,
+      "flooded_fraction": 0.001,
+      "district_area_km2": 3565.6
+     },
+     {
+      "district_id": "pk-sindh-kashmore",
+      "name": "Kashmore",
+      "flooded_km2": 241.6,
+      "flooded_fraction": 0.08,
+      "district_area_km2": 3020.2
+     },
+     {
+      "district_id": "pk-sindh-khairpur",
+      "name": "Khairpur",
+      "flooded_km2": 1527,
+      "flooded_fraction": 0.1,
+      "district_area_km2": 15270.2
+     },
+     {
+      "district_id": "pk-sindh-matiari",
+      "name": "Matiari",
+      "flooded_km2": 102,
+      "flooded_fraction": 0.14,
+      "district_area_km2": 728.6
+     },
+     {
+      "district_id": "pk-sindh-mirpur-khas",
+      "name": "Mirpur Khas",
+      "flooded_km2": 295.7,
+      "flooded_fraction": 0.1,
+      "district_area_km2": 2956.9
+     },
+     {
+      "district_id": "pk-sindh-naushahro-feroze",
+      "name": "Naushahro Feroze",
+      "flooded_km2": 360.3,
+      "flooded_fraction": 0.12,
+      "district_area_km2": 3002.6
+     },
+     {
+      "district_id": "pk-sindh-nawabshah",
+      "name": "Nawabshah (Shaheed Benazirabad)",
+      "flooded_km2": 448.4,
+      "flooded_fraction": 0.1,
+      "district_area_km2": 4483.9
+     },
+     {
+      "district_id": "pk-sindh-qambar-shahdadkot",
+      "name": "Qambar Shahdadkot",
+      "flooded_km2": 2416.2,
+      "flooded_fraction": 0.33,
+      "district_area_km2": 7321.7
+     },
+     {
+      "district_id": "pk-sindh-sanghar",
+      "name": "Sanghar",
+      "flooded_km2": 1261,
+      "flooded_fraction": 0.12,
+      "district_area_km2": 10508
+     },
+     {
+      "district_id": "pk-sindh-shikarpur",
+      "name": "Shikarpur",
+      "flooded_km2": 303.2,
+      "flooded_fraction": 0.12,
+      "district_area_km2": 2526.8
+     },
+     {
+      "district_id": "pk-sindh-sukkur",
+      "name": "Sukkur",
+      "flooded_km2": 476.9,
+      "flooded_fraction": 0.1,
+      "district_area_km2": 4768.6
+     },
+     {
+      "district_id": "pk-sindh-tando-allahyar",
+      "name": "Tando Allahyar",
+      "flooded_km2": 135.7,
+      "flooded_fraction": 0.09,
+      "district_area_km2": 1507.3
+     },
+     {
+      "district_id": "pk-sindh-tando-muhammad-khan",
+      "name": "Tando Muhammad Khan",
+      "flooded_km2": 201.6,
+      "flooded_fraction": 0.16,
+      "district_area_km2": 1260.3
+     },
+     {
+      "district_id": "pk-sindh-tharparkar",
+      "name": "Tharparkar",
+      "flooded_km2": 96.2,
+      "flooded_fraction": 0.005,
+      "district_area_km2": 19237.3
+     },
+     {
+      "district_id": "pk-sindh-thatta",
+      "name": "Thatta",
+      "flooded_km2": 982.8,
+      "flooded_fraction": 0.06,
+      "district_area_km2": 16380.5
+     },
+     {
+      "district_id": "pk-sindh-umerkot",
+      "name": "Umerkot",
+      "flooded_km2": 162.9,
+      "flooded_fraction": 0.03,
+      "district_area_km2": 5428.4
+     }
+    ]
+   },
+   "error": null,
+   "provenance": {
+    "organ": "eyes",
+    "tool": "compare_with_permanent_water",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+    "inputs_hash": "f4ca2bae0fc3d691999743e5bdd294bd20683b35916afe1da53630c7feeacff8",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:01.900Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "90f7649f-3e90-474e-8a37-f0391d4b89ae": {
+  "organ": "oracle",
+  "tool": "forecast_river",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "oracle.forecast",
+  "generated_at": "2026-11-20T10:00:01.500Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "station_id": "indus-sukkur",
+    "unit": "m3/s",
+    "as_of": "2022-08-30",
+    "target_kind": "modeled_glofas",
+    "target_label": "Modeled river discharge (GloFAS via Open-Meteo)",
+    "forecast": [
+     {
+      "date": "2022-08-31",
+      "lead_days": 1,
+      "discharge": {
+       "p10": 16044,
+       "p50": 16800,
+       "p90": 17632
+      }
+     },
+     {
+      "date": "2022-09-01",
+      "lead_days": 2,
+      "discharge": {
+       "p10": 16361,
+       "p50": 17350,
+       "p90": 18438
+      }
+     },
+     {
+      "date": "2022-09-02",
+      "lead_days": 3,
+      "discharge": {
+       "p10": 16665,
+       "p50": 17900,
+       "p90": 19259
+      }
+     },
+     {
+      "date": "2022-09-03",
+      "lead_days": 4,
+      "discharge": {
+       "p10": 16634,
+       "p50": 18100,
+       "p90": 19713
+      }
+     },
+     {
+      "date": "2022-09-04",
+      "lead_days": 5,
+      "discharge": {
+       "p10": 16054,
+       "p50": 17700,
+       "p90": 19511
+      }
+     },
+     {
+      "date": "2022-09-05",
+      "lead_days": 6,
+      "discharge": {
+       "p10": 15215,
+       "p50": 17000,
+       "p90": 18964
+      }
+     },
+     {
+      "date": "2022-09-06",
+      "lead_days": 7,
+      "discharge": {
+       "p10": 14216,
+       "p50": 16100,
+       "p90": 18172
+      }
+     }
+    ],
+    "danger_threshold_m3s": 17500,
+    "exceedance_prob": [
+     {
+      "date": "2022-08-31",
+      "p_exceed": 0.129
+     },
+     {
+      "date": "2022-09-01",
+      "p_exceed": 0.427
+     },
+     {
+      "date": "2022-09-02",
+      "p_exceed": 0.654
+     },
+     {
+      "date": "2022-09-03",
+      "p_exceed": 0.691
+     },
+     {
+      "date": "2022-09-04",
+      "p_exceed": 0.559
+     },
+     {
+      "date": "2022-09-05",
+      "p_exceed": 0.366
+     },
+     {
+      "date": "2022-09-06",
+      "p_exceed": 0.182
+     }
+    ],
+    "calibration": {
+     "method": "split_conformal",
+     "nominal_coverage": 0.8,
+     "n_calibration": 180
+    },
+    "station": {
+     "name": "Sukkur barrage",
+     "river": "Indus",
+     "requested_lat": 27.7,
+     "requested_lon": 68.85,
+     "cell_lat": 27.75,
+     "cell_lon": 68.85
+    }
+   },
+   "error": null,
+   "provenance": {
+    "organ": "oracle",
+    "tool": "forecast_river",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+    "inputs_hash": "8ff192bd503606d97d5f270938285c44b17a7e4d97464d75fd1a80e5c7942b02",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     },
+     {
+      "id": "open-meteo-glofas",
+      "name": "GloFAS discharge via Open-Meteo flood API (modeled)",
+      "license": "CC BY 4.0",
+      "as_of": "2022-08-30"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:01.500Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "cde3fd63-dceb-46ca-82cf-75525b49d4b6": {
+  "organ": "oracle",
+  "tool": "explain_forecast",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "oracle.explain",
+  "generated_at": "2026-11-20T10:00:02.200Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "drivers": [
+     {
+      "feature": "upstream rainfall, last 5 days",
+      "contribution_m3s": 1450,
+      "direction": "up"
+     },
+     {
+      "feature": "antecedent discharge",
+      "contribution_m3s": 820,
+      "direction": "up"
+     },
+     {
+      "feature": "seasonal baseline",
+      "contribution_m3s": -410,
+      "direction": "down"
+     }
+    ],
+    "narrative": "Modeled discharge is above its seasonal baseline mainly because of upstream rainfall over the last five days and already high discharge.",
+    "baseline_m3s": 15100
+   },
+   "error": null,
+   "provenance": {
+    "organ": "oracle",
+    "tool": "explain_forecast",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "cde3fd63-dceb-46ca-82cf-75525b49d4b6",
+    "inputs_hash": "2438e02e7c7eae16894bc533c222992b599e40ddc1fa60133af23671fc0c7e6c",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:02.200Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "196e0d75-521c-4bc9-8096-fd26e1f7eebb": {
+  "organ": "library",
+  "tool": "answer_with_citations",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "library.water",
+  "generated_at": "2026-11-20T10:00:01.700Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "status": "answered",
+    "answer": "پینے، کھانا پکانے اور صفائی کے لیے فی شخص روزانہ کم از کم 15 لیٹر پانی کا بندوبست کریں۔",
+    "citations": [
+     {
+      "doc_id": "demo-excerpt-water",
+      "publisher": "Demo fixture (excerpt authored for UI development)",
+      "url": null,
+      "lang": "en",
+      "title": "Demo excerpt: water supply guidance",
+      "page": 3,
+      "span": [
+       120,
+       245
+      ],
+      "quote": "Average water use for drinking, cooking and personal hygiene in any household is at least 15 litres per person per day."
+     }
+    ],
+    "claims": [
+     {
+      "text": "پینے، کھانا پکانے اور صفائی کے لیے فی شخص روزانہ کم از کم 15 لیٹر پانی کا بندوبست کریں۔",
+      "citation_idx": [
+       0
+      ]
+     }
+    ],
+    "refusal": null,
+    "quantities": [
+     {
+      "value": 15,
+      "unit": "litre",
+      "per": "person_day",
+      "claim_idx": 0
+     }
+    ],
+    "generation": {
+     "mode": "extractive",
+     "model": null,
+     "provider": null
+    }
+   },
+   "error": null,
+   "provenance": {
+    "organ": "library",
+    "tool": "answer_with_citations",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "196e0d75-521c-4bc9-8096-fd26e1f7eebb",
+    "inputs_hash": "f514ece6f70e3e511cd2ddb33030297c227a1fbe622ee8db1c8596674c3f6233",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:01.700Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "c3349774-0d09-4cd2-8d73-ad0978c98c0c": {
+  "organ": "library",
+  "tool": "answer_with_citations",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "library.food",
+  "generated_at": "2026-11-20T10:00:01.700Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "status": "answered",
+    "answer": "راشن سے فی شخص روزانہ تقریباً 2,100 کلو کیلوری توانائی ملنی چاہیے۔",
+    "citations": [
+     {
+      "doc_id": "demo-excerpt-food",
+      "publisher": "Demo fixture (excerpt authored for UI development)",
+      "url": null,
+      "lang": "en",
+      "title": "Demo excerpt: food assistance guidance",
+      "page": 7,
+      "span": [
+       40,
+       160
+      ],
+      "quote": "The initial planning figure for the energy requirement of a population is 2,100 kilocalories per person per day."
+     }
+    ],
+    "claims": [
+     {
+      "text": "راشن سے فی شخص روزانہ تقریباً 2,100 کلو کیلوری توانائی ملنی چاہیے۔",
+      "citation_idx": [
+       0
+      ]
+     }
+    ],
+    "refusal": null,
+    "quantities": [
+     {
+      "value": 2100,
+      "unit": "kcal",
+      "per": "person_day",
+      "claim_idx": 0
+     }
+    ],
+    "generation": {
+     "mode": "extractive",
+     "model": null,
+     "provider": null
+    }
+   },
+   "error": null,
+   "provenance": {
+    "organ": "library",
+    "tool": "answer_with_citations",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "c3349774-0d09-4cd2-8d73-ad0978c98c0c",
+    "inputs_hash": "f514ece6f70e3e511cd2ddb33030297c227a1fbe622ee8db1c8596674c3f6233",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:01.700Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "600ee921-e4ed-4852-8174-291f0973aff2": {
+  "organ": "library",
+  "tool": "answer_with_citations",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "library.shelter",
+  "generated_at": "2026-11-20T10:00:01.700Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "status": "refused",
+    "answer": null,
+    "citations": [],
+    "claims": [],
+    "refusal": {
+     "reason": "INSUFFICIENT_EVIDENCE",
+     "closest_hits": [
+      {
+       "doc_id": "demo-excerpt-shelter",
+       "publisher": "Demo fixture (excerpt authored for UI development)",
+       "url": null,
+       "lang": "en",
+       "title": "Demo excerpt: shelter and settlement guidance",
+       "page": 12,
+       "span": [
+        210,
+        330
+       ],
+       "quote": "People have at least 3.5 square metres of covered living space per person."
+      }
+     ]
+    },
+    "quantities": []
+   },
+   "error": null,
+   "provenance": {
+    "organ": "library",
+    "tool": "answer_with_citations",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "600ee921-e4ed-4852-8174-291f0973aff2",
+    "inputs_hash": "f514ece6f70e3e511cd2ddb33030297c227a1fbe622ee8db1c8596674c3f6233",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:01.700Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "a5143bef-899c-4003-8088-e4ba877d1a08": {
+  "organ": "ledger",
+  "tool": "resource:ledger.districts",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "ledger.districts",
+  "generated_at": "2026-11-20T10:00:00.700Z",
+  "doc": {
+   "ok": true,
+   "data": [
+    {
+     "district_id": "pk-sindh-badin",
+     "name": "Badin",
+     "population": 1726965,
+     "road_access": 0.4185,
+     "alt_delivery_fraction": 0.05,
+     "default_severity": 0.75
+    },
+    {
+     "district_id": "pk-sindh-dadu",
+     "name": "Dadu",
+     "population": 1864149,
+     "road_access": 0.5,
+     "alt_delivery_fraction": 0.05,
+     "default_severity": 0.9
+    },
+    {
+     "district_id": "pk-sindh-ghotki",
+     "name": "Ghotki",
+     "population": 1421073,
+     "road_access": 0.5963,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    },
+    {
+     "district_id": "pk-sindh-hyderabad",
+     "name": "Hyderabad",
+     "population": 2880820,
+     "road_access": 1,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    },
+    {
+     "district_id": "pk-sindh-jacobabad",
+     "name": "Jacobabad",
+     "population": 1102391,
+     "road_access": 0.5975,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.75
+    },
+    {
+     "district_id": "pk-sindh-jamshoro",
+     "name": "Jamshoro",
+     "population": 1345150,
+     "road_access": 0.3621,
+     "alt_delivery_fraction": 0.05,
+     "default_severity": 0.9
+    },
+    {
+     "district_id": "pk-sindh-karachi",
+     "name": "Karachi",
+     "population": 15962764,
+     "road_access": 1,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.1
+    },
+    {
+     "district_id": "pk-sindh-kashmore",
+     "name": "Kashmore",
+     "population": 1161462,
+     "road_access": 0.4977,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    },
+    {
+     "district_id": "pk-sindh-khairpur",
+     "name": "Khairpur",
+     "population": 2411606,
+     "road_access": 0.2843,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.9
+    },
+    {
+     "district_id": "pk-sindh-matiari",
+     "name": "Matiari",
+     "population": 408316,
+     "road_access": 0.8636,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    },
+    {
+     "district_id": "pk-sindh-mirpur-khas",
+     "name": "Mirpur Khas",
+     "population": 1465706,
+     "road_access": 0.6742,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.75
+    },
+    {
+     "district_id": "pk-sindh-naushahro-feroze",
+     "name": "Naushahro Feroze",
+     "population": 1869398,
+     "road_access": 1,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.75
+    },
+    {
+     "district_id": "pk-sindh-nawabshah",
+     "name": "Nawabshah (Shaheed Benazirabad)",
+     "population": 1839002,
+     "road_access": 0.8822,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.75
+    },
+    {
+     "district_id": "pk-sindh-qambar-shahdadkot",
+     "name": "Qambar Shahdadkot",
+     "population": 3303541,
+     "road_access": 0.6716,
+     "alt_delivery_fraction": 0.05,
+     "default_severity": 0.9
+    },
+    {
+     "district_id": "pk-sindh-sanghar",
+     "name": "Sanghar",
+     "population": 2451925,
+     "road_access": 0.3869,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.75
+    },
+    {
+     "district_id": "pk-sindh-shikarpur",
+     "name": "Shikarpur",
+     "population": 1516326,
+     "road_access": 0.6836,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.75
+    },
+    {
+     "district_id": "pk-sindh-sukkur",
+     "name": "Sukkur",
+     "population": 1349684,
+     "road_access": 0.5846,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    },
+    {
+     "district_id": "pk-sindh-tando-allahyar",
+     "name": "Tando Allahyar",
+     "population": 775687,
+     "road_access": 0.8522,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    },
+    {
+     "district_id": "pk-sindh-tando-muhammad-khan",
+     "name": "Tando Muhammad Khan",
+     "population": 405815,
+     "road_access": 0.4289,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    },
+    {
+     "district_id": "pk-sindh-tharparkar",
+     "name": "Tharparkar",
+     "population": 1428423,
+     "road_access": 0.3778,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.3
+    },
+    {
+     "district_id": "pk-sindh-thatta",
+     "name": "Thatta",
+     "population": 1733912,
+     "road_access": 0.2358,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.3
+    },
+    {
+     "district_id": "pk-sindh-umerkot",
+     "name": "Umerkot",
+     "population": 1089637,
+     "road_access": 0.528,
+     "alt_delivery_fraction": 0,
+     "default_severity": 0.5
+    }
+   ],
+   "error": null,
+   "provenance": {
+    "organ": "ledger",
+    "tool": "resource:ledger.districts",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "a5143bef-899c-4003-8088-e4ba877d1a08",
+    "inputs_hash": "52c44440c8b26566b374d5362283d66b2980b2431565afcb08f3dea18faf33eb",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:00.700Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "b66c5660-66f0-4539-8f06-06f4c0684b1f": {
+  "organ": "ledger",
+  "tool": "optimize_allocation",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "ledger.optimize",
+  "generated_at": "2026-11-20T10:00:04.400Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "status": "optimal",
+    "allocation": [
+     {
+      "district_id": "pk-sindh-badin",
+      "commodity_id": "water",
+      "quantity": 11227153
+     },
+     {
+      "district_id": "pk-sindh-dadu",
+      "commodity_id": "water",
+      "quantity": 46771404
+     },
+     {
+      "district_id": "pk-sindh-ghotki",
+      "commodity_id": "water",
+      "quantity": 1874744
+     },
+     {
+      "district_id": "pk-sindh-hyderabad",
+      "commodity_id": "water",
+      "quantity": 1376751
+     },
+     {
+      "district_id": "pk-sindh-jacobabad",
+      "commodity_id": "water",
+      "quantity": 9704708
+     },
+     {
+      "district_id": "pk-sindh-jamshoro",
+      "commodity_id": "water",
+      "quantity": 10628760
+     },
+     {
+      "district_id": "pk-sindh-karachi",
+      "commodity_id": "water",
+      "quantity": 68111
+     },
+     {
+      "district_id": "pk-sindh-kashmore",
+      "commodity_id": "water",
+      "quantity": 2049697
+     },
+     {
+      "district_id": "pk-sindh-khairpur",
+      "commodity_id": "water",
+      "quantity": 7045741
+     },
+     {
+      "district_id": "pk-sindh-matiari",
+      "commodity_id": "water",
+      "quantity": 2060412
+     },
+     {
+      "district_id": "pk-sindh-mirpur-khas",
+      "commodity_id": "water",
+      "quantity": 5333498
+     },
+     {
+      "district_id": "pk-sindh-naushahro-feroze",
+      "commodity_id": "water",
+      "quantity": 10529256
+     },
+     {
+      "district_id": "pk-sindh-nawabshah",
+      "commodity_id": "water",
+      "quantity": 7729926
+     },
+     {
+      "district_id": "pk-sindh-qambar-shahdadkot",
+      "commodity_id": "water",
+      "quantity": 70968193
+     },
+     {
+      "district_id": "pk-sindh-sanghar",
+      "commodity_id": "water",
+      "quantity": 8730060
+     },
+     {
+      "district_id": "pk-sindh-shikarpur",
+      "commodity_id": "water",
+      "quantity": 6919272
+     },
+     {
+      "district_id": "pk-sindh-sukkur",
+      "commodity_id": "water",
+      "quantity": 3458954
+     },
+     {
+      "district_id": "pk-sindh-tando-allahyar",
+      "commodity_id": "water",
+      "quantity": 2117470
+     },
+     {
+      "district_id": "pk-sindh-tando-muhammad-khan",
+      "commodity_id": "water",
+      "quantity": 1784794
+     },
+     {
+      "district_id": "pk-sindh-tharparkar",
+      "commodity_id": "water",
+      "quantity": 61112
+     },
+     {
+      "district_id": "pk-sindh-thatta",
+      "commodity_id": "water",
+      "quantity": 0
+     },
+     {
+      "district_id": "pk-sindh-umerkot",
+      "commodity_id": "water",
+      "quantity": 579902
+     },
+     {
+      "district_id": "pk-sindh-badin",
+      "commodity_id": "food",
+      "quantity": 1122715
+     },
+     {
+      "district_id": "pk-sindh-dadu",
+      "commodity_id": "food",
+      "quantity": 4677140
+     },
+     {
+      "district_id": "pk-sindh-ghotki",
+      "commodity_id": "food",
+      "quantity": 187474
+     },
+     {
+      "district_id": "pk-sindh-hyderabad",
+      "commodity_id": "food",
+      "quantity": 137675
+     },
+     {
+      "district_id": "pk-sindh-jacobabad",
+      "commodity_id": "food",
+      "quantity": 970470
+     },
+     {
+      "district_id": "pk-sindh-jamshoro",
+      "commodity_id": "food",
+      "quantity": 1062876
+     },
+     {
+      "district_id": "pk-sindh-karachi",
+      "commodity_id": "food",
+      "quantity": 6811
+     },
+     {
+      "district_id": "pk-sindh-kashmore",
+      "commodity_id": "food",
+      "quantity": 204969
+     },
+     {
+      "district_id": "pk-sindh-khairpur",
+      "commodity_id": "food",
+      "quantity": 704574
+     },
+     {
+      "district_id": "pk-sindh-matiari",
+      "commodity_id": "food",
+      "quantity": 206041
+     },
+     {
+      "district_id": "pk-sindh-mirpur-khas",
+      "commodity_id": "food",
+      "quantity": 533349
+     },
+     {
+      "district_id": "pk-sindh-naushahro-feroze",
+      "commodity_id": "food",
+      "quantity": 1052925
+     },
+     {
+      "district_id": "pk-sindh-nawabshah",
+      "commodity_id": "food",
+      "quantity": 772992
+     },
+     {
+      "district_id": "pk-sindh-qambar-shahdadkot",
+      "commodity_id": "food",
+      "quantity": 7096819
+     },
+     {
+      "district_id": "pk-sindh-sanghar",
+      "commodity_id": "food",
+      "quantity": 873006
+     },
+     {
+      "district_id": "pk-sindh-shikarpur",
+      "commodity_id": "food",
+      "quantity": 691927
+     },
+     {
+      "district_id": "pk-sindh-sukkur",
+      "commodity_id": "food",
+      "quantity": 345895
+     },
+     {
+      "district_id": "pk-sindh-tando-allahyar",
+      "commodity_id": "food",
+      "quantity": 211747
+     },
+     {
+      "district_id": "pk-sindh-tando-muhammad-khan",
+      "commodity_id": "food",
+      "quantity": 178479
+     },
+     {
+      "district_id": "pk-sindh-tharparkar",
+      "commodity_id": "food",
+      "quantity": 6111
+     },
+     {
+      "district_id": "pk-sindh-thatta",
+      "commodity_id": "food",
+      "quantity": 0
+     },
+     {
+      "district_id": "pk-sindh-umerkot",
+      "commodity_id": "food",
+      "quantity": 57990
+     },
+     {
+      "district_id": "pk-sindh-badin",
+      "commodity_id": "shelter",
+      "quantity": 26196
+     },
+     {
+      "district_id": "pk-sindh-dadu",
+      "commodity_id": "shelter",
+      "quantity": 109133
+     },
+     {
+      "district_id": "pk-sindh-ghotki",
+      "commodity_id": "shelter",
+      "quantity": 4374
+     },
+     {
+      "district_id": "pk-sindh-hyderabad",
+      "commodity_id": "shelter",
+      "quantity": 3212
+     },
+     {
+      "district_id": "pk-sindh-jacobabad",
+      "commodity_id": "shelter",
+      "quantity": 22644
+     },
+     {
+      "district_id": "pk-sindh-jamshoro",
+      "commodity_id": "shelter",
+      "quantity": 24800
+     },
+     {
+      "district_id": "pk-sindh-karachi",
+      "commodity_id": "shelter",
+      "quantity": 158
+     },
+     {
+      "district_id": "pk-sindh-kashmore",
+      "commodity_id": "shelter",
+      "quantity": 4782
+     },
+     {
+      "district_id": "pk-sindh-khairpur",
+      "commodity_id": "shelter",
+      "quantity": 16440
+     },
+     {
+      "district_id": "pk-sindh-matiari",
+      "commodity_id": "shelter",
+      "quantity": 4807
+     },
+     {
+      "district_id": "pk-sindh-mirpur-khas",
+      "commodity_id": "shelter",
+      "quantity": 12444
+     },
+     {
+      "district_id": "pk-sindh-naushahro-feroze",
+      "commodity_id": "shelter",
+      "quantity": 24568
+     },
+     {
+      "district_id": "pk-sindh-nawabshah",
+      "commodity_id": "shelter",
+      "quantity": 18036
+     },
+     {
+      "district_id": "pk-sindh-qambar-shahdadkot",
+      "commodity_id": "shelter",
+      "quantity": 165592
+     },
+     {
+      "district_id": "pk-sindh-sanghar",
+      "commodity_id": "shelter",
+      "quantity": 20370
+     },
+     {
+      "district_id": "pk-sindh-shikarpur",
+      "commodity_id": "shelter",
+      "quantity": 16144
+     },
+     {
+      "district_id": "pk-sindh-sukkur",
+      "commodity_id": "shelter",
+      "quantity": 8070
+     },
+     {
+      "district_id": "pk-sindh-tando-allahyar",
+      "commodity_id": "shelter",
+      "quantity": 4940
+     },
+     {
+      "district_id": "pk-sindh-tando-muhammad-khan",
+      "commodity_id": "shelter",
+      "quantity": 4164
+     },
+     {
+      "district_id": "pk-sindh-tharparkar",
+      "commodity_id": "shelter",
+      "quantity": 142
+     },
+     {
+      "district_id": "pk-sindh-thatta",
+      "commodity_id": "shelter",
+      "quantity": 0
+     },
+     {
+      "district_id": "pk-sindh-umerkot",
+      "commodity_id": "shelter",
+      "quantity": 1353
+     }
+    ],
+    "coverage": [
+     {
+      "district_id": "pk-sindh-badin",
+      "fraction": 0.263,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-dadu",
+      "fraction": 0.436,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-ghotki",
+      "fraction": 0.16,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-hyderabad",
+      "fraction": 0.174,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-jacobabad",
+      "fraction": 0.321,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-jamshoro",
+      "fraction": 0.288,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-karachi",
+      "fraction": 0.031,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-kashmore",
+      "fraction": 0.161,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-khairpur",
+      "fraction": 0.213,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-matiari",
+      "fraction": 0.263,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-mirpur-khas",
+      "fraction": 0.265,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-naushahro-feroze",
+      "fraction": 0.342,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-nawabshah",
+      "fraction": 0.306,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-qambar-shahdadkot",
+      "fraction": 0.475,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-sanghar",
+      "fraction": 0.216,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-shikarpur",
+      "fraction": 0.277,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-sukkur",
+      "fraction": 0.187,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-tando-allahyar",
+      "fraction": 0.221,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-tando-muhammad-khan",
+      "fraction": 0.2,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-tharparkar",
+      "fraction": 0.062,
+      "access_mode": "road",
+      "unreached_people": 0
+     },
+     {
+      "district_id": "pk-sindh-thatta",
+      "fraction": 0,
+      "access_mode": "unreachable",
+      "unreached_people": 166456
+     },
+     {
+      "district_id": "pk-sindh-umerkot",
+      "fraction": 0.129,
+      "access_mode": "road",
+      "unreached_people": 0
+     }
+    ],
+    "equity": {
+     "floor_requested": 0.4,
+     "floor_applied": 0.4,
+     "max_feasible_floor": 0.72
+    },
+    "total_coverage": 1955956,
+    "total_cost": 119999552,
+    "optimality_gap": 0,
+    "cost_benefit": {
+     "cost_per_person_covered": 48.74,
+     "people_covered": 2462128
+    },
+    "solver": {
+     "name": "GLOP",
+     "version": "9.x (fixture)",
+     "wall_time_s": 0.42
+    }
+   },
+   "error": null,
+   "provenance": {
+    "organ": "ledger",
+    "tool": "optimize_allocation",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+    "inputs_hash": "2bbdc9c409c360ed448b3a6eed115b2d9c74bf4d8cef3cf567608596901bde43",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:04.400Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "af670800-983a-4b33-83b6-2b3322dad5aa": {
+  "organ": "ledger",
+  "tool": "sensitivity_report",
+  "served_by": "real",
+  "mode": "demo",
+  "node_id": "ledger.sensitivity",
+  "generated_at": "2026-11-20T10:00:05.400Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "shadow_prices": [
+     {
+      "constraint": "supply:water",
+      "value": 0.0031,
+      "unit": "weighted people covered per litre",
+      "binding": true
+     },
+     {
+      "constraint": "supply:food",
+      "value": 0.41,
+      "unit": "weighted people covered per ration",
+      "binding": true
+     },
+     {
+      "constraint": "supply:shelter",
+      "value": 0,
+      "unit": "weighted people covered per kit",
+      "binding": false
+     },
+     {
+      "constraint": "budget",
+      "value": 0.000052,
+      "unit": "weighted people covered per currency unit",
+      "binding": true
+     },
+     {
+      "constraint": "equity_floor",
+      "value": -0.0021,
+      "unit": "weighted people covered per floor point",
+      "binding": true
+     }
+    ],
+    "reduced_costs": [
+     {
+      "district_id": "pk-sindh-hyderabad",
+      "commodity_id": "food",
+      "value": -0.12
+     }
+    ],
+    "ranges": [
+     {
+      "constraint": "supply:water",
+      "allowable_increase": 12000000,
+      "allowable_decrease": 31000000
+     }
+    ],
+    "basis": "lp_relaxation",
+    "equity_tradeoff": [
+     {
+      "min_coverage_floor": 0,
+      "status": "optimal",
+      "total_coverage": 2053754,
+      "people_covered": 2560613
+     },
+     {
+      "min_coverage_floor": 0.1,
+      "status": "optimal",
+      "total_coverage": 2037715,
+      "people_covered": 2543378
+     },
+     {
+      "min_coverage_floor": 0.2,
+      "status": "optimal",
+      "total_coverage": 2013070,
+      "people_covered": 2516295
+     },
+     {
+      "min_coverage_floor": 0.3,
+      "status": "optimal",
+      "total_coverage": 1979819,
+      "people_covered": 2479363
+     },
+     {
+      "min_coverage_floor": 0.4,
+      "status": "optimal",
+      "total_coverage": 1937961,
+      "people_covered": 2432582
+     },
+     {
+      "min_coverage_floor": 0.5,
+      "status": "optimal",
+      "total_coverage": 1887498,
+      "people_covered": 2375954
+     },
+     {
+      "min_coverage_floor": 0.6,
+      "status": "optimal",
+      "total_coverage": 1828428,
+      "people_covered": 2309476
+     },
+     {
+      "min_coverage_floor": 0.7,
+      "status": "feasible",
+      "total_coverage": 1760752,
+      "people_covered": 2233150
+     },
+     {
+      "min_coverage_floor": 0.8,
+      "status": "infeasible",
+      "total_coverage": null,
+      "people_covered": null
+     },
+     {
+      "min_coverage_floor": 0.9,
+      "status": "infeasible",
+      "total_coverage": null,
+      "people_covered": null
+     },
+     {
+      "min_coverage_floor": 1,
+      "status": "infeasible",
+      "total_coverage": null,
+      "people_covered": null
+     }
+    ],
+    "equity_cost": 115793,
+    "notes": [
+     "Shadow prices come from the LP relaxation; the plan itself uses integer quantities."
+    ]
+   },
+   "error": null,
+   "provenance": {
+    "organ": "ledger",
+    "tool": "sensitivity_report",
+    "tool_version": "0.1.0",
+    "contract_version": "0.4",
+    "run_id": "af670800-983a-4b33-83b6-2b3322dad5aa",
+    "inputs_hash": "021cee9849aaff7e9886a5a3ce943c51912273020ed8b4a41badb04f382d394b",
+    "mode": "demo",
+    "data_sources": [
+     {
+      "id": "fixture-hand-authored",
+      "name": "Hand-authored UI fixture (not a live organ output)",
+      "license": "MIT (this repository)",
+      "as_of": "2026-11-20"
+     }
+    ],
+    "model": null,
+    "generated_at": "2026-11-20T10:00:05.400Z"
+   },
+   "warnings": [
+    "FIXTURE: hand-authored for UI development, not a live organ call"
+   ]
+  }
+ },
+ "c621f7ae-003a-4c69-8cd0-cffbf37e591c": {
+  "organ": "brain",
+  "tool": "derive.ledger_input",
+  "served_by": "brain",
+  "mode": "demo",
+  "node_id": "derive.ledger_input",
+  "generated_at": "2026-11-20T10:00:02.900Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "assumptions": [
+     "پانی کی ضرورت فی شخص روزانہ 10 لیٹر فرض کی گئی ہے (7 دن کے لیے فی شخص 70 لیٹر)۔",
+     "ہر ضلع کی شدت آئیز کی رپورٹ کردہ سیلابی نسبت سے لی گئی ہے۔",
+     "دریائی خطرے کا جزو ماڈل شدہ بلند ترین سطح سے تجاوز کے امکان پر مبنی ہے۔"
+    ],
+    "water_l_per_person_day": 10,
+    "commodities": [
+     {
+      "id": "water",
+      "name": "Drinking water",
+      "name_ur": "پینے کا پانی",
+      "unit": "litre",
+      "unit_cost": 0.03,
+      "per_person_need": 70
+     },
+     {
+      "id": "food",
+      "name": "Food ration",
+      "name_ur": "خوراک کا راشن",
+      "unit": "ration",
+      "unit_cost": 4.5,
+      "per_person_need": 7
+     },
+     {
+      "id": "shelter",
+      "name": "Shelter kit",
+      "name_ur": "پناہ گاہ کٹ",
+      "unit": "kit",
+      "unit_cost": 38,
+      "per_person_need": 0.2
+     }
+    ],
+    "supply": {
+     "water": 300000000,
+     "food": 30000000,
+     "shelter": 700000
+    },
+    "budget": 120000000
+   },
+   "error": null,
+   "provenance": {
+    "organ": "brain",
+    "tool": "derive.ledger_input",
+    "run_id": "c621f7ae-003a-4c69-8cd0-cffbf37e591c",
+    "mode": "demo",
+    "contract_version": "0.4"
+   },
+   "warnings": []
+  }
+ },
+ "985b1be5-cd8f-4cff-8da2-00a58e13b94a": {
+  "organ": "brain",
+  "tool": "static.disclaimer",
+  "served_by": "brain",
+  "mode": "demo",
+  "node_id": "static.disclaimer",
+  "generated_at": "2026-11-20T10:00:02.900Z",
+  "doc": {
+   "ok": true,
+   "data": {
+    "text": "اسٹِچ فیصلہ سازی میں معاون ہے، آپریشنل اتھارٹی نہیں۔ مقامی امدادی اداروں سے تصدیق کریں۔"
+   },
+   "error": null,
+   "provenance": {
+    "organ": "brain",
+    "tool": "static.disclaimer",
+    "run_id": "985b1be5-cd8f-4cff-8da2-00a58e13b94a",
+    "mode": "demo",
+    "contract_version": "0.4"
+   },
+   "warnings": []
+  }
+ }
+}

@@ -1,0 +1,546 @@
+{
+ "briefing_id": "2c8883f8-9e00-48a1-8ad6-cdf8f4e573e5",
+ "scenario": "demo-sindh-2022",
+ "lang": "en",
+ "mode": "demo",
+ "sections": [
+  {
+   "id": "extent",
+   "title": "Flood extent",
+   "status": "ok",
+   "claims": [
+    {
+     "id": "extent.flood_area",
+     "kind": "number",
+     "text": "New flood water covers 16,630.2 km2 (18,704.0 km2 total water, 2,073.8 km2 permanent) in the scene acquired 2022-08-30.",
+     "evidence": [
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/new_flood_km2"
+      },
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/total_water_km2"
+      },
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/permanent_water_km2"
+      },
+      {
+       "run_id": "abde0ca3-1ab2-403f-88a7-d2942d1ea895",
+       "organ": "eyes",
+       "tool": "segment_flood",
+       "json_pointer": "/data/source_scene/acquired"
+      }
+     ]
+    },
+    {
+     "id": "extent.top_districts",
+     "kind": "number",
+     "text": "Largest flooded areas: Dadu 3,257.7 km2 (42.0% of the district), Qambar Shahdadkot 2,416.2 km2 (33.0% of the district), Jamshoro 2,243.6 km2 (20.0% of the district).",
+     "evidence": [
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/by_district/1/flooded_km2"
+      },
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/by_district/1/flooded_fraction"
+      },
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/by_district/13/flooded_km2"
+      },
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/by_district/13/flooded_fraction"
+      },
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/by_district/5/flooded_km2"
+      },
+      {
+       "run_id": "15b9cd04-22ba-4fb1-8ff3-485575adfea2",
+       "organ": "eyes",
+       "tool": "compare_with_permanent_water",
+       "json_pointer": "/data/by_district/5/flooded_fraction"
+      }
+     ]
+    },
+    {
+     "id": "extent.confidence",
+     "kind": "number",
+     "text": "Mean segmentation confidence over flood pixels: 0.87.",
+     "evidence": [
+      {
+       "run_id": "abde0ca3-1ab2-403f-88a7-d2942d1ea895",
+       "organ": "eyes",
+       "tool": "segment_flood",
+       "json_pointer": "/data/confidence"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "forecast",
+   "title": "River forecast",
+   "status": "ok",
+   "claims": [
+    {
+     "id": "forecast.peak",
+     "kind": "number",
+     "labels": [
+      "modeled"
+     ],
+     "text": "Modeled river discharge (GloFAS via Open-Meteo) near Sukkur barrage: peak median 18,100 m3/s on 2022-09-03 (p10 16,634, p90 19,713 m3/s).",
+     "evidence": [
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/forecast/3/discharge/p50"
+      },
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/forecast/3/discharge/p10"
+      },
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/forecast/3/discharge/p90"
+      },
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/forecast/3/date"
+      }
+     ]
+    },
+    {
+     "id": "forecast.exceedance",
+     "kind": "number",
+     "labels": [
+      "modeled"
+     ],
+     "text": "Modeled probability of exceeding 17,500 m3/s peaks at 69% on 2022-09-03.",
+     "evidence": [
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/exceedance_prob/3/p_exceed"
+      },
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/danger_threshold_m3s"
+      }
+     ]
+    },
+    {
+     "id": "forecast.calibration",
+     "kind": "statement",
+     "labels": [
+      "modeled"
+     ],
+     "text": "Modeled intervals are 80% split-conformal bands from 180 calibration points.",
+     "evidence": [
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/calibration/nominal_coverage"
+      },
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/calibration/n_calibration"
+      }
+     ]
+    },
+    {
+     "id": "forecast.drivers",
+     "kind": "statement",
+     "labels": [
+      "modeled"
+     ],
+     "text": "Modeled discharge is above its seasonal baseline mainly because of upstream rainfall over the last five days and already high discharge.",
+     "evidence": [
+      {
+       "run_id": "cde3fd63-dceb-46ca-82cf-75525b49d4b6",
+       "organ": "oracle",
+       "tool": "explain_forecast",
+       "json_pointer": "/data/narrative"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "guidance",
+   "title": "Guidance",
+   "status": "ok",
+   "claims": [
+    {
+     "id": "guidance.water.0",
+     "kind": "statement",
+     "text": "Plan for at least 15 litres of water per person per day for drinking, cooking and hygiene.",
+     "evidence": [
+      {
+       "run_id": "196e0d75-521c-4bc9-8096-fd26e1f7eebb",
+       "organ": "library",
+       "tool": "answer_with_citations",
+       "json_pointer": "/data/claims/0/text"
+      },
+      {
+       "run_id": "196e0d75-521c-4bc9-8096-fd26e1f7eebb",
+       "organ": "library",
+       "tool": "answer_with_citations",
+       "json_pointer": "/data/citations/0"
+      }
+     ]
+    },
+    {
+     "id": "guidance.food.0",
+     "kind": "statement",
+     "text": "Rations should supply about 2,100 kilocalories per person per day.",
+     "evidence": [
+      {
+       "run_id": "c3349774-0d09-4cd2-8d73-ad0978c98c0c",
+       "organ": "library",
+       "tool": "answer_with_citations",
+       "json_pointer": "/data/claims/0/text"
+      },
+      {
+       "run_id": "c3349774-0d09-4cd2-8d73-ad0978c98c0c",
+       "organ": "library",
+       "tool": "answer_with_citations",
+       "json_pointer": "/data/citations/0"
+      }
+     ]
+    },
+    {
+     "id": "guidance.shelter.0",
+     "kind": "statement",
+     "text": "Provide at least 3.5 square metres of covered living space per person.",
+     "evidence": [
+      {
+       "run_id": "600ee921-e4ed-4852-8174-291f0973aff2",
+       "organ": "library",
+       "tool": "answer_with_citations",
+       "json_pointer": "/data/claims/0/text"
+      },
+      {
+       "run_id": "600ee921-e4ed-4852-8174-291f0973aff2",
+       "organ": "library",
+       "tool": "answer_with_citations",
+       "json_pointer": "/data/citations/0"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "allocation",
+   "title": "Allocation",
+   "status": "partial",
+   "claims": [
+    {
+     "id": "allocation.summary",
+     "kind": "number",
+     "text": "The plan covers 2,462,128 people at 48.74 per person (119,999,552 total); solver status: optimal.",
+     "evidence": [
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/cost_benefit/people_covered"
+      },
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/cost_benefit/cost_per_person_covered"
+      },
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/total_cost"
+      },
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/status"
+      }
+     ]
+    },
+    {
+     "id": "allocation.water.qambar-shahdadkot",
+     "kind": "recommendation",
+     "labels": [
+      "disputed"
+     ],
+     "text": "Send 70,968,193 litres of drinking water to Qambar Shahdadkot. (disputed, see conflict C1)",
+     "evidence": [
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/allocation/13/quantity"
+      }
+     ]
+    },
+    {
+     "id": "allocation.water.dadu",
+     "kind": "recommendation",
+     "labels": [
+      "disputed"
+     ],
+     "text": "Send 46,771,404 litres of drinking water to Dadu. (disputed, see conflict C1)",
+     "evidence": [
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/allocation/1/quantity"
+      }
+     ]
+    },
+    {
+     "id": "allocation.water.badin",
+     "kind": "recommendation",
+     "labels": [
+      "disputed"
+     ],
+     "text": "Send 11,227,153 litres of drinking water to Badin. (disputed, see conflict C1)",
+     "evidence": [
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/allocation/0/quantity"
+      }
+     ]
+    },
+    {
+     "id": "allocation.food.qambar-shahdadkot",
+     "kind": "recommendation",
+     "text": "Send 7,096,819 rations of food ration to Qambar Shahdadkot.",
+     "evidence": [
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/allocation/35/quantity"
+      }
+     ]
+    },
+    {
+     "id": "allocation.shelter.qambar-shahdadkot",
+     "kind": "recommendation",
+     "text": "Send 165,592 kits of shelter kit to Qambar Shahdadkot.",
+     "evidence": [
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/allocation/57/quantity"
+      }
+     ]
+    },
+    {
+     "id": "allocation.unreached",
+     "kind": "number",
+     "text": "166,456 people in 1 district cannot be reached by road, air or boat with the given inputs.",
+     "evidence": [
+      {
+       "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
+       "organ": "ledger",
+       "tool": "optimize_allocation",
+       "json_pointer": "/data/coverage/20/unreached_people"
+      }
+     ]
+    }
+   ],
+   "missing": [
+    "sensitivity report (shadow prices and equity trade-off)"
+   ]
+  },
+  {
+   "id": "caveats",
+   "title": "Caveats",
+   "status": "ok",
+   "claims": [
+    {
+     "id": "caveat.disclaimer",
+     "kind": "statement",
+     "text": "Stitch is decision support, not an operational authority. Verify with local responders.",
+     "evidence": [
+      {
+       "run_id": "985b1be5-cd8f-4cff-8da2-00a58e13b94a",
+       "organ": "brain",
+       "tool": "static.disclaimer",
+       "json_pointer": "/data/text"
+      }
+     ]
+    },
+    {
+     "id": "caveat.mode",
+     "kind": "statement",
+     "labels": [
+      "demo"
+     ],
+     "text": "Demo mode: figures come from committed demo data, not live feeds.",
+     "evidence": [
+      {
+       "run_id": "abde0ca3-1ab2-403f-88a7-d2942d1ea895",
+       "organ": "eyes",
+       "tool": "segment_flood",
+       "json_pointer": "/provenance/mode"
+      }
+     ]
+    },
+    {
+     "id": "caveat.eyes_unvalidated",
+     "kind": "statement",
+     "labels": [
+      "unvalidated"
+     ],
+     "text": "Demo scene: Sindh, Aug 2022. The flood-mapping model was validated on sen1floods11_test, not on this region. Treat the extent as unvalidated.",
+     "evidence": [
+      {
+       "run_id": "abde0ca3-1ab2-403f-88a7-d2942d1ea895",
+       "organ": "eyes",
+       "tool": "segment_flood",
+       "json_pointer": "/data/validation/validated_for_region"
+      },
+      {
+       "run_id": "abde0ca3-1ab2-403f-88a7-d2942d1ea895",
+       "organ": "eyes",
+       "tool": "segment_flood",
+       "json_pointer": "/data/validation/eval_dataset"
+      }
+     ]
+    },
+    {
+     "id": "caveat.oracle_modeled",
+     "kind": "statement",
+     "labels": [
+      "modeled"
+     ],
+     "text": "River figures are model output (Modeled river discharge (GloFAS via Open-Meteo)), not instrument readings.",
+     "evidence": [
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/target_kind"
+      },
+      {
+       "run_id": "90f7649f-3e90-474e-8a37-f0391d4b89ae",
+       "organ": "oracle",
+       "tool": "forecast_river",
+       "json_pointer": "/data/target_label"
+      }
+     ]
+    },
+    {
+     "id": "caveat.assumptions",
+     "kind": "statement",
+     "text": "Water need is assumed to be 10 litres per person per day (70 litres per person for the 7-day period). Severity per district is mapped from the flooded fraction reported by Eyes. The river-risk term uses the modeled peak exceedance probability.",
+     "evidence": [
+      {
+       "run_id": "c621f7ae-003a-4c69-8cd0-cffbf37e591c",
+       "organ": "brain",
+       "tool": "derive.ledger_input",
+       "json_pointer": "/data/assumptions"
+      }
+     ]
+    },
+    {
+     "id": "caveat.conflict.C1",
+     "kind": "statement",
+     "text": "Unresolved disagreement: The Library recommends 15 litres of water per person per day, but the allocation plan assumes 10 litres per person per day. Neither side is treated as settled.",
+     "evidence": [
+      {
+       "run_id": "196e0d75-521c-4bc9-8096-fd26e1f7eebb",
+       "organ": "library",
+       "tool": "answer_with_citations",
+       "json_pointer": "/data/claims/0/text"
+      },
+      {
+       "run_id": "c621f7ae-003a-4c69-8cd0-cffbf37e591c",
+       "organ": "brain",
+       "tool": "derive.ledger_input",
+       "json_pointer": "/data/water_l_per_person_day"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "conflicts": [
+  {
+   "id": "C1",
+   "rule_id": "R3",
+   "status": "final",
+   "subjects": [
+    "water"
+   ],
+   "organs": [
+    "library",
+    "ledger"
+   ],
+   "resolution": "flagged",
+   "description": "The Library recommends 15 litres of water per person per day, but the allocation plan assumes 10 litres per person per day.",
+   "evidence": [
+    {
+     "run_id": "196e0d75-521c-4bc9-8096-fd26e1f7eebb",
+     "organ": "library",
+     "tool": "answer_with_citations",
+     "json_pointer": "/data/claims/0/text"
+    },
+    {
+     "run_id": "c621f7ae-003a-4c69-8cd0-cffbf37e591c",
+     "organ": "brain",
+     "tool": "derive.ledger_input",
+     "json_pointer": "/data/water_l_per_person_day"
+    }
+   ]
+  }
+ ],
+ "critic": {
+  "passed": true,
+  "removed_claims": [],
+  "notes": [
+   "All 23 claims were re-verified against stored evidence."
+  ]
+ },
+ "confidence": 0.7,
+ "generated_at": "2026-11-20T10:00:05.200Z"
+}

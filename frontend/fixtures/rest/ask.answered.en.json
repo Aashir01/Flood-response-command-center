@@ -1,0 +1,95 @@
+{
+ "ask_id": "01e2d7d4-6ed9-44f6-8341-5973f882c845",
+ "status": "answered",
+ "claims": [
+  {
+   "id": "ask.0",
+   "kind": "statement",
+   "text": "Plan for at least 15 litres of water per person per day for drinking, cooking and hygiene.",
+   "evidence": [
+    {
+     "run_id": "01e2d7d4-6ed9-44f6-8341-5973f882c845",
+     "organ": "library",
+     "tool": "answer_with_citations",
+     "json_pointer": "/data/claims/0/text"
+    },
+    {
+     "run_id": "01e2d7d4-6ed9-44f6-8341-5973f882c845",
+     "organ": "library",
+     "tool": "answer_with_citations",
+     "json_pointer": "/data/citations/0"
+    }
+   ]
+  }
+ ],
+ "refusal_claim": null,
+ "mode": "demo",
+ "library_run_id": "01e2d7d4-6ed9-44f6-8341-5973f882c845",
+ "result": {
+  "ok": true,
+  "data": {
+   "status": "answered",
+   "answer": "Plan for at least 15 litres of water per person per day for drinking, cooking and hygiene.",
+   "citations": [
+    {
+     "doc_id": "demo-excerpt-water",
+     "publisher": "Demo fixture (excerpt authored for UI development)",
+     "url": null,
+     "lang": "en",
+     "title": "Demo excerpt: water supply guidance",
+     "page": 3,
+     "span": [
+      120,
+      245
+     ],
+     "quote": "Average water use for drinking, cooking and personal hygiene in any household is at least 15 litres per person per day."
+    }
+   ],
+   "claims": [
+    {
+     "text": "Plan for at least 15 litres of water per person per day for drinking, cooking and hygiene.",
+     "citation_idx": [
+      0
+     ]
+    }
+   ],
+   "refusal": null,
+   "quantities": [
+    {
+     "value": 15,
+     "unit": "litre",
+     "per": "person_day",
+     "claim_idx": 0
+    }
+   ],
+   "generation": {
+    "mode": "extractive",
+    "model": null,
+    "provider": null
+   }
+  },
+  "error": null,
+  "provenance": {
+   "organ": "library",
+   "tool": "answer_with_citations",
+   "tool_version": "0.1.0",
+   "contract_version": "0.4",
+   "run_id": "01e2d7d4-6ed9-44f6-8341-5973f882c845",
+   "inputs_hash": "f514ece6f70e3e511cd2ddb33030297c227a1fbe622ee8db1c8596674c3f6233",
+   "mode": "demo",
+   "data_sources": [
+    {
+     "id": "fixture-hand-authored",
+     "name": "Hand-authored UI fixture (not a live organ output)",
+     "license": "MIT (this repository)",
+     "as_of": "2026-11-20"
+    }
+   ],
+   "model": null,
+   "generated_at": "2026-11-20T10:00:00Z"
+  },
+  "warnings": [
+   "FIXTURE: hand-authored for UI development, not a live organ call"
+  ]
+ }
+}

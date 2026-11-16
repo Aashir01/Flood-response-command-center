@@ -1,0 +1,21 @@
+{
+ "generated_at": "2026-11-20T09:30:00Z",
+ "git_sha": "fixture0",
+ "organs": {
+  "eyes": {
+   "status": "not_run"
+  },
+  "oracle": {
+   "status": "not_run"
+  },
+  "library": {
+   "status": "not_run"
+  },
+  "ledger": {
+   "status": "not_run"
+  },
+  "brain": {
+   "status": "not_run"
+  }
+ }
+}
