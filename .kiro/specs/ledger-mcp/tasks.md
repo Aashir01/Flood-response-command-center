@@ -10,7 +10,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Verify the OR-Tools wheel (GLOP and SCIP) imports in the target Docker base image.
   - Done when: `uv run pytest` passes on the skeleton.
 
-- [ ] **2. Problem model, validation, access modes** `core`
+- [x] **2. Problem model, validation, access modes** `core`
   - `core/problem.py`: input models (from `stitch_common`), validation, `normalize()` with usable access, reachable population, access modes, unreached people, needs, weights, `ρ_k`, shares, zero-reach warnings.
   - `tests/strategies.py`: `valid_problems()` and `invalid_problems()` with edge cases.
   - Tests: unit tests per validation rule; access-mode table tests at the threshold boundary. Refs: LED-R1.4 to R1.6, R2.1, R2.2.
