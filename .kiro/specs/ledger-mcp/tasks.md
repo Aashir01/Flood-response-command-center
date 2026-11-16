@@ -26,7 +26,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Property tests: P1, P2, P4, P5, P17, P18. Unit test: zero people covered. Refs: LED-R4, R5.
   - Done when: all pass under `ci`.
 
-- [ ] **5. Floors: `max_feasible_floor` and relax/error policy** `core`
+- [x] **5. Floors: `max_feasible_floor` and relax/error policy** `core`
   - `core/floors.py`: closed form (LP), bisection (MIP), policy, reason text, `equity` block.
   - Property tests: P15, P19. Unit tests for both policies and reason text. Refs: LED-R3.2 to R3.4.
   - Done when: a floor above `max_feasible_floor` returns the relaxed allocation by default and `infeasible` under `error`.

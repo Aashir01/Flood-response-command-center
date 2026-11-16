@@ -13,6 +13,16 @@ MIP (SCIP, ``integer = true``): ``x`` is integer, ``U = ceil(R)`` and the floor 
 bound ``x_dk >= ceil(phi * share_dk - 1e-9)``.
 
 Only districts with a positive reachable population get variables (design 2.2 step 6).
+
+Numerics (found by the property tests, see docs/ledger-model.md):
+
+* The objective is divided by its largest coefficient (``Model.objective_scale``) and
+  coefficients below ``1e-12`` of it are dropped. GLOP returns ``ABNORMAL`` for coefficients
+  near the subnormal range (severity 1e-308), and the relative effect of the drop is below 1e-12.
+* For allocation solves (``floor_rows = False``) the floor is a variable lower bound
+  ``x_dk >= phi * share_dk`` (exact at a simplex bound). The row form ``f_dk >= phi * rho_k`` is
+  only satisfied within the solver tolerance, so a floor of 1e-9 was silently dropped. The
+  sensitivity report builds the row form (``floor_rows = True``) because it needs its duals.
 """
 
 from __future__ import annotations
@@ -25,6 +35,7 @@ from ortools.linear_solver import pywraplp
 from stitch_ledger.core.problem import Problem
 
 INT_EPS = 1e-9
+OBJ_DROP = 1e-12
 
 
 @dataclass
@@ -39,6 +50,7 @@ class Model:
     budget_row: pywraplp.Constraint | None = None
     floor_rows: dict[tuple[int, int], pywraplp.Constraint] = field(default_factory=dict)
     cover_rows: dict[tuple[int, int], pywraplp.Constraint] = field(default_factory=dict)
+    objective_scale: float = 1.0
 
 
 def integer_upper(need: float) -> float:
@@ -51,11 +63,11 @@ def integer_floor(phi: float, share: float) -> float:
     return float(max(0, math.ceil(phi * share - INT_EPS)))
 
 
-def build(problem: Problem, floor: float, *, integer: bool, floor_rows: bool = True) -> Model:
+def build(problem: Problem, floor: float, *, integer: bool, floor_rows: bool = False) -> Model:
     """Build the model at the given (already feasible) equity floor.
 
-    ``floor_rows`` keeps explicit floor rows in LP mode even when ``floor = 0`` (needed by the
-    sensitivity report to read floor duals).
+    ``floor_rows`` (LP only) uses explicit rows ``f_dk >= phi * rho_k``, also at ``floor = 0``,
+    so that the sensitivity report can read floor duals. Otherwise the floor is a bound on x.
     """
     solver = pywraplp.Solver.CreateSolver("SCIP" if integer else "GLOP")
     if solver is None:  # pragma: no cover - the ortools wheel ships both
@@ -71,6 +83,15 @@ def build(problem: Problem, floor: float, *, integer: bool, floor_rows: bool = T
     m = Model(solver=solver, problem=problem, floor=floor, integer=integer)
     ncom = len(problem.commodities)
     obj = solver.Objective()
+    top = max(
+        (
+            problem.districts[d].weight * problem.commodities[k].weight
+            for d in problem.active
+            for k in range(ncom)
+        ),
+        default=0.0,
+    )
+    m.objective_scale = top if top > 0.0 else 1.0
     for d in problem.active:
         di = problem.districts[d]
         for k in range(ncom):
@@ -81,7 +102,8 @@ def build(problem: Problem, floor: float, *, integer: bool, floor_rows: bool = T
                 ub = max(lb, integer_upper(r))
                 x = solver.IntVar(lb, ub, f"x_{name}")
             else:
-                x = solver.NumVar(0.0, r, f"x_{name}")
+                lb = 0.0 if floor_rows else min(r, floor * problem.share[d][k])
+                x = solver.NumVar(lb, r, f"x_{name}")
             f = solver.NumVar(0.0, 1.0, f"f_{name}")
             m.x[d, k] = x
             m.f[d, k] = f
@@ -89,7 +111,8 @@ def build(problem: Problem, floor: float, *, integer: bool, floor_rows: bool = T
             cover.SetCoefficient(f, r)
             cover.SetCoefficient(x, -1.0)
             m.cover_rows[d, k] = cover
-            obj.SetCoefficient(f, di.weight * problem.commodities[k].weight)
+            coef = di.weight * problem.commodities[k].weight / m.objective_scale
+            obj.SetCoefficient(f, coef if coef >= OBJ_DROP else 0.0)
             if not integer and floor_rows:
                 rho = problem.commodities[k].supply_ratio
                 row = solver.Constraint(floor * rho, inf, f"floor_{name}")
