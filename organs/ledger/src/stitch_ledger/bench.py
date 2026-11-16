@@ -7,6 +7,7 @@ Measures wall time (median of ``--repeat`` runs) of:
 * ``lp``: ``optimize`` with ``integer = false`` and an equity floor of 0.3;
 * ``mip``: the same with ``integer = true`` (SCIP, 10 s limit), reporting status and gap;
 * ``sensitivity``: duals at the applied floor (``analyze``);
+* ``ranges``: allowable ranges of the priced supply and budget constraints;
 * ``sweep``: the equity trade-off with the default 11 floor steps;
 * ``sweep_no_budget``: the same without a budget, so every floor is feasible and solved (the
   worst case of the sweep: 11 LP solves).
@@ -29,6 +30,7 @@ from typing import Any
 from stitch_ledger.core.instances import random_spec
 from stitch_ledger.core.optimize import optimize
 from stitch_ledger.core.problem import ProblemSpec, normalize
+from stitch_ledger.core.ranges import allowable_ranges
 from stitch_ledger.core.sensitivity import analyze
 from stitch_ledger.core.tradeoff import lp_f_max, sweep
 
@@ -62,7 +64,13 @@ def run(seed: int = 0, repeat: int = 3) -> dict[str, Any]:
 
     lp_s, lp = _timed(lambda: optimize(lp_spec), repeat)
     mip_s, mip = _timed(lambda: optimize(mip_spec), 1 if repeat < 2 else 2)
-    sens_s, _ = _timed(lambda: analyze(problem, applied), repeat)
+    sens_s, sens = _timed(lambda: analyze(problem, applied), repeat)
+    priced = {
+        s.constraint: s.value
+        for s in sens.shadow_prices
+        if s.binding and s.value > 0 and s.constraint.startswith(("supply", "budget"))
+    }
+    ranges_s, ranged = _timed(lambda: allowable_ranges(problem, applied, priced), repeat)
     sweep_s, curve = _timed(lambda: sweep(problem, 11, applied), repeat)
     free = normalize(random_spec(seed, N_DISTRICTS, N_COMMODITIES, with_budget=False))
     free_s, free_curve = _timed(lambda: sweep(free, 11, 0.3), repeat)
@@ -78,6 +86,7 @@ def run(seed: int = 0, repeat: int = 3) -> dict[str, Any]:
         "lp": {"wall_s": lp_s, "status": lp.status, "gap": lp.optimality_gap},
         "mip": {"wall_s": mip_s, "status": mip.status, "gap": mip.optimality_gap},
         "sensitivity": {"wall_s": sens_s},
+        "ranges": {"wall_s": ranges_s, "ranged": len(ranged.lines), "skipped": len(ranged.skipped)},
         "sweep": {"wall_s": sweep_s, "solves": curve.solves, "points": len(curve.points)},
         "sweep_no_budget": {"wall_s": free_s, "solves": free_curve.solves},
         "host": {"python": platform.python_version(), "machine": platform.machine()},

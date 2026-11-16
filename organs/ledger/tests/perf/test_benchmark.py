@@ -23,9 +23,10 @@ def test_bench_200x10_is_under_budget_with_margin() -> None:
     r = bench.run(seed=0, repeat=1)
     assert r["lp"]["status"] == "optimal"
     assert r["mip"]["status"] in ("optimal", "feasible")
-    for key in ("lp", "mip", "sensitivity", "sweep", "sweep_no_budget"):
+    for key in ("lp", "mip", "sensitivity", "ranges", "sweep", "sweep_no_budget"):
         assert r[key]["wall_s"] < MARGIN_S, (key, r[key])
     assert r["sweep_no_budget"]["solves"] == 11
+    assert r["ranges"]["skipped"] == 0
 
 
 def test_instances_are_deterministic() -> None:

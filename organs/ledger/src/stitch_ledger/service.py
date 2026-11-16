@@ -56,6 +56,7 @@ from stitch_ledger.core.problem import (
     ProblemSpec,
     normalize,
 )
+from stitch_ledger.core.ranges import allowable_ranges
 from stitch_ledger.core.sensitivity import analyze
 from stitch_ledger.core.solve import SolverError, SolverTimeout
 from stitch_ledger.core.tradeoff import lp_f_max, sweep
@@ -194,6 +195,12 @@ class LedgerService:
             applied = min(previous.equity.floor_applied, lp_f_max(problem))
             sens = analyze(problem, applied)
             curve = sweep(problem, params.floor_steps, applied)
+            priced = {
+                s.constraint: s.value
+                for s in sens.shadow_prices
+                if s.binding and s.value > 0.0 and not s.constraint.startswith(("min_", "equity"))
+            }
+            ranged = allowable_ranges(problem, applied, priced)
         except InvalidProblem as exc:
             raise ToolFailure("INVALID_INPUT", str(exc)) from exc
         except SolverError as exc:
@@ -202,7 +209,15 @@ class LedgerService:
             *sens.notes,
             "Equity trade-off: LP relaxation re-solved at each floor; floors above f_max "
             f"({curve.f_max:.4g}) are infeasible by the budget and are not solved.",
-            "Allowable ranges are not computed (ranges is empty).",
+            "Allowable ranges: for binding supply and budget constraints with a positive "
+            "shadow price, the change of the right-hand side over which that shadow price stays "
+            "the same (LP relaxation, other constraints and floor bounds fixed, found by "
+            "parametric re-solves). Other constraints are not ranged.",
+            *(
+                [f"Ranges skipped (time budget): {', '.join(ranged.skipped)}."]
+                if ranged.skipped
+                else []
+            ),
         ]
         data = SensitivityReportOut(
             shadow_prices=[
@@ -213,7 +228,14 @@ class LedgerService:
                 ReducedCost(district_id=r.district_id, commodity_id=r.commodity_id, value=r.value)
                 for r in sens.reduced_costs
             ],
-            ranges=_no_ranges(),
+            ranges=[
+                ConstraintRange(
+                    constraint=r.constraint,
+                    allowable_increase=r.allowable_increase,
+                    allowable_decrease=r.allowable_decrease,
+                )
+                for r in ranged.lines
+            ],
             basis="lp_relaxation",
             equity_tradeoff=[
                 TradeoffPoint(
@@ -274,10 +296,6 @@ def _used_mode(params: OptimizeAllocationIn) -> Mode:
     if params.districts is None:
         return "demo"
     return params.mode or current_mode()
-
-
-def _no_ranges() -> list[ConstraintRange]:
-    return []
 
 
 def _to_output(result: Result) -> OptimizeAllocationOut:

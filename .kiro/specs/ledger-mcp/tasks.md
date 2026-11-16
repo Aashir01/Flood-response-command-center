@@ -78,7 +78,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - `organs/ledger/README.md`, `docs/ledger-model.md` (formulation, assumptions, shadow price meaning, efficiency-equity trade-off, limitations). Add the property-testing story to `docs/kiro-writeup.md`.
   - Done when: a reader can reproduce §2 from the doc.
 
-- [ ] **16. Allowable ranges by parametric re-solve** `stretch`
+- [x] **16. Allowable ranges by parametric re-solve** `stretch`
   - For binding supply and budget constraints, find the RHS interval where the dual is constant. Refs: LED-R6.3.
 
 - [ ] **17. Commodity priority weights** `stretch`
