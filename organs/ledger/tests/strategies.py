@@ -14,7 +14,7 @@ from typing import Any
 
 from hypothesis import strategies as st
 
-from stitch_ledger.core.problem import CommoditySpec, DistrictSpec, ProblemSpec
+from stitch_ledger.core.problem import CommoditySpec, DistrictSpec, Problem, ProblemSpec
 
 TAU = 0.1
 IDS = [f"d{i:02d}" for i in range(40)]
@@ -55,6 +55,16 @@ floors = st.one_of(
     st.just(1.0),
     st.floats(0.0, 1.0, allow_nan=False, allow_infinity=False),
 )
+
+
+def objective_scale(problem: Problem) -> float:
+    """Upper bound of ``total_coverage`` (``sum_d w_d``), at least 1.
+
+    GLOP works to a tolerance relative to the objective scale, so coverage comparisons between
+    two solves (or a solve and the baseline) use ``REL * objective_scale`` as their tolerance.
+    An absolute coverage of 1e-9 of this scale is noise (see the regression tests).
+    """
+    return max(1.0, sum(d.weight for d in problem.districts))
 
 
 @st.composite

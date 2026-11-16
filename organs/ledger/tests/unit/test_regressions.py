@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import itertools
+
 import pytest
 
+from stitch_ledger.core.baseline import proportional_baseline
 from stitch_ledger.core.optimize import optimize
-from stitch_ledger.core.problem import CommoditySpec, DistrictSpec, ProblemSpec
+from stitch_ledger.core.problem import CommoditySpec, DistrictSpec, ProblemSpec, normalize
+from stitch_ledger.core.tradeoff import sweep
 
 
 def test_regression_floor_below_solver_tolerance_was_silently_dropped() -> None:
@@ -87,3 +91,43 @@ def test_regression_glop_presolve_abnormal_on_degenerate_budget_row() -> None:
     )
     result = optimize(spec)
     assert result.status == "optimal" and result.total_coverage == 0.0  # no supply at all
+
+
+def test_regression_tiny_budget_coverage_is_solver_noise_p13() -> None:
+    """Found by LED-P13 (ci profile). Budget 8.6e-4 allows f ~ 1e-9 of one district's need, below
+    GLOP's tolerance, so the LP returns coverage 0 while the proportional baseline reports 2.2e-5.
+    Relative to the objective scale (sum of weights 21595) that is 1e-9: noise, not a worse plan.
+    Resolution: the property tolerance is relative to the objective scale, not to the value."""
+    spec = ProblemSpec(
+        districts=(
+            DistrictSpec("d02", 21595.0, 1.0, 1.0),
+            DistrictSpec("d07", 1.0, 0.0, 0.0, 1.0),
+        ),
+        commodities=(CommoditySpec("food", 10.0, 4.0, 86384.0),),
+        budget=0.0008637719451083679,
+    )
+    problem = normalize(spec)
+    result = optimize(spec)
+    base = proportional_baseline(problem)
+    scale = sum(d.weight for d in problem.districts)
+    assert base.total_coverage - result.total_coverage <= 1e-6 * scale
+    assert result.total_cost <= spec.budget * (1 + 1e-9)  # type: ignore[operator]
+
+
+def test_regression_tiny_budget_tradeoff_step_is_solver_noise_p10() -> None:
+    """Found by LED-P10 (ci profile). Same mechanism as the P13 case: at floor 0 GLOP returns 0
+    coverage for a budget of 8.2e-4, while the floor-1 solve is forced to 8.2e-4 coverage by the
+    floor bound. The rise is 1e-9 of the objective scale (818527)."""
+    spec = ProblemSpec(
+        districts=(
+            DistrictSpec("d01", 818527.0, 1.0, 1.0),
+            DistrictSpec("d07", 1.0, 0.0, 0.1),
+        ),
+        commodities=(CommoditySpec("food", 1.0, 1.0, 818528.0),),
+        budget=0.0008185260528851874,
+    )
+    problem = normalize(spec)
+    t = sweep(problem, 2, applied_floor=0.0)
+    values = [p.total_coverage for p in t.points if p.total_coverage is not None]
+    scale = sum(d.weight for d in problem.districts)
+    assert all(b <= a + 1e-6 * scale for a, b in itertools.pairwise(values))

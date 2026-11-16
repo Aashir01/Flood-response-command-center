@@ -9,7 +9,7 @@ from dataclasses import replace
 import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
-from ledger_strategies import valid_specs
+from ledger_strategies import objective_scale, valid_specs
 
 from stitch_ledger.core.optimize import optimize
 from stitch_ledger.core.problem import ProblemSpec, normalize
@@ -24,7 +24,8 @@ REL = 1e-6
     st.integers(2, 8),
 )
 def test_p10_total_coverage_is_non_increasing_in_the_floor(spec: ProblemSpec, steps: int) -> None:
-    t = sweep(normalize(spec), steps, applied_floor=0.0)
+    problem = normalize(spec)
+    t = sweep(problem, steps, applied_floor=0.0)
     floors = [p.floor for p in t.points]
     assert floors == sorted(floors) and len(set(floors)) == len(floors)
     feasible = [p for p in t.points if p.status != "infeasible"]
@@ -33,10 +34,10 @@ def test_p10_total_coverage_is_non_increasing_in_the_floor(spec: ProblemSpec, st
     assert flags == sorted(flags, reverse=True)
     values = [p.total_coverage for p in feasible]
     assert all(v is not None for v in values)
-    top = max((v for v in values if v is not None), default=0.0)
+    tol = REL * objective_scale(problem)
     for a, b in itertools.pairwise(values):
         assert a is not None and b is not None
-        assert b <= a + REL * max(1.0, top), (a, b)
+        assert b <= a + tol, (a, b)
     for p in t.points:
         if p.status == "infeasible":
             assert p.total_coverage is None and p.people_covered is None

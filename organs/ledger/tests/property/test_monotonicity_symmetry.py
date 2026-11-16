@@ -8,7 +8,13 @@ import random
 import pytest
 from hypothesis import assume, given, settings
 from hypothesis import strategies as st
-from ledger_strategies import districts_strategy, lp_specs, mip_specs, valid_specs
+from ledger_strategies import (
+    districts_strategy,
+    lp_specs,
+    mip_specs,
+    objective_scale,
+    valid_specs,
+)
 
 from stitch_ledger.core.baseline import proportional_baseline
 from stitch_ledger.core.optimize import optimize
@@ -66,7 +72,7 @@ def test_p3_with_a_floor_coverage_is_still_at_least_the_proportional_baseline(
     result = optimize(spec)
     assume(result.status != "infeasible")
     base = proportional_baseline(problem)
-    assert result.total_coverage >= base.total_coverage - REL * max(1.0, base.total_coverage)
+    assert result.total_coverage >= base.total_coverage - REL * objective_scale(problem)
 
 
 @settings(deadline=None)
@@ -139,8 +145,9 @@ def test_p8_coverage_fractions_are_unchanged_when_the_optimum_is_unique(
 def test_p13_lp_optimum_is_at_least_the_proportional_baseline(spec: ProblemSpec) -> None:
     result = optimize(spec)
     assume(result.status != "infeasible")
-    base = proportional_baseline(normalize(spec))
-    assert result.total_coverage >= base.total_coverage - REL * max(1.0, base.total_coverage)
+    problem = normalize(spec)
+    base = proportional_baseline(problem)
+    assert result.total_coverage >= base.total_coverage - REL * objective_scale(problem)
 
 
 @settings(deadline=None)
@@ -150,5 +157,6 @@ def test_p13_mip_optimum_is_at_least_the_floored_baseline_when_proven_optimal(
 ) -> None:
     result = optimize(spec)
     assume(result.status == "optimal")
-    base = proportional_baseline(normalize(spec))
-    assert result.total_coverage >= base.total_coverage - REL * max(1.0, base.total_coverage)
+    problem = normalize(spec)
+    base = proportional_baseline(problem)
+    assert result.total_coverage >= base.total_coverage - REL * objective_scale(problem)

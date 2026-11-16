@@ -61,7 +61,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Done when: the loader reads committed files offline and the manifest lists source and license.
   - Note: if the real build is blocked by data size or time, ship a smaller committed dataset with fewer districts, clearly labeled, and keep the build script.
 
-- [ ] **12. MCP server, envelope, resource, health** `core`
+- [x] **12. MCP server, envelope, resource, health** `core`
   - `server.py`: `optimize_allocation` (optional `districts`), `sensitivity_report`, resource `ledger://scenario/{id}/districts`, error mapping, provenance, `/healthz`, stdio and HTTP.
   - Contract tests: real output validates against schemas with `additionalProperties: false`. Smoke test: start, list tools and resources, call both tools.
   - Refs: LED-R2.4, R2.5, R8.1. Done when: the contract hook passes.
