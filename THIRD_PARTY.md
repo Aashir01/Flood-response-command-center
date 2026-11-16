@@ -36,6 +36,17 @@ Every third-party library, dataset, and model used by Stitch is listed here with
 
 Python: FastAPI, MCP Python SDK, Pydantic v2, PyTorch, ONNX Runtime, scikit-learn, rasterio, geopandas, DuckDB, OR-Tools / PuLP, Hypothesis, pytest, psycopg, pgvector. Frontend: Next.js, React, Tailwind CSS, Framer Motion, MapLibre GL, Playwright. Infra: Caddy, Docker, Postgres. Exact versions are pinned in `uv.lock` and `package-lock.json`.
 
+Bootstrap tooling (added with the bootstrap spec; versions pinned in `uv.lock`):
+| Library | Used by | License | Status |
+|---|---|---|---|
+| uv | workspace, lockfile | MIT / Apache-2.0 | in use |
+| Pydantic v2 | stitch_common | MIT | in use |
+| pytest, pytest-asyncio, pytest-socket | tests, no_network plugin | MIT | in use |
+| Hypothesis | property tests | MPL-2.0 | in use |
+| jsonschema | schema round-trip tests | MIT | in use |
+| ruff, mypy | lint, type-check | MIT | in use |
+| MCP Python SDK (`mcp`) | organ template and its smoke test | MIT | in use |
+| hatchling | build backend for workspace packages | MIT | in use |
 ## Generated / AI-assisted code
 
 Specs, steering docs, and code are developed with Kiro (AI-assisted). See `docs/kiro-writeup.md`.

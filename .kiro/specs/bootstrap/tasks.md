@@ -2,7 +2,7 @@
 
 Target: about half a day. Do first. `core` unless marked.
 
-- [ ] **1. uv workspace and tooling** `core`
+- [x] **1. uv workspace and tooling** `core`
   - Root `pyproject.toml` (workspace members `packages/*`, `organs/*`), `.python-version` 3.12, ruff, mypy, pytest config, `uv.lock`.
   - Done when: `uv sync` works and `uv run ruff check` and `uv run pytest` run on the empty workspace. Refs: BOOT-R1.
 
