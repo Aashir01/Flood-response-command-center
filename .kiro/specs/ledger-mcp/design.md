@@ -154,7 +154,7 @@ Hypothesis strategy `valid_problems()` generates 1 to 12 districts, 1 to 4 commo
 | LED-P15 | `max_feasible_floor` tight | feasible at the value; infeasible at value + 1e-6 when below 1 |
 | LED-P16 | `φ = 1`, no budget: allocation equals `share_dk` | LP problems |
 | LED-P17 | unreachable districts get zero of every commodity and are listed | problems with `a_d < τ`, `alt_d = 0` |
-| LED-P18 | road-denied district allocation ≤ air/boat need | problems with `a_d < τ`, `alt_d > 0` |
+| LED-P18 | road-denied district allocation ≤ air/boat capacity, plus at most one unit of integer rounding (design 2.5, `U = ceil(R)`); strict in LP mode | problems with `a_d < τ`, `alt_d > 0` |
 | LED-P19 | `relax`: `floor_applied = min(requested, max_feasible_floor)` | budget-limited problems |
 
 Property tests run on `core/` directly. Contract tests validate real tool output against the JSON Schemas generated from `stitch_common`. Unit tests cover hand-solved instances with derivations in docstrings.

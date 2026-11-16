@@ -21,7 +21,7 @@ The Ledger decides how much of each relief commodity goes to each district, give
 3. THE Ledger SHALL cap each district's allocation at its required need (no over-delivery beyond need).
 4. THE Ledger SHALL scale each district's reachable population by its usable road access, and SHALL add the district's optional air/boat capacity `alt_delivery_fraction` (share of the population that air or boat delivery can carry, default 0).
 5. WHERE a district is road-denied, THE Ledger SHALL cap its allocation at what air/boat delivery can carry. IF that capacity is zero, THEN THE Ledger SHALL mark the district `unreachable`, allocate nothing to it, and list it and its unreached people in `warnings` and in the output.
-6. THE Ledger SHALL NOT allocate to a road-denied district beyond its air/boat capacity under any input, and SHALL expose each district's `access_mode` (`road`, `air_boat`, `unreachable`) in the output.
+6. THE Ledger SHALL NOT allocate to a road-denied district beyond its air/boat capacity, plus at most one unit of integer rounding, under any input, and SHALL expose each district's `access_mode` (`road`, `air_boat`, `unreachable`) in the output.
 
 ### LED-R2 Inputs
 1. WHEN `optimize_allocation` is called, THE Ledger SHALL validate that populations, supplies, costs, and budget are non-negative and that `severity` and `road_access` lie in [0,1].
@@ -95,7 +95,7 @@ The Ledger decides how much of each relief commodity goes to each district, give
 - LED-P15: `max_feasible_floor` is tight: feasible at the value, infeasible just above it when it is below 1.
 - LED-P16: with `equity_floor = 1` and no budget, the allocation equals each district's proportional share.
 - LED-P17: an `unreachable` district receives zero of every commodity and appears in the output and warnings.
-- LED-P18: a road-denied district never receives more than its air/boat capacity allows.
+- LED-P18: a road-denied district never receives more than its air/boat capacity, plus at most one unit of integer rounding (none in LP mode).
 - LED-P19: with `relax`, `floor_applied = min(floor_requested, max_feasible_floor)`.
 
 ## Out of scope

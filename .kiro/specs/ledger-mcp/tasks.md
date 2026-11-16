@@ -40,7 +40,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - `core/baseline.py` (proportional share). Property tests P3 (as stated in the design), P7, P8, P13.
   - Done when: all pass under `ci`. Any failing example becomes a named regression test.
 
-- [ ] **8. RunStore** `core`
+- [x] **8. RunStore** `core`
   - `store.py`: DuckDB table, TTL (24 h minimum, purge at 48 h), 1,000-row cap, lock, in-memory fallback.
   - Tests: round-trip, expiry with an injected clock, cap eviction, concurrent writes. Refs: LED-R8.2, R6.4.
   - Done when: a restart keeps runs within the TTL (file mode).

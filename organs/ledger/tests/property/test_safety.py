@@ -131,21 +131,20 @@ def test_p18_integer_mode_never_exceeds_capacity_rounded_up_to_a_unit(spec: Prob
     assert _p18_violations(spec, optimize(spec), round_up=True) == []
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "SPEC CONFLICT: LED-P18/LED-R1.6 say a road-denied district never receives more than its "
-        "air/boat capacity, but design 2.5 sets U = ceil(R) in integer mode, which allows up to "
-        "one unit of over-delivery (capacity 0.5 units, 1 unit sent). Implemented per design."
-    ),
-)
-def test_p18_strict_in_integer_mode_regression_half_unit_capacity() -> None:
-    spec = ProblemSpec(
-        districts=(DistrictSpec("d04", 1.0, 1.0, 0.0, 0.5),),
-        commodities=(CommoditySpec("food", 0.0, 1.0, 1.0),),
-        integer=True,
-    )
-    assert _p18_violations(spec, optimize(spec), round_up=False) == []
+def test_p18_integer_mode_half_unit_capacity_regression() -> None:
+    """Spec conflict resolved by the owner: capacity 0.5 units, one whole unit sent. Allowed
+    (design 2.5, ``U = ceil(R)``): at most capacity plus one unit of integer rounding. The LP
+    version of the same instance stays strict."""
+    district = DistrictSpec("d04", 1.0, 1.0, 0.0, 0.5)
+    commodity = CommoditySpec("food", 0.0, 1.0, 1.0)
+    mip = ProblemSpec(districts=(district,), commodities=(commodity,), integer=True)
+    result = optimize(mip)
+    assert result.quantity("d04", "food") == 1.0
+    assert _p18_violations(mip, result, round_up=True) == []
+    assert result.quantity("d04", "food") <= 0.5 + 1.0
+    lp = ProblemSpec(districts=(district,), commodities=(commodity,), integer=False)
+    assert _p18_violations(lp, optimize(lp), round_up=False) == []
+    assert optimize(lp).quantity("d04", "food") == pytest.approx(0.5)
 
 
 @settings(deadline=None)
