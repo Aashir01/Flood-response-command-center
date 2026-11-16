@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install
+        run: uv sync --all-packages --frozen
+      - name: Ruff lint
+        run: uv run ruff check
+      - name: Ruff format
+        run: uv run ruff format --check
+      - name: Mypy
+        run: uv run mypy packages scripts evals
+      - name: Tests
+        run: uv run pytest -q -m "not live" --hypothesis-profile=ci
+      - name: Contract check
+        run: uv run python scripts/check_contracts.py
+      - name: Secret scan
+        run: uv run python scripts/secret_scan.py --all
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Kiro directory guard (.kiro must be tracked, never ignored)
+        run: |
+          if git check-ignore -q .kiro; then
+            echo "::error::.kiro is git-ignored"; exit 1
+          fi
+          if [ -z "$(git ls-files .kiro)" ]; then
+            echo "::error::no tracked files under .kiro"; exit 1
+          fi

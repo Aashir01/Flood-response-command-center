@@ -47,7 +47,7 @@ Target: about half a day. Do first. `core` unless marked.
   - `evals/run.py`, `schema.json`, `MetricResult`, merge to `latest.json`.
   - Tests: missing organ is `not_run`, output validates against the schema. Refs: BOOT-R7.
 
-- [ ] **12. Minimal CI** `core`
+- [x] **12. Minimal CI** `core`
   - `.github/workflows/ci.yml` per the design. Refs: BOOT-R8.
 
 - [ ] **13. Write-up skeleton and schedule** `core`
