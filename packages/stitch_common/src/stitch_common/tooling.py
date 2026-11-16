@@ -42,6 +42,12 @@ class Outcome[T]:
     warnings: list[str] = field(default_factory=list)
     data_sources: Sequence[DataSource] = ()
     model: ModelInfo | None = None
+    # Set by cores whose results are looked up later by `provenance.run_id` (the Ledger's
+    # `sensitivity_report`). Default: `run_tool` generates a fresh uuid4.
+    run_id: str | None = None
+    # The mode the core actually used (contract v0.4: "every result states which one it used").
+    # Default: `current_mode()` from `STITCH_MODE`.
+    mode: Mode | None = None
 
 
 def current_mode() -> Mode:
@@ -79,9 +85,10 @@ async def run_tool(
             tool=tool,
             tool_version=tool_version,
             inputs=params,
-            mode=mode,
+            mode=(outcome.mode if outcome and outcome.mode else mode),
             data_sources=outcome.data_sources if outcome else (),
             model=outcome.model if outcome else None,
+            run_id=outcome.run_id if outcome else None,
         )
 
     try:

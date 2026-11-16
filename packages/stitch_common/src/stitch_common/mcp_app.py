@@ -43,6 +43,7 @@ class ContractServer(MCPServer):
         tool_version: str,
         cores: Mapping[str, Callable[[Any], Any]],
         descriptions: Mapping[str, str] | None = None,
+        health_checks: Callable[[], Mapping[str, bool]] | None = None,
     ) -> None:
         super().__init__(
             name=f"{organ}-mcp",
@@ -53,18 +54,23 @@ class ContractServer(MCPServer):
         self.tool_version = tool_version
         self._cores = organ_cores(organ, cores)
         self._descriptions = dict(descriptions or {})
+        self._health_checks = health_checks
 
         @self.custom_route("/healthz", methods=["GET"])  # type: ignore[untyped-decorator]
         async def healthz(request: Request) -> Response:
+            checks = dict(self._health_checks()) if self._health_checks else {}
+            healthy = all(checks.values())
             return JSONResponse(
                 {
-                    "status": "ok",
+                    "status": "ok" if healthy else "degraded",
                     "organ": organ,
                     "tool_version": tool_version,
                     "contract_version": CONTRACT_VERSION,
                     "mode": current_mode(),
                     "tools": sorted(self._cores),
-                }
+                    **({"checks": checks} if checks else {}),
+                },
+                status_code=200 if healthy else 503,
             )
 
     async def list_tools(self) -> list[Tool]:

@@ -22,9 +22,14 @@ export namespace BrainBriefing {
   export type Notes = string[]
   export type Passed = boolean
   export type RemovedClaims = string[]
+  export type Disclaimer = (string | null)
   export type GeneratedAt = string
   export type Lang = ("en" | "ur")
   export type Mode = ("demo" | "live")
+  export type Organ1 = ("eyes" | "oracle" | "library" | "ledger" | "voice")
+  export type ServedBy = (("real" | "recorded") | null)
+  export type Status1 = ("ready" | "degraded" | "unwell" | "disabled" | "incompatible")
+  export type Organs1 = BriefingOrgan[]
   export type Scenario = string
   /**
    * @minItems 1
@@ -37,7 +42,7 @@ export namespace BrainBriefing {
   export type Claims = Claim[]
   export type Id2 = ("extent" | "forecast" | "guidance" | "allocation" | "caveats")
   export type Missing = string[]
-  export type Status1 = ("ok" | "partial" | "unavailable")
+  export type Status2 = ("ok" | "partial" | "unavailable")
   export type Title = string
   export type Sections = Section[]
 
@@ -46,9 +51,11 @@ export namespace BrainBriefing {
   confidence: Confidence
   conflicts: Conflicts
   critic: CriticVerdict
+  disclaimer?: Disclaimer
   generated_at: GeneratedAt
   lang: Lang
   mode: Mode
+  organs?: Organs1
   scenario: Scenario
   sections: Sections
   }
@@ -92,6 +99,17 @@ export namespace BrainBriefing {
   removed_claims: RemovedClaims
   }
   /**
+   * v0.4: which organ served the briefing, and whether it was a real call or a recording.
+   * 
+   * This interface was referenced by `Briefing`'s JSON-Schema
+   * via the `definition` "BriefingOrgan".
+   */
+  export interface BriefingOrgan {
+  organ: Organ1
+  served_by?: ServedBy
+  status: Status1
+  }
+  /**
    * This interface was referenced by `Briefing`'s JSON-Schema
    * via the `definition` "Section".
    */
@@ -99,7 +117,7 @@ export namespace BrainBriefing {
   claims: Claims
   id: Id2
   missing?: Missing
-  status: Status1
+  status: Status2
   title: Title
   }
   /**
@@ -482,9 +500,14 @@ export namespace BrainApiBriefingState {
   export type Notes = string[]
   export type Passed = boolean
   export type RemovedClaims = string[]
+  export type Disclaimer = (string | null)
   export type GeneratedAt = string
   export type Lang = ("en" | "ur")
   export type Mode = ("demo" | "live")
+  export type Organ1 = ("eyes" | "oracle" | "library" | "ledger" | "voice")
+  export type ServedBy = (("real" | "recorded") | null)
+  export type Status1 = ("ready" | "degraded" | "unwell" | "disabled" | "incompatible")
+  export type Organs1 = BriefingOrgan[]
   export type Scenario = string
   /**
    * @minItems 1
@@ -497,7 +520,7 @@ export namespace BrainApiBriefingState {
   export type Claims = Claim[]
   export type Id2 = ("extent" | "forecast" | "guidance" | "allocation" | "caveats")
   export type Missing = string[]
-  export type Status1 = ("ok" | "partial" | "unavailable")
+  export type Status2 = ("ok" | "partial" | "unavailable")
   export type Title = string
   export type Sections = Section[]
   export type BriefingId1 = string
@@ -512,7 +535,7 @@ export namespace BrainApiBriefingState {
   export type Mode1 = ("demo" | "live")
   export type Region = string
   export type Scenario1 = string
-  export type Status2 = ("running" | "done" | "failed" | "cancelled")
+  export type Status3 = ("running" | "done" | "failed" | "cancelled")
 
   /**
    * ``GET /briefings/{id}`` body. ``DELETE /briefings/{id}`` is an idempotent cancel (202).
@@ -524,7 +547,7 @@ export namespace BrainApiBriefingState {
   error?: (ApiErrorBody | null)
   finished_at?: FinishedAt
   request: BriefingRequest
-  status: Status2
+  status: Status3
   }
   /**
    * This interface was referenced by `BriefingState`'s JSON-Schema
@@ -535,9 +558,11 @@ export namespace BrainApiBriefingState {
   confidence: Confidence
   conflicts: Conflicts
   critic: CriticVerdict
+  disclaimer?: Disclaimer
   generated_at: GeneratedAt
   lang: Lang
   mode: Mode
+  organs?: Organs1
   scenario: Scenario
   sections: Sections
   }
@@ -581,6 +606,17 @@ export namespace BrainApiBriefingState {
   removed_claims: RemovedClaims
   }
   /**
+   * v0.4: which organ served the briefing, and whether it was a real call or a recording.
+   * 
+   * This interface was referenced by `BriefingState`'s JSON-Schema
+   * via the `definition` "BriefingOrgan".
+   */
+  export interface BriefingOrgan {
+  organ: Organ1
+  served_by?: ServedBy
+  status: Status1
+  }
+  /**
    * This interface was referenced by `BriefingState`'s JSON-Schema
    * via the `definition` "Section".
    */
@@ -588,7 +624,7 @@ export namespace BrainApiBriefingState {
   claims: Claims
   id: Id2
   missing?: Missing
-  status: Status1
+  status: Status2
   title: Title
   }
   /**
