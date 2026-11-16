@@ -70,7 +70,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Benchmark 200 × 10 and the equity sweep. Run the whole suite with sockets disabled. Refs: LED-R7, R11.
   - Done when: under budget with margin.
 
-- [ ] **14. Eval harness** `core`
+- [x] **14. Eval harness** `core`
   - `evals/ledger/`: seeded instance generator, solver vs proportional baseline, feasibility rate, gap distribution, solve time, coverage uplift, and the equity curve for the demo scenario. Write results in the dashboard schema. Refs: LED-R9.
   - Done when: `python -m evals.run --organ ledger --seed 0` is reproducible.
 

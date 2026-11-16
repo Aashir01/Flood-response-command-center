@@ -28,3 +28,4 @@ Thumbs.db
 # generated eval output (the schema is committed)
 evals/results/*.json
 !evals/results/schema.json
+evals/results/*.parquet

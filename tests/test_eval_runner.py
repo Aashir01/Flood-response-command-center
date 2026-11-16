@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import sys
 from datetime import UTC, datetime
@@ -47,7 +48,10 @@ def test_missing_organ_is_not_run_and_output_validates(
     latest = json.loads((results_dir / "latest.json").read_text(encoding="utf-8"))
     Draft202012Validator(results_schema()).validate(latest)
     assert set(latest["organs"]) == set(ORGANS)
-    assert {o["status"] for o in latest["organs"].values()} == {"not_run"}
+    # organs without an eval module are not_run (the ledger has one since ledger task 14)
+    for organ, result in latest["organs"].items():
+        if importlib.util.find_spec(f"evals.{organ}") is None:
+            assert result["status"] == "not_run", organ
     assert latest["git_sha"] == "abc1234"
     assert (results_dir / "ledger.json").exists()
 
