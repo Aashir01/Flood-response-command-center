@@ -177,16 +177,20 @@ def _drop_for_budget(problem: Problem, x: Allocation, floor: float = 0.0) -> Non
         return _units_value(problem, *key) / problem.unit_cost(*key)
 
     paid = [key for key in x if problem.unit_cost(*key) > 0.0]
+    over = cost_of(problem, x) - problem.budget
     for key in sorted(paid, key=lambda key: (density(key), key)):
-        over = cost_of(problem, x) - problem.budget
         if over <= 0:
-            return
+            break
         unit = problem.unit_cost(*key)
         take = min(_spare(problem, x, key, floor), float(math.ceil(over / unit - CLAMP_EPS)))
         x[key] -= take
-        # float noise: the ceiling above can leave the cost a hair over; one more unit fixes it
-        if cost_of(problem, x) > problem.budget and _spare(problem, x, key, floor) >= 1.0:
-            x[key] -= 1.0
+        over -= take * unit
+        if over <= 0:
+            # exact check (the running total has float error); one more unit fixes a hair over
+            over = cost_of(problem, x) - problem.budget
+            if over > 0 and _spare(problem, x, key, floor) >= 1.0:
+                x[key] -= 1.0
+                over = cost_of(problem, x) - problem.budget
 
 
 def assemble(
