@@ -70,9 +70,13 @@ def build_provenance(
     data_sources: Sequence[DataSource] = (),
     model: ModelInfo | None = None,
     run_id: str | None = None,
+    models: Sequence[ModelInfo] = (),
     generated_at: datetime | None = None,
 ) -> Provenance:
-    """Build a ``Provenance``. ``run_id`` defaults to a fresh uuid4, time to now (UTC)."""
+    """Build a ``Provenance``. ``run_id`` defaults to a fresh uuid4, time to now (UTC).
+
+    ``models`` (v0.4) lists every model the tool used; empty by default.
+    """
     return Provenance(
         organ=organ,
         tool=tool,
@@ -83,5 +87,6 @@ def build_provenance(
         mode=mode,
         data_sources=list(data_sources),
         model=model,
+        models=list(models),
         generated_at=generated_at or datetime.now(UTC),
     )

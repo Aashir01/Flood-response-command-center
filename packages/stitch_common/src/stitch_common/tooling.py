@@ -48,6 +48,9 @@ class Outcome[T]:
     # The mode the core actually used (contract v0.4: "every result states which one it used").
     # Default: `current_mode()` from `STITCH_MODE`.
     mode: Mode | None = None
+    # Contract v0.4 `Provenance.models`: every model the core used (Library: embedder,
+    # reranker, LLM). `model` stays the primary one. Default: none.
+    models: Sequence[ModelInfo] = ()
 
 
 def current_mode() -> Mode:
@@ -89,6 +92,7 @@ async def run_tool(
             data_sources=outcome.data_sources if outcome else (),
             model=outcome.model if outcome else None,
             run_id=outcome.run_id if outcome else None,
+            models=outcome.models if outcome else (),
         )
 
     try:
