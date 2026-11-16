@@ -6,7 +6,7 @@ Target: about half a day. Do first. `core` unless marked.
   - Root `pyproject.toml` (workspace members `packages/*`, `organs/*`), `.python-version` 3.12, ruff, mypy, pytest config, `uv.lock`.
   - Done when: `uv sync` works and `uv run ruff check` and `uv run pytest` run on the empty workspace. Refs: BOOT-R1.
 
-- [ ] **2. `stitch_common` core types and envelope** `core`
+- [x] **2. `stitch_common` core types and envelope** `core`
   - `types.py`, `envelope.py`, `provenance.py`, `version.py`, `logging.py`.
   - Tests: P1 (envelope invariant), P2 (hash canonical), P3 (Interval ordering, Hypothesis). Refs: BOOT-R2.1 to R2.3, R2.5.
 
