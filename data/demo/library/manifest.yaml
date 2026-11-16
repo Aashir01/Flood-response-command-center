@@ -1,0 +1,274 @@
+# Library corpus manifest: the single source of truth for every document (design 3.3).
+# data/demo/MANIFEST.md and the THIRD_PARTY.md document table are generated from this file by
+#   uv run python scripts/check_corpus_licenses.py --write-docs
+# Committed rows: text-first renditions of US federal public-domain web pages and team-authored
+# Urdu translations. sha256 is of the file with LF line endings. Page numbers are pages of the
+# committed rendition (separated by "<<<page-break>>>" lines), not of the source website.
+# owner_confirmed: false on every row: the implementing agent checked the license evidence; the
+# owner has not yet confirmed it (scripts/check_corpus_licenses.py --require-owner-confirmed).
+
+- doc_id: fema-ready-water
+  title: "Water (Ready.gov)"
+  publisher: FEMA
+  doc_type: guideline
+  lang: en
+  source_url: https://www.ready.gov/water
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: 82bc3eea1b5975503194a539aedeb9a345a551f46b80d6eccadabada45c9451a
+  license: US-Gov-PD
+  license_url: https://www.law.cornell.edu/uscode/text/17/105
+  license_evidence: >-
+    Ready.gov is a US federal government website run by FEMA (US Department of Homeland
+    Security). Works of the US federal government are not subject to copyright in the US
+    (17 U.S.C. 105). The page text retrieved on 2026-11-17 carried no copyright notice or
+    third-party credit for the text. Images were not copied.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/fema-ready-water.txt
+  format: text
+  notes: "Text rendition: navigation, the supplies-list link and images omitted; list items set as bullets; the methods table set as sentences."
+
+- doc_id: fema-ready-food
+  title: "Food (Ready.gov)"
+  publisher: FEMA
+  doc_type: guideline
+  lang: en
+  source_url: https://www.ready.gov/food
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: 3a1d44a0fd23a2f4e0166c9c8806f4516ae9af9485ef1235e209e34b203c8a54
+  license: US-Gov-PD
+  license_url: https://www.law.cornell.edu/uscode/text/17/105
+  license_evidence: >-
+    US federal government website (FEMA); 17 U.S.C. 105. No copyright notice on the page text
+    retrieved on 2026-11-17.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/fema-ready-food.txt
+  format: text
+  notes: "Text rendition: navigation, the supplies-list link and the FoodSafety.gov pointer omitted; list items set as bullets."
+
+- doc_id: fema-ready-shelter
+  title: "Shelter (Ready.gov)"
+  publisher: FEMA
+  doc_type: guideline
+  lang: en
+  source_url: https://www.ready.gov/shelter
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: c3c12917ab29b161350ad4136bac98022ba735270357eba3e4d57678a944f809
+  license: US-Gov-PD
+  license_url: https://www.law.cornell.edu/uscode/text/17/105
+  license_evidence: >-
+    US federal government website (FEMA); 17 U.S.C. 105. No copyright notice on the page text
+    retrieved on 2026-11-17.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/fema-ready-shelter.txt
+  format: text
+  notes: "Text rendition: US disaster-assistance notices, the SMS shelter-search line and the Stay-at-Home section omitted."
+
+- doc_id: fema-ready-floods
+  title: "Floods (Ready.gov)"
+  publisher: FEMA
+  doc_type: guideline
+  lang: en
+  source_url: https://www.ready.gov/floods
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: b8e0bf17aa475a9546d0f7a95e3acf8a34086e763f43de870904538b26b82f2f
+  license: US-Gov-PD
+  license_url: https://www.law.cornell.edu/uscode/text/17/105
+  license_evidence: >-
+    US federal government website (FEMA); 17 U.S.C. 105. No copyright notice on the page text
+    retrieved on 2026-11-17. The phrase "Turn Around Don't Drown" is a NOAA/NWS registered
+    trademark; it appears only as quoted safety advice.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/fema-ready-floods.txt
+  format: text
+  notes: "Text rendition, abridged: US flood-insurance (NFIP), flood-map, alert-system and 9-1-1 references and the resource link list omitted."
+
+- doc_id: fema-ready-kit
+  title: "Build A Kit (Ready.gov)"
+  publisher: FEMA
+  doc_type: guideline
+  lang: en
+  source_url: https://www.ready.gov/kit
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: 112b1ec1ce8e5e882e57968b0b86e0cf2a0fe74dcf4b930d44591102f396f29a
+  license: US-Gov-PD
+  license_url: https://www.law.cornell.edu/uscode/text/17/105
+  license_evidence: >-
+    US federal government website (FEMA); 17 U.S.C. 105. No copyright notice on the page text
+    retrieved on 2026-11-17.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/fema-ready-kit.txt
+  format: text
+  notes: "Text rendition, abridged: checklist links, translations list, a US prescription statistic, the cash item and graphics links omitted."
+
+- doc_id: epa-emergency-disinfection
+  title: "Emergency Disinfection of Drinking Water (US EPA)"
+  publisher: US EPA
+  doc_type: guideline
+  lang: en
+  source_url: https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water
+  retrieved_on: 2026-11-17
+  as_of: 2026-02-24
+  sha256: 3cf951be3f75b17a3178251cc9f31c42bfdbd7003d3cafca6a07a85dee55d33f
+  license: US-Gov-PD
+  license_url: https://www.law.cornell.edu/uscode/text/17/105
+  license_evidence: >-
+    US Environmental Protection Agency web page ("Last updated on February 24, 2026"); 17 U.S.C.
+    105. No copyright notice on the page text retrieved on 2026-11-17. The page cites a WHO
+    technical briefing for one statement; no WHO text is reproduced.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/epa-emergency-disinfection.txt
+  format: text
+  notes: "Text rendition: the bleach table set as bullet sentences; print link, hotline and private-well link omitted."
+
+- doc_id: stitch-ur-ready-water
+  title: "پانی: Ready.gov کا غیر سرکاری اردو ترجمہ"
+  publisher: Stitch team
+  doc_type: translation
+  lang: ur
+  source_url: https://www.ready.gov/water
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: 5bc275a2ef76779579ed6583a95ea4295026e8f8a68601dec5e3e86a315136da
+  license: CC-BY-4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  license_evidence: >-
+    Unofficial Urdu translation written for this repository by the implementing agent
+    (AI-assisted) from the public-domain FEMA page; released under CC BY 4.0 by the Stitch team.
+    Not reviewed by a native speaker yet.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/stitch-ur-ready-water.txt
+  format: text
+  translation_of: fema-ready-water
+  notes: "Needs a native-speaker proofread before release. Partial translation (needs, tips, treatment, boiling, chlorination)."
+
+- doc_id: stitch-ur-ready-floods
+  title: "سیلاب: Ready.gov کا غیر سرکاری اردو ترجمہ"
+  publisher: Stitch team
+  doc_type: translation
+  lang: ur
+  source_url: https://www.ready.gov/floods
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: 807574b4673410dec4e6bbb2ec77588841d50727dc1a4cc2f7924b7c54a6beec
+  license: CC-BY-4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  license_evidence: >-
+    Unofficial Urdu translation written for this repository by the implementing agent
+    (AI-assisted) from the public-domain FEMA page; released under CC BY 4.0 by the Stitch team.
+    Not reviewed by a native speaker yet.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/stitch-ur-ready-floods.txt
+  format: text
+  translation_of: fema-ready-floods
+  notes: "Needs a native-speaker proofread before release. Partial translation (warning, during, after)."
+
+- doc_id: stitch-ur-ready-shelter-kit
+  title: "پناہ گاہ اور ہنگامی سامان: Ready.gov کا غیر سرکاری اردو ترجمہ"
+  publisher: Stitch team
+  doc_type: translation
+  lang: ur
+  source_url: https://www.ready.gov/shelter
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: d53e12b7e46df30367ebc4a649954c65758412e88083abe71d43a0086886f670
+  license: CC-BY-4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  license_evidence: >-
+    Unofficial Urdu translation written for this repository by the implementing agent
+    (AI-assisted) from the public-domain FEMA pages "Shelter" and "Build A Kit"; released under
+    CC BY 4.0 by the Stitch team. Not reviewed by a native speaker yet.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/stitch-ur-ready-shelter-kit.txt
+  format: text
+  translation_of: fema-ready-shelter
+  notes: "Needs a native-speaker proofread before release. Partial translation (mass care shelter, basic kit)."
+
+# ---- fetch tier: never committed, downloaded by scripts/fetch_corpus.py into data/raw/library/
+
+- doc_id: who-tn09-water-quantity
+  title: "Technical note 9: How much water is needed in emergencies (WHO/WEDC)"
+  publisher: WHO
+  doc_type: guideline
+  lang: en
+  source_url: https://cdn.who.int/media/docs/default-source/wash-documents/who-tn-09-how-much-water-is-needed.pdf
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: 3c3f4f1e1e22e42cb2d3292247c319c03d4270a497008617e54725ecb0281e1f
+  license: "(c) WHO 2013, all rights reserved"
+  license_url: null
+  license_evidence: >-
+    Page 4 of the PDF reads "(c) World Health Organization 2013. All rights reserved."
+    (read from the downloaded file on 2026-11-17). Not an open license.
+  redistributable: false
+  owner_confirmed: false
+  tier: fetch
+  path: null
+  format: pdf
+  notes: "Gives the Sphere-derived 7.5 to 15 litres per person per day; the counterpart of the committed FEMA one-gallon figure in the CONFLICTING_EVIDENCE eval items."
+
+- doc_id: sphere-handbook-2018-en
+  title: "The Sphere Handbook 2018 (English)"
+  publisher: Sphere Association
+  doc_type: standard
+  lang: en
+  source_url: https://spherestandards.org/wp-content/uploads/Sphere-Handbook-2018-EN.pdf
+  retrieved_on: null
+  as_of: null
+  sha256: null
+  license: "Sphere Association copyright; educational reproduction with acknowledgment"
+  license_url: https://spherestandards.org/intellectual-property/
+  license_evidence: >-
+    The intellectual-property page returned HTTP 403 to scripted requests (spec author and
+    agent, 2026-11-17). A search snippet says the material is copyrighted and may be reproduced
+    for educational purposes with acknowledgment, not for resale. Not an open license.
+  redistributable: false
+  owner_confirmed: false
+  tier: fetch
+  path: null
+  format: pdf
+  notes: "Unpinned: the host returned HTTP 403 to scripted downloads. Download it in a browser, then run fetch_corpus.py --repin sphere-handbook-2018-en --local <file>."
+
+- doc_id: ndma-plan-2026-07
+  title: "NDMA plan document uploaded July 2026 (ndma.gov.pk/plans; owner to confirm the title)"
+  publisher: NDMA Pakistan
+  doc_type: plan
+  lang: en
+  source_url: https://www.ndma.gov.pk/storage/plans/July2026/6a574d2ba18a7.pdf
+  retrieved_on: 2026-11-17
+  as_of: null
+  sha256: 4155f9ef6a1904cef10455b1d98ec56aefe0c11cc448930c55c02ddb84e1d299
+  license: "Unclear: no license statement found"
+  license_url: null
+  license_evidence: >-
+    No license or open-data statement found on ndma.gov.pk. Government works are not
+    automatically public domain under Pakistan's Copyright Ordinance 1962. Treated as not
+    redistributable until NDMA grants written permission.
+  redistributable: false
+  owner_confirmed: false
+  tier: fetch
+  path: null
+  format: pdf
+  notes: "First PDF listed on https://www.ndma.gov.pk/plans on 2026-11-17 (68 pages; industrial and technological hazards context). Included to exercise the fetch path; not used by the eval set."

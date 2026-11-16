@@ -1,0 +1,66 @@
+# Anchor phrases for the OUT_OF_SCOPE gate (design 8.1 step 1). A question whose best cosine to
+# these phrases is below the calibrated tau_scope is refused as OUT_OF_SCOPE.
+# English phrases and Urdu phrases were written by the implementing agent; the Urdu ones need a
+# native-speaker review.
+en:
+  - flood response and relief
+  - drinking water supply in an emergency
+  - how much water each person needs per day
+  - treating and disinfecting drinking water
+  - boiling water to make it safe
+  - household bleach for water disinfection
+  - emergency shelter for displaced families
+  - mass care shelters and evacuation centres
+  - evacuation during a flood
+  - flood warning and early warning
+  - safety in floodwater and moving water
+  - food supplies and food safety after a disaster
+  - food rations for affected people
+  - sanitation and hygiene in emergencies
+  - cholera and diarrhoeal disease prevention
+  - waterborne disease after floods
+  - emergency supply kit
+  - first aid and medicines in a disaster
+  - electrical hazards after flooding
+  - returning home and cleanup after a flood
+  - disaster relief logistics and distribution
+  - needs of children, pregnant women and older people in emergencies
+  - protecting documents and property from flood water
+  - power outages and refrigerated food
+  - contaminated wells after a flood
+  - camp and shelter management
+  - disaster management authority guidance
+  - humanitarian standards for relief
+  - flood damage and recovery
+  - preparing a household for a flood
+ur:
+  - سیلاب میں امداد اور بحالی
+  - ہنگامی حالات میں پینے کا پانی
+  - ہر شخص کو روزانہ کتنا پانی چاہیے
+  - پانی کو صاف اور جراثیم سے پاک کرنا
+  - پانی ابال کر محفوظ بنانا
+  - پانی صاف کرنے کے لیے بلیچ
+  - بے گھر خاندانوں کے لیے ہنگامی پناہ گاہ
+  - اجتماعی پناہ گاہیں اور انخلا کے مراکز
+  - سیلاب کے دوران انخلا
+  - سیلاب کی وارننگ اور پیشگی اطلاع
+  - سیلابی پانی میں حفاظت
+  - آفت کے بعد خوراک اور اس کی حفاظت
+  - متاثرہ افراد کے لیے راشن
+  - ہنگامی حالات میں صفائی ستھرائی
+  - ہیضے اور اسہال سے بچاؤ
+  - سیلاب کے بعد پانی سے پھیلنے والی بیماریاں
+  - ہنگامی سامان کی کٹ
+  - آفت میں ابتدائی طبی امداد اور ادویات
+  - سیلاب کے بعد بجلی کے خطرات
+  - سیلاب کے بعد گھر واپسی اور صفائی
+  - امدادی سامان کی ترسیل اور تقسیم
+  - ہنگامی حالات میں بچوں، حاملہ خواتین اور بزرگوں کی ضروریات
+  - کاغذات اور سامان کو سیلاب سے بچانا
+  - بجلی بند ہونے پر خوراک کی حفاظت
+  - سیلاب کے بعد آلودہ کنواں
+  - کیمپ اور پناہ گاہ کا انتظام
+  - قدرتی آفات سے نمٹنے والے ادارے کی ہدایات
+  - انسانی امداد کے معیارات
+  - سیلاب سے نقصان اور بحالی
+  - گھرانے کو سیلاب کے لیے تیار کرنا

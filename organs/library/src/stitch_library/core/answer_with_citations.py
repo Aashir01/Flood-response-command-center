@@ -1,4 +1,8 @@
-"""Core logic of library.answer_with_citations. Pure: inputs in, output out, no I/O."""
+"""Tool entry of library.answer_with_citations: delegates to the process-wide ``LibraryService``.
+
+The decision, generation and verification logic is pure and lives in ``core/decide.py``,
+``core/context.py``, ``core/extractive.py`` and ``core/answer.py``.
+"""
 
 from __future__ import annotations
 
@@ -6,12 +10,7 @@ from stitch_common.organs.library import AnswerWithCitationsIn, AnswerWithCitati
 from stitch_common.tooling import Outcome
 
 
-def run(
-    params: AnswerWithCitationsIn,
-) -> AnswerWithCitationsOut | Outcome[AnswerWithCitationsOut]:
-    """Implement answer_with_citations.
+def run(params: AnswerWithCitationsIn) -> Outcome[AnswerWithCitationsOut]:
+    from stitch_library.service import get_service
 
-    Raise ``stitch_common.tooling.ToolFailure(code, message, retryable)`` for expected failures.
-    Return ``Outcome(data, warnings=[...], data_sources=[...])`` to add provenance details.
-    """
-    raise NotImplementedError("library.answer_with_citations")
+    return get_service().answer(params)

@@ -1,0 +1,60 @@
+"""Small Urdu-English concept glossary (agent-authored, needs a native-speaker review).
+
+Maps Urdu words (in the folded form produced by ``normalize``) and English spelling variants onto
+one English concept, so lexical checks (quantity rule, extractive overlap, the test embedder) can
+compare an Urdu question with English evidence. It is not a translation resource.
+"""
+
+from __future__ import annotations
+
+GLOSSARY: dict[str, str] = {
+    "پانی": "water",
+    "خوراک": "food",
+    "کھانا": "food",
+    "کھانے": "food",
+    "غذا": "food",
+    "راشن": "ration",
+    "پناہ": "shelter",
+    "پناہگاہ": "shelter",
+    "پناہگاہوں": "shelter",
+    "سیلاب": "flood",
+    "سیلابی": "flood",
+    "ابالیں": "boil",
+    "ابالنا": "boil",
+    "ابال": "boil",
+    "ابالا": "boil",
+    "گیلن": "gallon",
+    "لیٹر": "litre",
+    "liter": "litre",
+    "liters": "litre",
+    "روزانہ": "day",
+    "دن": "day",
+    "دنوں": "day",
+    "شخص": "person",
+    "فرد": "person",
+    "افراد": "person",
+    "کس": "person",
+    "people": "person",
+    "بلیچ": "bleach",
+    "ہیضہ": "cholera",
+    "ہیضے": "cholera",
+    "صفائی": "sanitation",
+    "جراثیم": "germ",
+    "بیماری": "disease",
+    "بیماریاں": "disease",
+    "بیماریوں": "disease",
+    "منٹ": "minute",
+    "ذخیرہ": "store",
+    "محفوظ": "safe",
+    "پینے": "drink",
+    "پینا": "drink",
+    "انخلا": "evacuate",
+    "گاڑی": "vehicle",
+    "بجلی": "electricity",
+    "دوائیں": "medicine",
+    "ادویات": "medicine",
+    "صابن": "soap",
+    "کلورین": "chlorine",
+    "قطرے": "drop",
+    "daily": "day",
+}

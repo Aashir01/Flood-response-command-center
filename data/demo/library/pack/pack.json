@@ -1,0 +1,234 @@
+{
+  "chunker_version": "1",
+  "content_sha256": "108179a7ecf4fbd9c4a3fdc717f1ed03a6ef32810e9e1522d990fcb3d9e70013",
+  "counts": {
+    "chunks": 65,
+    "docs": 9,
+    "pages": 22
+  },
+  "doc_ids": [
+    "epa-emergency-disinfection",
+    "fema-ready-floods",
+    "fema-ready-food",
+    "fema-ready-kit",
+    "fema-ready-shelter",
+    "fema-ready-water",
+    "stitch-ur-ready-floods",
+    "stitch-ur-ready-shelter-kit",
+    "stitch-ur-ready-water"
+  ],
+  "documents": [
+    {
+      "as_of": "2026-02-24",
+      "doc_id": "epa-emergency-disinfection",
+      "doc_type": "guideline",
+      "lang": "en",
+      "license": "US-Gov-PD",
+      "publisher": "US EPA",
+      "redistributable": true,
+      "sha256": "3cf951be3f75b17a3178251cc9f31c42bfdbd7003d3cafca6a07a85dee55d33f",
+      "source_url": "https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water",
+      "tier": "committed",
+      "title": "Emergency Disinfection of Drinking Water (US EPA)"
+    },
+    {
+      "as_of": null,
+      "doc_id": "fema-ready-floods",
+      "doc_type": "guideline",
+      "lang": "en",
+      "license": "US-Gov-PD",
+      "publisher": "FEMA",
+      "redistributable": true,
+      "sha256": "b8e0bf17aa475a9546d0f7a95e3acf8a34086e763f43de870904538b26b82f2f",
+      "source_url": "https://www.ready.gov/floods",
+      "tier": "committed",
+      "title": "Floods (Ready.gov)"
+    },
+    {
+      "as_of": null,
+      "doc_id": "fema-ready-food",
+      "doc_type": "guideline",
+      "lang": "en",
+      "license": "US-Gov-PD",
+      "publisher": "FEMA",
+      "redistributable": true,
+      "sha256": "3a1d44a0fd23a2f4e0166c9c8806f4516ae9af9485ef1235e209e34b203c8a54",
+      "source_url": "https://www.ready.gov/food",
+      "tier": "committed",
+      "title": "Food (Ready.gov)"
+    },
+    {
+      "as_of": null,
+      "doc_id": "fema-ready-kit",
+      "doc_type": "guideline",
+      "lang": "en",
+      "license": "US-Gov-PD",
+      "publisher": "FEMA",
+      "redistributable": true,
+      "sha256": "112b1ec1ce8e5e882e57968b0b86e0cf2a0fe74dcf4b930d44591102f396f29a",
+      "source_url": "https://www.ready.gov/kit",
+      "tier": "committed",
+      "title": "Build A Kit (Ready.gov)"
+    },
+    {
+      "as_of": null,
+      "doc_id": "fema-ready-shelter",
+      "doc_type": "guideline",
+      "lang": "en",
+      "license": "US-Gov-PD",
+      "publisher": "FEMA",
+      "redistributable": true,
+      "sha256": "c3c12917ab29b161350ad4136bac98022ba735270357eba3e4d57678a944f809",
+      "source_url": "https://www.ready.gov/shelter",
+      "tier": "committed",
+      "title": "Shelter (Ready.gov)"
+    },
+    {
+      "as_of": null,
+      "doc_id": "fema-ready-water",
+      "doc_type": "guideline",
+      "lang": "en",
+      "license": "US-Gov-PD",
+      "publisher": "FEMA",
+      "redistributable": true,
+      "sha256": "82bc3eea1b5975503194a539aedeb9a345a551f46b80d6eccadabada45c9451a",
+      "source_url": "https://www.ready.gov/water",
+      "tier": "committed",
+      "title": "Water (Ready.gov)"
+    },
+    {
+      "as_of": null,
+      "doc_id": "stitch-ur-ready-floods",
+      "doc_type": "translation",
+      "lang": "ur",
+      "license": "CC-BY-4.0",
+      "publisher": "Stitch team",
+      "redistributable": true,
+      "sha256": "807574b4673410dec4e6bbb2ec77588841d50727dc1a4cc2f7924b7c54a6beec",
+      "source_url": "https://www.ready.gov/floods",
+      "tier": "committed",
+      "title": "سیلاب: Ready.gov کا غیر سرکاری اردو ترجمہ"
+    },
+    {
+      "as_of": null,
+      "doc_id": "stitch-ur-ready-shelter-kit",
+      "doc_type": "translation",
+      "lang": "ur",
+      "license": "CC-BY-4.0",
+      "publisher": "Stitch team",
+      "redistributable": true,
+      "sha256": "d53e12b7e46df30367ebc4a649954c65758412e88083abe71d43a0086886f670",
+      "source_url": "https://www.ready.gov/shelter",
+      "tier": "committed",
+      "title": "پناہ گاہ اور ہنگامی سامان: Ready.gov کا غیر سرکاری اردو ترجمہ"
+    },
+    {
+      "as_of": null,
+      "doc_id": "stitch-ur-ready-water",
+      "doc_type": "translation",
+      "lang": "ur",
+      "license": "CC-BY-4.0",
+      "publisher": "Stitch team",
+      "redistributable": true,
+      "sha256": "5bc275a2ef76779579ed6583a95ea4295026e8f8a68601dec5e3e86a315136da",
+      "source_url": "https://www.ready.gov/water",
+      "tier": "committed",
+      "title": "پانی: Ready.gov کا غیر سرکاری اردو ترجمہ"
+    }
+  ],
+  "ingest_report": [
+    {
+      "chunks": 11,
+      "doc_id": "fema-ready-water",
+      "pages": 3,
+      "readable": 3,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 7,
+      "doc_id": "fema-ready-food",
+      "pages": 3,
+      "readable": 3,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 7,
+      "doc_id": "fema-ready-shelter",
+      "pages": 2,
+      "readable": 2,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 8,
+      "doc_id": "fema-ready-floods",
+      "pages": 3,
+      "readable": 3,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 7,
+      "doc_id": "fema-ready-kit",
+      "pages": 2,
+      "readable": 2,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 13,
+      "doc_id": "epa-emergency-disinfection",
+      "pages": 3,
+      "readable": 3,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 5,
+      "doc_id": "stitch-ur-ready-water",
+      "pages": 2,
+      "readable": 2,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 4,
+      "doc_id": "stitch-ur-ready-floods",
+      "pages": 2,
+      "readable": 2,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 3,
+      "doc_id": "stitch-ur-ready-shelter-kit",
+      "pages": 2,
+      "readable": 2,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    }
+  ],
+  "manifest_sha256": "cab1306ccf3ca7f463cfad3f003b12e9f282cd27520775072de06a49c53bef53",
+  "model_info": {
+    "e5-small-int8": {
+      "name": "intfloat/multilingual-e5-small",
+      "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+      "sha256": "739c8f25bbe6d8a6001cd2f048701da9879140cc67d4e9327716111e869dd717"
+    }
+  },
+  "models": [
+    "e5-small-int8"
+  ],
+  "pack_version": 1
+}
