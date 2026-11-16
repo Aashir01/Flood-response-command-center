@@ -1,0 +1,153 @@
+{
+  "$defs": {
+    "MetricResult": {
+      "additionalProperties": false,
+      "description": "One measured metric. ``target`` is None when the metric has no pass/fail threshold.",
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9_.\\-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "unit": {
+          "default": "",
+          "title": "Unit",
+          "type": "string"
+        },
+        "direction": {
+          "enum": [
+            "higher",
+            "lower"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "dataset": {
+          "minLength": 1,
+          "title": "Dataset",
+          "type": "string"
+        },
+        "mode": {
+          "default": "demo",
+          "enum": [
+            "demo",
+            "live",
+            "synthetic"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "git_sha": {
+          "title": "Git Sha",
+          "type": "string"
+        },
+        "seed": {
+          "title": "Seed",
+          "type": "integer"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "value",
+        "direction",
+        "dataset",
+        "timestamp",
+        "git_sha",
+        "seed"
+      ],
+      "title": "MetricResult",
+      "type": "object"
+    },
+    "OrganResult": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_run",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "#/$defs/MetricResult"
+          },
+          "title": "Metrics",
+          "type": "array"
+        },
+        "message": {
+          "default": "",
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "OrganResult",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Shape of ``evals/results/latest.json``.",
+  "properties": {
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "git_sha": {
+      "title": "Git Sha",
+      "type": "string"
+    },
+    "organs": {
+      "additionalProperties": {
+        "$ref": "#/$defs/OrganResult"
+      },
+      "title": "Organs",
+      "type": "object"
+    }
+  },
+  "required": [
+    "generated_at",
+    "git_sha",
+    "organs"
+  ],
+  "title": "Latest",
+  "type": "object"
+}

@@ -43,7 +43,7 @@ Target: about half a day. Do first. `core` unless marked.
   - Register the eight servers per the design. Verify `filesystem` and `fetch` start from the IDE MCP panel. Keep organ servers and GitHub disabled until they exist.
   - Done when: no secrets in the file and the enabled servers show as connected. Refs: BOOT-R4.
 
-- [ ] **11. Eval runner skeleton** `core`
+- [x] **11. Eval runner skeleton** `core`
   - `evals/run.py`, `schema.json`, `MetricResult`, merge to `latest.json`.
   - Tests: missing organ is `not_run`, output validates against the schema. Refs: BOOT-R7.
 

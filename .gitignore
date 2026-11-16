@@ -25,3 +25,6 @@ evals/results/*.tmp
 Thumbs.db
 # Kiro hook payload debug log (scripts/hooks/hook_io.py). Never add .kiro/ here.
 .stitch-hook-debug/
+# generated eval output (the schema is committed)
+evals/results/*.json
+!evals/results/schema.json
