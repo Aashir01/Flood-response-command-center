@@ -66,7 +66,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Contract tests: real output validates against schemas with `additionalProperties: false`. Smoke test: start, list tools and resources, call both tools.
   - Refs: LED-R2.4, R2.5, R8.1. Done when: the contract hook passes.
 
-- [ ] **13. Performance and offline checks** `core`
+- [x] **13. Performance and offline checks** `core`
   - Benchmark 200 × 10 and the equity sweep. Run the whole suite with sockets disabled. Refs: LED-R7, R11.
   - Done when: under budget with margin.
 
