@@ -50,7 +50,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Property test P6. Unit tests against hand-derived duals from task 3. Refs: LED-R6.
   - Done when: P6 passes and duals match hand-derived values.
 
-- [ ] **10. Equity trade-off** `core`
+- [x] **10. Equity trade-off** `core`
   - `core/tradeoff.py`: grid plus `max_feasible_floor`, LP re-solves, analytic infeasible tail, `equity_cost`, 10 s budget with partial result and warning.
   - Property tests P10, P11. Unit tests for the grid and the tail. Refs: LED-R10.
   - Done when: P10 and P11 pass and the infeasible tail is returned without solves.
