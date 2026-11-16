@@ -13,8 +13,9 @@ Every third-party library, dataset, and model used by Stitch is listed here with
 | Public gauge readings, Indus at Guddu/Sukkur/Kotri (optional small validation set) | oracle eval | TBD, included only if redistributable | planned |
 | Sentinel-1 scene of Sindh, Aug 2022 (one clipped scene, demo only) | eyes | Copernicus Sentinel data terms (free, full, open); attribution required | planned |
 | UNOSAT / Copernicus EMS Sindh 2022 reference extent (qualitative overlay) | eyes | TBD, included only if redistributable | planned |
-| WorldPop population grids | ledger | CC BY 4.0 | planned |
-| OpenStreetMap roads | ledger | ODbL | planned |
+| WorldPop Global 2000-2020 1 km, Pakistan 2020 (`pak_ppp_2020_1km_Aggregated`), district sums in `data/demo/ledger/districts.parquet` | ledger | CC BY 4.0, attribution: www.worldpop.org | in use |
+| OpenStreetMap roads (motorway to tertiary, via Overpass API), clipped length per district in `districts.parquet` | ledger | ODbL 1.0, (c) OpenStreetMap contributors | in use |
+| geoBoundaries gbOpen PAK ADM2, 2019 (Runfola et al. 2020, www.geoboundaries.org), simplified Sindh subset in `data/demo/boundaries/pk_districts.geojson` (shared with eyes) | ledger, eyes | CC BY 4.0 (site statement; per-boundary metadata says Public Domain) | in use |
 | NDMA / PDMA publications | library | public documents; verify per-document terms | planned |
 | ReliefWeb reports | library | per-report terms; API terms of use | planned |
 | Sphere Handbook | library | CC BY-NC-SA / check edition | planned |
@@ -69,6 +70,7 @@ Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond 
 | OR-Tools (GLOP, SCIP via `pywraplp`) | LP/MIP allocation solver | Apache-2.0 (SCIP bundled under Apache-2.0 since SCIP 9) | in use |
 | DuckDB | RunStore (run results for `sensitivity_report`) | MIT | in use |
 | PyArrow | read the committed district Parquet | Apache-2.0 | in use |
+| rasterio, shapely (dev-time only, `uv run --with`, not a workspace dependency) | `scripts/build_ledger_demo.py`: raster sums and road clipping | BSD-3-Clause, BSD-3-Clause | in use (build script) |
 | NumPy, pandas, protobuf, absl-py | transitive dependencies of OR-Tools | BSD-3-Clause, BSD-3-Clause, BSD-3-Clause, Apache-2.0 | in use (transitive) |
 
 ## frontend code libraries and fonts

@@ -55,7 +55,7 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
   - Property tests P10, P11. Unit tests for the grid and the tail. Refs: LED-R10.
   - Done when: P10 and P11 pass and the infeasible tail is returned without solves.
 
-- [ ] **11. Demo dataset and loader** `core`
+- [x] **11. Demo dataset and loader** `core`
   - `scripts/build_ledger_demo.py` (WorldPop per-district sums, OSM road density to `road_access`, `alt_delivery_fraction` demo values, `default_severity` prior). Commit the Parquet, `MANIFEST.md`, and `THIRD_PARTY.md` rows (WorldPop, OSM, OR-Tools).
   - `data/loader.py` with schema validation. Tests: schema, ranges in [0,1], unique ids. Refs: LED-R2.3, R11.1.
   - Done when: the loader reads committed files offline and the manifest lists source and license.
