@@ -700,12 +700,11 @@ source = { virtual = "." }
 dev = [
     { name = "hypothesis" },
     { name = "jsonschema" },
-    { name = "mcp" },
     { name = "mypy" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "ruff" },
-    { name = "stitch-common", extra = ["testing"] },
+    { name = "stitch-common", extra = ["mcp", "testing"] },
     { name = "types-jsonschema" },
 ]
 
@@ -715,12 +714,11 @@ dev = [
 dev = [
     { name = "hypothesis", specifier = ">=6.112" },
     { name = "jsonschema", specifier = ">=4.23" },
-    { name = "mcp", specifier = ">=1.2" },
     { name = "mypy", specifier = ">=1.13" },
     { name = "pytest", specifier = ">=8.3" },
     { name = "pytest-asyncio", specifier = ">=0.24" },
     { name = "ruff", specifier = ">=0.7" },
-    { name = "stitch-common", extras = ["testing"], editable = "packages/stitch_common" },
+    { name = "stitch-common", extras = ["testing", "mcp"], editable = "packages/stitch_common" },
     { name = "types-jsonschema", specifier = ">=4.23" },
 ]
 
@@ -733,6 +731,9 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+mcp = [
+    { name = "mcp" },
+]
 testing = [
     { name = "hypothesis" },
     { name = "jsonschema" },
@@ -743,10 +744,11 @@ testing = [
 requires-dist = [
     { name = "hypothesis", marker = "extra == 'testing'", specifier = ">=6.112" },
     { name = "jsonschema", marker = "extra == 'testing'", specifier = ">=4.23" },
+    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=2.3,<3" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "pytest", marker = "extra == 'testing'", specifier = ">=8.3" },
 ]
-provides-extras = ["testing"]
+provides-extras = ["mcp", "testing"]
 
 [[package]]
 name = "truststore"

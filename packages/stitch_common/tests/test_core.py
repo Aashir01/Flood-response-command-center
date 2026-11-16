@@ -12,6 +12,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 from pydantic import TypeAdapter, ValidationError
+
 from stitch_common import CONTRACT_VERSION
 from stitch_common.envelope import ErrorInfo, ToolResult, fail, ok
 from stitch_common.logging import JsonFormatter, redact

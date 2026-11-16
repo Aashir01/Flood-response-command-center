@@ -1,0 +1,12 @@
+"""Pure core logic for ${server_name}: no network, no MCP imports, no global state."""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+from typing import Any
+
+${core_imports}
+
+CORES: dict[str, Callable[[Any], Any]] = {
+${core_registry}
+}

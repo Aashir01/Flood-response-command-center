@@ -27,7 +27,7 @@ Target: about half a day. Do first. `core` unless marked.
   - `secret_scan.py` with ruleset and fixtures (positive and clean). `install_git_hooks.py`, `git-pre-commit`, `pre_commit_guard.py`.
   - Tests: P7. Refs: BOOT-R6.3, R6.4.
 
-- [ ] **7. Surgeon template and scaffold script** `core`
+- [x] **7. Surgeon template and scaffold script** `core`
   - `.kiro/templates/organ/**`, `scaffold_organ.py` (`--dry-run`, `--force`, idempotent, flips `mcp.json`).
   - Tests: P6, scaffold a throwaway organ into a temp copy and run its generated tests and `check_contracts.py`. Refs: BOOT-R5.2 to R5.5.
 

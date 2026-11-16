@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 dependencies = ["pydantic>=2.7"]
 
 [project.optional-dependencies]
+mcp = ["mcp>=2.3,<3"]
 testing = ["pytest>=8.3", "hypothesis>=6.112", "jsonschema>=4.23"]
 
 [project.entry-points.pytest11]

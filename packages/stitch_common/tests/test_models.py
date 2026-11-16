@@ -10,6 +10,7 @@ from hypothesis import given
 from hypothesis import strategies as st
 from jsonschema import Draft202012Validator
 from pydantic import BaseModel, ValidationError
+
 from stitch_common.base import Contract
 from stitch_common.brain import Briefing, TaskEvent
 from stitch_common.organs import ORGAN_TOOLS

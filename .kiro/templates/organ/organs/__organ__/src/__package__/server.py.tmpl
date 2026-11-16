@@ -1,0 +1,28 @@
+"""MCP server for ${server_name}. Thin layer: validation, envelope and /healthz come from
+``stitch_common.mcp_app``; the logic lives in ``${package}.core``.
+
+    python -m ${package}.server --stdio
+    python -m ${package}.server --http --host 127.0.0.1 --port 8000   # also serves GET /healthz
+"""
+
+from __future__ import annotations
+
+from stitch_common.mcp_app import ContractServer, serve
+from ${package}.core import CORES
+from ${package}.models import TOOL_NAMES, TOOL_SCHEMAS
+
+TOOL_VERSION = "0.1.0"
+
+__all__ = ["TOOL_NAMES", "TOOL_SCHEMAS", "TOOL_VERSION", "create_server", "main"]
+
+
+def create_server() -> ContractServer:
+    return ContractServer(organ="${organ}", tool_version=TOOL_VERSION, cores=CORES)
+
+
+def main(argv: list[str] | None = None) -> int:
+    return serve(create_server(), argv)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

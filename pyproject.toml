@@ -9,7 +9,7 @@ dependencies = []
 
 [dependency-groups]
 dev = [
-    "stitch-common[testing]",
+    "stitch-common[testing,mcp]",
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
     "hypothesis>=6.112",
@@ -17,7 +17,6 @@ dev = [
     "types-jsonschema>=4.23",
     "ruff>=0.7",
     "mypy>=1.13",
-    "mcp>=1.2",
 ]
 
 [tool.uv]
@@ -48,6 +47,16 @@ force-exclude = true
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 ignore = ["RUF012"]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "stitch_common",
+    "stitch_eyes",
+    "stitch_oracle",
+    "stitch_library",
+    "stitch_ledger",
+    "stitch_voice",
+]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["B011"]
