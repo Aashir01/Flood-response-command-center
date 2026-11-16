@@ -50,7 +50,7 @@ Target: about half a day. Do first. `core` unless marked.
 - [x] **12. Minimal CI** `core`
   - `.github/workflows/ci.yml` per the design. Refs: BOOT-R8.
 
-- [ ] **13. Write-up skeleton and schedule** `core`
+- [x] **13. Write-up skeleton and schedule** `core`
   - `docs/kiro-writeup.md` sections with the verified facts so far; `docs/schedule.md` (calendar to Dec 3). Refs: BOOT-R9.
 
 - [ ] **14. Powers** `human-assisted`
