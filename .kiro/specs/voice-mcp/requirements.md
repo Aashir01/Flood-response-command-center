@@ -8,7 +8,7 @@ The Voice transcribes spoken questions (Whisper) and speaks the briefing (TTS) i
 ## Requirements
 
 ### VOX-R1 Transcription
-1. WHEN `transcribe` is called with valid audio, THE Voice SHALL return text, detected language, timestamped segments, and `lang_confidence`, using Whisper on CPU.
+1. WHEN `transcribe` is called with valid audio, THE Voice SHALL return text, detected language, timestamped segments, and `lang_confidence`, using Whisper on CPU by default, or Deepgram Nova-3 when `STITCH_STT_PROVIDER=deepgram` and a key is set (revision R-DG below).
 2. THE Voice SHALL accept `wav`, `webm`, `mp3`, and `ogg` of at most 60 s and 10 MB, and return `INVALID_INPUT` otherwise.
 3. WHERE `lang_hint` is given, THE Voice SHALL use it to constrain decoding.
 4. IF the audio is silent or contains no speech, THEN THE Voice SHALL return empty text with a warning and not hallucinate text.
@@ -38,8 +38,8 @@ The Voice transcribes spoken questions (Whisper) and speaks the briefing (TTS) i
 1. THE Voice eval SHALL report word error rate (WER) for English and Urdu on a small recorded or public test set, and a TTS intelligibility check by round-trip (TTS then ASR) WER.
 
 ### VOX-R7 Pluggable TTS providers
-1. THE Voice SHALL define a `TTSProvider` interface and select the provider with `STITCH_TTS_PROVIDER`. Values: `azure` (default), `google` (fallback), `prerendered`, and `local-mms` (optional, off by default).
-2. THE `azure` provider SHALL call Azure Neural TTS with `ur-PK-UzmaNeural` (default Urdu voice, `ur-PK-AsadNeural` as the male alternative) and an English neural voice. THE `google` provider SHALL implement the same interface as a fallback. Keys are read from env (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`, and Google application credentials) and never committed. Vendors other than these two are out of scope.
+1. THE Voice SHALL define a `TTSProvider` interface and select the provider with `STITCH_TTS_PROVIDER`. Values: `deepgram` (English, default when keyed), `azure` (Urdu), `google` (fallback), `prerendered`, `local-mms` (optional, off by default), and `fake`.
+2. THE `azure` provider SHALL call Azure Neural TTS with `ur-PK-UzmaNeural` (default Urdu voice, `ur-PK-AsadNeural` as the male alternative) and an English neural voice. THE `google` provider SHALL implement the same interface as a fallback. Keys are read from env (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`, and Google application credentials) and never committed. Deepgram (`DEEPGRAM_API_KEY`) was added by the owner in Nov 2026 (revision R-DG); other vendors are out of scope.
 3. THE `prerendered` provider SHALL serve only the cached demo audio and return `NOT_FOUND` for other text, so the offline demo works with no key or network.
 4. THE `local-mms` provider (non-commercial model license) SHALL be disabled unless explicitly enabled, SHALL NOT be bundled in default images, and SHALL be listed in `THIRD_PARTY.md` as an optional non-commercial mode.
 5. WHEN the provider changes, THE `speak` output schema SHALL NOT change, and `provider` (`azure`, `google`, `prerendered`, `local-mms`, or `fake`) and `synthesized` (`live`, `cache`, or `prerendered`) SHALL be reported.
@@ -78,3 +78,10 @@ Voice cloning. Real-time streaming conversation. Speaker diarization.
 ## Open checks (before committing pre-rendered audio)
 1. Confirm Azure's terms allow committing generated audio to a public MIT repo. If they do not, the pre-rendered files are generated at image build time from a key, or the demo falls back to text with live synthesis only.
 2. Confirm a Pakistan-accessible Azure account can use the Speech resource, and pick a region.
+## Revision R-DG: Deepgram (owner decision, Nov 2026)
+Deepgram is the owner's hosted voice API. Verified against Deepgram docs and a live probe: Aura-2 TTS speaks English, Spanish, German, French, Dutch, Italian, Japanese only (no Urdu); Nova-3 STT supports `en` and monolingual `ur`.
+- VOX-R10.1 WHEN `STITCH_STT_PROVIDER=deepgram` and `DEEPGRAM_API_KEY` is set, THE Voice SHALL transcribe with Nova-3 (`language` from `lang_hint`, `ur` or `en`; `auto` uses `detect_language`), otherwise with local Whisper. A Deepgram failure SHALL fall back to local Whisper with a warning.
+- VOX-R10.2 English `speak` SHALL use Deepgram Aura-2 (`STITCH_DEEPGRAM_VOICE_EN`, default `aura-2-thalia-en`) when keyed. Urdu `speak` SHALL use Azure `ur-PK-UzmaNeural` when `AZURE_SPEECH_KEY` is set, else prerendered audio, else `UPSTREAM_UNAVAILABLE` with the warning "Urdu speech needs Azure; Urdu text briefing is shown". Urdu SHALL never be synthesized with an English voice.
+- VOX-R10.3 Deepgram STT sends user audio to a hosted service. This amends VOX-R4.3: it is opt-in by env, every request sets `mip_opt_out=true`, and the UI disclosure SHALL name Deepgram for the microphone.
+- VOX-R10.4 Paid calls SHALL pass a monthly budget guard (characters for TTS, seconds for STT); over the cap no request is sent.
+- VOX-R10.5 Deepgram's terms do not clearly permit redistributing generated audio, so prerendered audio SHALL be generated at build or deploy time into a git-ignored cache and not committed (`docs/decisions.md`).

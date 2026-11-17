@@ -336,3 +336,13 @@ Not inside the 8 h: Google provider (1.5 h stretch), local-mms (cut), the Voice 
 4. **Brain limits**: JSON body up to 4 MB on `/voice/transcribe`; `/voice/*` rate-limited per client.
 5. **Compose**: a `voice_cache` volume and the env variables in §7 (deployment design).
 6. **Warning codes** on `transcribe` (`NO_SPEECH`, `REPETITION_TRIMMED`, `LANGUAGE_UNSUPPORTED:<code>`) and `speak` (`TTS_BUDGET_80PCT`) documented as stable strings in §7 of the contracts.
+
+## 14. Revision R-DG: Deepgram (Nov 2026)
+Implements VOX-R10. Supersedes the provider defaults in sections 3.3 and 7 where they differ.
+- **Provider chain for `speak`.** `en`: `STITCH_TTS_PROVIDER` (default `deepgram`) then `prerendered` then `fake` only when `STITCH_TTS_PROVIDER=fake`. `ur`: `azure` (if keyed) then `prerendered`; Deepgram is skipped because `supports("ur")` is false. When nothing can serve, `UPSTREAM_UNAVAILABLE` with the Urdu warning.
+- **Deepgram TTS.** `POST https://api.deepgram.com/v1/speak?model=<voice>&encoding=linear16&container=wav&sample_rate=24000&mip_opt_out=true`, header `Authorization: Token <key>`, JSON `{"text": chunk}`. Chunks of at most 1500 characters (Aura-2 per-request limit is 2000), joined as WAV with 400 ms silence. 429 and 5xx retried twice with backoff honoring `Retry-After`; 401/403 is `CredentialsRejected`. MP3 is not requested: output is always WAV, the result states `format: wav`.
+- **Deepgram STT.** `POST https://api.deepgram.com/v1/listen?model=nova-3&language=<en|ur>&smart_format=false&punctuate=true&mip_opt_out=true` with the raw audio body and its `Content-Type`; `auto` sends `detect_language=true` and maps `hi` to `ur`. Segments come from `utterances=true`. Words with confidence are not logged.
+- **Local Whisper** stays the offline default and the fallback (section 2); the model loads lazily, and a missing model in an offline container returns `UPSTREAM_UNAVAILABLE` with a clear message.
+- **Cache.** `data/cache/voice/` (git-ignored, `STITCH_VOICE_CACHE_DIR`), key `sha256(text, lang, voice, provider, format, pipeline_version)`. Prerendered root `STITCH_VOICE_PRERENDERED_DIR` (default `data/cache/voice/prerendered`) with `index.json`, written by `scripts/prerender_voice.py`. The scripts it reads are `data/demo/voice/scripts/en.txt` and `ur.txt`.
+- **Budget.** SQLite in the cache directory, per provider per UTC month: `STITCH_TTS_MONTHLY_CHAR_CAP` (200000), `STITCH_STT_MONTHLY_SECONDS_CAP` (3600).
+- **Licensing.** Generated audio is not committed (section 8 option b); evidence and wording in `docs/decisions.md`.
