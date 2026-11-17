@@ -93,10 +93,22 @@ exec 9>/run/lock/stitch-deploy.lock
 flock -w 1800 9
 
 cur_tag="$(sed -n 's/^TAG=//p' "$STATE_DIR/current.env" 2>/dev/null | head -n1)"
+files="-f compose.yaml -f deploy/compose.prod.yaml"
+for f in ${COMPOSE_OVERRIDES-}; do
+    [[ "$f" =~ ^deploy/compose\.[a-z]+\.yaml$ ]] && files="$files -f $f"
+done
 web_up() {
+    # shellcheck disable=SC2086
     (cd "$REPO_DIR" && TAG="$cur_tag" docker compose --env-file "$PROD_ENV" \
-        -f compose.yaml -f deploy/compose.prod.yaml up -d --no-deps --wait web)
+        $files up -d --no-deps --wait web)
 }
+# Caddy needs 443/tcp (TLS-ALPN-01, HTTPS) and 443/udp (HTTP/3) open in UFW before it asks
+# for a certificate. vps_setup.sh opens them; this keeps the switch safe if they were removed.
+if command -v ufw >/dev/null 2>&1 && ufw status | grep -q '^Status: active'; then
+    ufw allow 443/tcp >/dev/null
+    ufw allow 443/udp >/dev/null
+    log "ufw: 443/tcp and 443/udp allowed"
+fi
 set_site() {
     if grep -q '^SITE_ADDRESS=' "$PROD_ENV"; then
         sed -i "s|^SITE_ADDRESS=.*|SITE_ADDRESS=$1|" "$PROD_ENV"

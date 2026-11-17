@@ -76,9 +76,22 @@ fi
 
 log() { echo "$(date -u +%FT%TZ) $*" | tee -a "$LOG" >&2; }
 
+# Extra override files after compose.prod.yaml, space-separated, relative to the checkout
+# (deploy.conf; e.g. COMPOSE_OVERRIDES="deploy/compose.live.yaml" for egress and keys).
+COMPOSE_OVERRIDES="${COMPOSE_OVERRIDES-}"
+compose_files() {
+    local f out="-f compose.yaml -f deploy/compose.prod.yaml"
+    for f in $COMPOSE_OVERRIDES; do
+        [[ "$f" =~ ^deploy/compose\.[a-z]+\.yaml$ ]] || { echo "bad override $f" >&2; return 1; }
+        out="$out -f $f"
+    done
+    echo "$out"
+}
 compose() {
-    (cd "$REPO_DIR" && TAG="$1" docker compose --env-file "$PROD_ENV" \
-        -f compose.yaml -f deploy/compose.prod.yaml "${@:2}")
+    local files
+    files="$(compose_files)" || return 1
+    # shellcheck disable=SC2086
+    (cd "$REPO_DIR" && TAG="$1" docker compose --env-file "$PROD_ENV" $files "${@:2}")
 }
 
 read_tag() { [[ -f "$1" ]] && sed -n 's/^TAG=//p' "$1" | head -n1 || true; }
@@ -135,9 +148,10 @@ get_images() {
         [[ -z "$svc" ]] && continue
         # one image may serve two services (library and seed); skip it once built
         docker image inspect "$img" >/dev/null 2>&1 && continue
+        # shellcheck disable=SC2046
         nice -n 10 bash -c 'cd "$1" && TAG="$2" docker compose --env-file "$3" \
-            -f compose.yaml -f deploy/compose.prod.yaml build "$4"' _ \
-            "$REPO_DIR" "$sha" "$PROD_ENV" "$svc" >>"$LOG" 2>&1 || {
+            "${@:5}" build "$4"' _ \
+            "$REPO_DIR" "$sha" "$PROD_ENV" "$svc" $(compose_files) >>"$LOG" 2>&1 || {
             log "build of $svc failed"; return 1; }
     done <<< "$missing"
 }
