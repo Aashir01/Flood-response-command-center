@@ -1,0 +1,41 @@
+{
+  "variant": "int8",
+  "model_variant": "unet-resnet18-s1-int8",
+  "file": "eyes_unet_r18.onnx",
+  "sha256": "fca41c50e8253989d0ca77572d6eb64c4c08b0dee2e85245a9904a8d147eca5f",
+  "bytes": 12640566,
+  "opset": 17,
+  "n_tiles": 8,
+  "tile": 256,
+  "tiles_from": "sen1floods11 hand-labeled validation split, random 256 crops, seed 2",
+  "max_abs_logit_diff": 1.1962506771087646,
+  "mean_abs_logit_diff": 0.04528250079602003,
+  "mask_agreement": 0.9792938232421875,
+  "torch_val_iou": 0.011400982039134734,
+  "onnx_val_iou": 0.010839655733237216,
+  "val_iou_diff_points": 0.05613263058975183,
+  "variants": {
+    "fp32": {
+      "bytes": 49854314,
+      "val_iou": 0.011400982039134734,
+      "latency_s_256_2threads": 0.17543735000072047
+    },
+    "fp16": {
+      "bytes": 24957559,
+      "val_iou": 0.011394744341488268,
+      "latency_s_256_2threads": 0.17348599998513237
+    },
+    "int8": {
+      "bytes": 12640566,
+      "val_iou": 0.010839655733237216,
+      "latency_s_256_2threads": 0.09794569999212399
+    }
+  },
+  "selection_rule": "int8 if val IoU drop <= 1.0 point and latency <= fp32; else fp16; else fp32 if < 50,000,000 bytes",
+  "versions": {
+    "torch": "2.15.0+cpu",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.32.0"
+  },
+  "checkpoint_epoch": 1
+}

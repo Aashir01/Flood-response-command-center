@@ -1,0 +1,56 @@
+# Eyes training config (design 3.2). Two profiles: `full` is the reproducible Colab/Modal GPU
+# fine-tune of the design; `cpu` is the reduced laptop run that produced the committed demo model.
+seed: 0
+data_root: data/raw/sen1floods11
+out_dir: data/raw/eyes-runs   # checkpoints (git-ignored). On Colab set to a Drive path.
+model:
+  arch: unet
+  encoder: resnet18
+  encoder_weights: imagenet     # owner accepted ImageNet init (design 12, item 4)
+  decoder_channels: [128, 64, 32, 16, 16]
+loss: {bce_weight: 1.0, dice_weight: 1.0}
+augment:
+  bias_db: 1.5        # uniform per-band offset, +-dB
+  noise_db: 0.5       # Gaussian sigma, dB
+  flips: true
+  rot90: true
+  quantize: true      # same uint8 quantization as the demo scene
+optim:
+  lr_decoder: 3.0e-4
+  lr_encoder: 1.0e-4
+  weight_decay: 1.0e-4
+profiles:
+  full:
+    crop: 256
+    crops_per_chip: 4
+    batch: 16
+    epochs: 60
+    warmup_epochs: 3
+    val_every: 1
+    ckpt_every: 5
+    time_budget_min: 0      # 0 = no budget
+    threads: 0              # 0 = torch default
+    amp: true               # CUDA only
+  cpu:
+    crop: 128
+    crops_per_chip: 4
+    batch: 16
+    epochs: 24
+    warmup_epochs: 1
+    val_every: 4
+    ckpt_every: 2
+    time_budget_min: 85
+    threads: 10
+    amp: false
+  smoke:
+    crop: 64
+    crops_per_chip: 1
+    batch: 4
+    epochs: 2
+    warmup_epochs: 1
+    val_every: 1
+    ckpt_every: 1
+    time_budget_min: 0
+    threads: 4
+    amp: false
+    max_chips: 8

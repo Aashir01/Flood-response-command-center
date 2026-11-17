@@ -1,0 +1,33 @@
+# Hand-authored LLM replies for the Library demo questions, turned into FakeLLM recordings by
+#   uv run python scripts/record_llm_demo.py --authored data/demo/library/llm_authored.yaml
+# No API key was available when these were made. They were written by the implementing agent
+# from the numbered sentences printed by `record_llm_demo.py --show`, following the system
+# prompt in organs/library/src/stitch_library/core/context.py. Recordings carry
+# model = "hand-authored". Re-record with a real provider (`--provider anthropic`) when a key is
+# available; the Library verifies replayed replies exactly like live ones.
+# Keys are "<demo id>/<lang>". Questions stopped by a refusal gate (food en/ur, shelter ur) never
+# reach the LLM and need no reply.
+water/en:
+  claims:
+    - text: "Store at least one gallon of water per person per day for several days, for drinking and sanitation."
+      support: [{chunk: C1, sentence: 6}, {chunk: C2, sentence: 2}]
+    - text: "A normally active person needs about three quarters of a gallon of fluid daily, from water and other beverages."
+      support: [{chunk: C1, sentence: 7}]
+  insufficient: false
+  conflict: false
+water/ur:
+  claims:
+    - text: "کئی دنوں کے لیے فی شخص روزانہ کم از کم ایک گیلن پانی ذخیرہ کریں، پینے اور صفائی دونوں کے لیے۔"
+      support: [{chunk: C2, sentence: 8}]
+    - text: "ایک عام سرگرم شخص کو روزانہ تقریباً تین چوتھائی گیلن مشروبات کی ضرورت ہوتی ہے۔"
+      support: [{chunk: C1, sentence: 1}]
+    - text: "بہت زیادہ گرمی میں پانی کی ضرورت دوگنی ہو سکتی ہے۔"
+      support: [{chunk: C1, sentence: 6}]
+  insufficient: false
+  conflict: false
+# The only passage that clears the evidence gate is about sheltering in place at home, which
+# does not say what shelter to provide to displaced families. The honest reply is "insufficient".
+shelter/en:
+  claims: []
+  insufficient: true
+  conflict: false

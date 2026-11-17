@@ -1,0 +1,61 @@
+{
+  "scenes": [
+    {
+      "region_id": "pk-sindh",
+      "scene_id": "s1-rtc-pk-sindh-2022-08-27",
+      "date": "2022-08-27",
+      "acquired": "2022-08-27T13:36:21.995016Z",
+      "sensor": "Sentinel-1A C-SAR IW (VV+VH), RTC gamma0 converted to sigma0",
+      "orbit_state": "ascending",
+      "relative_orbit": 42,
+      "file": "scenes/s1-rtc-pk-sindh-2022-08-27.tif",
+      "sha256": "9092ecece01c3524a4e46b45ebd2ed6f6bdad07a7e409eb46fa98b61a34a24d1",
+      "bytes": 12681369,
+      "crs": "EPSG:32642",
+      "resolution_m": 10.0,
+      "shape": [
+        2560,
+        2560
+      ],
+      "bounds_utm": [
+        357670.0,
+        2921120.0,
+        383270.0,
+        2946720.0
+      ],
+      "bbox": [
+        67.57013,
+        26.40315,
+        67.82961,
+        26.63658
+      ],
+      "incidence_deg": [
+        40.28,
+        42.15
+      ],
+      "valid_fraction": 1.0,
+      "quant": {
+        "lo": -35.0,
+        "hi": 5.0,
+        "nodata": 0,
+        "levels": 254
+      },
+      "validated_region": false,
+      "source": {
+        "provider": "Microsoft Planetary Computer, collection sentinel-1-rtc",
+        "item_id": "S1A_IW_GRDH_1SDV_20220827T133609_20220827T133634_044739_055782_rtc",
+        "stac_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1A_IW_GRDH_1SDV_20220827T133609_20220827T133634_044739_055782_rtc",
+        "processor": "Catalyst (RTC)"
+      },
+      "license": "CC-BY-4.0 (Planetary Computer sentinel-1-rtc); Copernicus Sentinel data terms (free, full and open)",
+      "attribution": "Contains modified Copernicus Sentinel data 2022, processed by Catalyst; hosted by Microsoft Planetary Computer",
+      "perm_water": {
+        "file": "jrc_perm_water_pk-sindh.tif",
+        "sha256": "d1901037fcb8c6ae50b6f552863ceb398cd41408c4f1f3777e2aaf78379ea379",
+        "source": "JRC Global Surface Water v1.4 (1984-2021) occurrence, tile 60E_30N",
+        "threshold": 50,
+        "license": "Copernicus Programme, free of charge without restriction of use; cite Pekel et al. 2016"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "channels": [
+    "VV",
+    "VH",
+    "VV-VH"
+  ],
+  "clip_db": [
+    -35.0,
+    5.0
+  ],
+  "mean": [
+    -9.2980791532759,
+    -15.47896602942764,
+    6.180886876151741
+  ],
+  "std": [
+    2.139717842421695,
+    2.2787462372193406,
+    2.738235434621614
+  ],
+  "input": "sigma0 dB, (1, 2, H, W) VV then VH, H and W multiples of 32",
+  "computed_on": "sen1floods11 hand-labeled train split (8 chips)"
+}
