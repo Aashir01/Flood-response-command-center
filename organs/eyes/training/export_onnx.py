@@ -105,7 +105,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--work", type=Path, default=REPO / "data" / "raw" / "eyes-export")
     ap.add_argument("--max-chips", type=int, default=0)
     ap.add_argument("--calib", type=int, default=200)
+    ap.add_argument("--models-out", type=Path, default=MODELS, help="where the shipped files go")
     args = ap.parse_args(argv)
+    models_dir: Path = args.models_out
     cfg = yaml.safe_load(args.config.read_text())
     root = args.data_root or (REPO / cfg["data_root"])
     work: Path = args.work
@@ -151,17 +153,33 @@ def main(argv: list[str] | None = None) -> int:
     crops = [s[0] for s in epoch_samples(rng, train, 256, 1, aug)][: args.calib]
     pre_q = work / "fp32_pre.onnx"
     quant_pre_process(str(fp32), str(pre_q))
-    int8 = work / "int8.onnx"
-    quantize_static(
-        str(pre_q),
-        str(int8),
-        CalibReader(crops),
-        quant_format=QuantFormat.QDQ,
-        per_channel=True,
-        activation_type=QuantType.QUInt8,
-        weight_type=QuantType.QInt8,
-        calibrate_method=CalibrationMethod.MinMax,
-    )
+    # int8 candidates: plain MinMax calibration over every node (the design default), and the
+    # same with the first and last convolutions kept in float. The stem sees raw normalized
+    # dB with a long tail and the head produces the logit itself, so these two layers carry most
+    # of the quantization error at the decision boundary (logit 0). The candidate that passes
+    # P5 with the highest mask agreement is the int8 row.
+    convs = [n.name for n in onnx.load(str(pre_q)).graph.node if n.op_type == "Conv"]
+    int8_cands: dict[str, tuple[Path, list[str]]] = {
+        "minmax": (work / "int8_minmax.onnx", []),
+        "minmax_float_stem_head": (work / "int8_minmax_fsh.onnx", [convs[0], convs[-1]]),
+        # Encoder-only int8 (11.2 M of 12.5 M parameters): the light decoder stays float.
+        "minmax_float_decoder": (
+            work / "int8_minmax_fdec.onnx",
+            [c for c in convs if not c.startswith("/net/encoder/")] + [convs[0]],
+        ),
+    }
+    for _cname, (path, exclude) in int8_cands.items():
+        quantize_static(
+            str(pre_q),
+            str(path),
+            CalibReader(crops),
+            quant_format=QuantFormat.QDQ,
+            per_channel=True,
+            activation_type=QuantType.QUInt8,
+            weight_type=QuantType.QInt8,
+            calibrate_method=CalibrationMethod.MinMax,
+            nodes_to_exclude=exclude,
+        )
     del train
 
     valid = load_split(root, "valid", args.max_chips)
@@ -200,28 +218,40 @@ def main(argv: list[str] | None = None) -> int:
             "mask_agreement": float(np.mean(agree)),
         }
 
-    rows: dict[str, dict[str, Any]] = {}
-    for name, path in (("fp32", fp32), ("fp16", fp16), ("int8", int8)):
+    def measure(path: Path) -> dict[str, Any]:
         sess = ort_session(path)
-        rows[name] = {
+        return {
             "bytes": path.stat().st_size,
             "val_iou": val_iou(sess, valid),
             "latency_s_256_2threads": latency(sess),
             **tile_check(sess),
         }
+
+    rows: dict[str, dict[str, Any]] = {}
+    for name, path in (("fp32", fp32), ("fp16", fp16)):
+        rows[name] = measure(path)
         print(name, rows[name], flush=True)
+    base = rows["fp32"]
 
     # The design 3.5 order, with the P5 tolerance (mask agreement >= 99.5%, IoU drop <= 1
     # point) as an eligibility condition for the reduced-precision variants.
-    base = rows["fp32"]
-
-    def ok_reduced(name: str) -> bool:
-        r = rows[name]
+    def passes(r: dict[str, Any]) -> bool:
         return bool(
             r["mask_agreement"] >= 0.995
             and base["val_iou"] - r["val_iou"] <= 0.01
             and r["bytes"] < SIZE_LIMIT
         )
+
+    int8_rows: dict[str, dict[str, Any]] = {}
+    for cname, (path, exclude) in int8_cands.items():
+        int8_rows[cname] = {**measure(path), "float_nodes": exclude}
+        print("int8", cname, int8_rows[cname], flush=True)
+    best = max(int8_rows, key=lambda k: (passes(int8_rows[k]), int8_rows[k]["mask_agreement"]))
+    rows["int8"] = {**int8_rows[best], "calibration": best, "candidates": int8_rows}
+    int8 = int8_cands[best][0]
+
+    def ok_reduced(name: str) -> bool:
+        return passes(rows[name])
 
     if (
         ok_reduced("int8")
@@ -234,11 +264,11 @@ def main(argv: list[str] | None = None) -> int:
         chosen = "fp32"
     if rows[chosen]["bytes"] >= SIZE_LIMIT:
         raise SystemExit("no variant fits the 50 MB limit")
-    MODELS.mkdir(parents=True, exist_ok=True)
-    shipped = MODELS / "eyes_unet_r18.onnx"
+    models_dir.mkdir(parents=True, exist_ok=True)
+    shipped = models_dir / "eyes_unet_r18.onnx"
     src = {"fp32": fp32, "fp16": fp16, "int8": int8}[chosen]
     shutil.copyfile(src, shipped)
-    (MODELS / "preprocess.json").write_text(json.dumps(pre, indent=2) + "\n")
+    (models_dir / "preprocess.json").write_text(json.dumps(pre, indent=2) + "\n")
     shipped_check = tile_check(ort_session(shipped))
     check = {
         "variant": chosen,
@@ -255,8 +285,9 @@ def main(argv: list[str] | None = None) -> int:
         "onnx_val_iou": rows[chosen]["val_iou"],
         "val_iou_diff_points": 100 * abs(torch_iou - rows[chosen]["val_iou"]),
         "variants": rows,
-        "selection_rule": "int8 if mask agreement >= 99.5%, val IoU drop <= 1.0 point and "
-        "latency <= fp32; else fp16 under the same tolerance; else fp32 if < 50,000,000 bytes",
+        "selection_rule": "int8 (best passing calibration candidate) if mask agreement >= "
+        "99.5%, val IoU drop <= 1.0 point and latency <= fp32; else fp16 under the same "
+        "tolerance; else fp32 if < 50,000,000 bytes",
         "versions": {
             "torch": torch.__version__,
             "onnx": onnx.__version__,
@@ -264,7 +295,7 @@ def main(argv: list[str] | None = None) -> int:
         },
         "checkpoint_epoch": int(ck.get("epoch", -1)),
     }
-    (MODELS / "export_check.json").write_text(json.dumps(check, indent=2) + "\n")
+    (models_dir / "export_check.json").write_text(json.dumps(check, indent=2) + "\n")
     print(json.dumps(check, indent=2))
     return 0
 
