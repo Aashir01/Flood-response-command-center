@@ -9,15 +9,15 @@
     5.0
   ],
   "mean": [
-    -9.2980791532759,
-    -15.47896602942764,
-    6.180886876151741
+    -10.44955767166718,
+    -17.269760282101466,
+    6.820202610434291
   ],
   "std": [
-    2.139717842421695,
-    2.2787462372193406,
-    2.738235434621614
+    4.05170420412621,
+    4.569690258043901,
+    3.3228025611020895
   ],
   "input": "sigma0 dB, (1, 2, H, W) VV then VH, H and W multiples of 32",
-  "computed_on": "sen1floods11 hand-labeled train split (8 chips)"
+  "computed_on": "sen1floods11 hand-labeled train split (252 chips)"
 }

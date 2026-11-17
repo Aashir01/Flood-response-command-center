@@ -2,40 +2,99 @@
   "variant": "int8",
   "model_variant": "unet-resnet18-s1-int8",
   "file": "eyes_unet_r18.onnx",
-  "sha256": "fca41c50e8253989d0ca77572d6eb64c4c08b0dee2e85245a9904a8d147eca5f",
-  "bytes": 12640566,
+  "sha256": "ed4f19cb7f6fe11d932b9fa9c288fcdc6816bee84940ba660b3d4625084161c6",
+  "bytes": 12666723,
   "opset": 17,
-  "n_tiles": 8,
+  "n_tiles": 16,
   "tile": 256,
   "tiles_from": "sen1floods11 hand-labeled validation split, random 256 crops, seed 2",
-  "max_abs_logit_diff": 1.1962506771087646,
-  "mean_abs_logit_diff": 0.04528250079602003,
-  "mask_agreement": 0.9792938232421875,
-  "torch_val_iou": 0.011400982039134734,
-  "onnx_val_iou": 0.010839655733237216,
-  "val_iou_diff_points": 0.05613263058975183,
+  "max_abs_logit_diff": 4.66846227645874,
+  "mean_abs_logit_diff": 0.10521357879042625,
+  "mask_agreement": 0.9970779418945312,
+  "torch_val_iou": 0.6922473970715999,
+  "onnx_val_iou": 0.6918626156708418,
+  "val_iou_diff_points": 0.03847814007580386,
   "variants": {
     "fp32": {
       "bytes": 49854314,
-      "val_iou": 0.011400982039134734,
-      "latency_s_256_2threads": 0.17543735000072047
+      "val_iou": 0.692247124813873,
+      "latency_s_256_2threads": 0.03670056449846015,
+      "max_abs_logit_diff": 5.91278076171875e-05,
+      "mean_abs_logit_diff": 1.4475672003300133e-06,
+      "mask_agreement": 1.0
     },
     "fp16": {
       "bytes": 24957559,
-      "val_iou": 0.011394744341488268,
-      "latency_s_256_2threads": 0.17348599998513237
+      "val_iou": 0.692310475546989,
+      "latency_s_256_2threads": 0.03735008049989119,
+      "max_abs_logit_diff": 0.30404186248779297,
+      "mean_abs_logit_diff": 0.004394246687297709,
+      "mask_agreement": 0.9998369216918945
     },
     "int8": {
-      "bytes": 12640566,
-      "val_iou": 0.010839655733237216,
-      "latency_s_256_2threads": 0.09794569999212399
+      "bytes": 12666723,
+      "val_iou": 0.6918626156708418,
+      "latency_s_256_2threads": 0.021617986501951236,
+      "max_abs_logit_diff": 4.66846227645874,
+      "mean_abs_logit_diff": 0.10521357879042625,
+      "mask_agreement": 0.9970779418945312,
+      "float_nodes": [
+        "/net/encoder/conv1/Conv",
+        "/net/segmentation_head/segmentation_head.0/Conv"
+      ],
+      "calibration": "minmax_float_stem_head",
+      "candidates": {
+        "minmax": {
+          "bytes": 12640725,
+          "val_iou": 0.691535222478863,
+          "latency_s_256_2threads": 0.026746619503683178,
+          "max_abs_logit_diff": 3.703713893890381,
+          "mean_abs_logit_diff": 0.12452720990404487,
+          "mask_agreement": 0.9970741271972656,
+          "float_nodes": []
+        },
+        "minmax_float_stem_head": {
+          "bytes": 12666723,
+          "val_iou": 0.6918626156708418,
+          "latency_s_256_2threads": 0.021617986501951236,
+          "max_abs_logit_diff": 4.66846227645874,
+          "mean_abs_logit_diff": 0.10521357879042625,
+          "mask_agreement": 0.9970779418945312,
+          "float_nodes": [
+            "/net/encoder/conv1/Conv",
+            "/net/segmentation_head/segmentation_head.0/Conv"
+          ]
+        },
+        "minmax_float_decoder": {
+          "bytes": 16497019,
+          "val_iou": 0.6919144200395526,
+          "latency_s_256_2threads": 0.027303593004035065,
+          "max_abs_logit_diff": 4.349997043609619,
+          "mean_abs_logit_diff": 0.09877254674211144,
+          "mask_agreement": 0.9970455169677734,
+          "float_nodes": [
+            "/net/decoder/blocks.0/conv1/conv1.0/Conv",
+            "/net/decoder/blocks.0/conv2/conv2.0/Conv",
+            "/net/decoder/blocks.1/conv1/conv1.0/Conv",
+            "/net/decoder/blocks.1/conv2/conv2.0/Conv",
+            "/net/decoder/blocks.2/conv1/conv1.0/Conv",
+            "/net/decoder/blocks.2/conv2/conv2.0/Conv",
+            "/net/decoder/blocks.3/conv1/conv1.0/Conv",
+            "/net/decoder/blocks.3/conv2/conv2.0/Conv",
+            "/net/decoder/blocks.4/conv1/conv1.0/Conv",
+            "/net/decoder/blocks.4/conv2/conv2.0/Conv",
+            "/net/segmentation_head/segmentation_head.0/Conv",
+            "/net/encoder/conv1/Conv"
+          ]
+        }
+      }
     }
   },
-  "selection_rule": "int8 if val IoU drop <= 1.0 point and latency <= fp32; else fp16; else fp32 if < 50,000,000 bytes",
+  "selection_rule": "int8 (best passing calibration candidate) if mask agreement >= 99.5%, val IoU drop <= 1.0 point and latency <= fp32; else fp16 under the same tolerance; else fp32 if < 50,000,000 bytes",
   "versions": {
     "torch": "2.15.0+cpu",
     "onnx": "1.23.2",
     "onnxruntime": "1.32.0"
   },
-  "checkpoint_epoch": 1
+  "checkpoint_epoch": 41
 }
