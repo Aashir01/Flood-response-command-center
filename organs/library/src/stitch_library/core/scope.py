@@ -38,6 +38,15 @@ _QUANTITY_WORDS = frozenset(
         "per",
         "capita",
         "kitna",
+        # Urdu question words for amounts (folded forms); agent-authored, needs native review.
+        "کتنا",
+        "کتنی",
+        "کتنے",
+        "فی",
+        "کم",
+        "از",
+        "زیادہ",
+        "مقدار",
     ]
 )
 _DENOMINATORS = frozenset(["person", "day", "each", "every", "household", "family"])
@@ -61,6 +70,22 @@ _GENERIC = frozenset(
         "get",
         "kept",
         "keep",
+        # Urdu auxiliaries and generic verbs (agent-authored, needs native review).
+        "چاہیے",
+        "چاہئے",
+        "چاہئیں",
+        "جائے",
+        "جائیں",
+        "دیا",
+        "دی",
+        "دیے",
+        "فراہم",
+        "درکار",
+        "ہوتا",
+        "ہوتی",
+        "ہوتے",
+        "ملنا",
+        "کیا",
     ]
 )
 _PER_PERSON_Q = re.compile(
@@ -113,10 +138,25 @@ def quantity_supported(query: str, sentences: Iterable[str]) -> bool:
     return any(states_quantity(query, s) for s in sentences)
 
 
+def _root(tok: str) -> str:
+    """English ``-ed`` / ``-ing`` stripped (``boiled`` and ``boil`` match); others unchanged."""
+    if tok.isascii():
+        if len(tok) > 5 and tok.endswith("ed"):
+            return tok[:-2]
+        if len(tok) > 6 and tok.endswith("ing"):
+            return tok[:-3]
+    return tok
+
+
 def states_quantity(query: str, sentence: str) -> bool:
     """``sentence`` shares a topic term with the question and states the asked quantity."""
     terms = topic_terms(query)
-    if terms and not terms & concept_tokens(search_text(sentence)):
+    # At least two shared topic terms (one if the question has only one), as the module
+    # docstring states. With one, "water" alone let a sentence about household drinking water
+    # answer a question about cholera-centre water (eval q045).
+    need = min(2, len(terms))
+    shared = {_root(t) for t in terms} & {_root(t) for t in concept_tokens(search_text(sentence))}
+    if terms and len(shared) < need:
         return False
     per = asked_per(query)
     if per:

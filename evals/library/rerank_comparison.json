@@ -1,0 +1,52 @@
+{
+  "en": {
+    "rerank": {
+      "dev_cost": 0,
+      "dev_false_answers": 0,
+      "dev_false_refusals": 0,
+      "dev_retrieval_misses": 0,
+      "mrr": 1.0,
+      "n": 18,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "threshold": -0.8403
+    },
+    "reranker_helps": true,
+    "rrf": {
+      "dev_cost": 3,
+      "dev_false_answers": 0,
+      "dev_false_refusals": 3,
+      "dev_retrieval_misses": 0,
+      "mrr": 0.9444,
+      "n": 18,
+      "recall@1": 0.8889,
+      "recall@3": 1.0,
+      "threshold": 0.8861
+    }
+  },
+  "ur": {
+    "rerank": {
+      "dev_cost": 4,
+      "dev_false_answers": 0,
+      "dev_false_refusals": 2,
+      "dev_retrieval_misses": 2,
+      "mrr": 0.8333,
+      "n": 12,
+      "recall@1": 0.8333,
+      "recall@3": 0.8333,
+      "threshold": 0.0457
+    },
+    "reranker_helps": false,
+    "rrf": {
+      "dev_cost": 3,
+      "dev_false_answers": 0,
+      "dev_false_refusals": 0,
+      "dev_retrieval_misses": 3,
+      "mrr": 0.75,
+      "n": 12,
+      "recall@1": 0.75,
+      "recall@3": 0.75,
+      "threshold": 0.86
+    }
+  }
+}

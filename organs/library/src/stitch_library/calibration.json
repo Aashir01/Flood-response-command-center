@@ -1,0 +1,318 @@
+{
+  "profiles": {
+    "e5-small-int8+mmarco-int8": {
+      "calibrated_at": "2026-11-17",
+      "corpus": "committed",
+      "cost_weights": {
+        "false_answer": 3.0,
+        "false_refusal": 1.0
+      },
+      "counts": {
+        "evidence_neg": 30,
+        "evidence_pos": 27,
+        "items": 62,
+        "scope_neg": 10
+      },
+      "dev_ids": [
+        "e001",
+        "e002",
+        "e003",
+        "e004",
+        "e005",
+        "e006",
+        "e007",
+        "e008",
+        "e009",
+        "e010",
+        "e011",
+        "e012",
+        "e013",
+        "e014",
+        "e015",
+        "e016",
+        "e017",
+        "e018",
+        "e019",
+        "e020",
+        "e021",
+        "e022",
+        "e023",
+        "e024",
+        "e025",
+        "e026",
+        "e027",
+        "e028",
+        "e029",
+        "e030",
+        "e031",
+        "e032",
+        "e033",
+        "e034",
+        "e035",
+        "e036",
+        "e037",
+        "e038",
+        "e039",
+        "e040",
+        "e041",
+        "e042",
+        "q003",
+        "q004",
+        "q005",
+        "q006",
+        "q007",
+        "q009",
+        "q010",
+        "q016",
+        "q017",
+        "q019",
+        "q024",
+        "q028",
+        "q030",
+        "q031",
+        "q037",
+        "q038",
+        "q040",
+        "q044",
+        "q048",
+        "q050"
+      ],
+      "dev_ids_sha256": "47180904bcfa088fc588bd8de3ee1b9eb9e2c2a1a19ea7a6436a5544909f3992",
+      "embedder": {
+        "id": "e5-small-int8",
+        "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+      },
+      "pack_content_sha256": "108179a7ecf4fbd9c4a3fdc717f1ed03a6ef32810e9e1522d990fcb3d9e70013",
+      "provisional": false,
+      "report": {
+        "en.dense": {
+          "false_answer_rate": 0.0,
+          "false_answers": 0,
+          "false_refusal_rate": 0.16666666666666666,
+          "false_refusals": 3,
+          "n_neg": 16,
+          "n_pos": 18,
+          "threshold": 0.8861497837774885
+        },
+        "en.rerank": {
+          "false_answer_rate": 0.0,
+          "false_answers": 0,
+          "false_refusal_rate": 0.0,
+          "false_refusals": 0,
+          "n_neg": 16,
+          "n_pos": 18,
+          "threshold": -0.8403123021125793
+        },
+        "pooled.dense": {
+          "cost": 3.0,
+          "false_answers": 1,
+          "false_refusals": 0,
+          "n_neg": 30,
+          "n_pos": 27,
+          "threshold": 0.863255895629458
+        },
+        "pooled.rerank": {
+          "cost": 0.0,
+          "false_answers": 0,
+          "false_refusals": 0,
+          "n_neg": 16,
+          "n_pos": 18,
+          "threshold": -0.8403123021125793
+        },
+        "scope": {
+          "cost": 6.0,
+          "false_answers": 2,
+          "false_refusals": 0,
+          "n_neg": 10,
+          "n_pos": 52,
+          "threshold": 0.8236121213545513
+        },
+        "ur.dense": {
+          "false_answer_rate": 0.0,
+          "false_answers": 0,
+          "false_refusal_rate": 0.0,
+          "false_refusals": 0,
+          "n_neg": 14,
+          "n_pos": 9,
+          "threshold": 0.860021366620211
+        }
+      },
+      "reranker": {
+        "id": "mmarco-int8",
+        "revision": "1427fd652930e4ba29e8149678df786c240d8825"
+      },
+      "seed": 0,
+      "skipped_ids": [
+        "e016",
+        "q019",
+        "q030",
+        "q040",
+        "q044"
+      ],
+      "tau_evid": {
+        "en": {
+          "dense": 0.88615,
+          "rerank": -0.840312
+        },
+        "pooled": {
+          "dense": 0.863256,
+          "rerank": -0.840312
+        },
+        "ur": {
+          "dense": 0.860021
+        }
+      },
+      "tau_scope": 0.823612,
+      "warnings": [
+        "ur/rerank: scorer did not run for this language"
+      ]
+    },
+    "e5-small-int8+none": {
+      "calibrated_at": "2026-11-17",
+      "corpus": "committed",
+      "cost_weights": {
+        "false_answer": 3.0,
+        "false_refusal": 1.0
+      },
+      "counts": {
+        "evidence_neg": 30,
+        "evidence_pos": 27,
+        "items": 62,
+        "scope_neg": 10
+      },
+      "dev_ids": [
+        "e001",
+        "e002",
+        "e003",
+        "e004",
+        "e005",
+        "e006",
+        "e007",
+        "e008",
+        "e009",
+        "e010",
+        "e011",
+        "e012",
+        "e013",
+        "e014",
+        "e015",
+        "e016",
+        "e017",
+        "e018",
+        "e019",
+        "e020",
+        "e021",
+        "e022",
+        "e023",
+        "e024",
+        "e025",
+        "e026",
+        "e027",
+        "e028",
+        "e029",
+        "e030",
+        "e031",
+        "e032",
+        "e033",
+        "e034",
+        "e035",
+        "e036",
+        "e037",
+        "e038",
+        "e039",
+        "e040",
+        "e041",
+        "e042",
+        "q003",
+        "q004",
+        "q005",
+        "q006",
+        "q007",
+        "q009",
+        "q010",
+        "q016",
+        "q017",
+        "q019",
+        "q024",
+        "q028",
+        "q030",
+        "q031",
+        "q037",
+        "q038",
+        "q040",
+        "q044",
+        "q048",
+        "q050"
+      ],
+      "dev_ids_sha256": "47180904bcfa088fc588bd8de3ee1b9eb9e2c2a1a19ea7a6436a5544909f3992",
+      "embedder": {
+        "id": "e5-small-int8",
+        "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+      },
+      "pack_content_sha256": "108179a7ecf4fbd9c4a3fdc717f1ed03a6ef32810e9e1522d990fcb3d9e70013",
+      "provisional": false,
+      "report": {
+        "en.dense": {
+          "false_answer_rate": 0.0,
+          "false_answers": 0,
+          "false_refusal_rate": 0.16666666666666666,
+          "false_refusals": 3,
+          "n_neg": 16,
+          "n_pos": 18,
+          "threshold": 0.8861497837774885
+        },
+        "pooled.dense": {
+          "cost": 3.0,
+          "false_answers": 1,
+          "false_refusals": 0,
+          "n_neg": 30,
+          "n_pos": 27,
+          "threshold": 0.863255895629458
+        },
+        "scope": {
+          "cost": 6.0,
+          "false_answers": 2,
+          "false_refusals": 0,
+          "n_neg": 10,
+          "n_pos": 52,
+          "threshold": 0.8236121213545513
+        },
+        "ur.dense": {
+          "false_answer_rate": 0.0,
+          "false_answers": 0,
+          "false_refusal_rate": 0.0,
+          "false_refusals": 0,
+          "n_neg": 14,
+          "n_pos": 9,
+          "threshold": 0.860021366620211
+        }
+      },
+      "reranker": {
+        "id": "none",
+        "revision": "none"
+      },
+      "seed": 0,
+      "skipped_ids": [
+        "e016",
+        "q019",
+        "q030",
+        "q040",
+        "q044"
+      ],
+      "tau_evid": {
+        "en": {
+          "dense": 0.88615
+        },
+        "pooled": {
+          "dense": 0.863256
+        },
+        "ur": {
+          "dense": 0.860021
+        }
+      },
+      "tau_scope": 0.823612,
+      "warnings": []
+    }
+  },
+  "version": 1
+}

@@ -184,7 +184,9 @@ def _per(tokens: list[str]) -> str | None:
             day = True
         elif t in _PER_PERSON and (prev in ("per", "each", "فی") or i == 0):
             person = True
-        elif prev == "per" and t in _UNIT_ALIASES and other is None:
+        elif prev in ("per", "each") and t in _UNIT_ALIASES and other is None:
+            # "per gallon", "to each gallon": a denominator unit. A later quantity of the same
+            # unit ("8 drops ..., or 6 drops ..., to each gallon") ends the clause first.
             other = _UNIT_ALIASES[t].unit
     if person and day:
         return "person_day"
@@ -193,6 +195,42 @@ def _per(tokens: list[str]) -> str | None:
     if day:
         return "day"
     return other
+
+
+PER_WINDOW = 14  # tokens after the unit that may hold its denominator ("... to each gallon")
+_UR_PER_PERSON_BEFORE = re.compile(r"(?:فی|ہر) (?:شخص|کس|فرد)")
+_UR_PER_DAY_BEFORE = re.compile(r"روزانہ|یومیہ|فی دن|ہر روز")
+_LOOKBACK = 40  # characters before the number, within the same clause
+
+
+def _per_before(s: str, start: int) -> set[str]:
+    """Urdu denominators written before the number (``فی شخص روزانہ کم از کم ایک گیلن``).
+
+    Urdu puts "per person" and "daily" ahead of the amount, so the forward scan of ``_per``
+    misses them. Only the text after the last clause break (``،``, ``۔``, ``,``, ``.``) and at
+    most 40 characters back is read, so a denominator of an earlier clause does not leak in.
+    English is not read backwards.
+    """
+    window = s[max(0, start - _LOOKBACK) : start]
+    for brk in ("،", "۔", ",", ".", "\n", "؟", ":"):
+        window = window.rsplit(brk, 1)[-1]
+    out: set[str] = set()
+    if _UR_PER_PERSON_BEFORE.search(window):
+        out.add("person")
+    if _UR_PER_DAY_BEFORE.search(window):
+        out.add("day")
+    return out
+
+
+def _merge_per(after: str | None, before: set[str]) -> str | None:
+    if not before:
+        return after
+    parts = set((after or "").split("_")) & {"person", "day"} | before
+    if after and not set(after.split("_")) <= {"person", "day"}:
+        return after  # a non-person/day denominator ("per gallon") wins
+    if parts == {"person", "day"}:
+        return "person_day"
+    return parts.pop()
 
 
 def extract_quantities(text: str) -> list[QuantityMatch]:
@@ -205,14 +243,14 @@ def extract_quantities(text: str) -> list[QuantityMatch]:
         for j, tok in enumerate(tail[:3]):
             if tok in _UNIT_ALIASES:
                 unit = _UNIT_ALIASES[tok]
-                rest = tail[j + 1 : j + 9]
+                rest = tail[j + 1 : j + 1 + PER_WINDOW]
                 break
             if tok.isdigit():
                 break
         if unit is None:
             continue
         value = float(n.value)
-        per = unit.implied_per or _per(rest)
+        per = unit.implied_per or _merge_per(_per(rest), _per_before(s, n.start))
         out.append(
             QuantityMatch(value, unit.unit, unit.dimension, value * unit.factor, per, n.start)
         )

@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 """Numbers, quantities, the conflict detector, refusal gates and the quantity rule."""
 
 from __future__ import annotations
@@ -101,3 +102,18 @@ def test_rrf_hand_built() -> None:
     assert fused["b"] == 1 / 62 + 1 / 61
     assert fused["a"] == 1 / 61 and fused["c"] == 1 / 62
     assert next(x for x, _ in rrf([[("a", 3.0), ("b", 2.0)], [("b", 0.9), ("c", 0.5)]])) == "b"
+
+
+def test_urdu_denominators_before_the_number_count() -> None:
+    """Urdu writes "per person daily" before the amount. Found on the Brain demo question
+    (the Urdu water question was refused by the quantity rule although the committed Urdu page
+    says ``فی شخص روزانہ کم از کم ایک گیلن``)."""
+    s = "کئی دنوں کے لیے فی شخص روزانہ کم از کم ایک گیلن پانی ذخیرہ کریں، پینے اور صفائی دونوں کے لیے۔"
+    q = extract_quantities(s)
+    assert [(x.value, x.unit, x.per) for x in q] == [(1.0, "gal_us", "person_day")]
+    question = "سیلاب کی ہنگامی صورتحال میں ہر شخص کو روزانہ کتنا پینے کا پانی چاہیے؟"
+    assert quantity_supported(question, [s])
+    # A denominator in an earlier clause does not attach to a later number.
+    assert extract_quantities("فی شخص روزانہ پانی دیں، اور 30 منٹ انتظار کریں")[0].per is None
+    # English is never read backwards.
+    assert extract_quantities("per person: wait 30 minutes")[0].per is None

@@ -72,6 +72,17 @@ TOP_EVIDENCE = 3
 DEFAULT_TOP_K = 8
 
 
+@dataclass(frozen=True)
+class Probe:
+    """Signals the refusal gates see for one query (``LibraryService.probe``)."""
+
+    qlang: str
+    scope_score: float
+    rerank_score: float | None  # best rerank logit, None when the reranker did not run
+    dense_score: float | None  # best dense cosine among the returned hits
+    hits: list[ScoredHit]
+
+
 @dataclass
 class LibraryService:
     store: Store
@@ -274,6 +285,20 @@ class LibraryService:
             for h in res.hits
         ]
         return self._outcome(SearchGuidanceOut(hits=hits), [h.doc_id for h in hits], res.warnings)
+
+    def probe(self, query: str, top_k: int = DEFAULT_TOP_K) -> Probe:
+        """Gate signals for one query, without answering (calibration and evals)."""
+        q = self._query(query)
+        qvec = self._embed(q)
+        res = self._retrieve(q, None, top_k, Filters(), qvec)
+        rerank = [h.rerank for h in res.hits if h.rerank is not None]
+        return Probe(
+            qlang=res.qlang,
+            scope_score=scope_score(qvec, self.anchors),
+            rerank_score=max(rerank) if rerank else None,
+            dense_score=max((h.dense for h in res.hits), default=None),
+            hits=res.hits,
+        )
 
     # answer_with_citations ----------------------------------------------------------------
     def _closest(self, q: str, hits: Sequence[ScoredHit]) -> list[Citation]:

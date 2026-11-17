@@ -24,7 +24,7 @@ class Settings:
     dsn: str | None = None
     embed_model: str = DEFAULT_EMBED_MODEL
     rerank_model: str = DEFAULT_RERANK_MODEL
-    rerank_langs: tuple[str, ...] = ("en", "ur")
+    rerank_langs: tuple[str, ...] = ("en",)  # Urdu off: evals/library/rerank_comparison.json
     model_dir: Path = Path("data/raw/models")
     threads: int = 2
     llm_provider: str = "fake"
@@ -46,7 +46,7 @@ class Settings:
     @classmethod
     def from_env(cls) -> Settings:
         data_dir = Path(os.environ.get("STITCH_LIBRARY_DATA") or LIBRARY_DATA)
-        langs = os.environ.get("STITCH_RERANK_LANGS", "en,ur")
+        langs = os.environ.get("STITCH_RERANK_LANGS", "en")
         return cls(
             store=os.environ.get("STITCH_LIBRARY_STORE", "memory").strip().lower(),
             dsn=os.environ.get("STITCH_LIBRARY_DSN") or None,

@@ -63,6 +63,23 @@ def demo_service() -> LibraryService:
     return make_demo_service()
 
 
+@pytest.fixture(autouse=True)
+def _fake_process_service(
+    request: pytest.FixtureRequest, demo_service: LibraryService
+) -> Iterator[None]:
+    """Tool entry points (``CORES``) use the process-wide service. Unit and property tests get
+    the fake-model demo service so they never load model files; ``@pytest.mark.models`` tests
+    build their own."""
+    if request.node.get_closest_marker("models") is not None:
+        yield
+        return
+    set_service(demo_service)
+    try:
+        yield
+    finally:
+        set_service(None)
+
+
 @pytest.fixture
 def installed_service(demo_service: LibraryService) -> Iterator[LibraryService]:
     set_service(demo_service)
