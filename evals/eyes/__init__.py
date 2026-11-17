@@ -114,9 +114,10 @@ def shipped_model() -> tuple[Any, dict[str, Any]]:
     from stitch_eyes.core.infer import OnnxTileModel
     from stitch_eyes.service import MODEL_VERSION
 
-    check = json.loads((MODEL_DIR / "export_check.json").read_text(encoding="utf-8"))
+    model_dir = Path(os.environ.get("STITCH_EYES_MODEL_DIR", MODEL_DIR))
+    check = json.loads((model_dir / "export_check.json").read_text(encoding="utf-8"))
     model = OnnxTileModel(
-        MODEL_DIR / check["file"],
+        model_dir / check["file"],
         expected_sha256=check["sha256"],
         variant=check["model_variant"],
         version=MODEL_VERSION,
