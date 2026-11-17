@@ -7,7 +7,7 @@ table only (``mlp_results.json``, read by ``evals/oracle``).
 CPU only, about 1 to 3 minutes on the laptop (no GPU needed; also runs on the free Colab CPU
 runtime). Protocol:
 
-* Inputs: the 40 features of ``core.features``; NaN slots (missing upstream, short history) are set
+* Inputs: the 28 features of ``core.features``; NaN slots (missing upstream, short history) are set
   to 0 with a missing-indicator column; standardised with train_fit statistics; the station code
   is one-hot.
 * Output: 14 leads x 3 quantiles of the log-ratio target, pinball loss, Adam, early stopping on

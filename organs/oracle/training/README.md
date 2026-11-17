@@ -9,6 +9,7 @@ Colab CPU runtime if wanted.
 |---|---|
 | `train_gbm.py` | design matrix from the committed demo Parquet, fit with early stopping on train_val, refit on 1997-2011, CQR conformity scores on 2012-2016, write `models/` and `manifest.json` |
 | `config.yaml` | hyperparameters (design section 4.2), seed, leads, quantiles |
+| `train_mlp.py` | stretch comparison, not shipped: PyTorch quantile MLP on the same features and splits, CQR, scored with the GBM on identical rows; writes `mlp_results.json`, read by the eval. Run with `uv run --with torch python organs/oracle/training/train_mlp.py --seed 0` (CPU, about 2 min; PyTorch is not a project dependency) |
 | `oracle_train.ipynb` | Colab/laptop notebook: pins versions, clones at a commit, runs `train_gbm.py --resume`, verifies the manifest, copies to Drive |
 
 ```

@@ -56,8 +56,26 @@ does not strictly hold, and coverage is marginal over seasons, not conditional o
 conditions.
 
 ## Evaluation
-See `evals/results/oracle.json` and `docs/oracle-model.md` (filled in by `python -m evals.run
---organ oracle --seed 0`).
+`uv run python -m evals.run --organ oracle --seed 0` (details and by-lead tables in
+`docs/oracle-model.md`). Test split 2017-2023, five stations, m3/s of modeled discharge;
+CRPS is the quantile approximation over tau 0.1/0.5/0.9.
+
+| | Test 2017-2023 | 2022 flood season (stress) |
+|---|---|---|
+| CRPS, this model | 220 | 793 |
+| CRPS, probabilistic persistence | 420 | 1105 |
+| CRPS, day-of-year climatology | 488 | 1103 |
+| Coverage of the 0.5 / 0.8 / 0.9 interval | 0.538 / 0.790 / 0.897 | 0.528 / 0.706 / 0.797 |
+
+Test coverage meets nominal within 0.05 (ORA-P7). The 2022 season is under-covered (0.706 for a
+nominal 0.8); nothing was tuned on it. At lead 14 in the stress season the model is worse than
+climatology (CRPS 1359 vs 1130). The danger threshold is rarely crossed in the test years, and
+the exceedance Brier score is worse than climatology's, so exceedance probabilities are indicative
+only. No observed (gauge) validation was performed.
+
+Not shipped, compared in the eval: a Mondrian (monsoon/non-monsoon) CQR variant (0.8 coverage
+0.794 test, 0.741 stress) and a PyTorch quantile MLP (`training/train_mlp.py`; CRPS 234 test,
+760 stress).
 
 ## Reproducibility
 `uv run python organs/oracle/training/train_gbm.py` (about 4 minutes on an i5 laptop CPU, no GPU).

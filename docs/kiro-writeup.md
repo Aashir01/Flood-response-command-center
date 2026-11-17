@@ -39,6 +39,17 @@ Found by the properties and kept as named tests in `organs/ledger/tests/unit/tes
 
 Missed by the properties and found by the seeded eval (`evals/ledger`, 200 instances up to 200 districts): SCIP reported an all-zero plan as optimal on a 100-district problem with needs around 1.9e7 (varbound upgrade numerics), and the integer budget repair broke the equity floor by one unit. The property strategies stop at 12 districts and small populations, so neither shape was generated. Both are fixed (a rounded-LP guard with a safer retry, and floor-aware batched repairs) with regression tests. The honest lesson: the properties are strong on small instances and numerically extreme inputs, but they did not cover realistic sizes, so the eval is a necessary second check rather than a formality.
 
+### Oracle: properties, the eval, and what they did not prove
+
+The oracle spec lists ORA-P1 to P8 and extras X1 to X10 (`.kiro/specs/oracle-mcp/design.md` section 11). Each maps to a test in `organs/oracle/tests/` (17 `@given` tests on shared strategies in `tests/strategies.py`, plus unit tests; about 160 tests in under a minute with sockets blocked). P1 to P3 run on random quantile triples and score arrays through the repair and the conformal step; P4 and P5 run the whole forecast pipeline on a fast stub model, with shuffled input rows and with every row after `as_of` perturbed or deleted; P6 checks the exceedance CDF on random knots including zero-width ones; P8 is a contract test plus a wording lint over the sources, tool descriptions and docs.
+
+What the work showed:
+- The design's small-sample fallback multiplies the conformal score quantile by `1 + 1/sqrt(n)`. For coverage below 0.8 that quantile is negative, so multiplying would narrow the interval. The code adds `|Q|/sqrt(n)` instead, and a property test checks that the fallback widens and keeps nesting (P3). This was caught while writing the property, before any run, so it is a design fix rather than a found failure.
+- The eval's lead-widening check (ORA-R5.1) failed on the mean of the relative interval width, while the mean width in m³/s grows at every lead. Dry-season rows at Kotri, with medians near 0 m³/s, dominate a mean of ratios. The check now uses the mean width and the median relative width, and the report keeps the failing measure visible.
+- The properties prove the interval is ordered, nested and leak-free. They say nothing about coverage on real floods. The eval does: test coverage of the 0.8 interval is 0.790, but on the 2022 flood season it is 0.706, and at lead 14 in that season the model is worse than climatology. Both numbers are in the model card and `docs/oracle-model.md`, and nothing was tuned on them.
+- The data build found that the Open-Meteo Flood API returns no values before 1997 at these cells although its docs say 1984. The splits were moved and the decision logged in `docs/decisions.md`.
+- No observed (gauge) validation exists. The target is modeled GloFAS discharge, and the eval reports `observed_validation: "not performed"`.
+
 ## Hooks
 
 Five hooks in `.kiro/hooks/`: `on-save-organ-tests`, `on-save-contract-validate`, `on-spec-change-tasks` (agent action), `on-save-eval-dashboard`, `pre-commit-lint-secrets` (PreToolUse on `shell`, runs only for `git commit`). Each script was run by hand and tested. Not verified: that the Kiro hooks panel loads the files and that the events fire. A git `pre-commit` hook (`scripts/install_git_hooks.py`) runs the same guard for manual commits.
