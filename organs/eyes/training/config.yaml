@@ -64,6 +64,17 @@ profiles:
     time_budget_min: 200
     threads: 6
     amp: false
+  vultr:              # the design's full profile on the Vultr VPS CPU (2 vCPU, shared with prod), time-boxed
+    crop: 256
+    crops_per_chip: 4
+    batch: 16
+    epochs: 60
+    warmup_epochs: 3
+    val_every: 1
+    ckpt_every: 1
+    time_budget_min: 230
+    threads: 2
+    amp: false
   smoke:
     crop: 64
     crops_per_chip: 1
