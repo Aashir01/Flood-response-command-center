@@ -140,7 +140,7 @@ def main(argv: list[str] | None = None) -> int:
         ],
     }
     dest = EYES / f"reference_extent_{args.region}.geojson"
-    dest.write_text(json.dumps(fc, separators=(",", ":")) + "\n", encoding="utf-8")
+    dest.write_bytes((json.dumps(fc, separators=(",", ":")) + "\n").encode("utf-8"))
     print(f"wrote {dest} ({dest.stat().st_size} bytes), reference water {area_km2:.1f} km2")
     return 0
 
