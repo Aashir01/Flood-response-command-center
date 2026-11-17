@@ -1,0 +1,11 @@
+{
+  "note": "On-disk (unpacked) size budgets in MB for deploy/bin/check_images.py (deploy design 4.2). Measured values are in deploy/README.md; budgets are the measurement plus about 15% headroom.",
+  "images": {
+    "brain": { "budget_mb": 300, "module": "stitch_brain" },
+    "ledger": { "budget_mb": 700, "module": "stitch_ledger" },
+    "oracle": { "budget_mb": 720, "module": "stitch_oracle" },
+    "library": { "budget_mb": 950, "module": "stitch_library" },
+    "eyes": { "budget_mb": 800, "module": "stitch_eyes" },
+    "web": { "budget_mb": 120, "caddyfiles": ["/etc/caddy/Caddyfile", "/etc/caddy/Caddyfile.prod"] }
+  }
+}
