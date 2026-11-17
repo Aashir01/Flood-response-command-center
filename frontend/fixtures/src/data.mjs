@@ -1,4 +1,4 @@
-// Hand-authored, contract-shaped demo data for the Sindh Aug 2022 scene. Every ToolResult is
+﻿// Hand-authored, contract-shaped demo data for the Sindh Aug 2022 scene. Every ToolResult is
 // marked as a fixture (data source id `fixture-hand-authored`) and validated against the JSON Schemas
 // by tests/unit/fixtures.contract.test.ts. Replace with recorded streams via `npm run record`.
 import { createHash } from 'node:crypto';
@@ -165,7 +165,7 @@ export const guidance = {
     answer: 'Plan for at least 15 litres of water per person per day for drinking, cooking and hygiene.',
     citation: { ...SRC('water'), title: 'Demo excerpt: water supply guidance', page: 3, span: [120, 245], quote: 'Average water use for drinking, cooking and personal hygiene in any household is at least 15 litres per person per day.' },
     claim: 'Plan for at least 15 litres of water per person per day for drinking, cooking and hygiene.',
-    claim_ur: 'پینے، کھانا پکانے اور صفائی کے لیے فی شخص روزانہ کم از کم 15 لیٹر پانی کا بندوبست کریں۔',
+    claim_ur: 'Ù¾ÛŒÙ†Û’ØŒ Ú©Ú¾Ø§Ù†Ø§ Ù¾Ú©Ø§Ù†Û’ Ø§ÙˆØ± ØµÙØ§Ø¦ÛŒ Ú©Û’ Ù„ÛŒÛ’ ÙÛŒ Ø´Ø®Øµ Ø±ÙˆØ²Ø§Ù†Û Ú©Ù… Ø§Ø² Ú©Ù… 15 Ù„ÛŒÙ¹Ø± Ù¾Ø§Ù†ÛŒ Ú©Ø§ Ø¨Ù†Ø¯ÙˆØ¨Ø³Øª Ú©Ø±ÛŒÚºÛ”',
     quantities: [{ value: 15, unit: 'litre', per: 'person_day', claim_idx: 0 }],
   },
   food: {
@@ -173,7 +173,7 @@ export const guidance = {
     answer: 'Rations should supply about 2,100 kilocalories per person per day.',
     citation: { ...SRC('food'), title: 'Demo excerpt: food assistance guidance', page: 7, span: [40, 160], quote: 'The initial planning figure for the energy requirement of a population is 2,100 kilocalories per person per day.' },
     claim: 'Rations should supply about 2,100 kilocalories per person per day.',
-    claim_ur: 'راشن سے فی شخص روزانہ تقریباً 2,100 کلو کیلوری توانائی ملنی چاہیے۔',
+    claim_ur: 'Ø±Ø§Ø´Ù† Ø³Û’ ÙÛŒ Ø´Ø®Øµ Ø±ÙˆØ²Ø§Ù†Û ØªÙ‚Ø±ÛŒØ¨Ø§Ù‹ 2,100 Ú©Ù„Ùˆ Ú©ÛŒÙ„ÙˆØ±ÛŒ ØªÙˆØ§Ù†Ø§Ø¦ÛŒ Ù…Ù„Ù†ÛŒ Ú†Ø§ÛÛŒÛ’Û”',
     quantities: [{ value: 2100, unit: 'kcal', per: 'person_day', claim_idx: 0 }],
   },
   shelter: {
@@ -181,7 +181,7 @@ export const guidance = {
     answer: 'Provide at least 3.5 square metres of covered living space per person.',
     citation: { ...SRC('shelter'), title: 'Demo excerpt: shelter and settlement guidance', page: 12, span: [210, 330], quote: 'People have at least 3.5 square metres of covered living space per person.' },
     claim: 'Provide at least 3.5 square metres of covered living space per person.',
-    claim_ur: 'ہر شخص کے لیے کم از کم 3.5 مربع میٹر ڈھکی ہوئی رہائشی جگہ فراہم کریں۔',
+    claim_ur: 'ÛØ± Ø´Ø®Øµ Ú©Û’ Ù„ÛŒÛ’ Ú©Ù… Ø§Ø² Ú©Ù… 3.5 Ù…Ø±Ø¨Ø¹ Ù…ÛŒÙ¹Ø± ÚˆÚ¾Ú©ÛŒ ÛÙˆØ¦ÛŒ Ø±ÛØ§Ø¦Ø´ÛŒ Ø¬Ú¯Û ÙØ±Ø§ÛÙ… Ú©Ø±ÛŒÚºÛ”',
     quantities: [{ value: 3.5, unit: 'm2', per: 'person', claim_idx: 0 }],
   },
 };
@@ -205,7 +205,7 @@ export function libraryAnswer(key, { refuse = false, lang = 'en' } = {}) {
     claims: [{ text: lang === 'ur' ? g.claim_ur : g.claim, citation_idx: [0] }],
     refusal: null,
     quantities: g.quantities,
-    generation: { mode: 'extractive', model: null, provider: null },
+    generation: { mode: 'extractive', model: null, provider: 'none' },
   };
 }
 export const askAnswers = {
@@ -215,9 +215,9 @@ export const askAnswers = {
 
 // ---------- ledger ----------
 export const COMMODITIES = [
-  { id: 'water', name: 'Drinking water', name_ur: 'پینے کا پانی', unit: 'litre', unit_cost: 0.03, per_person_need: 70 },
-  { id: 'food', name: 'Food ration', name_ur: 'خوراک کا راشن', unit: 'ration', unit_cost: 4.5, per_person_need: 7 },
-  { id: 'shelter', name: 'Shelter kit', name_ur: 'پناہ گاہ کٹ', unit: 'kit', unit_cost: 38, per_person_need: 0.2 },
+  { id: 'water', name: 'Drinking water', name_ur: 'Ù¾ÛŒÙ†Û’ Ú©Ø§ Ù¾Ø§Ù†ÛŒ', unit: 'litre', unit_cost: 0.03, per_person_need: 70 },
+  { id: 'food', name: 'Food ration', name_ur: 'Ø®ÙˆØ±Ø§Ú© Ú©Ø§ Ø±Ø§Ø´Ù†', unit: 'ration', unit_cost: 4.5, per_person_need: 7 },
+  { id: 'shelter', name: 'Shelter kit', name_ur: 'Ù¾Ù†Ø§Û Ú¯Ø§Û Ú©Ù¹', unit: 'kit', unit_cost: 38, per_person_need: 0.2 },
 ];
 export const SUPPLY = { water: 300_000_000, food: 30_000_000, shelter: 700_000 };
 export const BUDGET = 120_000_000;

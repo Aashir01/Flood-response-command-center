@@ -182,3 +182,61 @@ def json_docs(max_leaves: int = 20) -> st.SearchStrategy[Any]:
         ),
         max_leaves=max_leaves,
     )
+
+
+class FaultyOrgan:
+    """Wraps a client and fails every call in one of the BRN-P3 failure modes: ``error``
+    (an ok:false ToolResult), ``timeout`` (transport timeout), ``exception`` (raises), ``hang``
+    (sleeps on the clock until the deadline) and ``invalid`` (schema-invalid result)."""
+
+    def __init__(self, inner: Any, mode: str, clock: Any = None) -> None:
+        self.inner = inner
+        self.organ = inner.organ
+        self.served_by = inner.served_by
+        self.mode = mode
+        self.clock = clock
+
+    async def start(self) -> None:
+        return None
+
+    async def close(self) -> None:
+        return None
+
+    async def list_tools(self) -> list[str]:
+        out: list[str] = await self.inner.list_tools()
+        return out
+
+    def health(self) -> Any:
+        return self.inner.health()
+
+    async def _fail(self, tool: str, args: dict[str, Any], ctx: Any) -> Any:
+        from stitch_brain.runtime.organs import CallOutcome, TransportError
+        from stitch_brain.runtime.recorded import not_found
+
+        if self.mode == "error":
+            res = not_found(self.organ, tool, args, ctx)
+            res["error"] = {"code": "UPSTREAM_UNAVAILABLE", "message": "down", "retryable": False}
+            return CallOutcome(result=res)
+        if self.mode == "timeout":
+            return CallOutcome(transport_error=TransportError("TIMEOUT", "timed out"))
+        if self.mode == "exception":
+            raise RuntimeError("organ client crashed")
+        if self.mode == "hang":
+            await self.clock.sleep(10_000)
+            raise AssertionError("hang outlived the deadline")
+        if self.mode == "invalid":
+            return CallOutcome(transport_error=TransportError("PROTOCOL", "contract: bad shape"))
+        raise ValueError(self.mode)
+
+    async def call_tool(self, tool: str, args: dict[str, Any], *, timeout_s: float, ctx: Any) -> Any:
+        return await self._fail(tool, args, ctx)
+
+    async def read_resource(self, uri: str, *, timeout_s: float, ctx: Any) -> Any:
+        return await self._fail("resource:districts", {"uri": uri}, ctx)
+
+
+def faulty_registry(down: Any, mode: str, clock: Any = None) -> Any:
+    reg = recorded_registry()
+    for organ in down:
+        reg.clients[organ] = FaultyOrgan(reg.clients[organ], mode, clock)
+    return reg

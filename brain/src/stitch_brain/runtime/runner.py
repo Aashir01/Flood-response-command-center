@@ -8,7 +8,14 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from stitch_brain.config import I18n, ScenarioCfg, load_i18n, load_rules, load_scenarios
+from stitch_brain.config import (
+    I18n,
+    ScenarioCfg,
+    load_confidence,
+    load_i18n,
+    load_rules,
+    load_scenarios,
+)
 from stitch_brain.core.briefing import StatusInputs, assemble, labels_for, section_status
 from stitch_brain.core.claims import SECTION_ORDER, ClaimDraft
 from stitch_brain.core.confidence import ConfidenceParams, confidence, organ_confidences
@@ -111,7 +118,7 @@ class BriefingRunner:
         self.clock = clock or RealClock()
         self.scenarios = dict(scenarios or load_scenarios())
         self.i18n = i18n or load_i18n()
-        self.conf_params = conf_params or ConfidenceParams()
+        self.conf_params: ConfidenceParams = conf_params or load_confidence()
         self.rules: RuleSet = rules or load_rules()
         self.llm = llm
 

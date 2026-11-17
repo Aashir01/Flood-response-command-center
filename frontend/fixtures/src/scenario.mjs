@@ -1,11 +1,11 @@
-// Builds one scenario: the SSE event list, the evidence documents and the Briefing.
+﻿// Builds one scenario: the SSE event list, the evidence documents and the Briefing.
 import {
   BUDGET, COMMODITIES, SUPPLY, T0, THRESHOLD, districtRows, eyesCompare, eyesSegment, iso, ledgerDistricts, ledgerOptimize, ledgerSensitivity,
   libraryAnswer, nameOf, oracleExplain, oracleForecast, sum, toolResult, uid, FIXTURE_SOURCE, CONTRACT_VERSION, guidance,
 } from './data.mjs';
 
 const fmt = (n, d = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
-const UNIT_UR = { litre: 'لیٹر', ration: 'راشن', kit: 'کٹ' };
+const UNIT_UR = { litre: 'Ù„ÛŒÙ¹Ø±', ration: 'Ø±Ø§Ø´Ù†', kit: 'Ú©Ù¹' };
 
 export const SCENARIOS = ['default-demo', 'conflict', 'organ-error', 'refusal', 'partial', 'offline-fallback'];
 
@@ -17,7 +17,7 @@ const NODES = [
   { id: 'library.water', organ: 'library', tool: 'answer_with_citations', kind: 'organ', from: 300, to: 1700, timeout: 20 },
   { id: 'library.food', organ: 'library', tool: 'answer_with_citations', kind: 'organ', from: 400, to: 1900, timeout: 20 },
   { id: 'library.shelter', organ: 'library', tool: 'answer_with_citations', kind: 'organ', from: 500, to: 2100, timeout: 20 },
-  { id: 'ledger.districts', organ: 'ledger', tool: 'resource:ledger.districts', kind: 'resource', from: 300, to: 700, timeout: 5 },
+  { id: 'ledger.districts', organ: 'ledger', tool: 'resource:districts', kind: 'resource', from: 300, to: 700, timeout: 5 },
   { id: 'ledger.optimize', organ: 'ledger', tool: 'optimize_allocation', kind: 'organ', from: 3000, to: 4400, timeout: 15, deps: ['derive.ledger_input'] },
   { id: 'ledger.sensitivity', organ: 'ledger', tool: 'sensitivity_report', kind: 'organ', from: 4500, to: 5400, timeout: 15, optional: true, deps: ['ledger.optimize'] },
 ];
@@ -43,20 +43,20 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
   for (const q of ['water', 'food', 'shelter']) {
     res[`library.${q}`] = toolResult('library', 'answer_with_citations', libraryAnswer(q, { refuse: refusal && q === 'shelter', lang }), { at: 1700, runName: `library.${q}`, mode: 'demo' });
   }
-  res['ledger.districts'] = toolResult('ledger', 'resource:ledger.districts', ledgerDistricts(), { at: 700 });
+  res['ledger.districts'] = toolResult('ledger', 'resource:districts', { uri: 'ledger://scenario/demo-sindh-2022/districts', items: ledgerDistricts() }, { at: 700 });
   const opt = ledgerOptimize();
   res['ledger.optimize'] = toolResult('ledger', 'optimize_allocation', opt, { at: 4400 });
   if (!partial) res['ledger.sensitivity'] = toolResult('ledger', 'sensitivity_report', ledgerSensitivity(opt), { at: 5400 });
 
   // Brain-origin evidence (not a schema-validated ToolResult)
   const assumptions = [
-    L('Water need is assumed to be 10 litres per person per day (70 litres per person for the 7-day period).', 'پانی کی ضرورت فی شخص روزانہ 10 لیٹر فرض کی گئی ہے (7 دن کے لیے فی شخص 70 لیٹر)۔'),
-    L('Severity per district is mapped from the flooded fraction reported by Eyes.', 'ہر ضلع کی شدت آئیز کی رپورٹ کردہ سیلابی نسبت سے لی گئی ہے۔'),
-    oracleFail ? L('The river forecast was not available, so the river-risk term is zero.', 'دریا کی پیش گوئی دستیاب نہیں تھی، اس لیے دریائی خطرے کا جزو صفر ہے۔') : L('The river-risk term uses the modeled peak exceedance probability.', 'دریائی خطرے کا جزو ماڈل شدہ بلند ترین سطح سے تجاوز کے امکان پر مبنی ہے۔'),
+    L('Water need is assumed to be 10 litres per person per day (70 litres per person for the 7-day period).', 'Ù¾Ø§Ù†ÛŒ Ú©ÛŒ Ø¶Ø±ÙˆØ±Øª ÙÛŒ Ø´Ø®Øµ Ø±ÙˆØ²Ø§Ù†Û 10 Ù„ÛŒÙ¹Ø± ÙØ±Ø¶ Ú©ÛŒ Ú¯Ø¦ÛŒ ÛÛ’ (7 Ø¯Ù† Ú©Û’ Ù„ÛŒÛ’ ÙÛŒ Ø´Ø®Øµ 70 Ù„ÛŒÙ¹Ø±)Û”'),
+    L('Severity per district is mapped from the flooded fraction reported by Eyes.', 'ÛØ± Ø¶Ù„Ø¹ Ú©ÛŒ Ø´Ø¯Øª Ø¢Ø¦ÛŒØ² Ú©ÛŒ Ø±Ù¾ÙˆØ±Ù¹ Ú©Ø±Ø¯Û Ø³ÛŒÙ„Ø§Ø¨ÛŒ Ù†Ø³Ø¨Øª Ø³Û’ Ù„ÛŒ Ú¯Ø¦ÛŒ ÛÛ’Û”'),
+    oracleFail ? L('The river forecast was not available, so the river-risk term is zero.', 'Ø¯Ø±ÛŒØ§ Ú©ÛŒ Ù¾ÛŒØ´ Ú¯ÙˆØ¦ÛŒ Ø¯Ø³ØªÛŒØ§Ø¨ Ù†ÛÛŒÚº ØªÚ¾ÛŒØŒ Ø§Ø³ Ù„ÛŒÛ’ Ø¯Ø±ÛŒØ§Ø¦ÛŒ Ø®Ø·Ø±Û’ Ú©Ø§ Ø¬Ø²Ùˆ ØµÙØ± ÛÛ’Û”') : L('The river-risk term uses the modeled peak exceedance probability.', 'Ø¯Ø±ÛŒØ§Ø¦ÛŒ Ø®Ø·Ø±Û’ Ú©Ø§ Ø¬Ø²Ùˆ Ù…Ø§ÚˆÙ„ Ø´Ø¯Û Ø¨Ù„Ù†Ø¯ ØªØ±ÛŒÙ† Ø³Ø·Ø­ Ø³Û’ ØªØ¬Ø§ÙˆØ² Ú©Û’ Ø§Ù…Ú©Ø§Ù† Ù¾Ø± Ù…Ø¨Ù†ÛŒ ÛÛ’Û”'),
   ];
   const brainEntries = {
     derive: { run_id: uid('brain.derive.ledger_input'), organ: 'brain', tool: 'derive.ledger_input', data: { assumptions, water_l_per_person_day: 10, commodities: COMMODITIES, supply: SUPPLY, budget: BUDGET }, mode: 'demo' },
-    disclaimer: { run_id: uid('brain.static.disclaimer'), organ: 'brain', tool: 'static.disclaimer', data: { text: L('Stitch is decision support, not an operational authority. Verify with local responders.', 'اسٹِچ فیصلہ سازی میں معاون ہے، آپریشنل اتھارٹی نہیں۔ مقامی امدادی اداروں سے تصدیق کریں۔') }, mode: 'demo' },
+    disclaimer: { run_id: uid('brain.static.disclaimer'), organ: 'brain', tool: 'static.disclaimer', data: { text: L('Stitch is decision support, not an operational authority. Verify with local responders.', 'Ø§Ø³Ù¹ÙÚ† ÙÛŒØµÙ„Û Ø³Ø§Ø²ÛŒ Ù…ÛŒÚº Ù…Ø¹Ø§ÙˆÙ† ÛÛ’ØŒ Ø¢Ù¾Ø±ÛŒØ´Ù†Ù„ Ø§ØªÚ¾Ø§Ø±Ù¹ÛŒ Ù†ÛÛŒÚºÛ” Ù…Ù‚Ø§Ù…ÛŒ Ø§Ù…Ø¯Ø§Ø¯ÛŒ Ø§Ø¯Ø§Ø±ÙˆÚº Ø³Û’ ØªØµØ¯ÛŒÙ‚ Ú©Ø±ÛŒÚºÛ”') }, mode: 'demo' },
   };
 
   const ev = (key, organ, tool, pointer) => ({ run_id: res[key].provenance.run_id, organ, tool, json_pointer: pointer });
@@ -77,19 +77,19 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
   claims.extent.push({
     id: 'extent.flood_area', kind: 'number',
     text: L(`New flood water covers ${fmt(cmp.new_flood_km2, 1)} km2 (${fmt(cmp.total_water_km2, 1)} km2 total water, ${fmt(cmp.permanent_water_km2, 1)} km2 permanent) in the scene acquired 2022-08-30.`,
-      `نئے سیلابی پانی نے ${fmt(cmp.new_flood_km2, 1)} مربع کلومیٹر رقبہ ڈھانپ لیا ہے (کل پانی ${fmt(cmp.total_water_km2, 1)} مربع کلومیٹر، مستقل پانی ${fmt(cmp.permanent_water_km2, 1)} مربع کلومیٹر)، منظر 2022-08-30 کا ہے۔`),
+      `Ù†Ø¦Û’ Ø³ÛŒÙ„Ø§Ø¨ÛŒ Ù¾Ø§Ù†ÛŒ Ù†Û’ ${fmt(cmp.new_flood_km2, 1)} Ù…Ø±Ø¨Ø¹ Ú©Ù„ÙˆÙ…ÛŒÙ¹Ø± Ø±Ù‚Ø¨Û ÚˆÚ¾Ø§Ù†Ù¾ Ù„ÛŒØ§ ÛÛ’ (Ú©Ù„ Ù¾Ø§Ù†ÛŒ ${fmt(cmp.total_water_km2, 1)} Ù…Ø±Ø¨Ø¹ Ú©Ù„ÙˆÙ…ÛŒÙ¹Ø±ØŒ Ù…Ø³ØªÙ‚Ù„ Ù¾Ø§Ù†ÛŒ ${fmt(cmp.permanent_water_km2, 1)} Ù…Ø±Ø¨Ø¹ Ú©Ù„ÙˆÙ…ÛŒÙ¹Ø±)ØŒ Ù…Ù†Ø¸Ø± 2022-08-30 Ú©Ø§ ÛÛ’Û”`),
     evidence: [E.cmp('/data/new_flood_km2'), E.cmp('/data/total_water_km2'), E.cmp('/data/permanent_water_km2'), E.seg('/data/source_scene/acquired')],
   });
   const top = [...cmp.by_district].map((d, i) => ({ ...d, i })).sort((a, b) => b.flooded_km2 - a.flooded_km2 || a.district_id.localeCompare(b.district_id)).slice(0, 3);
   claims.extent.push({
     id: 'extent.top_districts', kind: 'number',
     text: L(`Largest flooded areas: ${top.map((d) => `${nameOf(d.district_id, 'en')} ${fmt(d.flooded_km2, 1)} km2 (${fmt(d.flooded_fraction * 100, 1)}% of the district)`).join(', ')}.`,
-      `سب سے زیادہ متاثرہ علاقے: ${top.map((d) => `${nameOf(d.district_id, 'ur')} ${fmt(d.flooded_km2, 1)} مربع کلومیٹر (ضلع کا ${fmt(d.flooded_fraction * 100, 1)}%)`).join('، ')}۔`),
+      `Ø³Ø¨ Ø³Û’ Ø²ÛŒØ§Ø¯Û Ù…ØªØ§Ø«Ø±Û Ø¹Ù„Ø§Ù‚Û’: ${top.map((d) => `${nameOf(d.district_id, 'ur')} ${fmt(d.flooded_km2, 1)} Ù…Ø±Ø¨Ø¹ Ú©Ù„ÙˆÙ…ÛŒÙ¹Ø± (Ø¶Ù„Ø¹ Ú©Ø§ ${fmt(d.flooded_fraction * 100, 1)}%)`).join('ØŒ ')}Û”`),
     evidence: top.flatMap((d) => [E.cmp(`/data/by_district/${d.i}/flooded_km2`), E.cmp(`/data/by_district/${d.i}/flooded_fraction`)]),
   });
   claims.extent.push({
     id: 'extent.confidence', kind: 'number',
-    text: L(`Mean segmentation confidence over flood pixels: ${seg.confidence}.`, `سیلابی پکسلز پر اوسط درجہ بندی اعتماد: ${seg.confidence}۔`),
+    text: L(`Mean segmentation confidence over flood pixels: ${seg.confidence}.`, `Ø³ÛŒÙ„Ø§Ø¨ÛŒ Ù¾Ú©Ø³Ù„Ø² Ù¾Ø± Ø§ÙˆØ³Ø· Ø¯Ø±Ø¬Û Ø¨Ù†Ø¯ÛŒ Ø§Ø¹ØªÙ…Ø§Ø¯: ${seg.confidence}Û”`),
     evidence: [E.seg('/data/confidence')],
   });
 
@@ -100,19 +100,19 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
     claims.forecast.push({
       id: 'forecast.peak', kind: 'number', labels: ['modeled'],
       text: L(`Modeled river discharge (GloFAS via Open-Meteo) near ${fc.station.name}: peak median ${fmt(fc.forecast[pk].discharge.p50)} m3/s on ${fc.forecast[pk].date} (p10 ${fmt(fc.forecast[pk].discharge.p10)}, p90 ${fmt(fc.forecast[pk].discharge.p90)} m3/s).`,
-        `ماڈل شدہ دریائی بہاؤ (GloFAS بذریعہ Open-Meteo) سکھر کے قریب: درمیانی بلند ترین سطح ${fmt(fc.forecast[pk].discharge.p50)} m3/s بتاریخ ${fc.forecast[pk].date} (p10 ${fmt(fc.forecast[pk].discharge.p10)}، p90 ${fmt(fc.forecast[pk].discharge.p90)} m3/s)۔`),
+        `Ù…Ø§ÚˆÙ„ Ø´Ø¯Û Ø¯Ø±ÛŒØ§Ø¦ÛŒ Ø¨ÛØ§Ø¤ (GloFAS Ø¨Ø°Ø±ÛŒØ¹Û Open-Meteo) Ø³Ú©Ú¾Ø± Ú©Û’ Ù‚Ø±ÛŒØ¨: Ø¯Ø±Ù…ÛŒØ§Ù†ÛŒ Ø¨Ù„Ù†Ø¯ ØªØ±ÛŒÙ† Ø³Ø·Ø­ ${fmt(fc.forecast[pk].discharge.p50)} m3/s Ø¨ØªØ§Ø±ÛŒØ® ${fc.forecast[pk].date} (p10 ${fmt(fc.forecast[pk].discharge.p10)}ØŒ p90 ${fmt(fc.forecast[pk].discharge.p90)} m3/s)Û”`),
       evidence: [E.fc(`/data/forecast/${pk}/discharge/p50`), E.fc(`/data/forecast/${pk}/discharge/p10`), E.fc(`/data/forecast/${pk}/discharge/p90`), E.fc(`/data/forecast/${pk}/date`)],
     });
     claims.forecast.push({
       id: 'forecast.exceedance', kind: 'number', labels: ['modeled'],
       text: L(`Modeled probability of exceeding ${fmt(THRESHOLD)} m3/s peaks at ${fmt(fc.exceedance_prob[ex].p_exceed * 100)}% on ${fc.exceedance_prob[ex].date}.`,
-        `ماڈل کے مطابق ${fmt(THRESHOLD)} m3/s سے تجاوز کا امکان ${fc.exceedance_prob[ex].date} کو ${fmt(fc.exceedance_prob[ex].p_exceed * 100)}% کی بلند ترین سطح پر ہے۔`),
+        `Ù…Ø§ÚˆÙ„ Ú©Û’ Ù…Ø·Ø§Ø¨Ù‚ ${fmt(THRESHOLD)} m3/s Ø³Û’ ØªØ¬Ø§ÙˆØ² Ú©Ø§ Ø§Ù…Ú©Ø§Ù† ${fc.exceedance_prob[ex].date} Ú©Ùˆ ${fmt(fc.exceedance_prob[ex].p_exceed * 100)}% Ú©ÛŒ Ø¨Ù„Ù†Ø¯ ØªØ±ÛŒÙ† Ø³Ø·Ø­ Ù¾Ø± ÛÛ’Û”`),
       evidence: [E.fc(`/data/exceedance_prob/${ex}/p_exceed`), E.fc('/data/danger_threshold_m3s')],
     });
     claims.forecast.push({
       id: 'forecast.calibration', kind: 'statement', labels: ['modeled'],
       text: L(`Modeled intervals are ${fmt(fc.calibration.nominal_coverage * 100)}% split-conformal bands from ${fc.calibration.n_calibration} calibration points.`,
-        `ماڈل شدہ وقفے ${fc.calibration.n_calibration} کیلیبریشن نقاط سے بنے ${fmt(fc.calibration.nominal_coverage * 100)}% اسپلٹ کنفارمل بینڈ ہیں۔`),
+        `Ù…Ø§ÚˆÙ„ Ø´Ø¯Û ÙˆÙ‚ÙÛ’ ${fc.calibration.n_calibration} Ú©ÛŒÙ„ÛŒØ¨Ø±ÛŒØ´Ù† Ù†Ù‚Ø§Ø· Ø³Û’ Ø¨Ù†Û’ ${fmt(fc.calibration.nominal_coverage * 100)}% Ø§Ø³Ù¾Ù„Ù¹ Ú©Ù†ÙØ§Ø±Ù…Ù„ Ø¨ÛŒÙ†Úˆ ÛÛŒÚºÛ”`),
       evidence: [E.fc('/data/calibration/nominal_coverage'), E.fc('/data/calibration/n_calibration')],
     });
     claims.forecast.push({
@@ -134,7 +134,7 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
       claims.guidance.push({
         id: `guidance.${q}.refusal`, kind: 'statement', labels: ['refusal'],
         text: L(`The guidance library declined to answer "${guidance[q].query}": no sufficiently supported passage was found. No guidance is given from memory.`,
-          `رہنمائی کی لائبریری نے سوال کا جواب دینے سے انکار کیا: مناسب شواہد پر مبنی کوئی عبارت نہیں ملی۔ یادداشت سے کوئی رہنمائی نہیں دی جاتی۔`),
+          `Ø±ÛÙ†Ù…Ø§Ø¦ÛŒ Ú©ÛŒ Ù„Ø§Ø¦Ø¨Ø±ÛŒØ±ÛŒ Ù†Û’ Ø³ÙˆØ§Ù„ Ú©Ø§ Ø¬ÙˆØ§Ø¨ Ø¯ÛŒÙ†Û’ Ø³Û’ Ø§Ù†Ú©Ø§Ø± Ú©ÛŒØ§: Ù…Ù†Ø§Ø³Ø¨ Ø´ÙˆØ§ÛØ¯ Ù¾Ø± Ù…Ø¨Ù†ÛŒ Ú©ÙˆØ¦ÛŒ Ø¹Ø¨Ø§Ø±Øª Ù†ÛÛŒÚº Ù…Ù„ÛŒÛ” ÛŒØ§Ø¯Ø¯Ø§Ø´Øª Ø³Û’ Ú©ÙˆØ¦ÛŒ Ø±ÛÙ†Ù…Ø§Ø¦ÛŒ Ù†ÛÛŒÚº Ø¯ÛŒ Ø¬Ø§ØªÛŒÛ”`),
         evidence: [E.lib(q, '/data/refusal/reason'), E.lib(q, '/data/refusal/closest_hits/0')],
       });
     }
@@ -144,7 +144,7 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
   claims.allocation.push({
     id: 'allocation.summary', kind: 'number',
     text: L(`The plan covers ${fmt(alloc.cost_benefit.people_covered)} people at ${fmt(alloc.cost_benefit.cost_per_person_covered, 2)} per person (${fmt(alloc.total_cost)} total); solver status: ${alloc.status}.`,
-      `منصوبہ ${fmt(alloc.cost_benefit.people_covered)} افراد کو فی کس ${fmt(alloc.cost_benefit.cost_per_person_covered, 2)} کی لاگت پر احاطہ کرتا ہے (کل ${fmt(alloc.total_cost)})؛ سولور کی حالت: ${alloc.status}۔`),
+      `Ù…Ù†ØµÙˆØ¨Û ${fmt(alloc.cost_benefit.people_covered)} Ø§ÙØ±Ø§Ø¯ Ú©Ùˆ ÙÛŒ Ú©Ø³ ${fmt(alloc.cost_benefit.cost_per_person_covered, 2)} Ú©ÛŒ Ù„Ø§Ú¯Øª Ù¾Ø± Ø§Ø­Ø§Ø·Û Ú©Ø±ØªØ§ ÛÛ’ (Ú©Ù„ ${fmt(alloc.total_cost)})Ø› Ø³ÙˆÙ„ÙˆØ± Ú©ÛŒ Ø­Ø§Ù„Øª: ${alloc.status}Û”`),
     evidence: [E.opt('/data/cost_benefit/people_covered'), E.opt('/data/cost_benefit/cost_per_person_covered'), E.opt('/data/total_cost'), E.opt('/data/status')],
   });
   for (const c of COMMODITIES) {
@@ -153,7 +153,7 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
       claims.allocation.push({
         id: `allocation.${c.id}.${r.district_id.replace('pk-sindh-', '')}`, kind: 'recommendation', labels: hasConflict && c.id === 'water' ? ['disputed'] : undefined,
         text: L(`Send ${fmt(r.quantity)} ${c.unit}s of ${c.name.toLowerCase()} to ${nameOf(r.district_id, 'en')}.${hasConflict && c.id === 'water' ? ' (disputed, see conflict C1)' : ''}`,
-          `${nameOf(r.district_id, 'ur')} کو ${fmt(r.quantity)} ${UNIT_UR[c.unit]} ${c.name_ur} بھیجیں۔${hasConflict && c.id === 'water' ? ' (متنازع، تصادم C1 دیکھیں)' : ''}`),
+          `${nameOf(r.district_id, 'ur')} Ú©Ùˆ ${fmt(r.quantity)} ${UNIT_UR[c.unit]} ${c.name_ur} Ø¨Ú¾ÛŒØ¬ÛŒÚºÛ”${hasConflict && c.id === 'water' ? ' (Ù…ØªÙ†Ø§Ø²Ø¹ØŒ ØªØµØ§Ø¯Ù… C1 Ø¯ÛŒÚ©Ú¾ÛŒÚº)' : ''}`),
         evidence: [E.opt(`/data/allocation/${r.i}/quantity`)],
       });
     }
@@ -163,7 +163,7 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
     claims.allocation.push({
       id: 'allocation.unreached', kind: 'number',
       text: L(`${fmt(sum(unreached.map((u) => u.unreached_people)))} people in ${unreached.length} district cannot be reached by road, air or boat with the given inputs.`,
-        `${unreached.length} ضلع میں ${fmt(sum(unreached.map((u) => u.unreached_people)))} افراد تک دی گئی معلومات کے مطابق سڑک، ہوائی یا کشتی کے ذریعے رسائی ممکن نہیں۔`),
+        `${unreached.length} Ø¶Ù„Ø¹ Ù…ÛŒÚº ${fmt(sum(unreached.map((u) => u.unreached_people)))} Ø§ÙØ±Ø§Ø¯ ØªÚ© Ø¯ÛŒ Ú¯Ø¦ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ú©Û’ Ù…Ø·Ø§Ø¨Ù‚ Ø³Ú‘Ú©ØŒ ÛÙˆØ§Ø¦ÛŒ ÛŒØ§ Ú©Ø´ØªÛŒ Ú©Û’ Ø°Ø±ÛŒØ¹Û’ Ø±Ø³Ø§Ø¦ÛŒ Ù…Ù…Ú©Ù† Ù†ÛÛŒÚºÛ”`),
       evidence: unreached.map((u) => E.opt(`/data/coverage/${u.i}/unreached_people`)),
     });
   }
@@ -172,12 +172,12 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
     claims.allocation.push({
       id: 'allocation.equity', kind: 'statement',
       text: L(`Equity floor requested ${alloc.equity.floor_requested}, applied ${alloc.equity.floor_applied} (highest feasible ${alloc.equity.max_feasible_floor}); coverage given up for equity: ${fmt(s.equity_cost)}.`,
-        `مساوات کی حد ${alloc.equity.floor_requested} مانگی گئی، ${alloc.equity.floor_applied} لاگو ہوئی (زیادہ سے زیادہ ممکن ${alloc.equity.max_feasible_floor})؛ مساوات کے لیے چھوڑا گیا احاطہ: ${fmt(s.equity_cost)}۔`),
+        `Ù…Ø³Ø§ÙˆØ§Øª Ú©ÛŒ Ø­Ø¯ ${alloc.equity.floor_requested} Ù…Ø§Ù†Ú¯ÛŒ Ú¯Ø¦ÛŒØŒ ${alloc.equity.floor_applied} Ù„Ø§Ú¯Ùˆ ÛÙˆØ¦ÛŒ (Ø²ÛŒØ§Ø¯Û Ø³Û’ Ø²ÛŒØ§Ø¯Û Ù…Ù…Ú©Ù† ${alloc.equity.max_feasible_floor})Ø› Ù…Ø³Ø§ÙˆØ§Øª Ú©Û’ Ù„ÛŒÛ’ Ú†Ú¾ÙˆÚ‘Ø§ Ú¯ÛŒØ§ Ø§Ø­Ø§Ø·Û: ${fmt(s.equity_cost)}Û”`),
       evidence: [E.opt('/data/equity/floor_applied'), E.sens('/data/equity_cost')],
     });
     claims.allocation.push({
       id: 'allocation.shadow.water', kind: 'number',
-      text: L(`One more litre of water would raise weighted coverage by about ${s.shadow_prices[0].value} (${s.shadow_prices[0].unit}).`, `ایک لیٹر مزید پانی وزنی احاطے میں ${s.shadow_prices[0].value} کا اضافہ کرے گا۔`),
+      text: L(`One more litre of water would raise weighted coverage by about ${s.shadow_prices[0].value} (${s.shadow_prices[0].unit}).`, `Ø§ÛŒÚ© Ù„ÛŒÙ¹Ø± Ù…Ø²ÛŒØ¯ Ù¾Ø§Ù†ÛŒ ÙˆØ²Ù†ÛŒ Ø§Ø­Ø§Ø·Û’ Ù…ÛŒÚº ${s.shadow_prices[0].value} Ú©Ø§ Ø§Ø¶Ø§ÙÛ Ú©Ø±Û’ Ú¯Ø§Û”`),
       evidence: [E.sens('/data/shadow_prices/0/value')],
     });
   }
@@ -185,56 +185,56 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
   const conflict = {
     id: 'C1', rule_id: 'R3', status: 'final', subjects: ['water'], organs: ['library', 'ledger'], resolution: 'flagged',
     description: L('The Library recommends 15 litres of water per person per day, but the allocation plan assumes 10 litres per person per day.',
-      'لائبریری فی شخص روزانہ 15 لیٹر پانی تجویز کرتی ہے، لیکن تقسیم کے منصوبے میں فی شخص روزانہ 10 لیٹر فرض کیا گیا ہے۔'),
+      'Ù„Ø§Ø¦Ø¨Ø±ÛŒØ±ÛŒ ÙÛŒ Ø´Ø®Øµ Ø±ÙˆØ²Ø§Ù†Û 15 Ù„ÛŒÙ¹Ø± Ù¾Ø§Ù†ÛŒ ØªØ¬ÙˆÛŒØ² Ú©Ø±ØªÛŒ ÛÛ’ØŒ Ù„ÛŒÚ©Ù† ØªÙ‚Ø³ÛŒÙ… Ú©Û’ Ù…Ù†ØµÙˆØ¨Û’ Ù…ÛŒÚº ÙÛŒ Ø´Ø®Øµ Ø±ÙˆØ²Ø§Ù†Û 10 Ù„ÛŒÙ¹Ø± ÙØ±Ø¶ Ú©ÛŒØ§ Ú¯ÛŒØ§ ÛÛ’Û”'),
     evidence: [E.lib('water', '/data/claims/0/text'), brainRef(brainEntries.derive, '/data/water_l_per_person_day')],
   };
 
   claims.caveats.push({ id: 'caveat.disclaimer', kind: 'statement', text: brainEntries.disclaimer.data.text, evidence: [brainRef(brainEntries.disclaimer, '/data/text')] });
   claims.caveats.push({
     id: 'caveat.mode', kind: 'statement', labels: ['demo'],
-    text: L('Demo mode: figures come from committed demo data, not live feeds.', 'ڈیمو موڈ: اعداد و شمار محفوظ شدہ ڈیمو ڈیٹا سے ہیں، براہ راست ذرائع سے نہیں۔'),
+    text: L('Demo mode: figures come from committed demo data, not live feeds.', 'ÚˆÛŒÙ…Ùˆ Ù…ÙˆÚˆ: Ø§Ø¹Ø¯Ø§Ø¯ Ùˆ Ø´Ù…Ø§Ø± Ù…Ø­ÙÙˆØ¸ Ø´Ø¯Û ÚˆÛŒÙ…Ùˆ ÚˆÛŒÙ¹Ø§ Ø³Û’ ÛÛŒÚºØŒ Ø¨Ø±Ø§Û Ø±Ø§Ø³Øª Ø°Ø±Ø§Ø¦Ø¹ Ø³Û’ Ù†ÛÛŒÚºÛ”'),
     evidence: [E.seg('/provenance/mode')],
   });
   claims.caveats.push({
     id: 'caveat.eyes_unvalidated', kind: 'statement', labels: ['unvalidated'],
     text: L('Demo scene: Sindh, Aug 2022. The flood-mapping model was validated on sen1floods11_test, not on this region. Treat the extent as unvalidated.',
-      'ڈیمو منظر: سندھ، اگست 2022۔ سیلاب کی نقشہ سازی کا ماڈل sen1floods11_test پر جانچا گیا ہے، اس خطے پر نہیں۔ اس حد کو غیر تصدیق شدہ سمجھیں۔'),
+      'ÚˆÛŒÙ…Ùˆ Ù…Ù†Ø¸Ø±: Ø³Ù†Ø¯Ú¾ØŒ Ø§Ú¯Ø³Øª 2022Û” Ø³ÛŒÙ„Ø§Ø¨ Ú©ÛŒ Ù†Ù‚Ø´Û Ø³Ø§Ø²ÛŒ Ú©Ø§ Ù…Ø§ÚˆÙ„ sen1floods11_test Ù¾Ø± Ø¬Ø§Ù†Ú†Ø§ Ú¯ÛŒØ§ ÛÛ’ØŒ Ø§Ø³ Ø®Ø·Û’ Ù¾Ø± Ù†ÛÛŒÚºÛ” Ø§Ø³ Ø­Ø¯ Ú©Ùˆ ØºÛŒØ± ØªØµØ¯ÛŒÙ‚ Ø´Ø¯Û Ø³Ù…Ø¬Ú¾ÛŒÚºÛ”'),
     evidence: [E.seg('/data/validation/validated_for_region'), E.seg('/data/validation/eval_dataset')],
   });
   if (!oracleFail) {
     claims.caveats.push({
       id: 'caveat.oracle_modeled', kind: 'statement', labels: ['modeled'],
-      text: L('River figures are model output (Modeled river discharge (GloFAS via Open-Meteo)), not instrument readings.', 'دریا کے اعداد ماڈل کا نتیجہ ہیں (ماڈل شدہ دریائی بہاؤ، GloFAS بذریعہ Open-Meteo)، آلات کی ریڈنگ نہیں۔'),
+      text: L('River figures are model output (Modeled river discharge (GloFAS via Open-Meteo)), not instrument readings.', 'Ø¯Ø±ÛŒØ§ Ú©Û’ Ø§Ø¹Ø¯Ø§Ø¯ Ù…Ø§ÚˆÙ„ Ú©Ø§ Ù†ØªÛŒØ¬Û ÛÛŒÚº (Ù…Ø§ÚˆÙ„ Ø´Ø¯Û Ø¯Ø±ÛŒØ§Ø¦ÛŒ Ø¨ÛØ§Ø¤ØŒ GloFAS Ø¨Ø°Ø±ÛŒØ¹Û Open-Meteo)ØŒ Ø¢Ù„Ø§Øª Ú©ÛŒ Ø±ÛŒÚˆÙ†Ú¯ Ù†ÛÛŒÚºÛ”'),
       evidence: [E.fc('/data/target_kind'), E.fc('/data/target_label')],
     });
   } else {
     claims.caveats.push({
       id: 'caveat.missing.oracle', kind: 'statement',
-      text: L('Oracle did not answer (TIMEOUT). The forecast section is unavailable.', 'اوریکل نے جواب نہیں دیا (TIMEOUT)۔ پیش گوئی کا حصہ دستیاب نہیں۔'),
+      text: L('Oracle did not answer (TIMEOUT). The forecast section is unavailable.', 'Ø§ÙˆØ±ÛŒÚ©Ù„ Ù†Û’ Ø¬ÙˆØ§Ø¨ Ù†ÛÛŒÚº Ø¯ÛŒØ§ (TIMEOUT)Û” Ù¾ÛŒØ´ Ú¯ÙˆØ¦ÛŒ Ú©Ø§ Ø­ØµÛ Ø¯Ø³ØªÛŒØ§Ø¨ Ù†ÛÛŒÚºÛ”'),
       evidence: [E.fc('/error/code')],
     });
   }
   claims.caveats.push({ id: 'caveat.assumptions', kind: 'statement', text: assumptions.join(' '), evidence: [brainRef(brainEntries.derive, '/data/assumptions')] });
   claims.caveats.push({
     id: 'caveat.conflict.C1', kind: 'statement',
-    text: L(`Unresolved disagreement: ${conflict.description} Neither side is treated as settled.`, `غیر حل شدہ اختلاف: ${conflict.description} کسی فریق کو طے شدہ نہیں سمجھا گیا۔`),
+    text: L(`Unresolved disagreement: ${conflict.description} Neither side is treated as settled.`, `ØºÛŒØ± Ø­Ù„ Ø´Ø¯Û Ø§Ø®ØªÙ„Ø§Ù: ${conflict.description} Ú©Ø³ÛŒ ÙØ±ÛŒÙ‚ Ú©Ùˆ Ø·Û’ Ø´Ø¯Û Ù†ÛÛŒÚº Ø³Ù…Ø¬Ú¾Ø§ Ú¯ÛŒØ§Û”`),
     evidence: conflict.evidence,
   });
   if (offline) {
     claims.caveats.push({
       id: 'caveat.fallback', kind: 'statement', labels: ['demo'],
-      text: L('Live data was requested but unavailable. This briefing uses the demo scene.', 'براہ راست ڈیٹا مانگا گیا تھا لیکن دستیاب نہیں تھا۔ یہ بریفنگ ڈیمو منظر استعمال کرتی ہے۔'),
+      text: L('Live data was requested but unavailable. This briefing uses the demo scene.', 'Ø¨Ø±Ø§Û Ø±Ø§Ø³Øª ÚˆÛŒÙ¹Ø§ Ù…Ø§Ù†Ú¯Ø§ Ú¯ÛŒØ§ ØªÚ¾Ø§ Ù„ÛŒÚ©Ù† Ø¯Ø³ØªÛŒØ§Ø¨ Ù†ÛÛŒÚº ØªÚ¾Ø§Û” ÛŒÛ Ø¨Ø±ÛŒÙÙ†Ú¯ ÚˆÛŒÙ…Ùˆ Ù…Ù†Ø¸Ø± Ø§Ø³ØªØ¹Ù…Ø§Ù„ Ú©Ø±ØªÛŒ ÛÛ’Û”'),
       evidence: [E.seg('/provenance/mode')],
     });
   }
 
   const titles = {
-    extent: L('Flood extent', 'سیلاب کی حد'), forecast: L('River forecast', 'دریا کی پیش گوئی'), guidance: L('Guidance', 'رہنمائی'),
-    allocation: L('Allocation', 'امداد کی تقسیم'), caveats: L('Caveats', 'احتیاطیں'),
+    extent: L('Flood extent', 'Ø³ÛŒÙ„Ø§Ø¨ Ú©ÛŒ Ø­Ø¯'), forecast: L('River forecast', 'Ø¯Ø±ÛŒØ§ Ú©ÛŒ Ù¾ÛŒØ´ Ú¯ÙˆØ¦ÛŒ'), guidance: L('Guidance', 'Ø±ÛÙ†Ù…Ø§Ø¦ÛŒ'),
+    allocation: L('Allocation', 'Ø§Ù…Ø¯Ø§Ø¯ Ú©ÛŒ ØªÙ‚Ø³ÛŒÙ…'), caveats: L('Caveats', 'Ø§Ø­ØªÛŒØ§Ø·ÛŒÚº'),
   };
   const status = (id) => {
-    if (id === 'forecast' && oracleFail) return ['unavailable', [L('river forecast', 'دریا کی پیش گوئی')]];
-    if (id === 'allocation' && partial) return ['partial', [L('sensitivity report (shadow prices and equity trade-off)', 'حساسیت رپورٹ (شیڈو قیمتیں اور مساوات کا توازن)')]];
+    if (id === 'forecast' && oracleFail) return ['unavailable', [L('river forecast', 'Ø¯Ø±ÛŒØ§ Ú©ÛŒ Ù¾ÛŒØ´ Ú¯ÙˆØ¦ÛŒ')]];
+    if (id === 'allocation' && partial) return ['partial', [L('sensitivity report (shadow prices and equity trade-off)', 'Ø­Ø³Ø§Ø³ÛŒØª Ø±Ù¾ÙˆØ±Ù¹ (Ø´ÛŒÚˆÙˆ Ù‚ÛŒÙ…ØªÛŒÚº Ø§ÙˆØ± Ù…Ø³Ø§ÙˆØ§Øª Ú©Ø§ ØªÙˆØ§Ø²Ù†)')]];
     return ['ok', undefined];
   };
   const sections = ['extent', 'forecast', 'guidance', 'allocation', 'caveats'].map((id) => {
@@ -251,7 +251,7 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
     mode: 'demo',
     sections,
     conflicts: hasConflict ? [conflict] : [],
-    critic: { passed: true, removed_claims: [], notes: [L(`All ${total} claims were re-verified against stored evidence.`, `تمام ${total} دعوے محفوظ شواہد کے مقابل دوبارہ جانچے گئے۔`)] },
+    critic: { passed: true, removed_claims: [], notes: [L(`All ${total} claims were re-verified against stored evidence.`, `ØªÙ…Ø§Ù… ${total} Ø¯Ø¹ÙˆÛ’ Ù…Ø­ÙÙˆØ¸ Ø´ÙˆØ§ÛØ¯ Ú©Û’ Ù…Ù‚Ø§Ø¨Ù„ Ø¯ÙˆØ¨Ø§Ø±Û Ø¬Ø§Ù†Ú†Û’ Ú¯Ø¦Û’Û”`)] },
     confidence: oracleFail ? 0.55 : refusal ? 0.74 : partial ? 0.7 : 0.78,
     generated_at: iso(6200),
   };
@@ -333,7 +333,7 @@ export function buildAsk(kind, lang) {
   const run_id = res.provenance.run_id;
   const refs = (p) => ({ run_id, organ: 'library', tool: 'answer_with_citations', json_pointer: p });
   const claim = refused
-    ? { id: 'ask.refusal', kind: 'statement', labels: ['refusal'], text: lang === 'ur' ? 'لائبریری نے اس سوال کا جواب دینے سے انکار کیا: مناسب شواہد نہیں ملے۔' : 'The guidance library declined to answer: no sufficiently supported passage was found.', evidence: [refs('/data/refusal/reason')] }
+    ? { id: 'ask.refusal', kind: 'statement', labels: ['refusal'], text: lang === 'ur' ? 'Ù„Ø§Ø¦Ø¨Ø±ÛŒØ±ÛŒ Ù†Û’ Ø§Ø³ Ø³ÙˆØ§Ù„ Ú©Ø§ Ø¬ÙˆØ§Ø¨ Ø¯ÛŒÙ†Û’ Ø³Û’ Ø§Ù†Ú©Ø§Ø± Ú©ÛŒØ§: Ù…Ù†Ø§Ø³Ø¨ Ø´ÙˆØ§ÛØ¯ Ù†ÛÛŒÚº Ù…Ù„Û’Û”' : 'The guidance library declined to answer: no sufficiently supported passage was found.', evidence: [refs('/data/refusal/reason')] }
     : { id: 'ask.0', kind: 'statement', text: r.claims[0].text, evidence: [refs('/data/claims/0/text'), refs('/data/citations/0')] };
   const body = { ask_id: uid(`ask.${kind}.${lang}`), status: refused ? 'refused' : 'answered', claims: refused ? [] : [claim], refusal_claim: refused ? claim : null, mode: 'demo', library_run_id: run_id, result: res };
   return { body, evidence: { [run_id]: { organ: 'library', tool: 'answer_with_citations', served_by: 'real', mode: 'demo', node_id: 'ask', generated_at: iso(0), doc: res } } };

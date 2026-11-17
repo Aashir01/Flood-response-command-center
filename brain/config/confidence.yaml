@@ -1,0 +1,9 @@
+# Briefing confidence (brain design 11). A heuristic "strength of the evidence" score, not a
+# probability. Every value below is a judgement value accepted by the owner as a documented
+# assumption (docs/decisions.md). Weights must cover the four organs and sum to 1.
+weights: {eyes: 0.30, oracle: 0.25, library: 0.20, ledger: 0.25}
+unvalidated_factor: 0.7        # Eyes confidence factor when the scene is not validated for the region
+conflict_penalty: {flagged: 0.15, escalated: 0.15, reconciled: 0.05}
+critic_failed_factor: 0.6
+removed_penalty: 0.05          # per claim removed by the critic
+removed_cap: 4                 # at most 4 removals are penalized

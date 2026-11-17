@@ -210,10 +210,7 @@
     {
      "id": "allocation.water.qambar-shahdadkot",
      "kind": "recommendation",
-     "labels": [
-      "disputed"
-     ],
-     "text": "Send 70,968,193 litres of drinking water to Qambar Shahdadkot. (disputed, see conflict C1)",
+     "text": "Send 70,968,193 litres of drinking water to Qambar Shahdadkot.",
      "evidence": [
       {
        "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
@@ -226,10 +223,7 @@
     {
      "id": "allocation.water.dadu",
      "kind": "recommendation",
-     "labels": [
-      "disputed"
-     ],
-     "text": "Send 46,771,404 litres of drinking water to Dadu. (disputed, see conflict C1)",
+     "text": "Send 46,771,404 litres of drinking water to Dadu.",
      "evidence": [
       {
        "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
@@ -242,10 +236,7 @@
     {
      "id": "allocation.water.badin",
      "kind": "recommendation",
-     "labels": [
-      "disputed"
-     ],
-     "text": "Send 11,227,153 litres of drinking water to Badin. (disputed, see conflict C1)",
+     "text": "Send 11,227,153 litres of drinking water to Badin.",
      "evidence": [
       {
        "run_id": "b66c5660-66f0-4539-8f06-06f4c0684b1f",
@@ -432,36 +423,7 @@
    ]
   }
  ],
- "conflicts": [
-  {
-   "id": "C1",
-   "rule_id": "R3",
-   "status": "final",
-   "subjects": [
-    "water"
-   ],
-   "organs": [
-    "library",
-    "ledger"
-   ],
-   "resolution": "flagged",
-   "description": "The Library recommends 15 litres of water per person per day, but the allocation plan assumes 10 litres per person per day.",
-   "evidence": [
-    {
-     "run_id": "196e0d75-521c-4bc9-8096-fd26e1f7eebb",
-     "organ": "library",
-     "tool": "answer_with_citations",
-     "json_pointer": "/data/claims/0/text"
-    },
-    {
-     "run_id": "c621f7ae-003a-4c69-8cd0-cffbf37e591c",
-     "organ": "brain",
-     "tool": "derive.ledger_input",
-     "json_pointer": "/data/water_l_per_person_day"
-    }
-   ]
-  }
- ],
+ "conflicts": [],
  "critic": {
   "passed": true,
   "removed_claims": [],

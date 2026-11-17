@@ -65,7 +65,7 @@
    "generation": {
     "mode": "extractive",
     "model": null,
-    "provider": null
+    "provider": "none"
    }
   },
   "error": null,

@@ -221,6 +221,15 @@ def load_rules(path: str | None = None) -> Any:
     return load_ruleset_text(p.read_text(encoding="utf-8"))
 
 
+@lru_cache(maxsize=2)
+def load_confidence(path: str | None = None) -> Any:
+    """``ConfidenceParams`` from ``confidence.yaml`` (weights checked to sum to 1 on load)."""
+    from stitch_brain.core.confidence import ConfidenceParams
+
+    p = Path(path) if path else config_dir() / "confidence.yaml"
+    return ConfidenceParams.from_dict(_read_yaml(p))
+
+
 @lru_cache(maxsize=8)
 def load_yaml(name: str) -> Any:
     return _read_yaml(config_dir() / name)
