@@ -7,7 +7,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
-ORGANS = ("eyes", "oracle", "library", "ledger", "voice")
+ORGANS = ("eyes", "oracle", "library", "ledger", "brain", "voice")
 Status = Literal["pass", "fail", "not_run", "error"]
 
 

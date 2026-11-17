@@ -12,6 +12,7 @@ import argparse
 import importlib
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -80,6 +81,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fast", action="store_true", help="fast subset (used by the save hook)")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--write-schema", action="store_true")
+    parser.add_argument(
+        "--live-llm",
+        action="store_true",
+        help="use a real LLM where an eval has a judge (sets STITCH_EVAL_LIVE_LLM=1; network)",
+    )
     args = parser.parse_args(argv)
 
     if args.write_schema:
@@ -89,6 +95,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"unknown organ {args.organ!r}")
 
     sys.path.insert(0, str(REPO_ROOT))
+    if args.live_llm:
+        os.environ["STITCH_EVAL_LIVE_LLM"] = "1"
     statuses: list[str] = []
     for organ in ORGANS if args.organ == "all" else (args.organ,):
         result = run_organ(organ, args.fast, args.seed)
