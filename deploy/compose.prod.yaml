@@ -21,6 +21,13 @@ services:
     deploy:
       resources:
         limits: { memory: 96M, cpus: "0.25" }
+  # Measured on the VPS: the Library sits at 817 of 832 MiB idle (embedder and reranker ONNX
+  # sessions), one query away from an OOM kill. The production host has 16 GB, so prod gets
+  # headroom; the base file keeps the 4 GB-floor budget (use compose.lite.yaml there).
+  library:
+    deploy:
+      resources:
+        limits: { memory: 1280M, cpus: "1.0" }
 volumes:
   caddy_data: {}
   caddy_config: {}

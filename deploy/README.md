@@ -65,7 +65,7 @@ Layout on the host:
 | `/srv/stitch.git`, `/srv/stitch` | bare repository the owner pushes to (`git push vultr main`) and the owner's working clone |
 | `/opt/stitch/repo` | the deploy checkout (detached at the running sha); compose files come from the same commit as the images |
 | `/opt/stitch/prod.env` | production settings, mode 600 (from `deploy/env/prod.env.example`) |
-| `/opt/stitch/deploy.conf` | `ORIGIN_URL`, `PUBLIC_IP`, `SMOKE_URL`, `BUILD_MISSING` |
+| `/opt/stitch/deploy.conf` | `ORIGIN_URL`, `PUBLIC_IP`, `SMOKE_URL`, `BUILD_MISSING`, `COMPOSE_OVERRIDES` (extra `deploy/compose.<x>.yaml` files after the prod override) |
 | `/opt/stitch/{current,previous}.env` | release shas for rollback |
 | `/opt/stitch/deploy.log`, `dns.log`, `backup.log`, `backups/` | logs and dumps |
 | `/usr/local/bin/stitch-{deploy,check-dns,backup}` | installed from `deploy/bin/` (root-owned 0755) |
@@ -135,7 +135,9 @@ Manual commands on the host (same project the deploy uses):
 
 ```bash
 cd /opt/stitch/repo
-alias dc='TAG=$(sed -n s/^TAG=//p /opt/stitch/current.env) docker compose --env-file /opt/stitch/prod.env -f compose.yaml -f deploy/compose.prod.yaml'
+alias dc='TAG=$(sed -n s/^TAG=//p /opt/stitch/current.env) docker compose --env-file /opt/stitch/prod.env -f compose.yaml -f deploy/compose.prod.yaml -f deploy/compose.live.yaml'
+# compose.live.yaml is in the list because deploy.conf has COMPOSE_OVERRIDES="deploy/compose.live.yaml"
+# (egress for Oracle live mode and Deepgram voice). STITCH_LLM_PROVIDER stays fake, see docs/decisions.md.
 dc ps                                  # states and health
 dc logs -f --tail 100 brain            # JSON logs per service (rotated: 3 x 10 MB)
 dc up -d --no-deps web                 # recreate the gateway after a prod.env change
@@ -171,7 +173,22 @@ Image sizes (unpacked, `deploy/bin/check_images.py`; budgets in `deploy/image-bu
 
 Ledger and Oracle exceed the design's first guesses (500 MB) because of OR-Tools, pandas and pyarrow wheels; the budgets were raised to the measurement plus headroom.
 
-MEMORY_TABLE_PLACEHOLDER
+Measured on the VPS, 2026-11-17, images at 884ff75 (Docker `Size`, which counts shared base layers once per image, so it reads higher than `check_images.py`): brain 377 MB, ledger 831 MB, oracle 896 MB, library 1210 MB, eyes 702 MB, web 174 MB. Re-run `check_images.py` on the next build and refresh the table above.
+
+Memory, idle after start (`docker stats --no-stream`, VPS, demo mode, Brain not yet running because brain task 23, the HTTP app, has not landed):
+
+| Service | Idle | Limit (base) | Limit (prod) |
+|---|---|---|---|
+| library | 817 MiB | 832 MiB | 1280 MiB |
+| eyes | 325 MiB | 640 MiB | 640 MiB |
+| oracle | 186 MiB | 320 MiB | 320 MiB |
+| ledger | 111 MiB | 256 MiB | 256 MiB |
+| postgres | 19 MiB | 384 MiB | 384 MiB |
+| web | 12 MiB | 64 MiB | 96 MiB |
+| brain | not measured | 320 MiB | 320 MiB |
+| voice | not measured | 640 MiB | 640 MiB |
+
+The Library idles at 98 % of its base limit, so `compose.prod.yaml` raises it to 1280 MiB on the 16 GB host. On a 4 GB host use `compose.lite.yaml` (no reranker). Peak numbers under a briefing loop are still to be measured (task 13).
 
 ## Backup and restore (DEP-R7.4)
 
@@ -196,4 +213,8 @@ Equivalent raw commands: `docker compose exec -T postgres pg_dump -U stitch_owne
 | Offline smoke (DEP-P5, P6) | `bash deploy/bin/offline_smoke.sh http://127.0.0.1:8080` (CI) or with `COMPOSE_FILES`, `SKIP_RESTART=1` on the VPS |
 | Smoke only | `python3 deploy/bin/smoke.py <base url> --allow-disabled voice` |
 
-SMOKE_RESULTS_PLACEHOLDER
+## Status on the VPS (2026-11-17)
+
+Running at 884ff75 from `/srv/stitch`: web, postgres (seeded: 9 docs, 65 chunks, `already seeded` on rerun), library, ledger, oracle, eyes, all healthy. `http://64.177.59.11/` and `/healthz` return 200. `/api/*` returns the gateway's JSON 503 `UPSTREAM_UNAVAILABLE`, because the Brain package has no HTTP app yet (`python -m stitch_brain.api` fails; brain task 23). The Brain container is stopped so it does not crash-loop. The smoke script and the offline smoke need the Brain and were not run.
+
+Known issue fixed in git, not yet on the VPS: at 884ff75 `init-secrets` fails on every start after the first (no `DAC_OVERRIDE`), so `docker compose up` stops at Postgres. Until the fix is deployed, start services with `up -d --no-deps` in dependency order (postgres, `run --rm --no-deps -T seed`, library, brain, web).
