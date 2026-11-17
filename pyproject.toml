@@ -75,7 +75,7 @@ explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 
 [[tool.mypy.overrides]]
-module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*", "pandas", "pandas.*", "lightgbm", "lightgbm.*", "onnxruntime", "onnxruntime.*", "onnx", "onnx.*", "pypdfium2", "pypdfium2.*", "pdfminer", "pdfminer.*"]
+module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*", "pandas", "pandas.*", "lightgbm", "lightgbm.*", "onnxruntime", "onnxruntime.*", "onnx", "onnx.*", "pypdfium2", "pypdfium2.*", "pdfminer", "pdfminer.*", "faster_whisper", "faster_whisper.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

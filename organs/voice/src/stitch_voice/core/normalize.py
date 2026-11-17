@@ -149,6 +149,9 @@ def _range(m: re.Match[str], lang: str) -> str:
 
 
 def _tidy(text: str, lang: str) -> str:
+    # A slash is never spoken. Leaving it in would let a second pass read spelled words such as
+    # "/ایس/ڈی" as a JSON pointer and strip them (VOX-P2).
+    text = text.replace("/", " ")
     text = _SPACES_RE.sub(" ", text)
     text = _NEWLINES_RE.sub("\n", text)
     text = _SPACE_BEFORE_PUNCT_RE.sub(r"\1", text)

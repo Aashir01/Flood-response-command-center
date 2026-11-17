@@ -113,3 +113,11 @@ def test_no_latin_or_digits_remain_in_urdu() -> None:
 
 def test_only_unspeakable_gives_empty() -> None:
     assert normalize("https://x.org [1]", "en") == ""
+
+
+@pytest.mark.parametrize("lang", ["en", "ur"])
+def test_vox_p2_regression_unit_then_pointer_is_idempotent(lang: str) -> None:
+    # Hypothesis example: spelled Urdu words joined by "/" were read as a JSON pointer on pass 2.
+    once = normalize("m3/s/data/forecast/3/p50", lang)
+    assert "/" not in once
+    assert normalize(once, lang) == once
