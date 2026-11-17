@@ -43,7 +43,9 @@ PHRASE_SYSTEM = (
 )
 TRANSLATE_SYSTEM = (
     "Translate each sentence into Urdu (Arabic script). Keep every number in ASCII digits and "
-    "every unit, date, identifier and name unchanged. Do not use lakh or crore. Return "
+    "every unit, date, identifier and name unchanged. Do not use lakh or crore. Write no "
+    "number words at all, so every number in the sentence is a digit from the source. Never "
+    "write the word ایک: Urdu needs no article, so translate 'a ration' as 'راشن'. Return "
     '{"claims": {<claim_id>: <sentence>}} with the same ids. ' + UNTRUSTED
 )
 JUDGE_SYSTEM = (
@@ -150,7 +152,9 @@ class LlmSteps:
                 raise
             return None
         except LLMUnavailable as exc:
-            self.trace.add(req.purpose, None, "unavailable", error=type(exc).__name__)
+            self.trace.add(
+                req.purpose, None, "unavailable", error=type(exc).__name__, detail=str(exc)[:160]
+            )
             return None
         self.trace.add(req.purpose, resp.key, "ok", provider=resp.provider)
         return resp.text
