@@ -82,6 +82,19 @@ def back_transform(y: np.ndarray, q_t: float) -> np.ndarray:
     return out
 
 
+def calibrate_batch(raw: np.ndarray, q_t: np.ndarray, q_hat: np.ndarray) -> np.ndarray:
+    """Vectorised steps 4a to 4d of the pipeline for many rows of one lead (used by the eval):
+    repair, CQR interval with ``q_hat`` per row, final sort, back-transform. ``raw`` has shape
+    ``(n, 3)`` in target space; returns ``(n, 3)`` discharge ``(lo, p50, hi)`` in m3/s, unrounded.
+    Equal to ``forecast`` before its rounding (tested)."""
+    rep, _ = repair(np.asarray(raw, dtype="float64"))
+    lo, hi = conformal.interval(rep[:, 0], rep[:, 1], rep[:, 2], np.asarray(q_hat, "float64"))
+    ys = np.sort(np.stack([lo, rep[:, 1], hi], axis=1), axis=1)
+    a = np.maximum(np.asarray(q_t, dtype="float64"), 0.0)[:, None] + 1.0
+    out: np.ndarray = np.maximum(a * np.exp(np.clip(ys, -Y_CLIP, Y_CLIP)) - 1.0, 0.0)
+    return out
+
+
 def data_end(frames: Frames) -> date:
     return max(frames.discharge["date"])  # type: ignore[no-any-return]
 

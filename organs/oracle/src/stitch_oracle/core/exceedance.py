@@ -56,8 +56,44 @@ class Cdf:
         p = 1.0 - self.cdf(math.log1p(max(threshold_m3s, 0.0)))
         return min(1.0, max(0.0, p))
 
+    @staticmethod
+    def knots_many(q10: np.ndarray, q50: np.ndarray, q90: np.ndarray) -> np.ndarray:
+        """Vectorised ``from_quantiles``: knots of many CDFs, shape ``(n, 5)``."""
+        x10, x50, x90 = (
+            np.log1p(np.maximum(np.asarray(v, "float64"), 0.0)) for v in (q10, q50, q90)
+        )
+        if np.any(x10 > x50) or np.any(x50 > x90):
+            raise ValueError("quantile knots must be ordered")
+        lo_slope = (x50 - x10) / (0.50 - 0.10)
+        hi_slope = (x90 - x50) / (0.90 - 0.50)
+        x01 = np.maximum(0.0, x10 - lo_slope * (0.10 - 0.01))
+        x99 = x90 + hi_slope * (0.99 - 0.90)
+        return np.stack([np.minimum(x01, x10), x10, x50, x90, x99], axis=1)
+
     def in_tail(self, threshold_m3s: float) -> bool:
         """True when the threshold falls outside the calibrated band, where ``F`` is
         extrapolated."""
         x = math.log1p(max(threshold_m3s, 0.0))
         return x < self.x[1] or x > self.x[3]
+
+
+def p_exceed_many(
+    q10: np.ndarray, q50: np.ndarray, q90: np.ndarray, threshold_m3s: np.ndarray
+) -> np.ndarray:
+    """Vectorised ``Cdf.from_quantiles(...).p_exceed(T)`` row by row (used by the eval; equal to
+    the scalar path, tested)."""
+    xs = Cdf.knots_many(q10, q50, q90)
+    x = np.log1p(np.maximum(np.asarray(threshold_m3s, dtype="float64"), 0.0))
+    x = np.broadcast_to(x, xs[:, 0].shape)
+    fk = np.asarray(F_KNOTS)
+    i = np.sum(xs <= x[:, None], axis=1) - 1
+    j = np.clip(i, 0, len(F_KNOTS) - 2)
+    rows = np.arange(xs.shape[0])
+    x0, x1 = xs[rows, j], xs[rows, j + 1]
+    span = x1 - x0
+    frac = np.divide(x - x0, span, out=np.ones_like(x0), where=span > 0)
+    f = fk[j] + (fk[j + 1] - fk[j]) * frac
+    f = np.where(i >= len(F_KNOTS) - 1, F_KNOTS[-1], f)
+    f = np.where(x < xs[:, 0], 0.0, np.where(x > xs[:, -1], 1.0, f))
+    out: np.ndarray = np.clip(1.0 - f, 0.0, 1.0)
+    return out

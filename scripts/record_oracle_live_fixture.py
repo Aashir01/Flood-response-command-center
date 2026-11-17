@@ -46,7 +46,7 @@ def main() -> int:
         "attribution": "Weather data by Open-Meteo.com (CC BY 4.0); GloFAS (Copernicus/ECMWF)",
         "calls": calls,
     }
-    OUT.write_text(json.dumps(doc, separators=(",", ":")) + "\n", encoding="utf-8")
+    OUT.write_text(json.dumps(doc, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {OUT.relative_to(REPO)} ({OUT.stat().st_size} bytes, {len(calls)} calls)")
     return 0
 
