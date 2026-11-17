@@ -27,11 +27,19 @@ from stitch_common.types import ErrorCode, Mode, OrganName
 class ToolFailure(Exception):
     """Raised by core code for an expected, reportable failure (e.g. ``INFEASIBLE``)."""
 
-    def __init__(self, code: ErrorCode, message: str, retryable: bool = False) -> None:
+    def __init__(
+        self,
+        code: ErrorCode,
+        message: str,
+        retryable: bool = False,
+        warnings: list[str] | None = None,
+    ) -> None:
         super().__init__(message)
         self.code: ErrorCode = code
         self.message = message
         self.retryable = retryable
+        # Envelope warnings that also apply to a failed result (e.g. the Voice's Urdu notice).
+        self.warnings: list[str] = list(warnings or [])
 
 
 @dataclass
@@ -106,7 +114,7 @@ async def run_tool(
             data = spec.output.model_validate(data)
         return ok(data, prov_for(outcome), outcome.warnings)
     except ToolFailure as f:
-        return fail(f.code, f.message, f.retryable, prov_for())
+        return fail(f.code, f.message, f.retryable, prov_for(), f.warnings)
     except NotImplementedError:
         return fail("INTERNAL", f"{organ}.{tool} is not implemented yet", False, prov_for())
     except ValidationError:

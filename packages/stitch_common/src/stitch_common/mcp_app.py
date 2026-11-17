@@ -44,6 +44,7 @@ class ContractServer(MCPServer):
         cores: Mapping[str, Callable[[Any], Any]],
         descriptions: Mapping[str, str] | None = None,
         health_checks: Callable[[], Mapping[str, bool]] | None = None,
+        health_meta: Callable[[], Mapping[str, Any]] | None = None,
     ) -> None:
         super().__init__(
             name=f"{organ}-mcp",
@@ -55,6 +56,8 @@ class ContractServer(MCPServer):
         self._cores = organ_cores(organ, cores)
         self._descriptions = dict(descriptions or {})
         self._health_checks = health_checks
+        # Optional organ details for /healthz (the Voice's capabilities and providers).
+        self._health_meta = health_meta
 
         @self.custom_route("/healthz", methods=["GET"])  # type: ignore[untyped-decorator]
         async def healthz(request: Request) -> Response:
@@ -69,6 +72,7 @@ class ContractServer(MCPServer):
                     "mode": current_mode(),
                     "tools": sorted(self._cores),
                     **({"checks": checks} if checks else {}),
+                    **({"meta": dict(self._health_meta())} if self._health_meta else {}),
                 },
                 status_code=200 if healthy else 503,
             )
