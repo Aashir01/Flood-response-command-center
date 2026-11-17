@@ -79,7 +79,9 @@ describe('LabBench with the mock streams', () => {
   });
 
   it('a state change appears within one render of the event (FRN-R2.4, 200 ms budget)', () => {
-    const ev = stream('default-demo')[1] as { seq: number; data: never };
+    const frame = stream('default-demo')[1];
+    if (!frame) throw new Error('fixture stream too short');
+    const ev = { seq: frame.seq, data: frame.data };
     const { rerender } = renderUi(<LabBench />, { bench: benchValue(initialState()) });
     expect(screen.getByTestId('jar-status-eyes')).toHaveTextContent('Idle');
     const t0 = performance.now();

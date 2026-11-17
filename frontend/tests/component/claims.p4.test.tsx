@@ -50,7 +50,7 @@ describe('FRN-P4 claims always carry an evidence control', () => {
 
   it('a claim without evidence cannot render (throws in test mode)', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => renderUi(<ClaimItem claim={{ id: 'bad', kind: 'statement', text: 'unsupported', evidence: [] } as Claim} lang="en" />)).toThrow(/FRN-P4/);
+    expect(() => renderUi(<ClaimItem claim={{ id: 'bad', kind: 'statement', text: 'unsupported', evidence: [] } as unknown as Claim} lang="en" />)).toThrow(/FRN-P4/);
     spy.mockRestore();
   });
 
