@@ -1,6 +1,6 @@
-﻿// Builds one scenario: the SSE event list, the evidence documents and the Briefing.
+// Builds one scenario: the SSE event list, the evidence documents and the Briefing.
 import {
-  BUDGET, COMMODITIES, SUPPLY, T0, THRESHOLD, districtRows, eyesCompare, eyesSegment, iso, ledgerDistricts, ledgerOptimize, ledgerSensitivity,
+  BUDGET, COMMODITIES, SUPPLY, THRESHOLD, eyesCompare, eyesSegment, iso, ledgerDistricts, ledgerOptimize, ledgerSensitivity,
   libraryAnswer, nameOf, oracleExplain, oracleForecast, sum, toolResult, uid, FIXTURE_SOURCE, CONTRACT_VERSION, guidance,
 } from './data.mjs';
 
@@ -315,7 +315,7 @@ export function buildScenario({ name = 'default-demo', lang = 'en' } = {}) {
   // ----- evidence documents (served by /api/evidence/:run_id) -----
   const evidence = {};
   for (const [k, r] of Object.entries(res)) {
-    const n = NODES.find((x) => x.id === k);
+    
     evidence[r.provenance.run_id] = { organ: r.provenance.organ, tool: r.provenance.tool, served_by: 'real', mode: r.provenance.mode, node_id: k, generated_at: r.provenance.generated_at, doc: r };
   }
   for (const b of Object.values(brainEntries)) {

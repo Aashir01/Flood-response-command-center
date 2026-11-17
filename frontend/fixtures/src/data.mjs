@@ -1,4 +1,4 @@
-﻿// Hand-authored, contract-shaped demo data for the Sindh Aug 2022 scene. Every ToolResult is
+// Hand-authored, contract-shaped demo data for the Sindh Aug 2022 scene. Every ToolResult is
 // marked as a fixture (data source id `fixture-hand-authored`) and validated against the JSON Schemas
 // by tests/unit/fixtures.contract.test.ts. Replace with recorded streams via `npm run record`.
 import { createHash } from 'node:crypto';

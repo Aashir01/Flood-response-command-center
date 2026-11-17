@@ -1,0 +1,74 @@
+/* Design tokens (ui-style.md, frontend design section 5). Logical properties only. */
+:root {
+  color-scheme: dark;
+  /* backgrounds */
+  --bg-0: #07090c;
+  --bg-1: #0d1217;
+  --bg-2: #151c24;
+  --bg-3: #1c2530;
+  /* text */
+  --fg-0: #eef3f2;
+  --fg-1: #b7c4c2;
+  /* accents */
+  --flood-glow: #2cf5c0;
+  --lightning: #9fd3ff;
+  --ember: #ff9d3c;
+  --blood: #ff4d5e;
+  --blood-text: #ff8a94;
+  --bone: #e8dfc8;
+  --brass: #c9a24a;
+  --water-perm: #2a6f68;
+  /* borders */
+  --border-ui: #5f7280;
+  --border-subtle: #3a4752;
+  /* glows: static; only the opacity of glow layers animates */
+  --glow-flood: 0 0 6px #2cf5c099, 0 0 18px #2cf5c055;
+  --glow-organ-calling: 0 0 8px #9fd3ffcc, 0 0 24px #9fd3ff66;
+  --glow-organ-done: 0 0 6px #2cf5c066;
+  --glow-organ-unwell: 0 0 8px #ff9d3caa, 0 0 20px #ff4d5e55;
+  --glow-card: 0 0 0 1px #2cf5c014, 0 10px 40px -20px #2cf5c040;
+  --glow-text: 0 0 12px #9fd3ff66;
+  /* spacing (4 px scale) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
+  /* radius */
+  --r-sm: 2px; --r-md: 4px; --r-lg: 8px; --r-jar: 12px;
+  /* z-index */
+  --z-map-ui: 10; --z-header: 20; --z-drawer: 40; --z-awakening: 50; --z-toast: 60;
+  /* motion */
+  --d-instant: 80ms; --d-quick: 160ms; --d-base: 240ms; --d-slow: 400ms;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  /* type */
+  --font-display-stack: var(--font-cinzel), 'Cinzel', Georgia, 'Times New Roman', serif;
+  --font-body-stack: var(--font-noto-sans), 'Noto Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --lh-body: 1.625;
+  --lh-display: 1.25;
+  --header-h: 64px;
+  --texture-opacity: 1;
+}
+
+:root[lang='ur'] {
+  --font-display-stack: var(--font-nastaliq), 'Noto Nastaliq Urdu', var(--font-naskh), 'Noto Naskh Arabic', 'Jameel Noori Nastaleeq', serif;
+  --font-body-stack: var(--font-naskh), 'Noto Naskh Arabic', var(--font-noto-sans), 'Segoe UI', Tahoma, sans-serif;
+  --lh-body: 1.9;
+  --lh-display: 2.1;
+}
+
+/* High contrast: raise borders, remove glows and textures. */
+:root[data-contrast='more'] {
+  --bg-0: #000000;
+  --bg-1: #000000;
+  --bg-2: #000000;
+  --bg-3: #0a0a0a;
+  --fg-0: #ffffff;
+  --fg-1: #e6eceb;
+  --border-ui: #8fa09d;
+  --border-subtle: #8fa09d;
+  --glow-flood: none;
+  --glow-organ-calling: none;
+  --glow-organ-done: none;
+  --glow-organ-unwell: none;
+  --glow-card: none;
+  --glow-text: none;
+  --texture-opacity: 0;
+}

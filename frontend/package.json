@@ -5,9 +5,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/copy-vendor.mjs",
     "dev": "next dev",
     "dev:mock": "node scripts/dev-mock.mjs",
     "mock": "node mock-brain/server.mjs",
+    "prebuild": "node scripts/copy-vendor.mjs",
     "build": "next build && node scripts/check-budget.mjs",
     "start": "node mock-brain/server.mjs --static out --port 4173",
     "lint": "eslint .",

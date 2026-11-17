@@ -4,4 +4,5 @@ out/
 next-env.d.ts
 playwright-report/
 test-results/
-*.tsbuildinfo
+*.tsbuildinfopublic/vendor/
+v.log

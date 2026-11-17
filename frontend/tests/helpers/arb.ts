@@ -4,7 +4,7 @@ import { ORGAN_IDS, type OrganId, type OrganInfo, type TaskEvent } from '@/api/t
 export const FC_RUNS = Number(process.env.FC_NUM_RUNS ?? (process.env.CI ? 200 : 30));
 
 export const organArb: fc.Arbitrary<OrganId> = fc.constantFrom(...ORGAN_IDS);
-export const healthArb: fc.Arbitrary<OrganInfo[]> = fc.tuple(...ORGAN_IDS.map((o) => fc.constantFrom('ready', 'degraded', 'unwell', 'disabled', 'incompatible') as fc.Arbitrary<OrganInfo['status']>)).map((sts) =>
+export const healthArb: fc.Arbitrary<OrganInfo[]> = fc.tuple(...ORGAN_IDS.map(() => fc.constantFrom('ready', 'degraded', 'unwell', 'disabled', 'incompatible') as fc.Arbitrary<OrganInfo['status']>)).map((sts) =>
   ORGAN_IDS.map((organ, i) => ({ organ, status: sts[i] as OrganInfo['status'] })),
 );
 
