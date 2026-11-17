@@ -10,7 +10,7 @@
       "command": "uv",
       "args": ["run", "--package", "stitch-oracle", "python", "-m", "stitch_oracle.server", "--stdio"],
       "env": { "STITCH_MODE": "demo" },
-      "disabled": true
+      "disabled": false
     },
     "library-mcp": {
       "command": "uv",
