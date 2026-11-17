@@ -5,7 +5,7 @@ import { useId, useMemo, useState } from 'react';
 import { IconWarning } from '@/components/icons';
 import { useLang } from '@/i18n/LangProvider';
 import { buildSegments, type EquityPoint } from '@/lib/equitySegments';
-import { linear, linePath, niceTicks } from '@/lib/scale';
+import { linear, linePath, niceTicksOuter } from '@/lib/scale';
 
 const W = 640;
 const H = 280;
@@ -34,7 +34,7 @@ export function EquityTradeoffChart({ points, currentFloor, equityCost }: { poin
   const lo = vals.length ? Math.min(...vals) : 0;
   const hi = vals.length ? Math.max(...vals) : 1;
   const pad = (hi - lo || hi || 1) * 0.15;
-  const ticks = niceTicks(Math.max(0, lo - pad), hi + pad, 4);
+  const ticks = niceTicksOuter(Math.max(0, lo - pad), hi + pad, 4);
   const y = linear([ticks[0] ?? lo, ticks.at(-1) ?? hi], [H - M.bottom, M.top]);
   const step = sorted.length > 1 ? (x(f1) - x(f0)) / (sorted.length - 1) : 40;
   const floorTxt = (f: number) => fmt.pct(f);

@@ -32,6 +32,21 @@ export function niceTicks(min: number, max: number, count = 5): number[] {
   return out;
 }
 
+/**
+ * Nice ticks whose first and last values enclose [min, max] (floor and ceil to the step), so a chart whose
+ * y-domain is [first, last] never draws data outside its plot area.
+ */
+export function niceTicksOuter(min: number, max: number, count = 5): number[] {
+  if (!(max > min)) return [min];
+  const inner = niceTicks(min, max, count);
+  const step = inner.length > 1 ? (inner[1] as number) - (inner[0] as number) : Math.abs(max - min) || 1;
+  const lo = Math.floor(min / step + 1e-9) * step;
+  const hi = Math.ceil(max / step - 1e-9) * step;
+  const out: number[] = [];
+  for (let v = lo; v <= hi + step * 1e-9; v += step) out.push(Math.round(v / step) * step);
+  return out;
+}
+
 export interface BandPoint {
   x: number;
   p10: number;

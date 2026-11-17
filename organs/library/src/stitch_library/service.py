@@ -153,12 +153,20 @@ class LibraryService:
         store: Store
         if settings.store == "pgvector":
             from stitch_library.store.pgvector import PgVectorStore
-            from stitch_library.store.seed import seed
+            from stitch_library.store.seed import is_seeded, seed
 
             if not settings.dsn:
                 raise StoreError("STITCH_LIBRARY_STORE=pgvector needs STITCH_LIBRARY_DSN")
-            pg = PgVectorStore(settings.dsn)
-            warnings += seed(pg, pack, embedder)
+            if settings.seed_mode == "off":
+                # Read-only runtime role: the seed job (python -m stitch_library.store.seed)
+                # owns the schema and the writes.
+                pg = PgVectorStore(settings.dsn, migrate=False)
+                if not is_seeded(pg, pack, embedder):
+                    log.error("library index is not seeded with this pack and embedder")
+                    warnings.append("NOT_SEEDED")
+            else:
+                pg = PgVectorStore(settings.dsn)
+                warnings += seed(pg, pack, embedder)
             store = pg
         else:
             store = MemoryStore()

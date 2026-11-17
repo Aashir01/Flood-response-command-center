@@ -252,7 +252,7 @@
   "alloc.gapNone": "not reported",
   "alloc.table": "Show allocation table",
   "alloc.tableCaption": "Planned quantities per district and commodity",
-  "alloc.unreachedNote": "{people} people in {n} districts cannot be reached with the given inputs.",
+  "alloc.unreachedNote": "{people} people cannot be reached with the given inputs (districts affected: {n}).",
   "alloc.noSensitivity": "The Ledger ran without a sensitivity report, so shadow prices and the equity trade-off are not shown.",
   "prices.title": "What would one more unit buy?",
   "prices.binding": "One more {unit} of {commodity} adds about {value} weighted people covered.",

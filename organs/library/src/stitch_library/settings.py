@@ -22,6 +22,7 @@ def _flag(name: str, default: bool = False) -> bool:
 class Settings:
     store: str = "memory"  # "memory" | "pgvector"
     dsn: str | None = None
+    seed_mode: str = "auto"  # "auto" seeds at startup; "off" only checks (read-only role)
     embed_model: str = DEFAULT_EMBED_MODEL
     rerank_model: str = DEFAULT_RERANK_MODEL
     rerank_langs: tuple[str, ...] = ("en",)  # Urdu off: evals/library/rerank_comparison.json
@@ -50,6 +51,7 @@ class Settings:
         return cls(
             store=os.environ.get("STITCH_LIBRARY_STORE", "memory").strip().lower(),
             dsn=os.environ.get("STITCH_LIBRARY_DSN") or None,
+            seed_mode=os.environ.get("STITCH_LIBRARY_SEED", "auto").strip().lower(),
             embed_model=os.environ.get("STITCH_EMBED_MODEL") or DEFAULT_EMBED_MODEL,
             rerank_model=os.environ.get("STITCH_RERANK_MODEL") or DEFAULT_RERANK_MODEL,
             rerank_langs=tuple(x.strip() for x in langs.split(",") if x.strip()),

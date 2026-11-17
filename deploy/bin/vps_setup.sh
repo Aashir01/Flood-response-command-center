@@ -13,7 +13,7 @@
 #   * UFW: allow 80/tcp, 443/tcp, 443/udp (22 stays as configured)
 #   * cron: DNS check every 5 minutes, weekly pg_dump (Sunday 03:30 UTC)
 #   * unattended security upgrades enabled
-# Root SSH login and sshd settings are left as they are (the owner's access).
+#   * sshd: keys only (no passwords); root keeps key login (the owner's access)
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 STATE_DIR=/opt/stitch
@@ -80,6 +80,16 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 30 3 * * 0 root /usr/local/bin/stitch-backup >> /opt/stitch/backup.log 2>&1
 EOF
 chmod 0644 /etc/cron.d/stitch
+
+# --- sshd: keys only -----------------------------------------------------------------------------
+# 05- sorts before cloud-init's 50-cloud-init.conf, and sshd uses the first value it reads.
+cat > /etc/ssh/sshd_config.d/05-stitch-hardening.conf <<'EOF'
+# Stitch VPS (deploy/README.md): keys only. Root keeps key login for the owner.
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin prohibit-password
+EOF
+sshd -t && systemctl reload ssh
 
 # --- unattended security upgrades ----------------------------------------------------------------
 if ! dpkg -s unattended-upgrades >/dev/null 2>&1; then

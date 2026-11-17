@@ -25,7 +25,10 @@
 
 /* ---------- base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-padding-block-start: calc(var(--header-h) + 16px); -webkit-text-size-adjust: 100%; }
+html { scroll-padding-block-start: 16px; -webkit-text-size-adjust: 100%; }
+@media (min-width: 768px) {
+  html { scroll-padding-block-start: calc(var(--header-h) + 16px); }
+}
 body {
   margin: 0;
   min-block-size: 100vh;
@@ -81,11 +84,13 @@ bdi { unicode-bidi: isolate; }
 
 /* ---------- header ---------- */
 .site-header {
-  position: sticky; inset-block-start: 0; z-index: var(--z-header);
+  /* Sticky only from 768 px: on a phone the wrapped header is about 220 px tall and would hide focused content (WCAG 2.4.11). */
+  position: relative; z-index: var(--z-header);
   background: color-mix(in srgb, var(--bg-0) 88%, transparent);
   backdrop-filter: blur(8px);
   border-block-end: 1px solid var(--border-subtle);
 }
+@media (min-width: 768px) { .site-header { position: sticky; inset-block-start: 0; } }
 .site-header::after {
   /* the stitched seam */
   content: ''; position: absolute; inset-inline: 0; inset-block-end: -4px; block-size: 3px;
@@ -275,9 +280,12 @@ bdi { unicode-bidi: isolate; }
 .bench__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-block-end: 8px; }
 .bench__rail { list-style: none; margin: 0; position: relative; z-index: 1; display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; padding-block: 6px 18px; padding-inline: 2px; }
 @media (min-width: 1280px) { .bench__rail { display: grid; grid-template-columns: repeat(5, 1fr); overflow: visible; } }
-.bench__rail > li { flex: 0 0 150px; scroll-snap-align: center; display: grid; }
+/* Narrow screens: a horizontal organ rail; 132 px items let the next jar peek in, so the rail reads as scrollable. */
+.bench__rail > li { flex: 0 0 132px; scroll-snap-align: start; display: grid; }
+@media (min-width: 768px) { .bench__rail > li { flex-basis: 150px; } }
 .jar {
-  inline-size: 100%; display: grid; justify-items: center; gap: 4px; padding: 8px 6px 10px;
+  /* align-content: start keeps names and status chips on one line across jars whose notes wrap differently */
+  inline-size: 100%; display: grid; justify-items: center; align-content: start; gap: 4px; padding: 8px 6px 10px;
   background: transparent; border: 1px solid transparent; border-radius: var(--r-jar); color: var(--fg-0); text-align: center; min-block-size: 44px;
 }
 .jar:hover { background: #ffffff08; border-color: var(--border-subtle); }

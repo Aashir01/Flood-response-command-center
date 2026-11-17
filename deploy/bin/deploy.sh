@@ -224,7 +224,9 @@ case "$ARG" in
         echo "current:  $(read_tag "$STATE_DIR/current.env")"
         echo "previous: $(read_tag "$STATE_DIR/previous.env")"
         cur="$(read_tag "$STATE_DIR/current.env")"
-        [[ -n "$cur" ]] && compose "$cur" ps --format 'table {{.Service}}\t{{.Status}}'
+        if [[ -n "$cur" ]]; then
+            compose "$cur" ps --format 'table {{.Service}}\t{{.Status}}'
+        fi
         ;;
     rollback) do_rollback ;;
     *) do_deploy "$ARG" ;;

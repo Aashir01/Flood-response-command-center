@@ -189,12 +189,26 @@ export default function HauntedMap(props: HauntedMapProps) {
   function declutter() {
     const map = mapRef.current;
     if (!map) return;
+    // 1. Area rule (labelVisible). 2. Collision rule: larger districts place their label first; a label that
+    // would overlap one already placed is hidden (the table and popups still name every district).
+    const candidates: { el: HTMLElement; area: number }[] = [];
     for (const m of markers.current) {
       if (!m.bbox) continue;
       const a = map.project([m.bbox[0], m.bbox[1]]);
       const b = map.project([m.bbox[2], m.bbox[3]]);
       const area = Math.abs(b.x - a.x) * Math.abs(b.y - a.y);
-      m.el.hidden = !labelVisible(area) || !propsRef.current.layers.districts;
+      const show = labelVisible(area) && propsRef.current.layers.districts;
+      m.el.hidden = !show;
+      if (show) candidates.push({ el: m.el, area });
+    }
+    candidates.sort((p, q) => q.area - p.area);
+    const placed: DOMRect[] = [];
+    const PAD = 3;
+    for (const c of candidates) {
+      const r = c.el.getBoundingClientRect();
+      const hit = placed.some((p) => r.left < p.right + PAD && r.right > p.left - PAD && r.top < p.bottom + PAD && r.bottom > p.top - PAD);
+      if (hit) c.el.hidden = true;
+      else placed.push(r);
     }
   }
 

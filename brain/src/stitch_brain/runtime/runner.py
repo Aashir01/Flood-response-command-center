@@ -3,6 +3,7 @@ phrase/translate -> critic -> assemble (design 7.1). Emits ``TaskEvent``s throug
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -48,14 +49,16 @@ from stitch_brain.runtime.llm_steps import LlmSteps
 from stitch_brain.runtime.organs import CallContext, CallOutcome, OrganClient
 from stitch_brain.runtime.registry import OrganRegistry
 from stitch_brain.runtime.validate import ContractViolation, validate_input
-from stitch_brain.settings import Settings
+from stitch_brain.settings import ORGANS, Settings
 from stitch_common import CONTRACT_VERSION
 from stitch_common.brain import Briefing, BriefingOrgan, Conflict, CriticVerdict, TaskEvent
 from stitch_common.brain_api import BriefingRequest
+from stitch_common.logging import get_logger
 from stitch_common.organs import ORGAN_TOOLS
 from stitch_common.provenance import inputs_hash
 
 Emit = Callable[[TaskEvent], None]
+LOG = get_logger("stitch_brain.run")
 SUMMARY_MAX = 10
 
 
@@ -86,6 +89,10 @@ def _summary(data: Any) -> dict[str, Any]:
             if len(out) >= SUMMARY_MAX:
                 break
     return out
+
+
+def _organ_rank(organ: str) -> int:
+    return ORGANS.index(organ) if organ in ORGANS else len(ORGANS)
 
 
 def _transport_error(out: CallOutcome) -> ErrorDict:
@@ -176,6 +183,8 @@ class _Run:
         self.started_at = r.clock.now()
         self.health_at_start = r.registry.health()
         self.reruns = 0
+        self.plans: list[dict[str, Any]] = []
+        self.plan_fallback: str | None = None
         self.rule_trace: list[str] = []
         self.t0 = r.clock.monotonic()
         self.steps = LlmSteps(
@@ -229,7 +238,16 @@ class _Run:
         }
         if added:
             payload["added"] = added
+        self.plans.append(plan.model_dump(mode="json"))
         self.emit("plan", "plan", payload)
+
+    def served_by_map(self) -> dict[str, str]:
+        from stitch_brain.runtime.registry import DisabledOrgan
+
+        return {
+            o: "disabled" if isinstance(c, DisabledOrgan) else c.served_by
+            for o, c in self.r.registry.clients.items()
+        }
 
     # --- organ phase -------------------------------------------------------------------------
     def client(self, node: Node) -> OrganClient | None:
@@ -271,6 +289,18 @@ class _Run:
         if not outcome.ok:
             err = outcome.error or ErrorDict("INTERNAL", "failed", False)
             payload["error"] = err.as_dict()
+        LOG.info(
+            "organ_result",
+            extra={
+                "briefing_id": self.bid,
+                "task_id": node.id,
+                "organ": node.organ,
+                "attempt": payload["attempt"],
+                "duration_ms": payload["duration_ms"],
+                "ok": outcome.ok,
+                "served_by": c.served_by,
+            },
+        )
         self.emit("organ_result", node.id, payload, organ=node.organ, tool=node.tool)
 
     def record_failure(self, node: Node, attempt: int, err: ErrorDict) -> str | None:
@@ -307,16 +337,28 @@ class _Run:
         self.call_inputs[node.id] = args
         ctx = CallContext(self.bid, node.id, attempt, self.scenario.fixture_set)
         started, t0 = self.r.clock.now(), self.r.clock.monotonic()
-        if node.kind == "resource":
-            out = await c.read_resource(args["uri"], timeout_s=node.timeout_s, ctx=ctx)
-        else:
+        if node.kind != "resource":
             try:
                 validate_input(node.organ or "", node.tool, args)
             except ContractViolation as exc:
                 err = ErrorDict("INVALID_INPUT", f"brain built invalid arguments: {exc}", False)
                 return AttemptResult(False, self.record_failure(node, attempt, err), err)
-            out = await c.call_tool(node.tool, args, timeout_s=node.timeout_s, ctx=ctx)
+        base = {"node_id": node.id, "attempt": attempt, "organ": node.organ, "args": args}
+        try:
+            if node.kind == "resource":
+                out = await c.read_resource(args["uri"], timeout_s=node.timeout_s, ctx=ctx)
+            else:
+                out = await c.call_tool(node.tool, args, timeout_s=node.timeout_s, ctx=ctx)
+        except asyncio.CancelledError:
+            self.calls.append({**base, "cancelled": True})  # trace: replay hangs the same way
+            raise
+        except Exception as exc:
+            self.calls.append({**base, "exception": type(exc).__name__})
+            raise
         if out.result is None:
+            assert out.transport_error is not None
+            te = out.transport_error
+            self.calls.append({**base, "transport_error": {"code": te.code, "message": te.message}})
             err = _transport_error(out)
             return AttemptResult(False, self.record_failure(node, attempt, err), err)
         ended = self.r.clock.now()
@@ -336,14 +378,7 @@ class _Run:
             source=out.source,
         )
         self.store.put(entry)  # stored before the node is marked done (BRN-R3.5)
-        self.calls.append(
-            {
-                "node_id": node.id,
-                "attempt": attempt,
-                "args": args,
-                "entry": entry.model_dump(mode="json"),
-            }
-        )
+        self.calls.append({**base, "entry": entry.model_dump(mode="json")})
         if entry.ok:
             return AttemptResult(True, entry.call_run_id)
         e = out.result.get("error") or {}
@@ -486,7 +521,15 @@ class _Run:
             plan=plan,
             outcomes=outcomes,
             drafts=drafts,
-            trace={"calls": self.calls, "llm_calls": self.steps.trace.calls},
+            trace={
+                "calls": self.calls,
+                "llm_calls": self.steps.trace.calls,
+                "plans": self.plans,
+                "served_by": self.served_by_map(),
+                "started_at": self.started_at.isoformat(),
+                "rule_trace": self.rule_trace,
+                "plan_fallback": self.plan_fallback,
+            },
         )
 
     # --- LLM steps and critic (design 10, 12, 13) ----------------------------------------------
@@ -657,7 +700,7 @@ class _Run:
                 status=self.health_at_start[o].status,
                 served_by=c.served_by,
             )
-            for o, c in self.r.registry.clients.items()
+            for o, c in sorted(self.r.registry.clients.items(), key=lambda kv: _organ_rank(kv[0]))
             if o in ORGAN_TOOLS and o != "voice"
         ]
         return assemble(

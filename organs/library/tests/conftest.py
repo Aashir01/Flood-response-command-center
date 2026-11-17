@@ -11,7 +11,12 @@
 from __future__ import annotations
 
 import importlib.util
+import os
+import secrets
+import shutil
+import subprocess
 import sys
+import time
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -87,6 +92,101 @@ def installed_service(demo_service: LibraryService) -> Iterator[LibraryService]:
         yield demo_service
     finally:
         set_service(None)
+
+
+PG_IMAGE = "pgvector/pgvector:pg16"
+
+
+def _docker_ok() -> bool:
+    if shutil.which("docker") is None:
+        return False
+    try:
+        res = subprocess.run(
+            ["docker", "info", "--format", "{{.ServerVersion}}"],
+            capture_output=True,
+            text=True,
+            timeout=20,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return res.returncode == 0 and bool(res.stdout.strip())
+
+
+def _wait_for_pg(dsn: str, timeout_s: float = 90.0) -> None:
+    import psycopg
+
+    deadline = time.monotonic() + timeout_s
+    ok_in_a_row = 0
+    while time.monotonic() < deadline:
+        try:
+            with psycopg.connect(dsn, connect_timeout=3) as conn:
+                conn.execute("SELECT 1")
+            ok_in_a_row += 1
+            if ok_in_a_row >= 2:  # the image restarts once after initdb
+                return
+        except psycopg.Error:
+            ok_in_a_row = 0
+        time.sleep(1.0)
+    raise RuntimeError("Postgres did not become ready")
+
+
+@pytest.fixture(scope="session")
+def pg_admin_dsn() -> Iterator[str]:
+    """A superuser DSN on a throwaway ``pgvector/pgvector:pg16`` container (or
+    ``STITCH_TEST_PG_DSN``). Skips cleanly when neither Docker nor the variable is available.
+    The password is generated per run; nothing is stored."""
+    env = os.environ.get("STITCH_TEST_PG_DSN")
+    if env:
+        yield env
+        return
+    if not _docker_ok():
+        pytest.skip("Docker is not available and STITCH_TEST_PG_DSN is not set")
+    password = secrets.token_hex(16)
+    name = f"stitch-library-test-{secrets.token_hex(4)}"
+    run = subprocess.run(
+        [
+            "docker", "run", "-d", "--rm", "--name", name,
+            "-e", f"POSTGRES_PASSWORD={password}", "-e", "POSTGRES_DB=postgres",
+            "-p", "127.0.0.1::5432", PG_IMAGE,
+        ],
+        capture_output=True, text=True, timeout=300, check=False,
+    )  # fmt: skip
+    if run.returncode != 0:
+        pytest.skip(f"cannot start {PG_IMAGE}: {run.stderr.strip()[:200]}")
+    try:
+        port_out = subprocess.run(
+            ["docker", "port", name, "5432/tcp"],
+            capture_output=True, text=True, timeout=30, check=True,
+        ).stdout.strip().splitlines()[0]  # fmt: skip
+        port = port_out.rsplit(":", 1)[-1]
+        dsn = f"postgresql://postgres:{password}@127.0.0.1:{port}/postgres"
+        _wait_for_pg(dsn)
+        yield dsn
+    finally:
+        subprocess.run(["docker", "rm", "-f", name], capture_output=True, timeout=60, check=False)
+
+
+@pytest.fixture
+def pg_dsn(pg_admin_dsn: str) -> Iterator[str]:
+    """A fresh database with the ``vector`` extension, dropped after the test."""
+    import psycopg
+    from psycopg import sql
+
+    db = f"t_{secrets.token_hex(6)}"
+    with psycopg.connect(pg_admin_dsn, autocommit=True) as conn:
+        conn.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(db)))
+    base, _, _ = pg_admin_dsn.rpartition("/")
+    dsn = f"{base}/{db}"
+    with psycopg.connect(dsn, autocommit=True) as conn:
+        conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
+    try:
+        yield dsn
+    finally:
+        with psycopg.connect(pg_admin_dsn, autocommit=True) as conn:
+            conn.execute(
+                sql.SQL("DROP DATABASE IF EXISTS {} WITH (FORCE)").format(sql.Identifier(db))
+            )
 
 
 @pytest.fixture(scope="session")

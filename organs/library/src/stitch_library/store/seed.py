@@ -55,3 +55,78 @@ def seed(store: PgVectorStore, pack: Pack, embedder: Embedder) -> list[str]:
         return warnings
     finally:
         store._exec(SQL_UNLOCK, (ADVISORY_LOCK,))
+
+
+def is_seeded(store: PgVectorStore, pack: Pack, embedder: Embedder) -> bool:
+    """True when the store holds exactly this pack for this embedder (read-only check)."""
+    return store.get_meta("seed_key") == seed_key(pack, embedder)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """``python -m stitch_library.store.seed [--check]``: idempotent seed job for Compose.
+
+    Reads ``STITCH_LIBRARY_DSN`` (a role that owns the schema), ``STITCH_EMBED_MODEL``,
+    ``STITCH_MODEL_DIR`` and ``STITCH_LIBRARY_PACK``. Applies migrations, then seeds under the
+    advisory lock; a second run writes nothing. Prints one JSON line. Exit codes: 0 seeded or
+    already seeded, 1 store error, 2 configuration error (no DSN, embedder missing),
+    3 ``--check`` found the store not seeded with this pack.
+    """
+    import argparse
+    import json
+    import sys
+    import time
+
+    from stitch_library.ml.embedder import ModelUnavailable, load_embedder
+    from stitch_library.pack import load_pack
+    from stitch_library.settings import Settings
+    from stitch_library.store.base import StoreError
+
+    parser = argparse.ArgumentParser(prog="python -m stitch_library.store.seed")
+    parser.add_argument("--check", action="store_true", help="only report; never write")
+    args = parser.parse_args(argv)
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
+    settings = Settings.from_env()
+    if not settings.dsn:
+        print("seed: STITCH_LIBRARY_DSN is not set", file=sys.stderr)
+        return 2
+    try:
+        embedder = load_embedder(settings.embed_model, settings.model_dir, threads=settings.threads)
+    except ModelUnavailable as exc:
+        print(f"seed: embedding model unavailable ({exc})", file=sys.stderr)
+        return 2
+    t0 = time.monotonic()
+    pack = load_pack(settings.pack_dir)
+    try:
+        store = PgVectorStore(settings.dsn, migrate=not args.check)
+        try:
+            before = store.get_meta("seed_key")
+            if args.check:
+                ok = is_seeded(store, pack, embedder)
+                warnings: list[str] = []
+            else:
+                warnings = seed(store, pack, embedder)
+                ok = True
+            stats = store.stats()
+        finally:
+            store.close()
+    except StoreError as exc:
+        print(f"seed: {exc}", file=sys.stderr)
+        return 1
+    key = seed_key(pack, embedder)
+    report = {
+        "event": "library_seed",
+        "mode": "check" if args.check else "seed",
+        "seeded": ok,
+        "wrote": (not args.check) and before != key,
+        "seed_key": key[:12],
+        "docs": stats.docs,
+        "chunks": stats.chunks,
+        "warnings": warnings,
+        "seconds": round(time.monotonic() - t0, 2),
+    }
+    print(json.dumps(report))
+    return 0 if ok else 3
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

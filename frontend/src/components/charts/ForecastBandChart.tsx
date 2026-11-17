@@ -5,7 +5,7 @@ import type { ForecastOut } from '@/api/types';
 import { ModeledLabel } from '@/components/briefing/labels';
 import { Bdi } from '@/i18n/bidi';
 import { useLang } from '@/i18n/LangProvider';
-import { bandPath, linear, linePath, niceTicks } from '@/lib/scale';
+import { bandPath, linear, linePath, niceTicksOuter } from '@/lib/scale';
 
 const W = 640;
 const H = 300;
@@ -34,7 +34,7 @@ export function ForecastBandChart({ forecast }: { forecast: ForecastOut }) {
   const pts = forecast.forecast;
   const n = pts.length;
   const [d0, d1] = forecastDomain(forecast);
-  const ticks = niceTicks(d0, d1, 5);
+  const ticks = niceTicksOuter(d0, d1, 5);
   const y = linear([ticks[0] ?? d0, ticks.at(-1) ?? d1], [H - M.bottom, M.top]);
   const x = (i: number) => (n <= 1 ? (M.left + W - M.right) / 2 : M.left + (i * (W - M.left - M.right)) / (n - 1));
   const band = bandPath(
@@ -101,8 +101,8 @@ export function ForecastBandChart({ forecast }: { forecast: ForecastOut }) {
           <circle key={p.date} cx={x(i)} cy={y(p.discharge.p50)} r="3" fill="#07090c" stroke="#9fd3ff" strokeWidth="1.5" />
         ))}
         {/* exceedance strip */}
-        <text className="label" x={M.left - 8} y={stripTop + STRIP / 2 + 4} textAnchor="end" style={{ fill: '#ffc58f' }}>
-          P
+        <text className="label" x={4} y={stripTop + 6} textAnchor="start" style={{ fill: '#ffc58f', fontSize: 10 }}>
+          {t('forecast.col.exceed')}
         </text>
         {pts.map((p, i) => {
           const pe = exceed.get(p.date);
