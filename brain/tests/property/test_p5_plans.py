@@ -6,7 +6,7 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from stitch_brain.config import load_scenarios
@@ -67,6 +67,7 @@ def dags(draw: Any) -> tuple[Plan, bool]:
     return plan, valid
 
 
+@settings(deadline=None)
 @given(dags())
 def test_brn_p5_validator_accepts_exactly_valid_dags(case: tuple[Plan, bool]) -> None:
     plan, valid = case

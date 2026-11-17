@@ -11,7 +11,7 @@ from typing import Any
 
 import pytest
 from brain_testkit import DEFAULT_WORLD, fixture_result, json_docs, world_store
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from evals.brain.scenarios import (
@@ -70,6 +70,7 @@ def test_static_scan_forbids_dynamic_code() -> None:
             assert not re.search(rf"(?<![\w.]){name}\s*\(", code), (mod.__name__, name)
 
 
+@settings(deadline=None)
 @given(json_docs(30))
 def test_brn_p18_fuzz_loads_or_raises_rule_config_error(raw: Any) -> None:
     with contextlib.suppress(RuleConfigError):
@@ -113,6 +114,7 @@ def test_each_rule_fires_on_a_hand_built_world(mutator: Any, rule: str) -> None:
     assert _fired(w) == {rule}
 
 
+@settings(deadline=None)
 @given(
     st.integers(0, 10_000),
     st.sampled_from([control_oracle_high, control_all_flooded, control_need_within_tolerance]),

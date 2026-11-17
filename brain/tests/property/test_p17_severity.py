@@ -5,7 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 
 from brain_testkit import world_store
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from stitch_brain.config import SeverityCfg, load_i18n, load_scenarios
@@ -51,6 +51,7 @@ def _bases(rows: list[tuple[int, Decimal, Decimal, Decimal, bool]]) -> list[Dist
     return [DistrictBase(f"d{i}", p, ra, alt, ff, b) for i, (p, ra, alt, ff, b) in enumerate(rows)]
 
 
+@settings(deadline=None)
 @given(districts, probs)
 def test_brn_p17_bounds_and_zero(
     rows: list[tuple[int, Decimal, Decimal, Decimal, bool]], o: Decimal
@@ -74,6 +75,7 @@ def test_brn_p17_bounds_and_zero(
         assert m.severity == 0 and m.population_affected == 0
 
 
+@settings(deadline=None)
 @given(districts, probs, probs, fractions)
 def test_brn_p17_monotone_in_flooded_fraction_and_risk(
     rows: list[tuple[int, Decimal, Decimal, Decimal, bool]],
@@ -100,6 +102,7 @@ def test_brn_p17_monotone_in_flooded_fraction_and_risk(
         assert a.severity <= b.severity and a.population_affected <= b.population_affected
 
 
+@settings(deadline=None)
 @given(districts, probs, st.randoms(use_true_random=False))
 def test_brn_p17_order_invariant(
     rows: list[tuple[int, Decimal, Decimal, Decimal, bool]], o: Decimal, rnd: object

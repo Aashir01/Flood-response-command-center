@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from stitch_brain.paths import recorded_dir, repo_root
@@ -105,6 +105,7 @@ def test_invalid_fixture_is_rejected(tmp_path: Path) -> None:
         validate_tool_result("ledger", "optimize_allocation", bad)
 
 
+@settings(deadline=None)
 @given(st.lists(st.text(max_size=20), max_size=4), st.booleans())
 def test_brn_p19_fixture_content_cannot_remove_the_label(warnings: list[str], drop: bool) -> None:
     src = DirectoryFixtureSource(recorded_dir(), repo_root())

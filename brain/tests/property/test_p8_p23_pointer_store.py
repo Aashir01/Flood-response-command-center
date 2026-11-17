@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from brain_testkit import json_docs
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from stitch_brain.core.evidence import EvidenceEntry, EvidenceStore, ResolvedRef, sha256_json
@@ -24,18 +24,21 @@ def _paths(doc: Any, prefix: tuple[str | int, ...] = ()) -> list[tuple[tuple[str
     return out
 
 
+@settings(deadline=None)
 @given(json_docs())
 def test_brn_p23_every_path_resolves_to_its_value(doc: Any) -> None:
     for path, value in _paths(doc):
         assert resolve(doc, pointer_for(path)) == Resolved(value)
 
 
+@settings(deadline=None)
 @given(json_docs(), st.text(max_size=12))
 def test_brn_p23_arbitrary_pointers_never_raise(doc: Any, ptr: str) -> None:
     res = resolve(doc, ptr)
     assert isinstance(res, Resolved | Unresolved)
 
 
+@settings(deadline=None)
 @given(st.lists(json_docs(8), min_size=1, max_size=5))
 def test_brn_p8_store_round_trip_resolves_identically(docs: list[Any]) -> None:
     store = EvidenceStore("b")

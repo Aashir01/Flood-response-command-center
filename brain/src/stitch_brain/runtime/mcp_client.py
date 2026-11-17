@@ -46,6 +46,8 @@ from stitch_common.organs import ORGAN_TOOLS
 BACKOFF_STEPS_S = (1.0, 2.0, 4.0, 8.0, 16.0, 30.0)
 BREAKER_WINDOW_S = 15.0
 PING_INTERVAL_S = 10.0
+PROBE_TIMEOUT_S = 5.0
+PROBE_FAILURES = 3
 _DROP_KEYS = frozenset({"description", "title", "default", "examples"})
 
 
@@ -121,6 +123,7 @@ class McpOrganClient:
         self._stop = asyncio.Event()
         self._connected = asyncio.Event()
         self._task: asyncio.Task[None] | None = None
+        self._in_flight = 0
         self.connect_attempts = 0
         self.backoffs: list[float] = []
 
@@ -193,10 +196,31 @@ class McpOrganClient:
         self._reason = "incompatible: " + "; ".join(problems[:3]) if problems else None
         self._last_check = datetime.now(UTC)
 
+    async def _probe(self) -> None:
+        """Liveness probe. ``tools/list`` instead of ``ping`` (deprecated in SDK 2.3)."""
+        await wait_for(self.clock, self._client.list_tools(), PROBE_TIMEOUT_S)
+
     async def _keepalive(self) -> None:
+        """Probe every 10 s while idle. A probe is skipped while calls are in flight (a
+        CPU-bound organ such as the Ledger solver may not answer until its call returns), and
+        the session is dropped only after ``PROBE_FAILURES`` consecutive failed probes. Before
+        this, one slow probe during a long solve tore down the session and failed the call."""
+        misses = 0
         while not self._stop.is_set():
             await self.clock.sleep(PING_INTERVAL_S)
-            await wait_for(self.clock, self._client.send_ping(), 5.0)
+            if self._in_flight > 0:
+                continue
+            try:
+                await self._probe()
+                misses = 0
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                misses += 1
+                self._last_error = f"liveness probe failed ({misses}/{PROBE_FAILURES})"
+                if misses >= PROBE_FAILURES:
+                    raise
+                continue
             self._last_check = datetime.now(UTC)
             if self.endpoint.healthz_url:
                 self._healthz_degraded = not await asyncio.to_thread(
@@ -229,6 +253,7 @@ class McpOrganClient:
             return CallOutcome(transport_error=TransportError("UNAVAILABLE", "incompatible"))
         if self._breaker_open():
             return CallOutcome(transport_error=TransportError("UNAVAILABLE", "circuit open"))
+        self._in_flight += 1
         try:
             raw = await self._client.call_tool(tool, args, read_timeout_seconds=timeout_s)
         except asyncio.CancelledError:
@@ -237,6 +262,8 @@ class McpOrganClient:
             return self._fail("TIMEOUT", f"{self.organ}.{tool} timed out")
         except Exception as exc:
             return self._fail("PROTOCOL", f"{self.organ}.{tool}: {type(exc).__name__}")
+        finally:
+            self._in_flight -= 1
         payload = raw.structured_content
         if payload is None and raw.content:
             with suppress(Exception):
@@ -252,6 +279,7 @@ class McpOrganClient:
     async def read_resource(self, uri: str, *, timeout_s: float, ctx: CallContext) -> CallOutcome:
         if self._client is None:
             return self._fail("CONNECTION", f"{self.organ} is not connected")
+        self._in_flight += 1
         try:
             res = await wait_for(self.clock, self._client.read_resource(uri), timeout_s)
             items = json.loads(res.contents[0].text)
@@ -261,6 +289,8 @@ class McpOrganClient:
             return self._fail("TIMEOUT", f"{uri} timed out")
         except Exception as exc:
             return self._fail("PROTOCOL", f"{uri}: {type(exc).__name__}")
+        finally:
+            self._in_flight -= 1
         if isinstance(items, dict) and "items" in items:
             items = items["items"]
         doc = wrap_resource(self.organ, uri, list(items), ctx=ctx)
