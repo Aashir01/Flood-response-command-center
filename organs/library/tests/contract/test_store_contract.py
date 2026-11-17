@@ -196,7 +196,7 @@ def test_p11_memory_and_pgvector_agree(
     mem = MemoryStore()
     pg = PgVectorStore(pg_dsn)
     try:
-        pg.delete_documents([d.doc.doc_id for d in pg.get_documents()])
+        pg.delete_documents([d.doc_id for d in pg.get_documents()])
         _load(mem, *docs)
         _load(pg, *docs)
         q = EMB.embed_queries([query])[0]
