@@ -80,6 +80,21 @@ def test_demo_scene_outputs_validate(real_service: EyesService, load_schema: Loa
     assert seg["model_variant"].startswith("unet-resnet18-s1-")
     assert seg["validation"]["validated_for_region"] is False
     assert seg["validation"]["eval_dataset"] == "sen1floods11_test"
+    # EYE-X9 / task 17: the committed UNOSAT extract is returned, labelled qualitative.
+    overlay = seg["reference_overlay_geojson"]
+    assert overlay is not None and overlay["features"]
+    assert "Qualitative only" in seg["reference_overlay_note"]
+    assert "CC BY-SA" in seg["reference_overlay_note"]
+
+
+def test_eye_x9_overlay_is_null_without_a_reference_file(synthetic_settings: Settings) -> None:
+    seg = _run(
+        EyesService(synthetic_settings),
+        "segment_flood",
+        {"region_id": "pk-test", "date": "2022-08-27"},
+    )
+    assert seg["data"]["reference_overlay_geojson"] is None
+    assert seg["data"]["reference_overlay_note"].startswith("No reference extent")
 
 
 def test_failure_envelope_validates(real_service: EyesService) -> None:

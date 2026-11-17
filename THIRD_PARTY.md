@@ -6,13 +6,14 @@ Every third-party library, dataset, and model used by Stitch is listed here with
 
 | Name | Used by | License / terms | Status |
 |---|---|---|---|
-| Sen1Floods11 (Cloud to Street / Bonafilia et al.) | eyes | CC BY 4.0 | planned |
+| Sen1Floods11 v1.1 hand-labeled S1 chips (Cloud to Street; Bonafilia et al. 2020, CVPR Workshops), `gs://sen1floods11`: training, validation and test of the Eyes U-Net; 8 test chips committed in `evals/eyes/data/` | eyes | CC BY 4.0 per the owner's brief; the repo has no LICENSE file and the bucket STAC says "proprietary", so no primary license text was found (docs/decisions.md). Cite Bonafilia et al. 2020 | in use |
 | Open-Meteo Flood API, Historical Weather API and Forecast API (request URLs in `data/demo/oracle/stations.json`; recorded live responses in `organs/oracle/tests/fixtures/live_openmeteo.json`) | oracle (demo data build, optional live mode, live-mode test fixture), brain (live mode) | CC BY 4.0, attribution "Weather data by Open-Meteo.com"; free non-commercial tier, accepted by the owner for this demo | in use |
 | ERA5 reanalysis daily precipitation and mean temperature (Copernicus C3S), via the Open-Meteo Historical Weather API, 5 points, 1997-2023, in `data/demo/oracle/rain_daily.parquet` | oracle | Copernicus licence; CC BY 4.0 via Open-Meteo | in use |
 | GloFAS v4 modeled river discharge (Copernicus Emergency Management Service, ECMWF) via the Open-Meteo Flood API, 7 grid cells, 1997-2023, in `data/demo/oracle/discharge_daily.parquet` (the Oracle target, always labeled "modeled") | oracle | CC BY 4.0 (Open-Meteo) / Copernicus | in use |
 | Public gauge readings, Indus at Guddu/Sukkur/Kotri (optional small validation set) | oracle eval | none found that are public, redistributable and cheap | not used (the eval reports `observed_validation: "not performed"`) |
-| Sentinel-1 scene of Sindh, Aug 2022 (one clipped scene, demo only) | eyes | Copernicus Sentinel data terms (free, full, open); attribution required | planned |
-| UNOSAT / Copernicus EMS Sindh 2022 reference extent (qualitative overlay) | eyes | TBD, included only if redistributable | planned |
+| Sentinel-1 scene of Sindh, 2022-08-27 (one clipped RTC scene from Microsoft Planetary Computer `sentinel-1-rtc`, demo only, `data/demo/eyes/scenes/`) | eyes | Copernicus Sentinel data terms (free, full, open), attribution "Contains modified Copernicus Sentinel data 2022"; Planetary Computer RTC product CC BY 4.0 | in use |
+| JRC Global Surface Water v1.4 occurrence (Pekel et al. 2016), permanent-water mask `data/demo/eyes/jrc_perm_water_pk-sindh.tif` | eyes | Copernicus Programme, free of charge without restriction of use; cite Pekel et al. 2016 | in use |
+| UNOSAT FL20220808PAK "Satellite detected water extents between 01 and 29 August 2022 over Pakistan" (VIIRS, via HDX), clipped extract `data/demo/eyes/reference_extent_pk-sindh.geojson` (qualitative overlay) | eyes | CC BY-SA (HDX dataset licence); the extract is shared under CC BY-SA with attribution to UNOSAT/UNITAR, not under MIT | in use |
 | WorldPop Global 2000-2020 1 km, Pakistan 2020 (`pak_ppp_2020_1km_Aggregated`), district sums in `data/demo/ledger/districts.parquet` | ledger | CC BY 4.0, attribution: www.worldpop.org | in use |
 | OpenStreetMap roads (motorway to tertiary, via Overpass API), clipped length per district in `districts.parquet` | ledger | ODbL 1.0, (c) OpenStreetMap contributors | in use |
 | geoBoundaries gbOpen PAK ADM2, 2019 (Runfola et al. 2020, www.geoboundaries.org), simplified Sindh subset in `data/demo/boundaries/pk_districts.geojson` (shared with eyes) | ledger, eyes | CC BY 4.0 (site statement; per-boundary metadata says Public Domain) | in use |
@@ -165,6 +166,7 @@ Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond 
 | PyTorch, torchvision (CPU wheels; `train` extra only, never in the runtime image) | fine-tuning and ONNX export (`organs/eyes/training/`) | BSD-3-Clause | in use (training) |
 | segmentation-models-pytorch (and its dependencies timm, huggingface_hub, safetensors) | U-Net/ResNet-18 definition (`train` extra) | MIT (timm, huggingface_hub, safetensors: Apache-2.0) | in use (training) |
 | onnx, onnxconverter-common | export, fp16 variant, int8 static quantization tooling (`train` extra) | Apache-2.0 / MIT | in use (training) |
+| pyogrio (dev-time only, `uv run --with pyogrio`, not a workspace dependency) | `scripts/fetch_reference_extent.py`: reads the UNOSAT shapefile | MIT (bundles GDAL: MIT/X) | in use (build script) |
 | PyYAML | training config (`train` extra) | MIT | in use (training) |
 ## voice-mcp code libraries
 Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it.

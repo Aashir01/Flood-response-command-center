@@ -72,9 +72,8 @@ MODE_FALLBACK_WARNING = (
 )
 NO_FLOOD_WARNING = "no flood pixels, confidence undefined (null)"
 NO_OVERLAY_NOTE = (
-    "No reference extent is committed: the redistribution licence of the UNOSAT and Copernicus "
-    "EMS 2022 Sindh products was not confirmed (scripts/fetch_reference_extent.py fetches one "
-    "locally)."
+    "No reference extent is committed for this scene, so there is no overlay "
+    "(scripts/fetch_reference_extent.py builds one from a redistributable source)."
 )
 ALLOWED_VARIANTS: frozenset[str] = frozenset(get_args(ModelVariant))
 
