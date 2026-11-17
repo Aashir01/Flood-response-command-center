@@ -65,7 +65,7 @@ def _all_leads(d: Design, split: Any) -> np.ndarray:
 
 
 def main(argv: list[str] | None = None) -> int:
-    import torch
+    import torch  # type: ignore[import-not-found, unused-ignore]  # dev-time only, uv --with
 
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--seed", type=int, default=0)
