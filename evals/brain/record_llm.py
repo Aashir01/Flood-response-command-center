@@ -87,7 +87,7 @@ async def run_matrix(
             req = BriefingRequest(
                 region=catalogue[sc].region,
                 scenario=sc,
-                lang=lang,  # type: ignore[arg-type]
+                lang=lang,
                 mode="demo",
             )
             out.append(MatrixRun(sc, lang, await runner.run(req, briefing_id(sc, lang))))

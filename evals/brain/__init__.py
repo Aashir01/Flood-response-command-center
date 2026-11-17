@@ -104,7 +104,7 @@ async def _briefing(
     settings = Settings(recorded_organs=("all",))
     reg = registry or OrganRegistry.build(settings, None)
     sc = load_scenarios()[scenario]
-    req = BriefingRequest(region=sc.region, scenario=scenario, lang=lang, mode="demo")  # type: ignore[arg-type]
+    req = BriefingRequest(region=sc.region, scenario=scenario, lang=lang, mode="demo")
     runner = BriefingRunner(reg, settings=settings, clock=clock, llm=llm)
     bid = bid or str(uuid.uuid5(uuid.NAMESPACE_URL, f"stitch-brain-eval/{scenario}/{lang}"))
     return await runner.run(req, bid)
@@ -236,12 +236,12 @@ def _live_judge() -> Callable[[str, list[str]], bool]:
 
 
 # --- seeded conflict scenarios (rule engine on the mutated evidence world) ---
-def _base_world() -> dict[str, dict[str, Any]]:
+def _base_world() -> dict[str, dict[str, Any] | None]:
     import json
 
     from stitch_brain.paths import recorded_dir
 
-    out: dict[str, dict[str, Any]] = {}
+    out: dict[str, dict[str, Any] | None] = {}
     for node, (organ, tool, name) in WORLD.items():
         path = recorded_dir() / organ / tool / f"{name}.json"
         out[node] = json.loads(path.read_text(encoding="utf-8"))["result"]
@@ -415,7 +415,7 @@ def run(fast: bool = False, seed: int = 0) -> list[MetricResult]:
             value=round(value, 4),
             target=target,
             unit=unit,
-            direction=direction,  # type: ignore[arg-type]
+            direction=direction,
             dataset=ds,
             mode="demo",
             timestamp=now,

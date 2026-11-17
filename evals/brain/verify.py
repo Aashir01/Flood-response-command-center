@@ -60,8 +60,8 @@ def extract_numbers(text: str) -> list[Num]:
     t = text.translate(_DIGITS)
     for pat, mark, _ in _UNITS:
         t = pat.sub(mark, t)
-    for m in _MASKS:
-        t = m.sub(lambda mm: " " * len(mm.group(0)), t)
+    for mask in _MASKS:
+        t = mask.sub(lambda mm: " " * len(mm.group(0)), t)
     out: list[Num] = []
     for m in _NUM.finditer(t):
         whole, frac, pct = m.group(1), m.group(2) or "", m.group(3)
