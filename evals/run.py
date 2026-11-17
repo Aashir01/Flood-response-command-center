@@ -45,9 +45,12 @@ def run_organ(organ: str, fast: bool, seed: int) -> OrganResult:
         return OrganResult(status="not_run", message=f"no eval module {module_name}")
     try:
         module = importlib.import_module(module_name)
-        metrics: list[MetricResult] = module.run(fast=fast, seed=seed)
+        out = module.run(fast=fast, seed=seed)
     except Exception as exc:
         return OrganResult(status="error", message=f"{type(exc).__name__}: {exc}")
+    if isinstance(out, OrganResult):  # an organ may report not_run or a message itself
+        return out
+    metrics: list[MetricResult] = out
     failed = any(m.met_target is False for m in metrics)
     return OrganResult(status="fail" if failed else "pass", metrics=metrics)
 
