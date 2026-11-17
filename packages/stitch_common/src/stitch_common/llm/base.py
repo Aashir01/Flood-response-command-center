@@ -58,7 +58,7 @@ class LLMResponse(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     text: str
-    provider: str  # "anthropic" | "openai" | "fake"
+    provider: str  # "anthropic" | "openai" | "nebius" | "fake"
     model: str
     usage: dict[str, int] = Field(default_factory=dict)
     latency_s: float = 0.0

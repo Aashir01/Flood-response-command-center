@@ -20,11 +20,13 @@ API (everything below is importable from ``stitch_common.llm``):
   modes: ``adversarial``, ``garbage``, ``echo_injection``.
 * ``RecordingLLM(inner, path)``: records real exchanges for later replay
   (``python -m stitch_common.llm.recording check|keys FILE``).
+* ``NebiusClient``: Nebius Token Factory (OpenAI-compatible; ``NEBIUS_API_KEY``, optional
+  ``NEBIUS_BASE_URL``), uses the ``openai`` extra.
 * ``ClaudeClient``, ``OpenAIClient``: lazy SDK import (extras ``stitch-common[anthropic]``,
   ``stitch-common[openai]``), key from ``ANTHROPIC_API_KEY`` / ``OPENAI_API_KEY``, model from
   ``STITCH_LLM_MODEL`` or the default.
 * ``get_llm_client(provider=None, *, recordings=None, model=None)``: provider from
-  ``STITCH_LLM_PROVIDER`` (``fake`` default, ``anthropic``, ``openai``). For ``fake``,
+  ``STITCH_LLM_PROVIDER`` (``fake`` default, ``anthropic``, ``openai``, ``nebius``). For ``fake``,
   ``recordings`` defaults to ``STITCH_LLM_RECORDINGS`` (``os.pathsep``-separated paths).
 
 Nothing in this package calls the network at import time. Tests never use the real adapters.
@@ -38,8 +40,11 @@ from pathlib import Path
 
 from stitch_common.llm.adapters import (
     DEFAULT_ANTHROPIC_MODEL,
+    DEFAULT_NEBIUS_MODEL,
     DEFAULT_OPENAI_MODEL,
+    NEBIUS_BASE_URL,
     ClaudeClient,
+    NebiusClient,
     OpenAIClient,
 )
 from stitch_common.llm.base import (
@@ -56,7 +61,7 @@ from stitch_common.llm.base import (
 from stitch_common.llm.fake import FakeLLM, Recording, default_recording_paths, load_recordings
 from stitch_common.llm.recording import RecordingLLM, stale_keys
 
-PROVIDERS = ("fake", "anthropic", "openai")
+PROVIDERS = ("fake", "anthropic", "openai", "nebius")
 
 
 def provider_name(provider: str | None = None) -> str:
@@ -79,12 +84,16 @@ def get_llm_client(
         return ClaudeClient(model)
     if name == "openai":
         return OpenAIClient(model)
+    if name == "nebius":
+        return NebiusClient(model)
     return FakeLLM(recordings if recordings is not None else default_recording_paths())
 
 
 __all__ = [
     "DEFAULT_ANTHROPIC_MODEL",
+    "DEFAULT_NEBIUS_MODEL",
     "DEFAULT_OPENAI_MODEL",
+    "NEBIUS_BASE_URL",
     "PROVIDERS",
     "BaseLLMClient",
     "ClaudeClient",
@@ -94,6 +103,7 @@ __all__ = [
     "LLMResponse",
     "LLMUnavailable",
     "Message",
+    "NebiusClient",
     "OpenAIClient",
     "Recording",
     "RecordingLLM",

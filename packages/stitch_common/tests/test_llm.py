@@ -13,6 +13,8 @@ from hypothesis import given
 from hypothesis import strategies as st
 
 from stitch_common.llm import (
+    DEFAULT_NEBIUS_MODEL,
+    NEBIUS_BASE_URL,
     ClaudeClient,
     FakeLLM,
     LLMClient,
@@ -20,6 +22,7 @@ from stitch_common.llm import (
     LLMResponse,
     LLMUnavailable,
     Message,
+    NebiusClient,
     OpenAIClient,
     RecordingLLM,
     RecordingMissing,
@@ -226,4 +229,45 @@ def test_live_openai_smoke() -> None:  # pragma: no cover - needs a key and the 
     if not os.environ.get("OPENAI_API_KEY"):
         pytest.skip("OPENAI_API_KEY not set")
     resp = OpenAIClient().complete("Reply with the word ok.", system="Be brief.", max_tokens=5)
+    assert resp.text
+
+
+def test_nebius_adapter_with_mocked_sdk(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: dict[str, Any] = {}
+
+    def create(**kwargs: Any) -> Any:
+        seen.update(kwargs)
+        return SimpleNamespace(
+            choices=[SimpleNamespace(message=SimpleNamespace(content="<think>x</think>\nok"))],
+            usage=SimpleNamespace(prompt_tokens=4, completion_tokens=1),
+        )
+
+    sdk = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    schema = {"type": "object"}
+    resp = NebiusClient("meta-llama/test", sdk_client=sdk).generate(_req(response_format=schema))
+    assert resp.provider == "nebius" and resp.model == "meta-llama/test"
+    assert resp.text == "ok"  # a leading reasoning block is dropped
+    assert seen["max_tokens"] > 0 and "max_completion_tokens" not in seen
+    assert seen["response_format"] == {"type": "json_schema", "json_schema": schema}
+    assert "JSON Schema" in seen["messages"][0]["content"]
+
+
+def test_nebius_provider_selection_and_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("STITCH_LLM_PROVIDER", "nebius")
+    monkeypatch.delenv("STITCH_LLM_MODEL", raising=False)
+    client = get_llm_client()
+    assert isinstance(client, NebiusClient) and client.model == DEFAULT_NEBIUS_MODEL
+    assert client._base_url() == NEBIUS_BASE_URL
+    monkeypatch.setenv("NEBIUS_BASE_URL", "https://example.invalid/v1/")
+    assert client._base_url() == "https://example.invalid/v1/"
+    monkeypatch.delenv("NEBIUS_API_KEY", raising=False)
+    with pytest.raises(LLMUnavailable, match="NEBIUS_API_KEY"):
+        NebiusClient().generate(_req())
+
+
+@pytest.mark.live
+def test_live_nebius_smoke() -> None:  # pragma: no cover - needs a key and the network
+    if not os.environ.get("NEBIUS_API_KEY"):
+        pytest.skip("NEBIUS_API_KEY not set")
+    resp = NebiusClient().complete("Reply with the word ok.", system="Be brief.", max_tokens=5)
     assert resp.text

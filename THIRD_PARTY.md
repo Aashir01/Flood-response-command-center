@@ -49,6 +49,8 @@ Bootstrap tooling (added with the bootstrap spec; versions pinned in `uv.lock`):
 | ruff, mypy | lint, type-check | MIT | in use |
 | MCP Python SDK (`mcp`) | organ template and its smoke test | MIT | in use |
 | hatchling | build backend for workspace packages | MIT | in use |
+| OpenAI Python SDK (`openai`) | `stitch_common.llm` OpenAI and Nebius adapters (extra `openai`, installed in Brain and Library) | Apache-2.0 | in use |
+| Anthropic Python SDK (`anthropic`) | `stitch_common.llm` Claude adapter (optional extra, not in images) | MIT | optional |
 ## Generated / AI-assisted code
 
 Specs, steering docs, and code are developed with Kiro (AI-assisted). See `docs/kiro-writeup.md`.
@@ -155,3 +157,12 @@ Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond 
 | Library | Used for | License | Status |
 |---|---|---|---|
 | (none yet) | | | |
+
+## Hosted LLM providers (optional, off by default)
+
+The demo runs with `STITCH_LLM_PROVIDER=fake` (recorded replies, no network). Live phrasing, Urdu translation and Library answers can use a hosted provider; keys come only from the environment.
+
+| Service | Used for | Terms | Status |
+|---|---|---|---|
+| Nebius Token Factory (OpenAI-compatible API, `https://api.tokenfactory.nebius.com/v1/`) | Brain prose and translation, Library answers when `STITCH_LLM_PROVIDER=nebius` | Nebius service terms; model licenses per model card (default `meta-llama/Llama-3.3-70B-Instruct`, Llama 3.3 Community License) | optional |
+| Anthropic API, OpenAI API | same, alternative providers | provider service terms | optional |

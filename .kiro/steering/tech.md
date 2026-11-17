@@ -23,8 +23,8 @@ inclusion: always
 - `data/demo/` holds the small committed offline dataset. Large raw data goes in `data/raw/` (git-ignored) and is fetched by scripts.
 
 ## LLM
-- One `LLMClient` interface in `stitch_common.llm` with Claude and OpenAI adapters plus a deterministic `FakeLLM` for tests and offline demo.
-- Selected by env: `STITCH_LLM_PROVIDER` (`anthropic`, `openai`, `fake`), plus the provider's own key variable. No keys in the repo. `.env.example` lists names only.
+- One `LLMClient` interface in `stitch_common.llm` with Claude, OpenAI and Nebius (OpenAI-compatible Token Factory) adapters plus a deterministic `FakeLLM` for tests and offline demo.
+- Selected by env: `STITCH_LLM_PROVIDER` (`anthropic`, `openai`, `nebius`, `fake`), `STITCH_LLM_MODEL`, plus the provider's own key variable (`NEBIUS_API_KEY` for Nebius). No keys in the repo. `.env.example` lists names only.
 - Demo mode must work with `fake` (replayed recorded responses) so `docker compose up` needs no key.
 
 ## Frontend
@@ -54,7 +54,9 @@ Every organ runs from `data/demo/` with no network calls. Live mode (Open-Meteo 
 | Variable | Purpose | Default |
 |---|---|---|
 | `STITCH_MODE` | `demo` or `live` | `demo` |
-| `STITCH_LLM_PROVIDER` | `fake`, `anthropic`, `openai` | `fake` |
+| `STITCH_LLM_PROVIDER` | `fake`, `anthropic`, `openai`, `nebius` | `fake` |
+| `STITCH_LLM_MODEL` | model id for the provider | provider default (Nebius: `meta-llama/Llama-3.3-70B-Instruct`) |
+| `NEBIUS_API_KEY`, `NEBIUS_BASE_URL` | Nebius Token Factory key and optional base URL | unset |
 | `STITCH_WHISPER_MODEL` | Whisper size | `base` |
 | `STITCH_EMBED_MODEL` | Library embedding model | small multilingual |
 | `STITCH_RERANK_MODEL` | Library reranker | small |

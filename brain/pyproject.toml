@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Brain of Stitch: task-graph orchestrator, evidence store, conflict rules, critic and HTTP/SSE API"
 requires-python = ">=3.12"
 dependencies = [
-    "stitch-common[mcp]",
+    "stitch-common[mcp,openai]",
     "fastapi>=0.115",
     "uvicorn>=0.30",
     "duckdb>=1.0",

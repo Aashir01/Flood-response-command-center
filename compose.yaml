@@ -36,6 +36,7 @@ x-python-health: &python-health
 x-organ-env: &organ-env
   STITCH_MODE: ${STITCH_MODE:-demo}
   STITCH_LLM_PROVIDER: ${STITCH_LLM_PROVIDER:-fake}
+  STITCH_LLM_MODEL: ${STITCH_LLM_MODEL:-}
   STITCH_HOST: 0.0.0.0
   STITCH_PORT: "8000"
   STITCH_LAZY_LOAD: ${STITCH_LAZY_LOAD:-1}
@@ -273,6 +274,8 @@ services:
       STITCH_CORS_ORIGINS: https://stitch.aashirnoman.dev,http://localhost,http://127.0.0.1
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      NEBIUS_API_KEY: ${NEBIUS_API_KEY:-}
+      NEBIUS_BASE_URL: ${NEBIUS_BASE_URL:-}
     networks: [core]
     <<: *hardening
     healthcheck: *python-health
