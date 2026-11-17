@@ -13,20 +13,20 @@ Owner actions that block or shape the schedule (do them on day 1, in parallel wi
 - Optionally request written permission from NDMA, PDMA Sindh, and Sphere (§3.1).
 - Find a native Urdu reviewer for the translated documents and for the Urdu questions.
 
-- [ ] **1. Scaffold the organ with `surgeon`** `core` `[M]` (about 1 h)
+- [x] **1. Scaffold the organ with `surgeon`** `core` `[M]` (about 1 h)
   - Generate `organs/library/` from the surgeon template: pyproject, `src/stitch_library`, `tests/{unit,property,contract,perf}`, README. Create the module tree from design §1 as empty modules with docstrings.
   - Add dependencies: `numpy`, `onnxruntime`, `tokenizers`, `pypdfium2`, `pdfminer.six`, `pyarrow`, `pyyaml`, `psycopg[binary]` (extra `pg`), `snowballstemmer` (optional extra). Each gets a `THIRD_PARTY.md` line in the same commit. **Verify the license of `pypdfium2` and `pdfminer.six` and record it** (design §4.1). If either is not permissive, stop and pick another extractor.
   - Confirm `no_network` is on by default, Hypothesis profiles `dev` and `ci` apply, ruff and mypy config applies.
   - Add pytest markers: `models` (needs the model cache), `pg` (needs `STITCH_TEST_PG_DSN`, uses `allow_loopback`), `perf`, `live`.
   - Done when: `uv run pytest` passes on the skeleton and `uv sync --package stitch-library` works on Windows.
 
-- [ ] **2. `stitch_common.llm`: interface and `FakeLLM`** `core` `[M]` (about 2 h)
+- [x] **2. `stitch_common.llm`: interface and `FakeLLM`** `core` `[M]` (about 2 h)
   - `LLMRequest`, `LLMResponse`, `LLMClient`, `LLMUnavailable`, and `get_client(provider)` per design §7.1. `FakeLLM` replays `data/demo/library/llm_recordings.jsonl` by key, raises `LLMUnavailable` on a missing key, and has `adversarial`, `garbage`, and `echo_injection` test modes. Adapters come in task 22.
   - Tests: replay hit and miss, key stability (prompt version, normalized query, sorted chunk ids), mode behavior. Refs: LIB-R7.1, R7.2.
   - Coordinate with the brain spec so it reuses this module and does not write its own.
   - Done when: `FakeLLM` is importable from `stitch_common.llm` with `mypy --strict` clean.
 
-- [ ] **3. Normalization, language detection, sentences, chunks** `core` `[M]` (about 3 h)
+- [x] **3. Normalization, language detection, sentences, chunks** `core` `[M]` (about 3 h)
   - `core/normalize.py`, `core/lang.py`, `core/sentences.py`, `core/chunk.py` per design §4.2 to §4.4, with `CHUNKER_VERSION`.
   - `tests/strategies.py`: `page_texts()` (English, Urdu, mixed, Urdu digits, ZWNJ, diacritics, letter variants, bullets, hyphenated line breaks).
   - Property tests: P9 (idempotence, quote verbatim after normalization), P13 (sentence spans), chunk spans equal `text[start:end]`, chunks never cross pages. Unit tests: hand-built English and Urdu splitting cases (`1.5 litres`, `No. 5`, `۔`, `؟`, bullets, long sentence), language detection on pure, mixed, and Arabic-only samples. Refs: LIB-R1.1, R1.2.
@@ -38,18 +38,18 @@ Owner actions that block or shape the schedule (do them on day 1, in parallel wi
   - Tests: Hypothesis test that builds random manifests and file trees in a temp directory and compares the checker's verdict to an oracle (P6). Unit tests for each failure rule. Run the checker on the real repo in CI. Refs: LIB-R1.4, R10.1, R10.3. P6.
   - Done when: the checker passes on the repo, fails on each negative fixture, and every committed file has an `owner_confirmed` entry.
 
-- [ ] **5. Ingestion pipeline and pack builder** `core` `[M]` (about 4 h)
+- [x] **5. Ingestion pipeline and pack builder** `core` `[M]` (about 4 h)
   - `ingest/pdf.py` (pypdfium2, pdfminer fallback, `classify_page` with the six rules of §4.1, child-process isolation with timeout), `ingest/pipeline.py` (pages, chunks, ids, report), `scripts/build_library_pack.py` (writes `pages.parquet`, `chunks.parquet`, `pack.json`; vectors are added in task 8). Ingestion fails on a manifest entry with a missing field and on documents under 60 % readable pages unless `--allow-low-yield`.
   - Fixtures: small generated PDFs (clean English, clean Urdu text-first, an empty page, a page with garbled private-use characters, a page with reversed Urdu words).
   - Tests: unit tests for each unreadable reason and the reorder detector. Property tests P7 (ids and Store contents identical on re-run) and P16 (unreadable pages never produce chunks). Refs: LIB-R1.1 to R1.5.
   - Done when: the pack builds from the committed PDFs and the ingest report lists readable-page ratios per document.
 
-- [ ] **6. `Store` protocol, `MemoryStore`, contract suite** `core` `[M]` (about 2 h)
+- [x] **6. `Store` protocol, `MemoryStore`, contract suite** `core` `[M]` (about 2 h)
   - `store/base.py`, `store/memory.py` per design §5.1 and §5.2. Load a pack into a `MemoryStore`.
   - `tests/contract/test_store_contract.py`: one parametrized suite (memory now, pgvector in task 13) covering idempotent upsert, delete cascade, filters, tie-break order, unreadable pages excluded.
   - Done when: the contract suite passes for `MemoryStore`.
 
-- [ ] **7. BM25 and tokenizers** `core` `[M]` (about 2 h)
+- [x] **7. BM25 and tokenizers** `core` `[M]` (about 2 h)
   - `core/tokenize.py` (English stopwords, Urdu stopword list with a provenance note, optional stemmer behind a flag), `core/bm25.py` per design §6.2.
   - Tests: hand-computed BM25 scores on a 3-document example, Urdu fold equivalence (variant letters match), language routing, rebuild fingerprint. Refs: LIB-R2.1.
   - Done when: hand-computed scores match to 1e-9.
@@ -60,25 +60,27 @@ Owner actions that block or shape the schedule (do them on day 1, in parallel wi
   - Tests: `FakeEmbedder` determinism and overlap monotonicity (unit). `@models` tests: embedding shape and norm, English and Urdu paraphrase ranks above an unrelated sentence, int8 versus fp32 parity. Refs: LIB-R1.1, R7.4, R11.1.
   - Done when: a pack with real vectors builds on the laptop and the `@models` tests pass with the cache present.
 
-- [ ] **9. Hybrid retrieval and `search_guidance` core** `core` `[M]` (about 3 h)
+- [x] **9. Hybrid retrieval and `search_guidance` core** `core` `[M]` (about 3 h)
   - `core/fusion.py` (RRF, k = 60), `core/retrieve.py` (§6.1 steps 1 to 8, reranker as `NullReranker` for now, exact score fill-in, `text_sha` dedupe, filters), `models/reranker.py` with `NullReranker` and `FakeReranker`.
   - Property tests: P3, P8, P17, P4 (constrained generator, as written in design §11). Unit tests: hand-built fusion example, cross-lingual query finds an Urdu chunk with `FakeEmbedder`, filters. Refs: LIB-R2.1 to R2.5.
   - Done when: P3, P8, P17, and P4 pass under `ci`.
 
-- [ ] **10. Refusal logic with provisional thresholds, scope gate, quantity rule** `core` `[M]` (about 2 h)
+- [x] **10. Refusal logic with provisional thresholds, scope gate, quantity rule** `core` `[M]` (about 2 h)
   - `core/decide.py` (pure verdict function), `core/scope.py` (anchors from `data/demo/library/scope_anchors.yaml`, 30 English and 30 Urdu phrases), quantity rule (§8.1 step 4). Thresholds come from `calibration.json`. Ship a **provisional** file marked `"provisional": true`, set by hand from a few probes. The server logs a warning while it is provisional.
   - Property test P10 (monotone in the threshold). Unit tests: each gate in isolation, `closest_hits` shape, the quantity rule in English and Urdu. Refs: LIB-R4.1, R4.2, R4.4.
   - Done when: P10 passes and the three refusal reasons are reachable in tests.
 
-- [ ] **11. Citations, verification, extractive answers** `core` `[M]` (about 3 h)
+- [x] **11. Citations, verification, extractive answers** `core` `[M]` (about 3 h)
   - `core/citations.py` (slice quote, truncate at 400 on a word boundary, adjust span), `core/answer.py` (verification steps 1 to 5 of §7.3, answer assembly from claims, final non-empty-citation assertion), `core/extractive.py` (§7.5). The LLM path is task 15, but the verification code is written here against a claim model so extractive answers use the same checks.
   - Property tests: P1 and P2 (extractive path, any query on `mini_corpora`), P14 (numbers), P15 (verdict versus gate). Unit tests: truncation, cross-language claim handling, URL rejection. Refs: LIB-R3.1 to R3.4, R4.4, R5.1, R5.2, R7.3.
   - Done when: P1, P2, P14, and P15 pass under `ci`.
 
-- [ ] **12. MCP server, envelope, health, offline end-to-end test** `core` `[M]` **checkpoint** (about 2 h)
+- [x] **12. MCP server, envelope, health, offline end-to-end test** `core` `[M]` **checkpoint** (about 2 h)
   - `server.py` (`search_guidance`, `answer_with_citations`, error mapping per §9.1, provenance per §9.2, input limits per §13), `http.py` (`/healthz`, §9.3), `settings.py`. `STITCH_LIBRARY_STORE=memory` loads the committed pack directly. Write `data/demo/library/demo_questions.yaml` (5 to 6 questions answerable from committed documents; share it with the brain spec).
   - Tests: contract tests validate real tool output against the schemas generated from `stitch_common` (`additionalProperties: false`). End-to-end test under `no_network`: start the server in memory mode, call both tools for every demo question, assert answered with valid citations. P18. Refs: LIB-R8.1, R8.2, R11.1, R11.2.
   - Done when: the end-to-end test passes with sockets disabled and the contract hook is green. **Minimal path complete.**
+
+Status (2026-11-17, implementing agent): ticked tasks meet their "Done when". Open items in ticked tasks: no `tests/perf` directory (task 1), `record_llm_demo.py --check` is not yet a CI step (task 15). Not ticked: 4 (no row is `owner_confirmed`), 8 (no `@models` embedder tests besides the demo replay test), 13 (no string-built-SQL grep test, no pgvector service in CI; the pg contract suite, P11 and `tests/integration/test_pgvector_pack.py` pass locally against Docker), 14 (no failing-reranker fallback test), 17 (set is now 51 questions after the 2026-11-17 corpus change; no `evals/library/README.md`), 19 (`docs/library-models.md` missing), 20, 21, 22 (no manual live run of the Claude/OpenAI adapters), 23.
 
 ## After the checkpoint
 
@@ -92,12 +94,12 @@ Owner actions that block or shape the schedule (do them on day 1, in parallel wi
   - Tests: `@models` test that the relevant passage ranks above an unrelated one (English), the Urdu behavior is recorded (see task 19), a failing reranker degrades to `rerank = null` without error, P3 still holds with the reranker off, on, and failing. Refs: LIB-R2.1, R2.2, R7.4.
   - Done when: reranked retrieval passes the contract and property tests and falls back cleanly.
 
-- [ ] **15. LLM answer path and prompt-injection defenses** `core` (about 4 h)
+- [x] **15. LLM answer path and prompt-injection defenses** `core` (about 4 h)
   - `core/context.py` (sanitize, number sentences, build prompt, `PROMPT_VERSION`), the claim schema and parser, the LLM branch in `core/answer.py` (resolve ids, set `insufficient` and `conflict` handling, extractive fallback on `LLMUnavailable`, invalid or oversized output, `STITCH_LIB_REQUIRE_LLM`). `scripts/record_llm_demo.py` (`live` marker, needs a key) writes `llm_recordings.jsonl` for the demo questions after human review. `--check` lists stale keys and runs in CI.
   - Tests: P5 (injection payloads and `FakeLLM` adversarial modes), P1, P2, P14, P15 with fuzzed `llm_outputs()`. Unit tests: unknown ids, extra keys, oversize, non-JSON, forged `<doc>` tags, injected URL, `insufficient: true`. Replay test: demo questions answer from recordings under `no_network`. Refs: LIB-R3.1, R5, R6, R7.1 to R7.3. P5, P14, P15.
   - Done when: P5 passes and every demo question answers from a recording through the full verification path.
 
-- [ ] **16. Conflict detector** `core` (about 2 h)
+- [x] **16. Conflict detector** `core` (about 2 h)
   - `core/conflict.py` per design §8.6 (unit table, canonical units, relative difference above 20 %, two documents, shared query terms). Wire it into the decision order. Support `STITCH_LIB_CONFLICT_POLICY=refuse` only.
   - Tests: fixed sentences (litres versus US gallons, same-document repeats, different dimensions, Urdu digits), `closest_hits` holds both passages, LLM `conflict: true` tightens. Refs: LIB-R4.3.
   - Done when: both passages of a conflicting pair appear in `closest_hits` with reason `CONFLICTING_EVIDENCE`, and non-conflicts are not refused.
@@ -108,7 +110,7 @@ Owner actions that block or shape the schedule (do them on day 1, in parallel wi
   - Tests: unit tests of the validator on good and broken fixtures. P12 split-hash check as a CI script. Refs: LIB-R9.1, R10.4. P12.
   - Done when: the validator passes and counts match design §10.1.
 
-- [ ] **18. Calibration and eval harness** `core` (about 4 h)
+- [x] **18. Calibration and eval harness** `core` (about 4 h)
   - `evals/library/calibrate.py` (design §8.4, seed 0, writes `calibration.json`), `evals/library/run.py` (metrics of design §10.4, committed and full corpus reported separately, bootstrap intervals, per-language, reranker on and off, extractive versus LLM). Wire into `python -m evals.run --organ library [--fast]` and the dashboard schema. Stale-calibration and split-overlap checks refuse to run.
   - Tests: threshold selection on synthetic scores (known optimum), cost weights, pooled-threshold fallback with warning, metric functions on hand-built result sets, stale calibration blocks the run. Refs: LIB-R4.5, R9.2, R10.4. P10, P12.
   - Done when: `python -m evals.run --organ library --fast --seed 0` is reproducible, replaces the provisional thresholds, and the report separates dev, test, committed, and full.
