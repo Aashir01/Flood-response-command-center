@@ -34,13 +34,13 @@ Tasks 1, 2, 3 (English numbers and units, Urdu minimum: digits and units tables)
 
 ## Tasks
 
-- [ ] **1. Scaffold the organ with `surgeon`, models, settings, `fake` provider** `core` (0.5 h)
+- [x] **1. Scaffold the organ with `surgeon`, models, settings, `fake` provider** `core` (0.5 h) *(done 2026-11-17; the `google` and `local-mms` extras are left to tasks 12 and 13)*
   - Generate `organs/voice/` (pyproject with extras `google` and `local-mms`, `src/stitch_voice`, tests). Wire `stitch_common` Voice models. `settings.py` with the env table (design §7). `/healthz` returning `capabilities`, `tts_provider`, `hosted`, `whisper_model`.
   - `providers/base.py` (protocol, typed errors) and `providers/fake.py` (deterministic tone WAV, duration proportional to spoken characters).
   - Tests: import, healthz, `fake` determinism, `no_network` fixture on by default. Refs: VOX-R5.1, R7.1, R7.5, R9.2.
   - Done when: `uv run pytest` is green on the skeleton and `fake` is selectable by env.
 
-- [ ] **2. AudioStore, cache key, `prerendered` provider, budget store** `core` (0.75 h)
+- [x] **2. AudioStore, cache key, `prerendered` provider, budget store** `core` (0.75 h) *(done 2026-11-17; `tests/unit/test_store.py`)*
   - `core/keys.py` (canonical JSON hash including `pipeline_version`), `store.py` (`AudioStore` with atomic writes, LRU eviction, separate read-only prerendered root; `BudgetStore` in SQLite), `core/budget.py` (reserve, release, monthly rollover by UTC month, 80 % warning), `providers/prerendered.py` (index lookup by text hash and language; `NOT_FOUND` otherwise).
   - Tests: atomic write (kill mid-write leaves no partial file), eviction never touches prerendered entries, budget never exceeds the cap under concurrent reservations, month rollover with an injected clock, release after failure. Refs: VOX-R3.2, R7.3, R7.5, VOX-P3 (store part).
   - Done when: a cache hit returns identical bytes and `NOT_FOUND` is returned for unknown text.
@@ -51,7 +51,7 @@ Tasks 1, 2, 3 (English numbers and units, Urdu minimum: digits and units tables)
   - Tests: table-driven unit tests per rule (including `m3/s`, `m³/s`, `km2`, `1,234,567`, decimals, ISO dates, `GloFAS`, `NDMA`); property **VOX-P2** idempotence on mixed generated text; unit test that unspeakables (URLs, UUIDs, JSON pointers, `[1]`) are stripped. Refs: VOX-R2.3, R2.4, VOX-P2.
   - Done when: P2 passes under `ci`, and the English and Urdu sample sentences produce the expected spoken forms in the review sheet.
 
-- [ ] **4. Sentence splitter and audio joining** `core` (0.5 h)
+- [x] **4. Sentence splitter and audio joining** `core` (0.5 h) *(done 2026-11-17 for WAV; the MP3 join was dropped by revision R-DG, output is always WAV)*
   - `core/split.py` (boundaries including `۔` and `؟`, protected abbreviations, 800-character chunks, long-sentence fallback), `core/audio.py` (WAV join with silence via `wave`; MP3 frame join with ID3/Xing stripping, parameter check, zero-payload silence frames, frame-count duration).
   - Tests: splitter rejoin reproduces the text; WAV join duration equals the sum plus pauses; MP3 join decoded with PyAV matches the sum plus pauses within 20 ms and has no decode errors; mismatched parameters raise the typed error; **VOX-P1** duration positivity and monotonicity with `fake`. Refs: VOX-R2.2, VOX-P1.
   - Done when: P1 passes and a joined MP3 of five chunks decodes cleanly.
@@ -68,12 +68,12 @@ Tasks 1, 2, 3 (English numbers and units, Urdu minimum: digits and units tables)
   - Measure on the dev laptop and, when available, the VPS: real-time factor for `tiny`, `base`, `small` on a 15 s clip (VOX-R1.5). Record in `docs/`.
   - Done when: P4 passes, silence and noise return empty text with `NO_SPEECH`, and the 15 s English clip transcribes in under 15 s with `base` on a 2 vCPU limit (`docker run --cpus 2`).
 
-- [ ] **7. MCP server, envelope, contract tests, P3, P5** `core` (0.5 h)
+- [x] **7. MCP server, envelope, contract tests, P3, P5** `core` (0.5 h) *(done 2026-11-17; P5 covers `fake`, `prerendered`, `deepgram` and `azure` mocks; no `google` provider exists)*
   - `server.py` with `transcribe` and `speak`, error mapping (design §6), provenance (`model`, `data_sources`), provider chain with fallbacks, `/healthz`, stdio and HTTP transports.
   - Tests: contract tests (inputs and outputs validate with `additionalProperties: false`); **VOX-P3** (noisy provider proves cache identity); **VOX-P5** (identical schema across `fake`, `prerendered`, `azure` mock, `google` mock); smoke test starting the server, listing tools, calling both. Refs: VOX-R1, R2, R5, R7.5, R7.6, VOX-P3, VOX-P5.
   - Done when: the `on-save-contract-validate` hook passes and P3 and P5 are green.
 
-- [ ] **8. Pre-render script and licensing gate** `core` + `gate` + `owner` (0.5 h)
+- [x] **8. Pre-render script and licensing gate** `core` + `gate` + `owner` (0.5 h) *(done 2026-11-17: option (b), `docs/voice-licensing.md`; `scripts/prerender_voice.py` and `python -m stitch_voice.prerender`; English rendered with Deepgram, Urdu needs Azure)*
   - `scripts/prerender_demo_audio.py` (`--dry-run` prints characters and budget impact; writes `<lang>-<sha8>.<ext>` and `index.json` with provider, voice, text hash, duration, date, tool version). `data/demo/voice/scripts/en.txt` and `ur.txt` are produced from the Brain's script builder (task 10) or hand-written first and checked later.
   - **Gate (owner, 30 min):** read the Microsoft Product Terms and the Azure AI services terms for Speech output (links in design §8.2). Decide: (a) cleared in writing: run the script, commit the audio, add MANIFEST and THIRD_PARTY rows naming Azure and the voices, set the flag; (b) not cleared or not checked: do **not** commit Azure audio; generate on the VPS after deploy with `docker compose run --rm voice python -m stitch_voice.prerender --demo`; commit only the scripts, `index.json` without audio, and `fake`-provider audio so clean-clone offline runs still exercise the path.
   - Tests: dry run output is deterministic; `index.json` schema; every audio file in `data/demo/voice` appears in the MANIFEST (also checked by the deployment hygiene script); a Brain test (task 10) asserting the script text equals the committed files. Refs: VOX-R3.2, R7.3, R4.3, DEP-R8.1.
