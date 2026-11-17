@@ -6,18 +6,20 @@
 
 Services use the real local models (``STITCH_MODEL_DIR``, default ``data/raw/models``) and the
 ``FakeLLM`` replaying ``data/demo/library/llm_recordings.jsonl``; questions without a recording
-take the extractive path. No network is used.
+take the extractive path. No network is used, except with ``STITCH_EVAL_LIVE_LLM=1``
+(``python -m evals.run --live-llm``), which calls the provider named by ``STITCH_LLM_PROVIDER``.
 """
 
 from __future__ import annotations
 
+import os
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cache
 from typing import Literal
 
 from evals.library.dataset import PageText
-from stitch_common.llm import FakeLLM, LLMClient
+from stitch_common.llm import FakeLLM, LLMClient, get_llm_client, provider_name
 from stitch_library.calibration import Calibration, load_calibration, profile_key
 from stitch_library.core.normalize import normalize_text
 from stitch_library.fetched import FetchedSet, ingest_fetched, load_fetched_into_store
@@ -93,6 +95,23 @@ def normalize_quote(s: str) -> str:
     return normalize_text(s)
 
 
+LIVE_LLM_TIMEOUT_S = 60.0
+
+
+def live_llm() -> bool:
+    return os.environ.get("STITCH_EVAL_LIVE_LLM") == "1"
+
+
+def default_llm(settings: Settings) -> LLMClient:
+    """The replaying ``FakeLLM``, or the configured provider for a ``--live-llm`` run."""
+    if not live_llm():
+        return FakeLLM([settings.recordings])
+    name = provider_name()
+    if name == "fake":
+        raise RuntimeError("--live-llm needs STITCH_LLM_PROVIDER set to a real provider")
+    return get_llm_client(name)
+
+
 @dataclass
 class Built:
     service: LibraryService
@@ -116,12 +135,14 @@ def build_service(
     if corpus == "full":
         load_fetched_into_store(store, fetched(), emb)
     settings = Settings() if rerank_langs is None else Settings(rerank_langs=rerank_langs)
+    if live_llm():  # this run measures answer quality, so allow more than the service's 6 s
+        settings = replace(settings, llm_timeout_s=LIVE_LLM_TIMEOUT_S)
     cal = calibration or load_calibration(profile_key(emb.model_id, rr.model_id))
     service = LibraryService.build(
         store,
         emb,
         rr,
-        llm=llm if llm is not None else FakeLLM([settings.recordings]),
+        llm=llm if llm is not None else default_llm(settings),
         settings=settings,
         calibration=cal,
     )
