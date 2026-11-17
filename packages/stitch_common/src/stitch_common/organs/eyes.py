@@ -14,7 +14,12 @@ from pydantic import AwareDatetime, Field
 from stitch_common.base import Contract
 from stitch_common.types import BBox, FeatureCollection, Mode, NonNeg, Slug, Unit
 
-ModelVariant = Literal["unet-resnet18-s1-int8", "vh-threshold-baseline"]
+ModelVariant = Literal[
+    "unet-resnet18-s1-int8",
+    "unet-resnet18-s1-fp16",  # v0.6
+    "unet-resnet18-s1-fp32",  # v0.6
+    "vh-threshold-baseline",
+]
 
 
 class SegmentFloodIn(Contract):

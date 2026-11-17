@@ -37,7 +37,7 @@ PROVENANCE: dict[str, Any] = {
     "organ": "ledger",
     "tool": "optimize_allocation",
     "tool_version": "0.1.0",
-    "contract_version": "0.5",
+    "contract_version": "0.6",
     "run_id": "2f5e2b0e-6b36-4b3c-8a55-5d7a1f2f9c11",
     "inputs_hash": "0" * 64,
     "mode": "demo",

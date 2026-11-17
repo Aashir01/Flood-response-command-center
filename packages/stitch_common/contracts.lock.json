@@ -1,5 +1,5 @@
 {
-  "contract_version": "0.5",
+  "contract_version": "0.6",
   "schemas": {
     "brain.briefing.json": "c55630240b6fa0b86fdca0cbf1f329976a91c0d1f2fa6b82a4473a146f7e8f96",
     "brain.task_event.json": "b959381e40e968c11b066cfcc8d90e776b3ca1a0e48dfa79183b7e4fa86e2fa0",
@@ -30,7 +30,7 @@
     "eyes.compare_with_permanent_water.out.json": "761933244abc535f00f8360ea9fd9dca3dad6c2e68800060af17344f4017a6b9",
     "eyes.resource.scenes.json": "22d778e77a45a2a0e2a55db5081667c1effc45d3facb6c335a0c82d8bbd8bbfc",
     "eyes.segment_flood.in.json": "1a3f2241d814647b6733b2d7fd926d8bdee3e41547d12a8de544738ba621eeef",
-    "eyes.segment_flood.out.json": "566aad514c0f24b33b353c4efddb2fba36476cb2d9f52c11c24574e7b175be9d",
+    "eyes.segment_flood.out.json": "7ce9deca6c6fd7b7437090c3d9e97c19095304c5719525941e010912ab90e596",
     "ledger.optimize_allocation.in.json": "d860861c484934ea21f53d7543b2afcf2c82d44733609864c730df7cd9e28c1c",
     "ledger.optimize_allocation.out.json": "ec4153b8d9cc5685aff9e143951c5a02231719d4ab602af50a9c991541265a69",
     "ledger.resource.districts.json": "bf1605f1c3b51dc2d3553e6673fc05ec2ccaeafeeed2ddc586d153306c197e84",

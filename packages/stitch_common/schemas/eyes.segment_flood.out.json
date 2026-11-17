@@ -118,6 +118,8 @@
         {
           "enum": [
             "unet-resnet18-s1-int8",
+            "unet-resnet18-s1-fp16",
+            "unet-resnet18-s1-fp32",
             "vh-threshold-baseline"
           ],
           "type": "string"
