@@ -164,6 +164,9 @@ def main(argv: list[str] | None = None) -> int:
     stopped_early = False
     best_epoch = next((h["epoch"] for h in history if h.get("val_iou") == best_iou), -1)
     for epoch in range(start_epoch, epochs):
+        if epoch >= epochs:
+            # ``range`` is fixed at loop start; the time budget may shorten ``epochs`` below.
+            break
         te = time.time()
         samples = epoch_samples(rng, train, prof["crop"], prof["crops_per_chip"], cfg["augment"])
         bs = int(prof["batch"])

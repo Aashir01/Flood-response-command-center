@@ -53,6 +53,17 @@ profiles:
     time_budget_min: 180
     threads: 6
     amp: false
+  laptop256:          # second laptop job: the design's 256 px crops, time-boxed (docs/decisions.md)
+    crop: 256
+    crops_per_chip: 2
+    batch: 8
+    epochs: 60
+    warmup_epochs: 2
+    val_every: 2
+    ckpt_every: 1
+    time_budget_min: 200
+    threads: 6
+    amp: false
   smoke:
     crop: 64
     crops_per_chip: 1

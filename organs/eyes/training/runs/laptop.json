@@ -1,0 +1,204 @@
+{
+  "profile": "laptop",
+  "profile_config": {
+    "crop": 128,
+    "crops_per_chip": 4,
+    "batch": 16,
+    "epochs": 40,
+    "warmup_epochs": 2,
+    "val_every": 2,
+    "ckpt_every": 1,
+    "time_budget_min": 180,
+    "threads": 6,
+    "amp": false
+  },
+  "seed": 0,
+  "git_commit": "46cdc81 (training code; train.py loop-length fix in a later commit)",
+  "device": "cpu",
+  "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+  "torch": "2.15.0+cpu",
+  "smp": "0.6.0",
+  "pretrained": "imagenet",
+  "n_train_chips": 252,
+  "n_valid_chips": 89,
+  "effective_epochs": 24,
+  "best_epoch": 23,
+  "best_val_iou": 0.6626456226690761,
+  "wall_time_s": 5367.5,
+  "stopped_early_by_time_budget": false,
+  "note": "The time budget shortened the cosine schedule from 40 to 24 epochs after epoch 1, but the loop range was fixed at 40 (bug, fixed afterwards), so epoch 24 ran at learning rate 0 and the run was stopped by hand during epoch 25. The exported checkpoint is best.pt (best validation water IoU, epoch 23). wall_time_s is the sum of epoch times (data loading took a further ~150 s); the laptop was shared with other work.",
+  "history": [
+    {
+      "epoch": 0,
+      "train_loss": 1.2463567968337768,
+      "epoch_s": 836.9
+    },
+    {
+      "epoch": 1,
+      "train_loss": 0.9038887408471876,
+      "epoch_s": 389.8,
+      "val_iou": 0.6052955358723734,
+      "val_f1": 0.7541234898450456
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.7141539526562537,
+      "epoch_s": 285.9
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5836519171153346,
+      "epoch_s": 322.3,
+      "val_iou": 0.6171387669033294,
+      "val_f1": 0.7632477552746977
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.6131226213709,
+      "epoch_s": 297.5
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.6256804533543125,
+      "epoch_s": 529.5,
+      "val_iou": 0.6433174509194468,
+      "val_f1": 0.7829496979533765
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.5754510933353055,
+      "epoch_s": 286.4
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.5712059152222448,
+      "epoch_s": 199.4,
+      "val_iou": 0.6310672705624402,
+      "val_f1": 0.7738090046339162
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.5711552565616946,
+      "epoch_s": 170.8
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.548771281396189,
+      "epoch_s": 103.0,
+      "val_iou": 0.6506112623637301,
+      "val_f1": 0.7883276664816078
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.529554776006168,
+      "epoch_s": 111.1
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.504179049643778,
+      "epoch_s": 95.4,
+      "val_iou": 0.6049015874953235,
+      "val_f1": 0.753817669829037
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.5795384436365096,
+      "epoch_s": 87.6
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.5274266204045664,
+      "epoch_s": 99.2,
+      "val_iou": 0.6373869189339976,
+      "val_f1": 0.7785416037755587
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.5156338407147315,
+      "epoch_s": 107.4
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.5394708891549418,
+      "epoch_s": 130.0,
+      "val_iou": 0.6603864379505876,
+      "val_f1": 0.7954611322478659
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.4920519780247442,
+      "epoch_s": 99.3
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.5190988594005185,
+      "epoch_s": 91.7,
+      "val_iou": 0.6590743822964852,
+      "val_f1": 0.7945085396161643
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.5299289579833707,
+      "epoch_s": 97.6
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.512563582870268,
+      "epoch_s": 98.6,
+      "val_iou": 0.6516021405128807,
+      "val_f1": 0.7890546088908982
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.47063086830800577,
+      "epoch_s": 110.6
+    },
+    {
+      "epoch": 21,
+      "train_loss": 0.5076626899742311,
+      "epoch_s": 112.4,
+      "val_iou": 0.6592151751876171,
+      "val_f1": 0.7946108317302194
+    },
+    {
+      "epoch": 22,
+      "train_loss": 0.4400771527040389,
+      "epoch_s": 209.4
+    },
+    {
+      "epoch": 23,
+      "train_loss": 0.5214837380955296,
+      "epoch_s": 247.7,
+      "val_iou": 0.6626456226690761,
+      "val_f1": 0.7970978465096112
+    },
+    {
+      "epoch": 24,
+      "train_loss": 0.4475199810920223,
+      "epoch_s": 248.0
+    }
+  ],
+  "preprocess": {
+    "channels": [
+      "VV",
+      "VH",
+      "VV-VH"
+    ],
+    "clip_db": [
+      -35.0,
+      5.0
+    ],
+    "mean": [
+      -10.44955767166718,
+      -17.269760282101466,
+      6.820202610434291
+    ],
+    "std": [
+      4.05170420412621,
+      4.569690258043901,
+      3.3228025611020895
+    ],
+    "input": "sigma0 dB, (1, 2, H, W) VV then VH, H and W multiples of 32",
+    "computed_on": "sen1floods11 hand-labeled train split (252 chips)"
+  }
+}
