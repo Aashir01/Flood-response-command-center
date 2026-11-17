@@ -1,0 +1,119 @@
+name: cd
+# Deployment design 9.2 (DEP-R6): after CI passes on main, build and push every image to GHCR
+# tagged with the commit sha (and `main`), deploy over SSH through the forced command of the
+# restricted `deploy` user, smoke-test the public URL, and roll back on failure.
+#
+# Needs (GitHub > Settings > Environments > production):
+#   secrets  DEPLOY_SSH_KEY  private key whose public half is in ~deploy/.ssh/authorized_keys
+#            VPS_HOST        64.177.59.11
+#            VPS_HOST_KEY    the host's known_hosts line(s) (ssh-keyscan -t ed25519 <host>, verified)
+#   vars     PUBLIC_URL      http://64.177.59.11 until DNS exists, then https://stitch.aashirnoman.dev
+#            SMOKE_ARGS      optional, default "--allow-disabled voice"
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "deploy (current main) or rollback"
+        type: choice
+        options: [deploy, rollback]
+        default: deploy
+permissions:
+  contents: read
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: >
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      (github.event_name == 'workflow_dispatch' && inputs.action == 'deploy')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      sha: ${{ steps.meta.outputs.sha }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - id: meta
+        run: |
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+      - uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push (tag = commit sha)
+        uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
+        env:
+          TAG: ${{ steps.meta.outputs.sha }}
+          GH_OWNER: ${{ steps.meta.outputs.owner }}
+          SOURCE_URL: ${{ github.server_url }}/${{ github.repository }}
+        with:
+          source: .
+          files: deploy/docker-bake.hcl
+          targets: all
+          push: true
+          set: |
+            *.cache-from=type=gha,scope=stitch
+            *.cache-to=type=gha,scope=stitch,mode=max
+      - name: Also tag `main`
+        env:
+          SHA: ${{ steps.meta.outputs.sha }}
+          OWNER: ${{ steps.meta.outputs.owner }}
+        run: |
+          for img in ledger oracle library brain eyes web; do
+            docker buildx imagetools create -t "ghcr.io/$OWNER/stitch-$img:main" "ghcr.io/$OWNER/stitch-$img:$SHA"
+          done
+
+  deploy:
+    needs: publish
+    if: always() && (needs.publish.result == 'success' || (github.event_name == 'workflow_dispatch' && inputs.action == 'rollback'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    environment: production
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: deploy/bin
+      - name: SSH key and pinned host key (no trust on first use)
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          VPS_HOST_KEY: ${{ secrets.VPS_HOST_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$VPS_HOST_KEY" > ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
+      - name: Deploy (forced command accepts only a sha or `rollback`)
+        id: deploy
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          ACTION: ${{ inputs.action == 'rollback' && 'rollback' || needs.publish.outputs.sha }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            -o ServerAliveInterval=30 "deploy@$VPS_HOST" "$ACTION"
+      - name: Post-deploy smoke against the public URL
+        id: smoke
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL || 'https://stitch.aashirnoman.dev' }}
+          SMOKE_ARGS: ${{ vars.SMOKE_ARGS || '--allow-disabled voice' }}
+        run: |
+          # shellcheck disable=SC2086
+          python3 deploy/bin/smoke.py "$PUBLIC_URL" $SMOKE_ARGS --retries 6 --briefing-timeout 150
+      - name: Roll back on failure
+        if: failure() && steps.deploy.outcome == 'success' && inputs.action != 'rollback'
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            "deploy@$VPS_HOST" rollback
+          echo "::error::post-deploy smoke failed; rolled back to the previous release"
