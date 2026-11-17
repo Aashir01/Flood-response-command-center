@@ -62,8 +62,16 @@ def test_training_run_log_is_committed_and_matches_the_export() -> None:
     runs = sorted((ORGAN_DIR / "training" / "runs").glob("*.json"))
     assert runs, "training/runs/<profile>.json is missing"
     logs = [json.loads(p.read_text("utf-8")) for p in runs]
-    shipped = [g for g in logs if g.get("best_epoch") == CHECK["checkpoint_epoch"]]
-    assert shipped, "no run log has the exported checkpoint's epoch as its best epoch"
+    # The shipped run is the log whose best epoch is the exported checkpoint and whose best
+    # validation IoU equals the PyTorch validation IoU the export recomputed (same code, same
+    # 89 chips), so an older log with the same best epoch cannot match by accident.
+    shipped = [
+        g
+        for g in logs
+        if g.get("best_epoch") == CHECK["checkpoint_epoch"]
+        and abs(g["best_val_iou"] - CHECK["torch_val_iou"]) <= 1e-6
+    ]
+    assert len(shipped) == 1, "exactly one run log must match the exported checkpoint"
     log = shipped[0]
     assert log["n_train_chips"] == 252 and log["n_valid_chips"] == 89
     assert all("val_iou" in h for h in log["history"] if h["epoch"] == log["best_epoch"])
