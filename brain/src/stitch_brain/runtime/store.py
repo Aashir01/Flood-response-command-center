@@ -79,6 +79,24 @@ class EventLog:
         for w in list(self._waiters):
             w.set()
 
+    async def wait_beyond(self, seq: int, timeout_s: float) -> bool:
+        """Wait until an event with ``seq`` greater than ``seq`` exists or the log closes.
+        Returns False on timeout (the SSE route then sends a ``: ping`` comment)."""
+        if len(self._events) > seq or self._closed:
+            return True
+        waiter = asyncio.Event()
+        self._waiters.add(waiter)
+        try:
+            async with asyncio.timeout(timeout_s):
+                while len(self._events) <= seq and not self._closed:
+                    waiter.clear()
+                    await waiter.wait()
+            return True
+        except TimeoutError:
+            return False
+        finally:
+            self._waiters.discard(waiter)
+
     def after(self, seq: int) -> list[tuple[int, TaskEvent]]:
         start = max(0, seq)
         return [(i + 1, e) for i, e in enumerate(self._events[start:], start=start)]

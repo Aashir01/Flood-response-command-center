@@ -154,17 +154,31 @@ class BriefingRunner:
         }
 
     async def run(
-        self, request: BriefingRequest, briefing_id: str, emit: Emit | None = None
+        self,
+        request: BriefingRequest,
+        briefing_id: str,
+        emit: Emit | None = None,
+        *,
+        store: EvidenceStore | None = None,
     ) -> RunResult:
+        """``store``: an empty store the run fills; the API passes one so that evidence is
+        readable through ``GET /evidence/{run_id}`` while the run is still going."""
         emit = emit or (lambda e: None)
-        run = _Run(self, request, briefing_id, emit)
+        run = _Run(self, request, briefing_id, emit, store)
         return await run.execute()
 
 
 class _Run:
     """State of one run. Kept separate so the runner can serve several runs concurrently."""
 
-    def __init__(self, r: BriefingRunner, req: BriefingRequest, bid: str, emit: Emit) -> None:
+    def __init__(
+        self,
+        r: BriefingRunner,
+        req: BriefingRequest,
+        bid: str,
+        emit: Emit,
+        store: EvidenceStore | None = None,
+    ) -> None:
         self.r = r
         self.req = req
         self.bid = bid
@@ -175,7 +189,7 @@ class _Run:
         if scenario.region != req.region:
             raise RunError("INVALID_INPUT", f"scenario {req.scenario} is not for {req.region}")
         self.scenario = scenario
-        self.store = EvidenceStore(bid)
+        self.store = store if store is not None else EvidenceStore(bid)
         self.bctx = BuildContext(scenario=scenario, store=self.store, lang=req.lang, mode=req.mode)
         self.failures = 0
         self.call_inputs: dict[str, dict[str, Any]] = {}
