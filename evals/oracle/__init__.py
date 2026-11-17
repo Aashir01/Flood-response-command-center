@@ -27,6 +27,8 @@ Protocol (design section 10), committed demo data only, no network:
 * Stretch (task 16): a Mondrian variant (scores split by monsoon Jun-Sep vs the rest of the year)
   is computed for comparison only. It is not adopted: the only data not used to fit the shipped
   models are the calibration and test years, so choosing it would tune on the test period.
+* Stretch (task 17): the PyTorch quantile MLP scores from the committed
+  ``organs/oracle/training/mlp_results.json`` (``train_mlp.py``) are added as comparison metrics.
 """
 
 from __future__ import annotations
@@ -44,6 +46,9 @@ import pandas as pd
 from evals.models import MetricResult
 
 RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
+MLP_RESULTS = (
+    Path(__file__).resolve().parents[2] / "organs" / "oracle" / "training" / "mlp_results.json"
+)
 TARGET_KIND = "modeled_glofas"
 TARGET_LABEL = "Modeled river discharge (GloFAS via Open-Meteo)"
 COVERAGES = (0.5, 0.8, 0.9)
@@ -87,6 +92,14 @@ def _metrics_block(
         out["brier"] = m.brier(p_exc, y > thr)
         out["event_rate"] = float(np.mean(y > thr))
     return out
+
+
+def _mlp_results() -> dict[str, Any] | None:
+    """Committed output of ``organs/oracle/training/train_mlp.py`` (stretch task 17), if any."""
+    if not MLP_RESULTS.is_file():
+        return None
+    doc: dict[str, Any] = json.loads(MLP_RESULTS.read_text(encoding="utf-8"))
+    return doc
 
 
 def _non_decreasing(values: list[float]) -> bool:
@@ -312,6 +325,7 @@ def evaluate(fast: bool, seed: int) -> dict[str, Any]:
             "untouched selection period exists, so choosing it would tune on the test years."
         ),
         "overall": overall,
+        "mlp_comparison": _mlp_results(),
         "checks": {
             "ora_p7_test": p7,
             "lead_widening": widening,
@@ -499,6 +513,23 @@ def to_metrics(report: dict[str, Any], seed: int) -> list[MetricResult]:
             **kw,
         )
     )
+    mlp = report.get("mlp_comparison")
+    if mlp:
+        for split, sfx in (("test", "test"), ("stress_2022", "stress2022")):
+            r = mlp["results"].get(split)
+            if r is None:
+                continue
+            out.append(
+                _metric(
+                    f"oracle.mlp.crps_skill_vs_gbm.{sfx}",
+                    f"Quantile MLP (not shipped) CRPS skill vs the shipped GBM, {split}",
+                    r["crps_skill_mlp_vs_gbm"],
+                    dataset=f"oracle demo {split}, modeled GloFAS (all rows, mlp_results.json)",
+                    notes=f"MLP coverage_80 {r['mlp']['coverage_80']:.3f} vs GBM "
+                    f"{r['gbm']['coverage_80']:.3f}; {mlp['protocol_note']}",
+                    **kw,
+                )
+            )
     out.append(
         _metric(
             "oracle.observed_validation.performed",

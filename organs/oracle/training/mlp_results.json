@@ -1,0 +1,43 @@
+{
+ "target_kind": "modeled_glofas",
+ "target_label": "Modeled river discharge (GloFAS via Open-Meteo)",
+ "shipped": false,
+ "seed": 0,
+ "torch_version": "2.15.0+cpu",
+ "architecture": "MLP 59-128-64-42, ReLU, pinball loss, Adam lr 1e-3, batch 512",
+ "epochs_selected": 39,
+ "train_seconds": 5.8,
+ "protocol_note": "trained on train_fit (1997-2008), early stopping on train_val (2009-2011), no refit; CQR on 2012-2016 per station and lead with the 0.8 band (station's own scores); scored on identical rows for both models; CRPS is the quantile approximation",
+ "results": {
+  "test": {
+   "mlp": {
+    "crps": 233.9841749959251,
+    "coverage_80": 0.7525491185291068,
+    "width_80_m3s": 820.4451569931272,
+    "n": 178395
+   },
+   "gbm": {
+    "crps": 220.48894926348422,
+    "coverage_80": 0.7900389584909892,
+    "width_80_m3s": 904.7403008055666,
+    "n": 178395
+   },
+   "crps_skill_mlp_vs_gbm": -0.061205905227994295
+  },
+  "stress_2022": {
+   "mlp": {
+    "crps": 760.1199540102803,
+    "coverage_80": 0.6656848306332842,
+    "width_80_m3s": 1190.2715734954252,
+    "n": 10185
+   },
+   "gbm": {
+    "crps": 792.7702426622855,
+    "coverage_80": 0.7064310260186549,
+    "width_80_m3s": 1806.074600509006,
+    "n": 10185
+   },
+   "crps_skill_mlp_vs_gbm": 0.04118505828669705
+  }
+ }
+}
