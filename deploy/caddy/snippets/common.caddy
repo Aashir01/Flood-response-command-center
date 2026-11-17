@@ -26,6 +26,23 @@ handle /healthz {
 	respond "ok" 200
 }
 
+# Voice routes: speaking a whole briefing is several hosted TTS calls (one per sentence), which
+# can take well over 30 s on a cold cache. The Brain's own voice timeout is 120 s, so the
+# gateway waits a little longer than that.
+handle /api/voice/* {
+	uri strip_prefix /api
+	request_body {
+		max_size 4MB
+	}
+	header Cache-Control no-store
+	reverse_proxy brain:8000 {
+		transport http {
+			dial_timeout 5s
+			response_header_timeout 150s
+		}
+	}
+}
+
 # Brain HTTP/SSE API. handle_path strips /api. No `encode` here: SSE must not be buffered or
 # compressed, and flush_interval -1 flushes every write immediately.
 handle_path /api/* {

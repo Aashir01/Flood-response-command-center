@@ -26,7 +26,8 @@ from stitch_common.brain_api import (
 )
 
 SPEAK_MAX_CHARS = 4000
-TIMEOUT_S = 45.0
+# A whole briefing is several hosted TTS calls; the gateway allows 150 s (deploy/caddy).
+TIMEOUT_S = 120.0
 
 
 def _voice(registry: OrganRegistry) -> OrganClient:
