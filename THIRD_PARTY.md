@@ -150,3 +150,8 @@ Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond 
 | segmentation-models-pytorch (and its dependencies timm, huggingface_hub, safetensors) | U-Net/ResNet-18 definition (`train` extra) | MIT (timm, huggingface_hub, safetensors: Apache-2.0) | in use (training) |
 | onnx, onnxconverter-common | export, fp16 variant, int8 static quantization tooling (`train` extra) | Apache-2.0 / MIT | in use (training) |
 | PyYAML | training config (`train` extra) | MIT | in use (training) |
+## voice-mcp code libraries
+Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it.
+| Library | Used for | License | Status |
+|---|---|---|---|
+| (none yet) | | | |

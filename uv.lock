@@ -17,6 +17,7 @@ members = [
     "stitch-ledger",
     "stitch-library",
     "stitch-oracle",
+    "stitch-voice",
 ]
 
 [[package]]
@@ -1608,6 +1609,17 @@ requires-dist = [
     { name = "pyarrow", specifier = ">=16" },
     { name = "stitch-common", extras = ["mcp"], editable = "packages/stitch_common" },
 ]
+
+[[package]]
+name = "stitch-voice"
+version = "0.1.0"
+source = { editable = "organs/voice" }
+dependencies = [
+    { name = "stitch-common", extra = ["mcp"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "stitch-common", extras = ["mcp"], editable = "packages/stitch_common" }]
 
 [[package]]
 name = "sympy"

@@ -30,7 +30,6 @@ members = ["packages/*", "organs/*", "brain"]
 # uv rejects member dirs without a pyproject.toml. scripts/scaffold_organ.py removes an organ
 # from this list when it creates the organ.
 exclude = [
-    "organs/voice",
 ]
 
 [tool.uv.sources]
