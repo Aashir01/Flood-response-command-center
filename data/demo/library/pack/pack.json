@@ -1,6 +1,6 @@
 {
   "chunker_version": "1",
-  "content_sha256": "e5c3c3ba723956db71e0606d8b13092d166b5cebe6851a5e912c0071f3f0c448",
+  "content_sha256": "a6f2cf367bb5839286ad8d1344ac8dd47829b58c0cf1ab8a6a9eab7689229461",
   "counts": {
     "chunks": 99,
     "docs": 11,
@@ -145,7 +145,7 @@
       "license": "CC-BY-4.0",
       "publisher": "Stitch team",
       "redistributable": true,
-      "sha256": "c584ce26392ba24208229c0cb51429fe019afbe4650f6e77a69a60565f4b69e0",
+      "sha256": "131994172fb171eb9b90ffff6ec7e05a0a5dcc12f41e3334da9d24fcee938c28",
       "source_url": "https://archive.org/download/FieldOperationsGuide2005/FieldOperationsGuide2005.pdf",
       "tier": "committed",
       "title": "خوراک کا راشن اور ہنگامی پناہ گاہ: USAID فیلڈ آپریشنز گائیڈ کا غیر سرکاری اردو ترجمہ"
@@ -265,7 +265,7 @@
       "unreadable": {}
     }
   ],
-  "manifest_sha256": "d44d1cf854fd966451658ac3316467f9ed4d7d6ed18994104477240329d66433",
+  "manifest_sha256": "a6c66e535e84cb1d0fb20ab98799654a85018f310e803ddd325e219dd5d40357",
   "model_info": {
     "e5-small-int8": {
       "name": "intfloat/multilingual-e5-small",

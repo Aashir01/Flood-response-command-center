@@ -82,7 +82,7 @@
         "id": "e5-small-int8",
         "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
       },
-      "pack_content_sha256": "e5c3c3ba723956db71e0606d8b13092d166b5cebe6851a5e912c0071f3f0c448",
+      "pack_content_sha256": "a6f2cf367bb5839286ad8d1344ac8dd47829b58c0cf1ab8a6a9eab7689229461",
       "provisional": false,
       "report": {
         "en.dense": {
@@ -92,7 +92,7 @@
           "false_refusals": 2,
           "n_neg": 14,
           "n_pos": 20,
-          "threshold": 0.870522241001114
+          "threshold": 0.8699518040560578
         },
         "en.rerank": {
           "false_answer_rate": 0.0,
@@ -101,7 +101,7 @@
           "false_refusals": 0,
           "n_neg": 14,
           "n_pos": 20,
-          "threshold": -0.7662051022052765
+          "threshold": -0.7828440964221954
         },
         "pooled.dense": {
           "cost": 4.0,
@@ -109,7 +109,7 @@
           "false_refusals": 4,
           "n_neg": 26,
           "n_pos": 31,
-          "threshold": 0.8700212366639357
+          "threshold": 0.8675407486381552
         },
         "pooled.rerank": {
           "cost": 0.0,
@@ -117,7 +117,7 @@
           "false_refusals": 0,
           "n_neg": 14,
           "n_pos": 20,
-          "threshold": -0.7662051022052765
+          "threshold": -0.7828440964221954
         },
         "scope": {
           "cost": 6.0,
@@ -134,7 +134,7 @@
           "false_refusals": 0,
           "n_neg": 12,
           "n_pos": 11,
-          "threshold": 0.8529628136438444
+          "threshold": 0.8489307028130118
         }
       },
       "reranker": {
@@ -151,15 +151,15 @@
       ],
       "tau_evid": {
         "en": {
-          "dense": 0.870522,
-          "rerank": -0.766205
+          "dense": 0.869952,
+          "rerank": -0.782844
         },
         "pooled": {
-          "dense": 0.870021,
-          "rerank": -0.766205
+          "dense": 0.867541,
+          "rerank": -0.782844
         },
         "ur": {
-          "dense": 0.852963
+          "dense": 0.848931
         }
       },
       "tau_scope": 0.823612,
@@ -249,7 +249,7 @@
         "id": "e5-small-int8",
         "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
       },
-      "pack_content_sha256": "e5c3c3ba723956db71e0606d8b13092d166b5cebe6851a5e912c0071f3f0c448",
+      "pack_content_sha256": "a6f2cf367bb5839286ad8d1344ac8dd47829b58c0cf1ab8a6a9eab7689229461",
       "provisional": false,
       "report": {
         "en.dense": {
@@ -259,7 +259,7 @@
           "false_refusals": 2,
           "n_neg": 14,
           "n_pos": 20,
-          "threshold": 0.870522241001114
+          "threshold": 0.8699518040560578
         },
         "pooled.dense": {
           "cost": 4.0,
@@ -267,7 +267,7 @@
           "false_refusals": 4,
           "n_neg": 26,
           "n_pos": 31,
-          "threshold": 0.8700212366639357
+          "threshold": 0.8675407486381552
         },
         "scope": {
           "cost": 6.0,
@@ -284,7 +284,7 @@
           "false_refusals": 0,
           "n_neg": 12,
           "n_pos": 11,
-          "threshold": 0.8529628136438444
+          "threshold": 0.8489307028130118
         }
       },
       "reranker": {
@@ -301,13 +301,13 @@
       ],
       "tau_evid": {
         "en": {
-          "dense": 0.870522
+          "dense": 0.869952
         },
         "pooled": {
-          "dense": 0.870021
+          "dense": 0.867541
         },
         "ur": {
-          "dense": 0.852963
+          "dense": 0.848931
         }
       },
       "tau_scope": 0.823612,
