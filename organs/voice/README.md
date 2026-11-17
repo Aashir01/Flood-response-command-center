@@ -72,7 +72,7 @@ Generate it where it is served:
 ```
 uv run python scripts/prerender_voice.py --dry-run           # sizes and budget, no calls
 uv run python scripts/prerender_voice.py --env-file .env     # writes data/cache/voice/prerendered
-docker compose run --rm voice python /app/scripts/prerender_voice.py --out /cache/voice/prerendered
+docker compose run --rm voice python -m stitch_voice.prerender --out /cache/voice/prerendered
 ```
 
 The English demo script (3,818 characters, 5,892 spoken after number expansion) renders to about
@@ -98,6 +98,7 @@ src/stitch_voice/
   decode.py      input audio checks (magic bytes, 60 s limit, level), in memory
   service.py     provider chains, cache, budget, error mapping; builds every output
   store.py       audio cache (atomic, LRU) and the monthly budget in SQLite
+  prerender.py   renders the demo scripts into the prerendered cache (python -m stitch_voice.prerender)
   server.py      thin MCP layer from stitch_common.mcp_app
 tests/  unit/ property/ contract/ live/ test_smoke_stdio.py
 ```
