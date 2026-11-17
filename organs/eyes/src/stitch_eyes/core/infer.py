@@ -68,6 +68,7 @@ class OnnxTileModel:
         so.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
         self._sess: Any = ort.InferenceSession(str(path), so, providers=["CPUExecutionProvider"])
         self.name = "unet-resnet18-s1"
+        self.path = path
         self.version = version
         self.sha256 = sha
         self.variant = variant
