@@ -1496,6 +1496,7 @@ dependencies = [
     { name = "onnxruntime" },
     { name = "pyproj" },
     { name = "rasterio" },
+    { name = "scipy" },
     { name = "shapely" },
     { name = "stitch-common", extra = ["mcp"] },
 ]
@@ -1521,6 +1522,7 @@ requires-dist = [
     { name = "pyproj", specifier = ">=3.6" },
     { name = "pyyaml", marker = "extra == 'train'", specifier = ">=6" },
     { name = "rasterio", specifier = ">=1.4" },
+    { name = "scipy", specifier = ">=1.13" },
     { name = "segmentation-models-pytorch", marker = "extra == 'train'", specifier = ">=0.3.4" },
     { name = "shapely", specifier = ">=2.0" },
     { name = "stitch-common", extras = ["mcp"], editable = "packages/stitch_common" },

@@ -84,7 +84,8 @@ class ThresholdTileModel:
     """Fallback: VH below a threshold is water, after a 3 x 3 mean (speckle) filter.
 
     The logit is ``(threshold - mean3x3(VH)) / scale``. The 3 x 3 receptive field is smaller
-    than any tile overlap, so tiled output equals untiled output away from the window edge.
+    than any tile overlap, so the tile size changes the output only through the edge padding
+    of each tile's outer pixel ring (which has the lowest blend weight) and at the window edge.
     """
 
     threshold_db: float = -20.0

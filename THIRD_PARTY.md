@@ -140,4 +140,13 @@ Libraries the Brain (rain/, package stitch_brain) adds beyond the workspace bas
 Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it.
 | Library | Used for | License | Status |
 |---|---|---|---|
-| (none yet) | | | |
+| ONNX Runtime | CPU inference of the shipped U-Net (`organs/eyes/models/eyes_unet_r18.onnx`) | MIT | in use |
+| NumPy | tiling, integer blending, masks, areas | BSD-3-Clause | in use |
+| rasterio (bundles GDAL) | COG window reads, district rasterization, raster-to-polygon (`features.shapes`) | BSD-3-Clause (GDAL: MIT/X) | in use |
+| Shapely (bundles GEOS) | polygon simplification (`coverage_simplify`), validity repair, precision grid | BSD-3-Clause (GEOS: LGPL-2.1, dynamically linked in the wheel) | in use |
+| pyproj (bundles PROJ) | UTM 42N / WGS84 transforms | MIT | in use |
+| SciPy | 4-connected component labelling (`ndimage.label`) | BSD-3-Clause | in use |
+| PyTorch, torchvision (CPU wheels; `train` extra only, never in the runtime image) | fine-tuning and ONNX export (`organs/eyes/training/`) | BSD-3-Clause | in use (training) |
+| segmentation-models-pytorch (and its dependencies timm, huggingface_hub, safetensors) | U-Net/ResNet-18 definition (`train` extra) | MIT (timm, huggingface_hub, safetensors: Apache-2.0) | in use (training) |
+| onnx, onnxconverter-common | export, fp16 variant, int8 static quantization tooling (`train` extra) | Apache-2.0 / MIT | in use (training) |
+| PyYAML | training config (`train` extra) | MIT | in use (training) |

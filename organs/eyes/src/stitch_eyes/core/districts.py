@@ -46,17 +46,22 @@ def rasterize_districts(
     shape: tuple[int, int],
 ) -> tuple[I32, list[District]]:
     """Index raster into the returned list of districts sorted by id; -1 means none."""
+    import shapely
     from pyproj import Transformer
     from rasterio.features import rasterize
     from shapely.geometry import mapping
     from shapely.geometry import shape as to_shape
-    from shapely.ops import transform as shp_transform
 
     ordered = sorted(districts, key=lambda d: d.district_id)
     tr = Transformer.from_crs("EPSG:4326", crs, always_xy=True)
+
+    def _xy(c: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
+        x, y = tr.transform(c[:, 0], c[:, 1])
+        return np.column_stack([x, y])
+
     shapes = []
     for idx in range(len(ordered) - 1, -1, -1):  # descending id: smallest written last
-        geom = shp_transform(tr.transform, to_shape(ordered[idx].geometry))
+        geom = shapely.transform(to_shape(ordered[idx].geometry), _xy)
         if not geom.is_empty:
             shapes.append((mapping(geom), idx))
     if not shapes:

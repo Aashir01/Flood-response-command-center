@@ -99,6 +99,16 @@ BOUNDARIES = DataSource(
 )
 
 
+def check_request(bbox: tuple[float, float, float, float] | None, tile_size: int) -> None:
+    """Checks beyond the contract model (design 11): a non-empty bbox and a valid tile size."""
+    if bbox is not None:
+        w, s, e, n = bbox
+        if not (w < e and s < n):
+            raise ToolFailure("INVALID_INPUT", "bbox requires west < east and south < north")
+    if not valid_tile_size(tile_size):
+        raise ToolFailure("INVALID_INPUT", "tile_size must be a power of two in 64..1024")
+
+
 class EyesService:
     def __init__(self, settings: Settings | None = None, model: TileModel | None = None) -> None:
         self.settings = settings or Settings.from_env()
@@ -200,12 +210,7 @@ class EyesService:
         warnings: list[str] = []
         if mode == "live":
             warnings.append(MODE_FALLBACK_WARNING)
-        if bbox is not None:
-            w, s, e, n = bbox
-            if not (w < e and s < n):
-                raise ToolFailure("INVALID_INPUT", "bbox requires west < east and south < north")
-        if not valid_tile_size(tile_size):
-            raise ToolFailure("INVALID_INPUT", "tile_size must be a power of two in 64..1024")
+        check_request(bbox, tile_size)
         try:
             scene, days = self.catalog().find(region_id, when, self.settings.date_tolerance_days)
         except SceneNotFound as exc:
