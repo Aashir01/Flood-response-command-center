@@ -62,12 +62,15 @@ known-first-party = [
 "organs/library/**" = ["RUF001", "RUF002", "RUF003"]
 "data/demo/library/**" = ["RUF001", "RUF002", "RUF003"]
 "evals/library/**" = ["RUF001", "RUF002", "RUF003"]
+# Urdu speech text, numbers and letter names are intentional in the Voice organ.
+"organs/voice/**" = ["RUF001", "RUF002", "RUF003"]
+"evals/voice/**" = ["RUF001", "RUF002", "RUF003"]
 
 [tool.mypy]
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "organs/oracle/src", "organs/library/src", "brain/src", "scripts", "scripts/hooks"]
+mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "organs/oracle/src", "organs/library/src", "organs/voice/src", "brain/src", "scripts", "scripts/hooks"]
 explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 
