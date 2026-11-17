@@ -98,7 +98,7 @@ def git_commit() -> str:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", type=Path, default=HERE / "config.yaml")
-    ap.add_argument("--profile", default="full", choices=["full", "cpu", "smoke"])
+    ap.add_argument("--profile", default="full", help="a profile name from config.yaml")
     ap.add_argument("--data-root", type=Path)
     ap.add_argument("--out", type=Path)
     ap.add_argument("--resume", default="", help="'auto' to resume from <out>/last.pt")
@@ -156,6 +156,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"resumed at epoch {start_epoch}, best val IoU {best_iou:.4f}")
 
     epochs = int(prof["epochs"])
+    if args.resume == "auto" and (out / "last.pt").exists():
+        # The schedule length may have been shortened by the time budget; keep it on resume.
+        epochs = int(ck.get("epochs", epochs))
     budget_s = float(prof.get("time_budget_min", 0)) * 60
     t0 = time.time()
     stopped_early = False
@@ -182,11 +185,12 @@ def main(argv: list[str] | None = None) -> int:
             scaler.step(opt)
             scaler.update()
             losses.append(float(loss.detach()))
-        if budget_s > 0 and epoch == start_epoch and start_epoch == 0:
+        if budget_s > 0 and epoch == 1 and start_epoch <= 1:
             # Fit the cosine schedule into the time budget (CPU profile): the number of epochs
-            # that fit is estimated from the first epoch and logged.
-            per_epoch = (time.time() - te) * 1.08  # validation overhead
-            fit = max(int(budget_s // per_epoch), 2)
+            # that fit is estimated from the second epoch (the first one carries warm-up
+            # overhead) and logged.
+            per_epoch = (time.time() - te) * 1.10  # validation overhead
+            fit = max(2 + int((budget_s - (time.time() - t0)) // per_epoch), 2)
             if fit < epochs:
                 print(f"time budget: schedule shortened from {epochs} to {fit} epochs", flush=True)
                 epochs = fit
@@ -215,6 +219,7 @@ def main(argv: list[str] | None = None) -> int:
                     "rng": rng.bit_generator.state,
                     "torch_rng": torch.get_rng_state(),
                     "epoch": epoch,
+                    "epochs": epochs,
                     "best_iou": best_iou,
                     "history": history,
                 },

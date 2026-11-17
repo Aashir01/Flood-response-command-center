@@ -42,6 +42,17 @@ profiles:
     time_budget_min: 85
     threads: 10
     amp: false
+  laptop:             # shipped-model run: i5 laptop CPU, 6 threads, time-boxed (docs/decisions.md)
+    crop: 128
+    crops_per_chip: 4
+    batch: 16
+    epochs: 40
+    warmup_epochs: 2
+    val_every: 2
+    ckpt_every: 1
+    time_budget_min: 180
+    threads: 6
+    amp: false
   smoke:
     crop: 64
     crops_per_chip: 1
