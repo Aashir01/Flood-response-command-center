@@ -70,12 +70,12 @@ known-first-party = [
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "organs/oracle/src", "organs/library/src", "organs/voice/src", "brain/src", "scripts", "scripts/hooks"]
+mypy_path = ["packages/stitch_common/src", "organs/ledger/src", "organs/oracle/src", "organs/library/src", "organs/voice/src", "organs/eyes/src", "brain/src", "scripts", "scripts/hooks"]
 explicit_package_bases = true
 exclude = ["\\.kiro/templates/", "/tests/"]
 
 [[tool.mypy.overrides]]
-module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*", "pandas", "pandas.*", "lightgbm", "lightgbm.*", "onnxruntime", "onnxruntime.*", "onnx", "onnx.*", "pypdfium2", "pypdfium2.*", "pdfminer", "pdfminer.*", "faster_whisper", "faster_whisper.*"]
+module = ["ortools", "ortools.*", "duckdb", "pyarrow", "pyarrow.*", "pandas", "pandas.*", "lightgbm", "lightgbm.*", "onnxruntime", "onnxruntime.*", "onnx", "onnx.*", "pypdfium2", "pypdfium2.*", "pdfminer", "pdfminer.*", "faster_whisper", "faster_whisper.*", "rasterio", "rasterio.*", "scipy", "scipy.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

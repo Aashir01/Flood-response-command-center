@@ -188,9 +188,9 @@ class NebiusClient(OpenAIClient):
 
     Differences from OpenAI handled here: the base URL (``NEBIUS_BASE_URL`` env overrides it),
     the key variable ``NEBIUS_API_KEY``, ``max_tokens`` instead of ``max_completion_tokens``,
-    and ``response_format.json_schema`` carrying the schema itself. Nebius recommends also
-    stating the schema in the prompt, so it is appended to the system message. Model ids are
-    Hugging Face style (``STITCH_LLM_MODEL``, default ``DEFAULT_NEBIUS_MODEL``).
+    and ``response_format.json_schema`` as ``{name, schema}`` (a bare schema is a 422). Nebius
+    recommends also stating the schema in the prompt, so it is appended to the system message.
+    Model ids are Hugging Face style (``STITCH_LLM_MODEL``, default ``DEFAULT_NEBIUS_MODEL``).
     """
 
     provider = "nebius"
@@ -203,7 +203,10 @@ class NebiusClient(OpenAIClient):
     def _request_kwargs(self, req: LLMRequest, kwargs: dict[str, Any]) -> dict[str, Any]:
         out: dict[str, Any] = {"max_tokens": req.max_tokens}
         if req.response_format:
-            out["response_format"] = {"type": "json_schema", "json_schema": req.response_format}
+            out["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {"name": "reply", "schema": req.response_format},
+            }
         return out
 
     def _schema_in_prompt(self, req: LLMRequest) -> bool:

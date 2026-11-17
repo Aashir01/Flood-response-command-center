@@ -100,13 +100,15 @@ def incidence_deg(item: dict[str, Any], xs: np.ndarray, ys: np.ndarray) -> np.nd
     def dist(line: np.ndarray) -> np.ndarray:
         (x1, y1), (x2, y2) = line
         num = np.abs((y2 - y1) * xs - (x2 - x1) * ys + x2 * y1 - y2 * x1)
-        return num / math.hypot(x2 - x1, y2 - y1)
+        res: np.ndarray = num / math.hypot(x2 - x1, y2 - y1)
+        return res
 
     dw, de = dist(west), dist(east)
     frac_from_west = dw / (dw + de)
     ascending = item["properties"]["sat:orbit_state"] == "ascending"
     frac_near_to_far = frac_from_west if ascending else 1 - frac_from_west
-    return NEAR_DEG + (FAR_DEG - NEAR_DEG) * frac_near_to_far
+    out: np.ndarray = NEAR_DEG + (FAR_DEG - NEAR_DEG) * frac_near_to_far
+    return out
 
 
 def read_band(href: str, bounds: tuple[float, float, float, float]) -> np.ndarray:
@@ -125,7 +127,8 @@ def read_band(href: str, bounds: tuple[float, float, float, float]) -> np.ndarra
     if nod is not None:
         bad |= arr == nod
     arr[bad] = np.nan
-    return arr
+    res: np.ndarray = arr
+    return res
 
 
 def main(argv: list[str] | None = None) -> int:

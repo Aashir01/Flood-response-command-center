@@ -248,7 +248,11 @@ def test_nebius_adapter_with_mocked_sdk(monkeypatch: pytest.MonkeyPatch) -> None
     assert resp.provider == "nebius" and resp.model == "meta-llama/test"
     assert resp.text == "ok"  # a leading reasoning block is dropped
     assert seen["max_tokens"] > 0 and "max_completion_tokens" not in seen
-    assert seen["response_format"] == {"type": "json_schema", "json_schema": schema}
+    # Nebius rejects a bare schema with 422 (json_schema.name and .schema are required)
+    assert seen["response_format"] == {
+        "type": "json_schema",
+        "json_schema": {"name": "reply", "schema": schema},
+    }
     assert "JSON Schema" in seen["messages"][0]["content"]
 
 
