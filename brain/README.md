@@ -3,6 +3,18 @@
 The orchestrator of Stitch. It is not an MCP server: it is an MCP client plus a FastAPI app. The
 architecture write-up is `docs/brain-design.md`; the spec is `.kiro/specs/brain/`.
 
+## Commands
+
+```powershell
+uv run python -m stitch_brain.cli run --scenario demo-sindh-2022 --lang ur   # recorded organs, offline
+uv run python -m stitch_brain.api                                            # HTTP/SSE API
+uv run pytest brain -q                                                       # 339 tests, sockets blocked
+uv run pytest brain/tests/integration -q                                     # real organs over stdio
+uv run python -m evals.run --organ brain --seed 0 --fast                     # eval (add --live-llm for a Nebius judge)
+uv run python -m evals.brain.record_llm --check                              # recordings current?
+uv run python -m evals.brain.record_llm --provider nebius --env-file .env    # re-record (network, key)
+```
+
 ## MCP SDK notes (task 8)
 
 - Client: `mcp.Client` (SDK 2.x) over stdio (`StdioServerParameters`) or streamable HTTP (a URL).

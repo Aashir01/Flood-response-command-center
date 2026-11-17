@@ -62,7 +62,7 @@ ecorded/eyes/** | hand-authored | Per-district flooded fractions for Sindh, 2022
 ecorded/oracle/** | hand-authored | A seven-day modeled discharge curve, exceedance probabilities and an explanation for the Indus near Kotri. Illustrative values, labelled modeled; the danger threshold is illustrative. | Same script, MIT (Stitch) |
 | 
 ecorded/library/** | hand-authored | Answers and a refusal paraphrasing well-known Sphere Handbook 2018 minimum standards (15 litres of water and 2,100 kcal per person per day). Quotes are paraphrases and page numbers are not verified. Used in tests and the all-recorded CLI only; the Compose demo uses the real Library. The -conflicts variant states 7.5 litres on purpose (seeded conflict R3). | Same script, MIT (Stitch) |
-| llm/brain.jsonl | recorded | FakeLLM replay file for the Brain's phrasing, translation and judge steps. Empty until recorded with a provider key by the owner; the Brain then uses template text. | n/a |
+| llm/brain.jsonl | recorded | FakeLLM replay file for the Brain's phrasing, Urdu translation and judge steps: Nebius Token Factory (Qwen/Qwen3-235B-A22B-Instruct-2507) replies for demo-sindh-2022 and demo-sindh-2022-conflicts in en and ur, recorded with `python -m evals.brain.record_llm --provider nebius`. Replayed replies pass the same code checks as live ones; a miss falls back to template text. | Model output, generated for this repo (MIT, Stitch) |
 
 ## Eyes (`data/demo/eyes/`)
 
