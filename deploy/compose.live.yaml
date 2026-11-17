@@ -23,6 +23,8 @@ services:
       # Deepgram: Nova-3 transcription, Aura-2 English speech (STITCH_STT_PROVIDER and
       # STITCH_TTS_PROVIDER = deepgram in prod.env). The key is useless without egress.
       DEEPGRAM_API_KEY: ${DEEPGRAM_API_KEY:-}
+      AZURE_SPEECH_KEY: ${AZURE_SPEECH_KEY:-}
+      AZURE_SPEECH_REGION: ${AZURE_SPEECH_REGION:-}
 
 networks:
   egress: {}

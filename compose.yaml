@@ -242,15 +242,19 @@ services:
     command: ["python", "-m", "stitch_voice.server", "--http"]
     environment:
       <<: *organ-env
-      STITCH_TTS_PROVIDER: ${STITCH_TTS_PROVIDER:-prerendered}
+      # Voice hand-over (docs/decisions.md): Deepgram TTS for English, Azure or the prerendered
+      # cache for Urdu, local Whisper STT by default. Without keys the chain falls back to
+      # `prerendered` and then to the text briefing. Keys reach the container only through
+      # deploy/compose.live.yaml (egress).
+      STITCH_TTS_PROVIDER: ${STITCH_TTS_PROVIDER:-deepgram}
       STITCH_STT_PROVIDER: ${STITCH_STT_PROVIDER:-whisper}
-      STITCH_DEEPGRAM_VOICE_EN: ${STITCH_DEEPGRAM_VOICE_EN:-}
+      STITCH_DEEPGRAM_VOICE_EN: ${STITCH_DEEPGRAM_VOICE_EN:-aura-2-thalia-en}
       STITCH_WHISPER_MODEL: ${STITCH_WHISPER_MODEL:-base}
+      STITCH_VOICE_CACHE_DIR: /cache/voice
+      STITCH_VOICE_PRERENDERED_DIR: /cache/voice/prerendered
       STITCH_IDLE_UNLOAD_S: "300"
-      AZURE_SPEECH_KEY: ${AZURE_SPEECH_KEY:-}
-      AZURE_SPEECH_REGION: ${AZURE_SPEECH_REGION:-}
     volumes:
-      - voice_cache:/var/cache/stitch-voice
+      - voice_cache:/cache/voice
     networks: [core]
     <<: *hardening
     healthcheck:
