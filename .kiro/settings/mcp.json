@@ -16,7 +16,7 @@
       "command": "uv",
       "args": ["run", "--package", "stitch-library", "python", "-m", "stitch_library.server", "--stdio"],
       "env": { "STITCH_MODE": "demo", "STITCH_LLM_PROVIDER": "fake" },
-      "disabled": true
+      "disabled": false
     },
     "ledger-mcp": {
       "command": "uv",
