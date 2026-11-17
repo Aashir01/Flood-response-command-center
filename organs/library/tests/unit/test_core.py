@@ -142,7 +142,7 @@ def test_queries_are_logged_as_hash_by_default(
 
 def test_health_reports_store_index_and_models(demo_service: LibraryService) -> None:
     h = demo_service.health()
-    assert h["db_ok"] and h["chunks"] > 0 and h["docs"] == 9
+    assert h["db_ok"] and h["chunks"] > 0 and h["docs"] == 11
     assert h["calibration"] == "ok" and h["embedder"]["loaded"]
     assert demo_service.health_checks() == {
         "db": True,

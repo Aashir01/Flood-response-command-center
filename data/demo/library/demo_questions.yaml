@@ -1,14 +1,13 @@
-# Library demo questions: the guidance questions the Brain asks for demo-sindh-2022
-# (brain/config/scenarios.yaml guidance_questions, en and ur). Shared with the brain spec.
-# `expected` is what the committed corpus supports, checked by
-# organs/library/tests/integration/test_demo_questions.py with the real models and by the
-# fake-model end-to-end test for the envelope and invariants.
+# Library demo questions: the guidance questions the Brain asks for demo-sindh-2022 and
+# demo-sindh-2022-conflicts (brain/config/scenarios.yaml guidance_questions, en and ur; the
+# conflicts scenario extends the first and asks the same questions). Shared with the brain spec.
+# `expected` is what the committed corpus supports, checked by the fake-model end-to-end test for
+# the envelope and invariants and by the replay test against the recorded LLM replies.
 #
-# The committed corpus is household-preparedness guidance (FEMA Ready.gov, US EPA) plus
-# team-authored Urdu translations. It has no ration standard for displaced families, so the
-# food questions are refused (INSUFFICIENT_EVIDENCE) rather than answered from storage advice.
-# The Urdu shelter question scores just under the calibrated Urdu evidence threshold and is
-# refused; that is the calibrated behavior, not a special case.
+# The committed corpus is FEMA Ready.gov and US EPA household guidance, an excerpt of the
+# USAID/OFDA Field Operations Guide (food rations, shelter; added 2026-11-17) and team-authored
+# Urdu translations of both. Before the FOG excerpt the food questions were refused
+# (INSUFFICIENT_EVIDENCE) and the shelter questions fell under the evidence gate.
 - id: water
   lang: en
   query: "How much drinking water does each person need per day in a flood emergency?"
@@ -22,27 +21,20 @@
 - id: food
   lang: en
   query: "What food ration should displaced flood-affected families receive?"
-  expected: refused
-  expected_reason: INSUFFICIENT_EVIDENCE
+  expected: answered
   eval_id: q024
 - id: food
   lang: ur
   query: "سیلاب سے بے گھر خاندانوں کو کتنا خوراک کا راشن ملنا چاہیے؟"
-  expected: refused
-  expected_reason: INSUFFICIENT_EVIDENCE
+  expected: answered
   eval_id: q046
 - id: shelter
   lang: en
   query: "What emergency shelter should be provided to families displaced by floods?"
-  # Only a shelter-in-place passage clears the evidence gate; the recorded reply says
-  # "insufficient" (the LLM may only tighten). The mass-care passage that would answer it
-  # ranks below the gate: an honest retrieval miss, counted in the eval (q002).
-  expected: refused
-  expected_reason: INSUFFICIENT_EVIDENCE
+  expected: answered
   eval_id: q002
 - id: shelter
   lang: ur
   query: "سیلاب سے بے گھر خاندانوں کو کیسی ہنگامی پناہ گاہ دی جائے؟"
-  expected: refused
-  expected_reason: INSUFFICIENT_EVIDENCE
+  expected: answered
   eval_id: q032

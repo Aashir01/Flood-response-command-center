@@ -8,8 +8,8 @@
         "false_refusal": 1.0
       },
       "counts": {
-        "evidence_neg": 30,
-        "evidence_pos": 27,
+        "evidence_neg": 26,
+        "evidence_pos": 31,
         "items": 62,
         "scope_neg": 10
       },
@@ -82,42 +82,42 @@
         "id": "e5-small-int8",
         "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
       },
-      "pack_content_sha256": "108179a7ecf4fbd9c4a3fdc717f1ed03a6ef32810e9e1522d990fcb3d9e70013",
+      "pack_content_sha256": "e5c3c3ba723956db71e0606d8b13092d166b5cebe6851a5e912c0071f3f0c448",
       "provisional": false,
       "report": {
         "en.dense": {
           "false_answer_rate": 0.0,
           "false_answers": 0,
-          "false_refusal_rate": 0.16666666666666666,
-          "false_refusals": 3,
-          "n_neg": 16,
-          "n_pos": 18,
-          "threshold": 0.8861497837774885
+          "false_refusal_rate": 0.1,
+          "false_refusals": 2,
+          "n_neg": 14,
+          "n_pos": 20,
+          "threshold": 0.870522241001114
         },
         "en.rerank": {
           "false_answer_rate": 0.0,
           "false_answers": 0,
           "false_refusal_rate": 0.0,
           "false_refusals": 0,
-          "n_neg": 16,
-          "n_pos": 18,
-          "threshold": -0.8403123021125793
+          "n_neg": 14,
+          "n_pos": 20,
+          "threshold": -0.7662051022052765
         },
         "pooled.dense": {
-          "cost": 3.0,
-          "false_answers": 1,
-          "false_refusals": 0,
-          "n_neg": 30,
-          "n_pos": 27,
-          "threshold": 0.863255895629458
+          "cost": 4.0,
+          "false_answers": 0,
+          "false_refusals": 4,
+          "n_neg": 26,
+          "n_pos": 31,
+          "threshold": 0.8700212366639357
         },
         "pooled.rerank": {
           "cost": 0.0,
           "false_answers": 0,
           "false_refusals": 0,
-          "n_neg": 16,
-          "n_pos": 18,
-          "threshold": -0.8403123021125793
+          "n_neg": 14,
+          "n_pos": 20,
+          "threshold": -0.7662051022052765
         },
         "scope": {
           "cost": 6.0,
@@ -132,9 +132,9 @@
           "false_answers": 0,
           "false_refusal_rate": 0.0,
           "false_refusals": 0,
-          "n_neg": 14,
-          "n_pos": 9,
-          "threshold": 0.860021366620211
+          "n_neg": 12,
+          "n_pos": 11,
+          "threshold": 0.8529628136438444
         }
       },
       "reranker": {
@@ -151,15 +151,15 @@
       ],
       "tau_evid": {
         "en": {
-          "dense": 0.88615,
-          "rerank": -0.840312
+          "dense": 0.870522,
+          "rerank": -0.766205
         },
         "pooled": {
-          "dense": 0.863256,
-          "rerank": -0.840312
+          "dense": 0.870021,
+          "rerank": -0.766205
         },
         "ur": {
-          "dense": 0.860021
+          "dense": 0.852963
         }
       },
       "tau_scope": 0.823612,
@@ -175,8 +175,8 @@
         "false_refusal": 1.0
       },
       "counts": {
-        "evidence_neg": 30,
-        "evidence_pos": 27,
+        "evidence_neg": 26,
+        "evidence_pos": 31,
         "items": 62,
         "scope_neg": 10
       },
@@ -249,25 +249,25 @@
         "id": "e5-small-int8",
         "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
       },
-      "pack_content_sha256": "108179a7ecf4fbd9c4a3fdc717f1ed03a6ef32810e9e1522d990fcb3d9e70013",
+      "pack_content_sha256": "e5c3c3ba723956db71e0606d8b13092d166b5cebe6851a5e912c0071f3f0c448",
       "provisional": false,
       "report": {
         "en.dense": {
           "false_answer_rate": 0.0,
           "false_answers": 0,
-          "false_refusal_rate": 0.16666666666666666,
-          "false_refusals": 3,
-          "n_neg": 16,
-          "n_pos": 18,
-          "threshold": 0.8861497837774885
+          "false_refusal_rate": 0.1,
+          "false_refusals": 2,
+          "n_neg": 14,
+          "n_pos": 20,
+          "threshold": 0.870522241001114
         },
         "pooled.dense": {
-          "cost": 3.0,
-          "false_answers": 1,
-          "false_refusals": 0,
-          "n_neg": 30,
-          "n_pos": 27,
-          "threshold": 0.863255895629458
+          "cost": 4.0,
+          "false_answers": 0,
+          "false_refusals": 4,
+          "n_neg": 26,
+          "n_pos": 31,
+          "threshold": 0.8700212366639357
         },
         "scope": {
           "cost": 6.0,
@@ -282,9 +282,9 @@
           "false_answers": 0,
           "false_refusal_rate": 0.0,
           "false_refusals": 0,
-          "n_neg": 14,
-          "n_pos": 9,
-          "threshold": 0.860021366620211
+          "n_neg": 12,
+          "n_pos": 11,
+          "threshold": 0.8529628136438444
         }
       },
       "reranker": {
@@ -301,13 +301,13 @@
       ],
       "tau_evid": {
         "en": {
-          "dense": 0.88615
+          "dense": 0.870522
         },
         "pooled": {
-          "dense": 0.863256
+          "dense": 0.870021
         },
         "ur": {
-          "dense": 0.860021
+          "dense": 0.852963
         }
       },
       "tau_scope": 0.823612,

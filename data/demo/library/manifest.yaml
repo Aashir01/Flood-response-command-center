@@ -1,8 +1,8 @@
 # Library corpus manifest: the single source of truth for every document (design 3.3).
 # data/demo/MANIFEST.md and the THIRD_PARTY.md document table are generated from this file by
 #   uv run python scripts/check_corpus_licenses.py --write-docs
-# Committed rows: text-first renditions of US federal public-domain web pages and team-authored
-# Urdu translations. sha256 is of the file with LF line endings. Page numbers are pages of the
+# Committed rows: text-first renditions of US federal public-domain web pages and one US federal
+# publication (USAID/OFDA Field Operations Guide excerpt), plus team-authored Urdu translations. sha256 is of the file with LF line endings. Page numbers are pages of the
 # committed rendition (separated by "<<<page-break>>>" lines), not of the source website.
 # owner_confirmed: false on every row: the implementing agent checked the license evidence; the
 # owner has not yet confirmed it (scripts/check_corpus_licenses.py --require-owner-confirmed).
@@ -206,6 +206,65 @@
   translation_of: fema-ready-shelter
   notes: "Needs a native-speaker proofread before release. Partial translation (mass care shelter, basic kit)."
 
+- doc_id: usaid-fog-v4-food-shelter
+  title: "Field Operations Guide for Disaster Assessment and Response, Version 4.0: food rations and shelter (USAID/OFDA)"
+  publisher: USAID OFDA
+  doc_type: guideline
+  lang: en
+  source_url: https://archive.org/download/FieldOperationsGuide2005/FieldOperationsGuide2005.pdf
+  retrieved_on: 2026-11-17
+  as_of: 2005-09-01
+  sha256: e49339a94e7be9f9b13886c99dd08784379fa1774e82702191251cbbed2360f2
+  license: US-Gov-PD
+  license_url: https://www.law.cornell.edu/uscode/text/17/105
+  license_evidence: >-
+    Field Operations Guide (FOG) Version 4.0, September 2005, by the US Agency for International
+    Development, Office of U.S. Foreign Disaster Assistance, "in cooperation with and produced by
+    the USDA Forest Service" (title page); both are US federal agencies, so the text is a work of
+    the US Government (17 U.S.C. 105). The 389-page PDF (sha256
+    7227d0ec1f33f2d8c08e856df14b30525b07f2775f094988defd18333aec18a2, downloaded on 2026-11-17)
+    has no copyright notice and no "reprinted with permission" or "adapted from" credit on any
+    page (full-text search), and the Internet Archive item FieldOperationsGuide2005 carries the
+    Public Domain Mark 1.0 (checked with web_fetch on 2026-11-17). The introduction lists sources
+    the authors drew on (UNHCR, WHO, Sphere and others); the excerpted passages are OFDA prose
+    with no quoted third-party text. 17 U.S.C. 105 governs US copyright; it does not address
+    protection abroad.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/usaid-fog-v4-food-shelter.txt
+  format: text
+  notes: >-
+    Text rendition, excerpt: chapter III "General Feeding Programs" (source pages III-46 to
+    III-48), "Shelter Interventions" (III-92 to III-95), "Camps" (III-97) and appendix B "Plastic
+    Sheeting" (B-4 to B-8). Prose verbatim (line-break hyphens joined; one lost hyphen restored in
+    "Food-for-Work"); the food-category table and Table III-8 set as bullet sentences; figures,
+    the inside-cover standards card (which includes a 15 liters/person/day water figure) and the
+    water, health and camp-planning chapters are not included. Page n of this rendition is
+    excerpt n, not a FOG page.
+- doc_id: stitch-ur-usaid-fog-food-shelter
+  title: "خوراک کا راشن اور ہنگامی پناہ گاہ: USAID فیلڈ آپریشنز گائیڈ کا غیر سرکاری اردو ترجمہ"
+  publisher: Stitch team
+  doc_type: translation
+  lang: ur
+  source_url: https://archive.org/download/FieldOperationsGuide2005/FieldOperationsGuide2005.pdf
+  retrieved_on: 2026-11-17
+  as_of: 2005-09-01
+  sha256: c584ce26392ba24208229c0cb51429fe019afbe4650f6e77a69a60565f4b69e0
+  license: CC-BY-4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  license_evidence: >-
+    Unofficial Urdu translation written for this repository by the implementing agent
+    (AI-assisted) from the public-domain USAID/OFDA Field Operations Guide excerpt
+    (usaid-fog-v4-food-shelter); released under CC BY 4.0 by the Stitch team. Not reviewed by a
+    native speaker yet.
+  redistributable: true
+  owner_confirmed: false
+  tier: committed
+  path: corpus/stitch-ur-usaid-fog-food-shelter.txt
+  format: text
+  translation_of: usaid-fog-v4-food-shelter
+  notes: "Needs a native-speaker proofread before release. Partial translation (survival ration, food categories, shelter space, roof priority, plastic sheeting)."
 # ---- fetch tier: never committed, downloaded by scripts/fetch_corpus.py into data/raw/library/
 
 - doc_id: who-tn09-water-quantity

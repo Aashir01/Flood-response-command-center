@@ -83,9 +83,10 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     dev = [q for q in questions if q.split == "dev"]
     committed = sum(q.answerable and q.tier == "committed" for q in questions)
+    answerable = sum(q.answerable for q in questions)
     print(
         f"ok: {len(questions)} questions ({len(dev)} dev, {len(questions) - len(dev)} test), "
-        f"{len(extra)} dev_extra, {committed}/38 answerable on the committed corpus"
+        f"{len(extra)} dev_extra, {committed}/{answerable} answerable on the committed corpus"
     )
     return 0
 

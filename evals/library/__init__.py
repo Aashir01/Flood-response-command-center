@@ -1,6 +1,6 @@
 """Library evals (LIB-R9, LIB-R10.4): ``python -m evals.run --organ library --seed 0 [--fast]``.
 
-Runs the 50-question set (``questions.jsonl``) through the real Library service: local e5-small
+Runs the 51-question set (``questions.jsonl``) through the real Library service: local e5-small
 and mMARCO models, the committed pack, ``FakeLLM`` replaying the demo recordings (other
 questions take the extractive path), no network.
 
@@ -11,19 +11,22 @@ questions take the extractive path), no network.
 Headline numbers are the committed corpus, test split. Before running, the harness refuses if
 the calibration profile is missing, provisional or computed on another pack, if the split
 differs from ``split.lock``, or if calibration used a test id (LIB-P12). Bootstrap 95 %
-intervals (1000 resamples, ``seed``) are attached to the main rates; with 30 test questions
+intervals (1000 resamples, ``seed``) are attached to the main rates; with 31 test questions
 they are wide. Per-question rows and breakdowns go to ``evals/results/library_report.json``.
 """
 
 from __future__ import annotations
 
 import json
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from evals.models import MetricResult
+
+if TYPE_CHECKING:
+    from evals.library.harness import Result as QResult
 
 RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 CI_METRICS = ("answer_rate", "refusal_rate", "false_answer_rate", "citation_accuracy")
@@ -84,7 +87,7 @@ def _metric(
         value=float(value),
         target=target,
         unit=unit,
-        direction=direction,  # type: ignore[arg-type]
+        direction=direction,
         dataset=dataset,
         mode="demo",
         timestamp=now,
@@ -114,7 +117,7 @@ def _block(
             continue
         notes = note
         if name in CI_METRICS:
-            ci = bootstrap_ci(results, lambda rs, n=name: metrics_for(rs)[n], seed=seed)
+            ci = bootstrap_ci(results, _metric_of(name), seed=seed)
             if ci is not None:
                 report["ci95"][name] = ci
                 notes = f"{note} 95% CI [{ci[0]:.2f}, {ci[1]:.2f}], n={len(results)}".strip()
@@ -131,6 +134,15 @@ def _block(
             )
         )
     return out, report
+
+
+def _metric_of(name: str) -> Callable[[Sequence[QResult]], float | None]:
+    from evals.library.harness import metrics_for
+
+    def f(rs: Sequence[QResult]) -> float | None:
+        return metrics_for(rs)[name]
+
+    return f
 
 
 def run(fast: bool, seed: int) -> list[MetricResult]:
@@ -160,12 +172,13 @@ def run(fast: bool, seed: int) -> list[MetricResult]:
         ms, rep = _block(results, f"library.{tag}", dataset, seed=seed, sha=sha, now=now, note=note)
         metrics += ms
         by: dict[str, Any] = {}
-        for key, sel in (
+        selectors: tuple[tuple[str, Callable[[QResult], bool]], ...] = (
             ("lang.en", lambda r: r.lang == "en"),
             ("lang.ur", lambda r: r.lang == "ur"),
             ("generation.llm", lambda r: r.generation == "llm"),
             ("generation.extractive", lambda r: r.generation == "extractive"),
-        ):
+        )
+        for key, sel in selectors:
             from evals.library.harness import metrics_for
 
             sub = [r for r in results if sel(r)]

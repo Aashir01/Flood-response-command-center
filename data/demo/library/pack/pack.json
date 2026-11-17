@@ -1,10 +1,10 @@
 {
   "chunker_version": "1",
-  "content_sha256": "108179a7ecf4fbd9c4a3fdc717f1ed03a6ef32810e9e1522d990fcb3d9e70013",
+  "content_sha256": "e5c3c3ba723956db71e0606d8b13092d166b5cebe6851a5e912c0071f3f0c448",
   "counts": {
-    "chunks": 65,
-    "docs": 9,
-    "pages": 22
+    "chunks": 99,
+    "docs": 11,
+    "pages": 29
   },
   "doc_ids": [
     "epa-emergency-disinfection",
@@ -15,7 +15,9 @@
     "fema-ready-water",
     "stitch-ur-ready-floods",
     "stitch-ur-ready-shelter-kit",
-    "stitch-ur-ready-water"
+    "stitch-ur-ready-water",
+    "stitch-ur-usaid-fog-food-shelter",
+    "usaid-fog-v4-food-shelter"
   ],
   "documents": [
     {
@@ -134,6 +136,32 @@
       "source_url": "https://www.ready.gov/water",
       "tier": "committed",
       "title": "پانی: Ready.gov کا غیر سرکاری اردو ترجمہ"
+    },
+    {
+      "as_of": "2005-09-01",
+      "doc_id": "stitch-ur-usaid-fog-food-shelter",
+      "doc_type": "translation",
+      "lang": "ur",
+      "license": "CC-BY-4.0",
+      "publisher": "Stitch team",
+      "redistributable": true,
+      "sha256": "c584ce26392ba24208229c0cb51429fe019afbe4650f6e77a69a60565f4b69e0",
+      "source_url": "https://archive.org/download/FieldOperationsGuide2005/FieldOperationsGuide2005.pdf",
+      "tier": "committed",
+      "title": "خوراک کا راشن اور ہنگامی پناہ گاہ: USAID فیلڈ آپریشنز گائیڈ کا غیر سرکاری اردو ترجمہ"
+    },
+    {
+      "as_of": "2005-09-01",
+      "doc_id": "usaid-fog-v4-food-shelter",
+      "doc_type": "guideline",
+      "lang": "en",
+      "license": "US-Gov-PD",
+      "publisher": "USAID OFDA",
+      "redistributable": true,
+      "sha256": "e49339a94e7be9f9b13886c99dd08784379fa1774e82702191251cbbed2360f2",
+      "source_url": "https://archive.org/download/FieldOperationsGuide2005/FieldOperationsGuide2005.pdf",
+      "tier": "committed",
+      "title": "Field Operations Guide for Disaster Assessment and Response, Version 4.0: food rations and shelter (USAID/OFDA)"
     }
   ],
   "ingest_report": [
@@ -217,9 +245,27 @@
       "readable_ratio": 1.0,
       "reordered": 0,
       "unreadable": {}
+    },
+    {
+      "chunks": 29,
+      "doc_id": "usaid-fog-v4-food-shelter",
+      "pages": 5,
+      "readable": 5,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
+    },
+    {
+      "chunks": 5,
+      "doc_id": "stitch-ur-usaid-fog-food-shelter",
+      "pages": 2,
+      "readable": 2,
+      "readable_ratio": 1.0,
+      "reordered": 0,
+      "unreadable": {}
     }
   ],
-  "manifest_sha256": "cab1306ccf3ca7f463cfad3f003b12e9f282cd27520775072de06a49c53bef53",
+  "manifest_sha256": "d44d1cf854fd966451658ac3316467f9ed4d7d6ed18994104477240329d66433",
   "model_info": {
     "e5-small-int8": {
       "name": "intfloat/multilingual-e5-small",

@@ -62,7 +62,20 @@ Only documents with `redistributable = true` are committed. The rest are fetched
 
 | Document | Publisher | License / terms | Redistributable | Committed |
 |---|---|---|---|---|
-| (none yet) | | | | |
+| Water (Ready.gov) (`fema-ready-water`) | FEMA | US-Gov-PD | yes | yes |
+| Food (Ready.gov) (`fema-ready-food`) | FEMA | US-Gov-PD | yes | yes |
+| Shelter (Ready.gov) (`fema-ready-shelter`) | FEMA | US-Gov-PD | yes | yes |
+| Floods (Ready.gov) (`fema-ready-floods`) | FEMA | US-Gov-PD | yes | yes |
+| Build A Kit (Ready.gov) (`fema-ready-kit`) | FEMA | US-Gov-PD | yes | yes |
+| Emergency Disinfection of Drinking Water (US EPA) (`epa-emergency-disinfection`) | US EPA | US-Gov-PD | yes | yes |
+| پانی: Ready.gov کا غیر سرکاری اردو ترجمہ (`stitch-ur-ready-water`) | Stitch team | CC-BY-4.0 | yes | yes |
+| سیلاب: Ready.gov کا غیر سرکاری اردو ترجمہ (`stitch-ur-ready-floods`) | Stitch team | CC-BY-4.0 | yes | yes |
+| پناہ گاہ اور ہنگامی سامان: Ready.gov کا غیر سرکاری اردو ترجمہ (`stitch-ur-ready-shelter-kit`) | Stitch team | CC-BY-4.0 | yes | yes |
+| Field Operations Guide for Disaster Assessment and Response, Version 4.0: food rations and shelter (USAID/OFDA) (`usaid-fog-v4-food-shelter`) | USAID OFDA | US-Gov-PD | yes | yes |
+| خوراک کا راشن اور ہنگامی پناہ گاہ: USAID فیلڈ آپریشنز گائیڈ کا غیر سرکاری اردو ترجمہ (`stitch-ur-usaid-fog-food-shelter`) | Stitch team | CC-BY-4.0 | yes | yes |
+| Technical note 9: How much water is needed in emergencies (WHO/WEDC) (`who-tn09-water-quantity`) | WHO | (c) WHO 2013, all rights reserved | no | no (fetched by script) |
+| The Sphere Handbook 2018 (English) (`sphere-handbook-2018-en`) | Sphere Association | Sphere Association copyright; educational reproduction with acknowledgment | no | no (fetched by script) |
+| NDMA plan document uploaded July 2026 (ndma.gov.pk/plans; owner to confirm the title) (`ndma-plan-2026-07`) | NDMA Pakistan | Unclear: no license statement found | no | no (fetched by script) |
 
 ## Training compute (no third-party code)
 Training runs on Google Colab (free) and Modal. These are services, not redistributed code.

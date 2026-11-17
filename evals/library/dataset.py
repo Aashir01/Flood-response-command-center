@@ -2,7 +2,11 @@
 
 Files (all committed):
 
-* ``questions.jsonl``: the 50-question set (30 English, 20 Urdu; 38 answerable, 12 not).
+* ``questions.jsonl``: the question set (51 questions: 31 English, 20 Urdu; 41 answerable, 10
+  not). At the freeze it had 50 (38 answerable, 12 not). On 2026-11-17 the committed corpus gained
+  the USAID/OFDA Field Operations Guide excerpt: three questions it answers were relabelled
+  (``frozen_label`` below) and one unanswerable test question (q051) was added so the set keeps
+  10 unanswerable questions (LIB-R9.1). See docs/decisions.md.
 * ``dev_extra.jsonl``: extra calibration-only items (``split = "dev_only"``), never reported.
 * ``split.lock``: ``sha256`` of the sorted ``id:split`` lines of ``questions.jsonl``. The split
   is assigned once by ``assign_splits`` and must never change after calibration (LIB-P12).
@@ -12,6 +16,11 @@ The split rule: within each stratum ``(lang, answerable)`` questions are ordered
 questions round-robin over the refusal reasons (sorted by name), each reason in ``sha256``
 order, so dev covers every reason where possible. Quotas give dev 20 questions (7 Urdu, 15
 answerable, 5 unanswerable) and test the other 30 (13 Urdu, 23 answerable, 7 unanswerable).
+
+A question relabelled after the freeze (its gold answer changed because the corpus changed)
+keeps its split: it carries ``frozen_label``, the labels it had when the split was assigned, and
+the split rule reads those. The split, ``split.lock`` and the calibration/test separation are
+therefore unchanged by a relabel; only the reported dev/test answerable counts move.
 """
 
 from __future__ import annotations
@@ -37,11 +46,11 @@ DEV_QUOTA: dict[tuple[str, bool], int] = {
     ("ur", False): 2,
 }
 EXPECTED_COUNTS = {
-    "total": 50,
-    "en": 30,
+    "total": 51,
+    "en": 31,
     "ur": 20,
-    "answerable": 38,
-    "INSUFFICIENT_EVIDENCE": 6,
+    "answerable": 41,
+    "INSUFFICIENT_EVIDENCE": 4,
     "OUT_OF_SCOPE": 4,
     "CONFLICTING_EVIDENCE": 2,
 }
@@ -63,6 +72,16 @@ class PageRef(BaseModel):
     page: int = Field(ge=1)
 
 
+class FrozenLabel(BaseModel):
+    """The labels a question had when the split was frozen (see the module docstring)."""
+
+    model_config = ConfigDict(extra="forbid")
+    answerable: bool
+    expected_reason: Reason | None
+    relabelled_on: str = Field(pattern=r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+    why: str = Field(min_length=1)
+
+
 class Question(BaseModel):
     model_config = ConfigDict(extra="forbid")
     id: str = Field(pattern=r"^[qe][0-9]{3}$")
@@ -80,6 +99,13 @@ class Question(BaseModel):
     demo: bool = False
     needs_native_review: bool = False
     notes: str = ""
+    frozen_label: FrozenLabel | None = None
+
+    def split_label(self) -> tuple[bool, str | None]:
+        """``(answerable, expected_reason)`` as seen by the split rule."""
+        if self.frozen_label is not None:
+            return self.frozen_label.answerable, self.frozen_label.expected_reason
+        return self.answerable, self.expected_reason
 
     def pages(self) -> set[tuple[str, int]]:
         """Gold and alternative pages that support an answer."""
@@ -108,7 +134,7 @@ def assign_splits(questions: Sequence[Question]) -> dict[str, str]:
     out = {q.id: "test" for q in questions}
     for (lang, answerable), quota in DEV_QUOTA.items():
         stratum = sorted(
-            (q for q in questions if q.lang == lang and q.answerable == answerable),
+            (q for q in questions if q.lang == lang and q.split_label()[0] == answerable),
             key=lambda q: _h(q.id),
         )
         if answerable:
@@ -116,7 +142,7 @@ def assign_splits(questions: Sequence[Question]) -> dict[str, str]:
         else:
             by_reason: dict[str, list[Question]] = {}
             for q in stratum:
-                by_reason.setdefault(str(q.expected_reason), []).append(q)
+                by_reason.setdefault(str(q.split_label()[1]), []).append(q)
             queues = [by_reason[r] for r in sorted(by_reason)]
             chosen = []
             while len(chosen) < quota and any(queues):
@@ -228,7 +254,8 @@ def _check_question(
         errors.append(f"{q.id}: a conflict question needs gold passages from two documents")
     if q.expected_reason in ("INSUFFICIENT_EVIDENCE", "OUT_OF_SCOPE") and q.gold:
         errors.append(f"{q.id}: {q.expected_reason} question with gold evidence")
-    for ref in [*q.gold, *q.alt_pages]:
+    refs: list[Gold | PageRef] = [*q.gold, *q.alt_pages]
+    for ref in refs:
         if ref.doc_id not in manifest:
             errors.append(f"{q.id}: unknown document {ref.doc_id}")
     gold_tiers = {manifest.get(g.doc_id) for g in q.gold}
