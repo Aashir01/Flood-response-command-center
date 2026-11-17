@@ -164,5 +164,5 @@ The demo runs with `STITCH_LLM_PROVIDER=fake` (recorded replies, no network). Li
 
 | Service | Used for | Terms | Status |
 |---|---|---|---|
-| Nebius Token Factory (OpenAI-compatible API, `https://api.tokenfactory.nebius.com/v1/`) | Brain prose and translation, Library answers when `STITCH_LLM_PROVIDER=nebius` | Nebius service terms; model licenses per model card (default `meta-llama/Llama-3.3-70B-Instruct`, Llama 3.3 Community License) | optional |
+| Nebius Token Factory (OpenAI-compatible API, `https://api.tokenfactory.nebius.com/v1/`) | Brain prose and translation, Library answers when `STITCH_LLM_PROVIDER=nebius` | Nebius service terms; model licenses per model card (default `Qwen/Qwen3-235B-A22B-Instruct-2507`, Apache-2.0) | optional |
 | Anthropic API, OpenAI API | same, alternative providers | provider service terms | optional |

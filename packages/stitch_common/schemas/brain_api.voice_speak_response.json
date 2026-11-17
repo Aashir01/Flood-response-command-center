@@ -30,6 +30,7 @@
       "enum": [
         "azure",
         "google",
+        "deepgram",
         "prerendered",
         "local-mms",
         "fake"

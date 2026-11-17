@@ -10,6 +10,7 @@ from pathlib import Path
 from mcp import Client, StdioServerParameters
 from starlette.testclient import TestClient
 
+from stitch_common import CONTRACT_VERSION
 from stitch_common.envelope import ToolResult
 from stitch_ledger.models import TOOL_NAMES
 from stitch_ledger.server import create_server
@@ -65,4 +66,4 @@ def test_healthz_reports_checks() -> None:
     body = r.json()
     assert body["status"] == "ok" and body["organ"] == "ledger"
     assert body["checks"] == {"solver": True, "dataset": True, "store": True}
-    assert body["contract_version"] == "0.4"
+    assert body["contract_version"] == CONTRACT_VERSION

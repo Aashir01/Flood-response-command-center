@@ -55,7 +55,7 @@ Every organ runs from `data/demo/` with no network calls. Live mode (Open-Meteo 
 |---|---|---|
 | `STITCH_MODE` | `demo` or `live` | `demo` |
 | `STITCH_LLM_PROVIDER` | `fake`, `anthropic`, `openai`, `nebius` | `fake` |
-| `STITCH_LLM_MODEL` | model id for the provider | provider default (Nebius: `meta-llama/Llama-3.3-70B-Instruct`) |
+| `STITCH_LLM_MODEL` | model id for the provider | provider default (Nebius: `Qwen/Qwen3-235B-A22B-Instruct-2507`) |
 | `NEBIUS_API_KEY`, `NEBIUS_BASE_URL` | Nebius Token Factory key and optional base URL | unset |
 | `STITCH_WHISPER_MODEL` | Whisper size | `base` |
 | `STITCH_EMBED_MODEL` | Library embedding model | small multilingual |

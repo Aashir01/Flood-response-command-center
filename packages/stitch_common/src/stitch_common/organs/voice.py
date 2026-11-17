@@ -19,7 +19,7 @@ MAX_AUDIO_BYTES = 10_000_000
 # base64 length for MAX_AUDIO_BYTES, used as a cheap pre-check before decoding.
 _MAX_B64_CHARS = 4 * ((MAX_AUDIO_BYTES + 2) // 3)
 
-Provider = Literal["azure", "google", "prerendered", "local-mms", "fake"]
+Provider = Literal["azure", "google", "deepgram", "prerendered", "local-mms", "fake"]
 Synthesized = Literal["live", "cache", "prerendered"]
 
 

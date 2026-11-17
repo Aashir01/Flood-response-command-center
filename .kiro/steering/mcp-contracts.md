@@ -2,7 +2,7 @@
 inclusion: always
 ---
 
-# MCP contracts (v0.4)
+# MCP contracts (v0.5)
 
 Single source of truth for organ tool I/O. `packages/stitch_common` mirrors these as Pydantic v2 models; the contract hook validates both directions. Schemas are written as compact JSON Schema (`?` = optional). Any change bumps `contract_version` and is logged at the bottom. v0.4 changes are all additive: every new input is optional and every new output field is optional (an absent field means "unknown"), so v0.3 payloads stay valid. Decisions per proposal: `docs/contract-v0.4-decisions.md`.
 
@@ -203,7 +203,7 @@ out: { "text": str, "lang": "en|ur", "segments": [ { "start": number, "end": num
 ```jsonc
 in:  { "text": str (<= 4000 chars), "lang": "en|ur", "voice"?: str, "format"?: "wav|mp3" }
 out: { "audio_b64": str, "format": str, "duration_s": number, "sample_rate": int, "lang": str,
-       "provider": "azure|google|prerendered|local-mms|fake", "synthesized": "live|cache|prerendered",
+       "provider": "azure|google|deepgram|prerendered|local-mms|fake", "synthesized": "live|cache|prerendered",
        "voice"?: str }                            // v0.4: the resolved voice name
 ```
 Stable warning strings (v0.4, documented not enforced): `transcribe` may add `NO_SPEECH`, `REPETITION_TRIMMED`, `LANGUAGE_UNSUPPORTED:<code>`; `speak` may add `TTS_BUDGET_80PCT`.
@@ -285,3 +285,4 @@ Event payloads (`TaskEvent.payload`):
 - 0.2: eyes `validation` and `reference_overlay_geojson`; oracle `target_kind`/`target_label`; ledger `equity_tradeoff`, `equity_cost`, `floor_steps`; voice `provider`, `synthesized`.
 - 0.3: ledger `districts` optional override, `alt_delivery_fraction`, `min_road_access`, `access_mode`, `unreached_people`; `min_coverage_fraction` replaced by `equity_floor` (fraction of proportional share) with `on_infeasible_floor` and `equity` output; resource `ledger://scenario/{id}/districts`.
 - 0.4: all additive and optional. Provenance `models`; optional `mode` input on eyes, oracle `forecast_river` and ledger `optimize_allocation`; eyes nullable `confidence`, `reference_overlay_note`, `valid_fraction`, `model_variant`, per-district `district_area_km2` and `flooded_roads_km`, `permanent_water_km2` definition, resource `eyes://scenes`; oracle `calibration.interval_lower_q/upper_q`, `station`, `quantile_correction_applied`, explain `lead_days_explained` and `feature_group`, resource `oracle://stations`; library `answer_lang`, `generation`, `quantities`, hit `chunk_id/span/title/publisher`, `filters.lang/doc_id`, refusal is `ok: true` and `NO_EVIDENCE` unused; voice `speak.voice` and stable warning strings; brain `Claim.labels`, `Briefing.organs/disclaimer`, `Section.missing`, `Conflict.rule_id/status/subjects`, `notice` event, `EvidenceRef.run_id` clarified; new section 8c (Brain HTTP/SSE API and event payloads) and `stitch_common.brain_api`.
+- 0.5: voice `provider` gains `deepgram` (Deepgram Nova-3 transcription and Aura-2 English speech). Additive.

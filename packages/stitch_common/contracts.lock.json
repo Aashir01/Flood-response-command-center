@@ -1,5 +1,5 @@
 {
-  "contract_version": "0.4",
+  "contract_version": "0.5",
   "schemas": {
     "brain.briefing.json": "c55630240b6fa0b86fdca0cbf1f329976a91c0d1f2fa6b82a4473a146f7e8f96",
     "brain.task_event.json": "b959381e40e968c11b066cfcc8d90e776b3ca1a0e48dfa79183b7e4fa86e2fa0",
@@ -19,7 +19,7 @@
     "brain_api.payload_organ_result.json": "6796fb6d0b131a264b6476dc8a5c89297cf21ee3199b2c2f60b38906a1eadf74",
     "brain_api.payload_plan.json": "14c383cf98d374585912cba3e9be59808dc7e48bc61239e02d609d92bb55b3d0",
     "brain_api.speak_request.json": "ab261ca80d521a4d2192ce70df0e1e6f1a4c28d234b46f806b402a68d6c68dff",
-    "brain_api.voice_speak_response.json": "bcb8c0240f7c3431493ce5d4b5feb736ece4e059c1f9182b823999cfe61475e5",
+    "brain_api.voice_speak_response.json": "8fcca26f4d995f722b5dbd08304d57cfa3121f5c1aeebd2373f122fa91daacbe",
     "brain_api.voice_transcribe_response.json": "ac51d95c6c5e68527bf2a62735cd9167123f9784c4bdd100361bd7247207bbf7",
     "common.citation.json": "d9f93aeead079bcaa935ad790cf3d0fb3b07dd84a1e95b4158e15a272955425e",
     "common.evidence_ref.json": "030eb76978ddbd5a90f66aee0ddce6056c79295569ef89b2bedab9efea1b54c8",
@@ -46,7 +46,7 @@
     "oracle.forecast_river.out.json": "a7a53086567c090101a3d5715dfa485759fdc8918187d60ec4576719396e8c4e",
     "oracle.resource.stations.json": "940b10fdc8bc24b637cb797be2622f5d4309b4d4f9fa3d4cee173ec42861376c",
     "voice.speak.in.json": "43e448a7e26a57bc6c558033cc8d1d34a7a03ec469c684f47f7b598e5f5fd953",
-    "voice.speak.out.json": "1e784ca0fb0a333d233431b4b1d0b591d643db1d659d648c6eda14d4e4ebd2fc",
+    "voice.speak.out.json": "82954d74f5459f95b696c78185f5af171ac45af61a6ca296966dc623b09ceb35",
     "voice.transcribe.in.json": "05647f13158fc483d3cf0111caeb41aa7d59b1b5248713ef6ca4049326f57a0f",
     "voice.transcribe.out.json": "8281f4ade84c3411933b909eaf995fcbcf5fab1ce6d84c92aa60f1aa1fa60490"
   }

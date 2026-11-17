@@ -56,9 +56,9 @@ def _spec(key: str) -> Any:
     return ORGAN_TOOLS[organ][tool]
 
 
-def test_version_is_04() -> None:
-    assert CONTRACT_VERSION == "0.4"
-    assert PROVENANCE["contract_version"] == "0.4"
+def test_version_is_at_least_04() -> None:
+    assert tuple(int(x) for x in CONTRACT_VERSION.split(".")) >= (0, 4)
+    assert PROVENANCE["contract_version"] == CONTRACT_VERSION
 
 
 @pytest.mark.parametrize("key", sorted(V04_IN))

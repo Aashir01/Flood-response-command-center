@@ -179,7 +179,7 @@ class OpenAIClient(BaseLLMClient):
         return False
 
 
-DEFAULT_NEBIUS_MODEL = "meta-llama/Llama-3.3-70B-Instruct"
+DEFAULT_NEBIUS_MODEL = "Qwen/Qwen3-235B-A22B-Instruct-2507"
 NEBIUS_BASE_URL = "https://api.tokenfactory.nebius.com/v1/"
 
 
