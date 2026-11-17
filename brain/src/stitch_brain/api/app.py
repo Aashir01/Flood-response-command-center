@@ -16,6 +16,7 @@ from typing import Any
 from fastapi import FastAPI, Header, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response, StreamingResponse
+from pydantic import ValidationError
 from starlette.middleware.gzip import GZipMiddleware
 
 from stitch_brain import BRAIN_VERSION
@@ -261,7 +262,16 @@ def create_app(
             raise ApiException("NOT_FOUND", "unknown run id", details={"reason": "unknown run_id"})
         if pointer is None:
             return _json(entry.result)
-        ref = EvidenceRef(run_id=run_id, organ=entry.organ, tool=entry.tool, json_pointer=pointer)
+        try:
+            ref = EvidenceRef(
+                run_id=run_id, organ=entry.organ, tool=entry.tool, json_pointer=pointer
+            )
+        except ValidationError:
+            raise ApiException(
+                "NOT_FOUND",
+                "the pointer does not resolve",
+                details={"reason": "not an RFC 6901 pointer"},
+            ) from None
         store = EvidenceStore(entry.briefing_id)
         store.put(entry)
         res = store.resolve(ref)
@@ -282,11 +292,16 @@ def create_app(
         return _json(body.model_dump(mode="json", exclude_none=True))
 
     # --- ask ---------------------------------------------------------------------------------
-    @app.post("/ask", response_model=AskResponse, response_model_exclude_none=True)
-    async def post_ask(body: AskRequest) -> AskResponse:
+    @app.post("/ask", response_model=AskResponse)
+    async def post_ask(body: AskRequest) -> Response:
         resp, store = await run_ask(body, reg, runner.i18n, ask_scenario)
         manager.remember_ask(resp.ask_id, store)
-        return resp
+        # Drop absent top-level optionals only: the embedded Library ToolResult keeps its
+        # nulls, which the contract requires (``error: null``, ``refusal: null``, ...).
+        out = resp.model_dump(mode="json", exclude_none=True, exclude={"result"})
+        if resp.result is not None:
+            out["result"] = resp.result.model_dump(mode="json")
+        return _json(out)
 
     # --- voice -------------------------------------------------------------------------------
     @app.post("/voice/transcribe")

@@ -407,6 +407,15 @@ def library() -> None:
         {"scenario": "demo-sindh-2022-conflicts", "args": {"query": q, "answer_lang": "ur"}},
         water("7.5", 7.5, "water-conflicts-ur", "ur"),
     )
+    # POST /ask asks with fixture set "ask": an answered question (beats ask-default-refusal,
+    # which matches every other question).
+    write(
+        "library",
+        "answer_with_citations",
+        "ask-water-en",
+        {"scenario": "ask", "args": {"query": qs["water"][0]}},
+        water("15", 15.0, "ask-water-en"),
+    )
     food_text = (
         "A general food ration should provide at least 2,100 kcal per person per day, "
         "with protein and fat in the planned ration."
