@@ -29,3 +29,6 @@ Thumbs.db
 evals/results/*.json
 !evals/results/schema.json
 evals/results/*.parquet
+# deployment secrets (deploy design 6.2). Never add .kiro/ here.
+prod.env
+deploy/secrets/

@@ -51,12 +51,34 @@ def lint_staged(root: Path, files: list[str]) -> list[str]:
     return problems
 
 
+def hygiene(root: Path) -> list[str]:
+    """Fast repo hygiene checks from ``deploy/bin/check_repo_hygiene.py`` (.kiro guard, MCP
+    settings, tracked secret files). Skipped when the script is absent (older checkouts)."""
+    import importlib.util
+
+    script = root / "deploy" / "bin" / "check_repo_hygiene.py"
+    if not script.is_file():
+        return []
+    spec = importlib.util.spec_from_file_location("check_repo_hygiene", script)
+    if spec is None or spec.loader is None:
+        return []
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    found: list[str] = [
+        *mod.check_kiro(root),
+        *mod.check_mcp_settings(root),
+        *mod.check_secret_files(root),
+    ]
+    return ["repo hygiene:\n" + "\n".join(f"  {f}" for f in found)] if found else []
+
+
 def guard(root: Path) -> list[str]:
     staged = secret_scan.list_staged(root)
     problems = lint_staged(root, staged)
     findings = secret_scan.scan_files(root, staged, staged=True)
     if findings:
         problems.append("secret scan found:\n" + "\n".join(f"  {f}" for f in findings))
+    problems += hygiene(root)
     return problems
 
 
