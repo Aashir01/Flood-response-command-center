@@ -44,7 +44,7 @@ def test_p17_filters_are_respected(data: st.DataObject, lang: str | None) -> Non
         publisher=frozenset(pubs) if pubs else None,
         doc_type=frozenset(types) if types else None,
     )
-    ret = Retriever(corpus.store, corpus.embedder, rerankers().example())
+    ret = Retriever(corpus.store, corpus.embedder, data.draw(rerankers()))
     res = ret.search(q, top_k=20, flt=flt, lang=lang)
     for h in res.hits:
         assert pubs is None or h.doc.publisher in pubs
@@ -59,10 +59,20 @@ ranked = st.lists(st.sampled_from([f"c{i:02d}" for i in range(15)]), unique=True
 def test_p8_rrf_is_deterministic_and_dominance_respecting(
     a: list[str], b: list[str], rnd: random.Random
 ) -> None:
-    la = [(c, 1.0) for c in a]
-    lb = [(c, 1.0) for c in b]
+    # Scores strictly decrease along each list, so list position is the rank. (With equal
+    # scores, rank is defined by id, not by arrival order; that is checked below.)
+    la = [(c, float(len(a) - i)) for i, c in enumerate(a)]
+    lb = [(c, float(len(b) - i)) for i, c in enumerate(b)]
     out = rrf([la, lb])
     assert out == rrf([la, lb])
+    shuffled_a, shuffled_b = la[:], lb[:]
+    rnd.shuffle(shuffled_a)
+    rnd.shuffle(shuffled_b)
+    assert rrf([shuffled_a, shuffled_b]) == out
+    ties = [(c, 1.0) for c in a]
+    shuffled_ties = ties[:]
+    rnd.shuffle(shuffled_ties)
+    assert rrf([ties]) == rrf([shuffled_ties])
     assert {c for c, _ in out} == set(a) | set(b)
     pos = {c: i for i, (c, _) in enumerate(out)}
     ra = {c: i for i, c in enumerate(a)}
@@ -82,8 +92,9 @@ def test_p8_full_retrieval_is_repeatable(data: st.DataObject) -> None:
     corpus = data.draw(mini_corpora())
     q = data.draw(queries(corpus))
     assume(q.strip())
-    r1 = Retriever(corpus.store, corpus.embedder, rerankers().example()).search(q, top_k=8)
-    r2 = Retriever(corpus.store, corpus.embedder, rerankers().example()).search(q, top_k=8)
+    rr = data.draw(rerankers())
+    r1 = Retriever(corpus.store, corpus.embedder, rr).search(q, top_k=8)
+    r2 = Retriever(corpus.store, corpus.embedder, rr).search(q, top_k=8)
     assert [h.chunk.chunk_id for h in r1.hits] == [h.chunk.chunk_id for h in r2.hits]
 
 
@@ -113,10 +124,10 @@ def test_p4_irrelevant_document_does_not_change_top1(data: st.DataObject) -> Non
     base += [ingest(f"doc-o{i}", [t]) for i, t in enumerate(others)]
     q = "boil drinking water one minute"
     before = build_store(base)
-    top_before = Retriever(before.store, before.embedder, rerankers().example()).search(q).hits
+    rr = data.draw(rerankers())
+    top_before = Retriever(before.store, before.embedder, rr).search(q).hits
     added = " ".join(data.draw(st.lists(st.sampled_from(NOISE_WORDS), min_size=8, max_size=16)))
     after = build_store([*base, ingest("doc-added", [added + "."])])
-    rr = rerankers().example()
     top_after = Retriever(after.store, after.embedder, rr).search(q).hits
     assert top_before and top_after
     assert top_after[0].chunk.chunk_id == top_before[0].chunk.chunk_id
