@@ -16,6 +16,7 @@ from hypothesis import strategies as st
 
 from stitch_brain.config import load_scenarios
 from stitch_brain.core.briefing import normalize_ids
+from stitch_brain.core.plans import default_plan
 from stitch_brain.runtime.clock import VirtualClock
 from stitch_brain.runtime.store import (
     EventLog,
@@ -41,6 +42,15 @@ def _kinds(events: list[Any]) -> Counter[tuple[str, str]]:
     return Counter((e.event, e.task_id) for e in events)
 
 
+# BRN-P4 is about completion *order*. Delays must stay below the smallest per-call organ
+# timeout of the default plan (``ledger.districts``: 5 s), otherwise a call legitimately times
+# out, the run degrades and the briefing differs for a reason the property does not cover.
+# (The original 0..10 s range made seed=5 time out ``ledger.districts`` on all three attempts.)
+MAX_DELAY_S = 0.9 * min(
+    n.timeout_s for n in default_plan(SC, plan_id="p").nodes if n.kind in ("organ", "resource")
+)
+
+
 class DelayedOrgan:
     """Delays every call on the virtual clock by a drawn amount (completion order varies)."""
 
@@ -62,11 +72,11 @@ class DelayedOrgan:
         return self.inner.health()
 
     async def call_tool(self, tool: str, args: dict[str, Any], **kw: Any) -> Any:
-        await self.clock.sleep(self.rng.uniform(0, 10))
+        await self.clock.sleep(self.rng.uniform(0, MAX_DELAY_S))
         return await self.inner.call_tool(tool, args, **kw)
 
     async def read_resource(self, uri: str, **kw: Any) -> Any:
-        await self.clock.sleep(self.rng.uniform(0, 10))
+        await self.clock.sleep(self.rng.uniform(0, MAX_DELAY_S))
         return await self.inner.read_resource(uri, **kw)
 
 
@@ -92,6 +102,26 @@ async def test_brn_p4_same_request_twice_gives_the_same_briefing() -> None:
 async def test_brn_p4_completion_order_does_not_change_the_briefing(seed: int, lang: str) -> None:
     base = await run_briefing(lang=lang, briefing_id=BID)
     res = await _delayed_run(seed, lang)
+    assert _norm(res) == _norm(base)
+
+
+async def test_brn_p4_regression_caveat_refs_ignore_completion_order() -> None:
+    """Distilled from seed=0: the ``caveat.mode`` refs and the ``caveat.recorded.*`` warning
+    ref followed store insertion order, which is the order concurrent calls finished in."""
+    base = await run_briefing(briefing_id=BID)
+    res = await _delayed_run(0)
+    assert _norm(res) == _norm(base)
+    order = [e.node_id for e in res.store.entries()]
+    canon = [e.node_id for e in res.store.canonical_entries()]
+    assert canon == sorted(canon) and sorted(order) == canon
+
+
+async def test_brn_p4_regression_delays_stay_below_the_call_timeouts() -> None:
+    """Distilled from seed=5: the test delays exceeded ``ledger.districts``' 5 s timeout."""
+    assert 0 < MAX_DELAY_S < 5
+    base = await run_briefing(briefing_id=BID)
+    res = await _delayed_run(5)
+    assert not [e for e in res.events if e.event == "organ_result" and not e.payload["ok"]]
     assert _norm(res) == _norm(base)
 
 

@@ -111,7 +111,7 @@ def required_claims(
     if seg is not None and seg.data().get("validation", {}).get("validated_for_region") is False:
         req.append(Requirement("S1", "caveat.eyes_unvalidated", "unvalidated Eyes scene"))
     seen: set[str] = set()
-    for e in store.entries():
+    for e in store.canonical_entries():
         if e.served_by != "recorded" or not e.ok or e.organ in seen:
             continue
         warns = e.result.get("warnings") or []

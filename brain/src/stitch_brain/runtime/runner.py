@@ -505,7 +505,7 @@ class _Run:
             digits=self.r.settings.ur_digits,
             node_status={k: o.status for k, o in outcomes.items()},
         )
-        organ_entries = [e for e in self.store.entries() if e.served_by != "brain"]
+        organ_entries = [e for e in self.store.canonical_entries() if e.served_by != "brain"]
         drafts = render_all(ctx, organ_entries)
         apply_disputed(
             drafts, records, self.r.i18n.pack(self.req.lang).disputed_suffix, self.req.lang

@@ -79,6 +79,10 @@ class EvidenceEntry(BaseModel):
         )
 
 
+def canonical_key(e: EvidenceEntry) -> tuple[str, int, str]:
+    return (e.node_id, e.attempt, e.call_run_id)
+
+
 def _check_finite(obj: Any, path: str = "") -> None:
     if isinstance(obj, float) and not math.isfinite(obj):
         raise EvidenceError(f"non-finite number at {path or '/'}")
@@ -144,6 +148,14 @@ class EvidenceStore:
     def entries(self) -> Iterator[EvidenceEntry]:
         for rid in self._order:
             yield self._entries[rid]
+
+    def canonical_entries(self) -> list[EvidenceEntry]:
+        """Entries in a completion-order-independent order (node id, attempt, run id).
+
+        ``entries()`` follows insertion order, which is the order calls *finished* in. Anything
+        rendered into a briefing must use this order instead, or concurrent organ timing leaks
+        into the output (BRN-P4)."""
+        return sorted(self._entries.values(), key=canonical_key)
 
     def __len__(self) -> int:
         return len(self._entries)

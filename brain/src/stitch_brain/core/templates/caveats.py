@@ -7,7 +7,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 from stitch_brain.core.claims import ClaimDraft, SectionId, Slot, id_token
-from stitch_brain.core.evidence import EvidenceEntry
+from stitch_brain.core.evidence import EvidenceEntry, canonical_key
 from stitch_brain.core.pointer import pointer_for
 from stitch_brain.core.templates.common import RenderCtx, claim, derived, leaf, lookup_slot
 
@@ -61,7 +61,8 @@ def render_caveats_head(ctx: RenderCtx, organ_entries: Iterable[EvidenceEntry]) 
             )
         )
     meta = ctx.ok("run_meta")
-    entries = list(organ_entries)
+    # Completion order of concurrent calls must not reach the briefing (BRN-P4).
+    entries = sorted(organ_entries, key=canonical_key)
     if meta is not None:
         d = meta.data()
         if d.get("mode_effective") == "live":
