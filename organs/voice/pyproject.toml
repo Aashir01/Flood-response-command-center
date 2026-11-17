@@ -3,7 +3,7 @@ name = "stitch-voice"
 version = "0.1.0"
 description = "Voice organ (voice-mcp) for Stitch"
 requires-python = ">=3.12"
-dependencies = ["stitch-common[mcp]"]
+dependencies = ["stitch-common[mcp]", "httpx>=0.27", "faster-whisper>=1.1,<2"]
 
 [tool.uv.sources]
 stitch-common = { workspace = true }

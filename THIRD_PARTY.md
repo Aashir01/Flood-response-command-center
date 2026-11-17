@@ -27,8 +27,9 @@ Every third-party library, dataset, and model used by Stitch is listed here with
 | SegFormer / U-Net backbone weights (TBD) | eyes | TBD | planned |
 | Embedding model (TBD, multilingual) | library | TBD | planned |
 | Reranker model (TBD) | library | TBD | planned |
-| Whisper `tiny` / `base` (size set by `STITCH_WHISPER_MODEL`) | voice | MIT | planned |
-| Azure Neural TTS (default; `ur-PK-UzmaNeural`) | voice | Microsoft service terms. Generated audio is committed only if the terms allow | planned |
+| Whisper `tiny` / `base` weights (OpenAI, CTranslate2 conversions `Systran/faster-whisper-*`; size set by `STITCH_WHISPER_MODEL`, downloaded at build time, not committed) | voice | MIT | in use |
+| Deepgram Aura-2 TTS (English) and Nova-3 STT (en, ur), hosted API, `DEEPGRAM_API_KEY` | voice | Deepgram Terms of Service (2026-08-06). Output is the user's content but redistribution is not expressly granted, so generated audio is not committed; requests set `mip_opt_out=true`; audio must be disclosed as AI-generated (terms 3.5) | in use (when keyed) |
+| Azure Neural TTS (Urdu only; `ur-PK-UzmaNeural`) | voice | Microsoft service terms. Generated audio is not committed | in use (when keyed) |
 | Google Cloud Text-to-Speech (fallback provider) | voice | Google service terms | planned |
 | Meta MMS-TTS (optional local mode, OFF by default, not bundled) | voice | CC BY-NC 4.0 (non-commercial) | optional |
 | Coqui XTTS (not used; noted as a non-commercial alternative) | voice | CPML (non-commercial) | not used |
@@ -156,7 +157,10 @@ Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond 
 Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it.
 | Library | Used for | License | Status |
 |---|---|---|---|
-| (none yet) | | | |
+| faster-whisper | local offline speech-to-text (default STT and fallback); bundles the Silero VAD ONNX file (MIT) | MIT | in use |
+| CTranslate2 | inference engine under faster-whisper (CPU int8) | MIT | in use |
+| PyAV (bundles FFmpeg libraries) | duration probe and decoding of webm/ogg/mp3 input | BSD-3-Clause (FFmpeg: LGPL-2.1, dynamically linked in the wheel) | in use |
+| httpx | Deepgram and Azure REST calls | BSD-3-Clause | in use |
 
 ## Hosted LLM providers (optional, off by default)
 
