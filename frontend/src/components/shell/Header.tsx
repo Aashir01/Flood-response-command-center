@@ -50,9 +50,11 @@ export function Header({ route, mode }: { route: Route; mode?: 'demo' | 'live' }
               {t(mode === 'demo' ? 'mode.demo' : 'mode.live')}
             </span>
           ) : null}
-          <a className="tool-btn" href={`/${other}/${route}`} hrefLang={other} lang={other} aria-label={t('lang.switchLabel')} data-testid="lang-toggle">
+          <a className="tool-btn" href={`/${other}/${route}`} hrefLang={other} data-testid="lang-toggle">
             <IconGlobe />
-            <span>{t('lang.switchTo')}</span>
+            {/* The visible label is in the target language; the name keeps it and adds a current-language hint. */}
+            <span className="sr-only">{t('lang.switchLabel')}: </span>
+            <span lang={other}>{t('lang.switchTo')}</span>
           </a>
           {lang === 'ur' ? (
             <button type="button" className="tool-btn" aria-pressed={digits === 'arabext'} onClick={() => setDigits(digits === 'arabext' ? 'latn' : 'arabext')}>

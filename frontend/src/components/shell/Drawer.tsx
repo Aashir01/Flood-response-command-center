@@ -73,7 +73,10 @@ export function Drawer({
               <span>{t('drawer.close')}</span>
             </button>
           </div>
-          <div className="drawer__body">{children}</div>
+          {/* Focusable so a long body can be scrolled with the keyboard (WCAG 2.1.1, axe scrollable-region-focusable). */}
+          <div className="drawer__body" tabIndex={0}>
+            {children}
+          </div>
         </>
       ) : null}
     </dialog>
