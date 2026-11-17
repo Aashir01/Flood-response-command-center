@@ -228,7 +228,9 @@ class FaultyOrgan:
             return CallOutcome(transport_error=TransportError("PROTOCOL", "contract: bad shape"))
         raise ValueError(self.mode)
 
-    async def call_tool(self, tool: str, args: dict[str, Any], *, timeout_s: float, ctx: Any) -> Any:
+    async def call_tool(
+        self, tool: str, args: dict[str, Any], *, timeout_s: float, ctx: Any
+    ) -> Any:
         return await self._fail(tool, args, ctx)
 
     async def read_resource(self, uri: str, *, timeout_s: float, ctx: Any) -> Any:

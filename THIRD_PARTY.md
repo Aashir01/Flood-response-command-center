@@ -136,3 +136,8 @@ Libraries the Brain (rain/, package stitch_brain) adds beyond the workspace bas
 | DuckDB | Brain RunStore (runs, events, evidence, traces) | MIT | in use |
 | PyYAML | Brain config files (scenarios, organs, conflict rules, i18n) | MIT | in use |
 | MCP Python SDK client (mcp.Client, stdio and streamable HTTP) | Brain to organ calls | MIT | in use |
+## eyes-mcp code libraries
+Added by `scripts/scaffold_organ.py`. List every library this organ adds beyond the workspace baseline (stitch-common, MCP SDK, pytest, Hypothesis) in the same commit that adds it.
+| Library | Used for | License | Status |
+|---|---|---|---|
+| (none yet) | | | |
