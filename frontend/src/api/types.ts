@@ -80,7 +80,7 @@ export const ORGAN_IDS: readonly OrganId[] = ['eyes', 'oracle', 'library', 'ledg
 export type Lang = 'en' | 'ur';
 export type Mode = 'demo' | 'live';
 
-export type ApiErrorCode = 'RATE_LIMITED' | 'UNREACHABLE' | 'TIMEOUT' | 'NOT_FOUND' | 'INVALID_INPUT' | 'UPSTREAM_UNAVAILABLE' | 'BUSY' | 'INTERNAL';
+export type ApiErrorCode = 'RATE_LIMITED' | 'UNREACHABLE' | 'TIMEOUT' | 'NOT_FOUND' | 'INVALID_INPUT' | 'UPSTREAM_UNAVAILABLE' | 'BUSY' | 'CANCELLED' | 'PAYLOAD_TOO_LARGE' | 'INTERNAL';
 export interface ApiError {
   code: ApiErrorCode;
   message: string;

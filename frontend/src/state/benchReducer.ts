@@ -73,6 +73,7 @@ export type BenchAction =
   | { type: 'HEALTH_FAILED' }
   | { type: 'RUN_STARTING' }
   | { type: 'RUN_ACCEPTED'; taskId: string }
+  | { type: 'RUN_REJECTED'; code: string; message: string; ts: string }
   | { type: 'EVENT'; seq: number; event: TaskEvent }
   | { type: 'RUN_CANCELLED' }
   | { type: 'STREAM_LOST' }
@@ -270,6 +271,8 @@ export function benchReducer(s: BenchState, a: BenchAction): BenchState {
       return resetForRun(s);
     case 'RUN_ACCEPTED':
       return { ...s, run: { ...s.run, taskId: a.taskId, status: s.run.status === 'starting' ? 'starting' : s.run.status } };
+    case 'RUN_REJECTED':
+      return { ...s, run: { ...s.run, status: 'failed' }, errors: [...s.errors, { code: a.code, message: a.message, ts: a.ts, fatal: true }] };
     case 'EVENT':
       if (a.seq <= s.lastSeq) return s;
       return applyEvent({ ...s, lastSeq: a.seq }, a.seq, a.event);

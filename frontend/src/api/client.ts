@@ -11,34 +11,39 @@ import type {
   SpeakRequest,
   VoiceSpeakResponse,
   VoiceTranscribeResponse,
+  ToolEnvelope,
 } from './types';
 
-export const BRAIN_URL: string = (process.env.NEXT_PUBLIC_BRAIN_URL ?? '/api').replace(/\/$/, '');
+/** Same-origin /api behind Caddy; NEXT_PUBLIC_BRAIN_URL points at a mock or local Brain in dev. */
+export const BRAIN_URL: string = (process.env.NEXT_PUBLIC_BRAIN_URL || '/api').replace(/\/$/, '');
 
+/** Shape of evals/results/latest.json (evals/results/schema.json). */
 export interface EvalMetric {
   id: string;
   label: string;
-  value: number | null;
-  target: number | null;
-  direction: 'higher_is_better' | 'lower_is_better';
+  value: number;
+  target?: number | null;
   unit?: string;
-  passed?: boolean | null;
-  dataset?: string;
-  mode?: string;
+  direction: 'higher' | 'lower';
+  dataset: string;
+  mode?: 'demo' | 'live' | 'synthetic';
+  timestamp: string;
+  git_sha: string;
+  seed: number;
+  notes?: string;
+  /** Proposed (design section 13): up to 10 earlier values. Absent today. */
   history?: { timestamp: string; value: number }[];
 }
 export interface EvalOrgan {
-  status: 'ok' | 'not_run' | 'failed';
-  metrics: EvalMetric[];
-  note?: string;
+  status: 'pass' | 'fail' | 'not_run' | 'error';
+  metrics?: EvalMetric[];
+  message?: string;
 }
 export interface EvalsLatest {
   generated_at: string | null;
-  git_sha?: string | null;
-  mode?: string;
+  git_sha?: string;
   organs: Record<string, EvalOrgan>;
 }
-
 async function request<T>(path: string, init: RequestInit = {}, timeoutMs = 10_000): Promise<Result<T>> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -79,6 +84,8 @@ export const api = {
   getOrgans: () => request<OrganList>('/organs'),
   startBriefing: (body: BriefingRequest) => request<BriefingAccepted>('/briefings', { method: 'POST', body: JSON.stringify(body) }),
   cancelBriefing: (id: string) => request<void>(`/briefings/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+  /** Full stored ToolResult of a call (no pointer). */
+  getToolResult: (runId: string) => request<ToolEnvelope<unknown>>(`/evidence/${encodeURIComponent(runId)}`, {}, 15_000),
   getBriefing: (id: string) => request<BriefingState>(`/briefings/${encodeURIComponent(id)}`),
   /** Pointer form only: `/data` returns the tool output, `/data/x/0` one value (Brain design §14). */
   getEvidence: (runId: string, pointer = '/data') =>
