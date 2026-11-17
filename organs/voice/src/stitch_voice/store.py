@@ -11,7 +11,7 @@ import os
 import sqlite3
 import tempfile
 import threading
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -84,7 +84,7 @@ class BudgetStore:
         self._clock = clock or (lambda: datetime.now(UTC))
         self._lock = threading.Lock()
         path.parent.mkdir(parents=True, exist_ok=True)
-        with self._connect() as db:
+        with self._db() as db:
             db.execute(
                 "CREATE TABLE IF NOT EXISTS usage (provider TEXT, metric TEXT, month TEXT, "
                 "used REAL NOT NULL, PRIMARY KEY (provider, metric, month))"
@@ -93,8 +93,18 @@ class BudgetStore:
     def _connect(self) -> sqlite3.Connection:
         return sqlite3.connect(self.path, timeout=10, isolation_level=None)
 
+    @contextlib.contextmanager
+    def _db(self) -> Iterator[sqlite3.Connection]:
+        # `with sqlite3.connect(...)` does not close the connection; on Windows an open handle
+        # keeps the file locked (cache directory cleanup, volume rotation).
+        db = self._connect()
+        try:
+            yield db
+        finally:
+            db.close()
+
     def used(self, provider: str, metric: str) -> float:
-        with self._connect() as db:
+        with self._db() as db:
             row = db.execute(
                 "SELECT used FROM usage WHERE provider=? AND metric=? AND month=?",
                 (provider, metric, month_key(self._clock())),
@@ -128,7 +138,7 @@ class BudgetStore:
 
     def release(self, provider: str, metric: str, amount: float) -> None:
         month = month_key(self._clock())
-        with self._lock, self._connect() as db:
+        with self._lock, self._db() as db:
             db.execute(
                 "UPDATE usage SET used = MAX(0, used - ?)"
                 " WHERE provider=? AND metric=? AND month=?",
