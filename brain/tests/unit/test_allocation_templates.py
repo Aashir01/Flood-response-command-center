@@ -51,7 +51,7 @@ def test_patterns_contain_no_digits_or_number_words(lang: str) -> None:
         pytest.skip(f"{lang} pack not present yet")
     words = set(EN_NUMBER_WORDS) | set(UR_NUMBER_WORDS)
     units = UnitTable(load_i18n().unit_aliases())
-    texts = {**pack.templates, **pack.conflicts, **pack.assumptions}
+    texts = {**pack.templates, **pack.conflicts, **pack.assumptions, "disclaimer": pack.disclaimer}
     for tid, pattern in texts.items():
         fields(pattern)
         lit = literal_text(pattern)

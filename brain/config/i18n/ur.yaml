@@ -1,0 +1,109 @@
+# Urdu claim patterns (brain design 5.3, 13). Same rules as en.yaml (enforced by tests):
+# - patterns contain no digits and no number words (Urdu number words such as the words for
+#   one, two, hundred, thousand, lakh or crore are rejected), so every number comes from a slot;
+# - only {name} fields;
+# - every template id in en.yaml exists here, with the same slot names.
+# Units stay as ASCII tokens (km2, m3/s) next to numbers so the unit check and the UI can
+# isolate them; Urdu unit words are accepted as aliases.
+# PROOFREAD: drafted without a native-speaker review. The owner (or a native speaker) must
+# proofread every pattern before the demo (docs/decisions.md).
+lang: ur
+list_sep: "، "
+disputed_suffix: " (متنازع، تضاد {cid} دیکھیں)"
+section_titles:
+  extent: سیلاب کا پھیلاؤ
+  forecast: دریا کی پیش گوئی (ماڈل شدہ)
+  guidance: لائبریری سے رہنمائی
+  allocation: امداد کی تقسیم
+  caveats: انتباہات
+tables:
+  organ:
+    eyes: آئیز (سیلاب کی نقشہ سازی)
+    oracle: اوریکل (دریا کی پیش گوئی)
+    library: لائبریری (رہنمائی)
+    ledger: لیجر (تقسیم)
+    voice: آواز
+  solver_status:
+    optimal: بہترین
+    feasible: قابل عمل، بہترین ہونا ثابت نہیں
+    infeasible: ناقابل عمل
+  refusal:
+    INSUFFICIENT_EVIDENCE: کوئی مناسب حد تک معاون اقتباس نہیں ملا
+    OUT_OF_SCOPE: سوال سیلابی ردعمل کی رہنمائی کے دائرے سے باہر ہے
+    CONFLICTING_EVIDENCE: اس مقدار پر ذرائع میں اختلاف ہے
+  unit:
+    litre: لیٹر
+    kg: کلوگرام
+    kit: کٹس
+    km2: km2
+    m3/s: m3/s
+    people: افراد
+    usd: USD
+units:
+  km2: [km2, km², مربع کلومیٹر]
+  m3/s: [m3/s, m³/s, مکعب میٹر فی سیکنڈ]
+  people: [افراد, لوگ]
+  litre: [لیٹر]
+  kg: [کلوگرام, کلو]
+  kit: [کٹس, کٹ]
+  usd: [USD, ڈالر]
+modeled_terms: [ماڈل شدہ, ماڈل]
+forbidden_oracle_terms: [گیج, مشاہدہ, مشاہدات, مشاہداتی, ناپا, پیمائش, gauge, observed, measured, observation]
+templates:
+  extent.flood_area: "نئے سیلابی پانی کا رقبہ {new} km2 ہے (کل پانی {total} km2، مستقل پانی {perm} km2)، اس منظر میں جو {date} کو حاصل کیا گیا۔"
+  extent.flood_area_nodate: "نئے سیلابی پانی کا رقبہ {new} km2 ہے (کل پانی {total} km2، مستقل پانی {perm} km2)۔"
+  extent.top_districts: "سب سے زیادہ زیر آب علاقے: {items}۔"
+  extent.top_districts.item: "{name} {km} km2 (ضلع کا {pct})"
+  extent.confidence: "سیلابی پکسلز پر تقسیم بندی کا اوسط اعتماد: {conf}۔"
+  extent.scene: "منظر: {sensor}، {scene_id}، حاصل کردہ {date}۔"
+  forecast.peak: "ماڈل شدہ دریائی بہاؤ (GloFAS بذریعہ Open-Meteo) برائے {station}: زیادہ سے زیادہ وسطی قدر {p50} m3/s بتاریخ {date} (p10 {p10} m3/s، p90 {p90} m3/s)۔"
+  forecast.exceedance: "ماڈل شدہ امکان کہ بہاؤ {thr} m3/s سے بڑھ جائے، {date} کو {pct} کی بلند ترین سطح پر ہے۔"
+  forecast.calibration: "ماڈل شدہ وقفے {cov} کے split-conformal بینڈ ہیں، جو {n} کیلیبریشن نکات سے بنے ہیں۔"
+  forecast.drivers: "ماڈل شدہ پیش گوئی کے محرکات: {narrative}"
+  guidance.claim: "{text}"
+  guidance.refusal: "رہنمائی کی لائبریری نے \"{query}\" کا جواب دینے سے انکار کیا: {reason}۔ یادداشت سے کوئی رہنمائی نہیں دی جاتی۔"
+  allocation.summary: "یہ منصوبہ {people} افراد کا احاطہ کرتا ہے، فی فرد {cpp} USD (کل {cost} USD)؛ سولور کی حالت: {status}۔"
+  allocation.summary_none: "دی گئی معلومات کے ساتھ یہ منصوبہ کسی فرد کا احاطہ نہیں کرتا (کل {cost} USD)؛ سولور کی حالت: {status}۔"
+  allocation.gap: "سولور بہترین حل سے {gap} کے فرق کی اطلاع دیتا ہے۔"
+  allocation.line: "{district} کو {commodity} بھیجیں: {qty} {unit}۔"
+  allocation.others: "باقی {n} اضلاع میں {commodity} بھیجیں: {qty} {unit}۔"
+  allocation.uncovered: "ضرورت مند {people} افراد اس منصوبے میں دستیاب رسد سے محروم رہتے ہیں۔"
+  allocation.unreachable: "{n} اضلاع کے {people} افراد تک دی گئی معلومات کے مطابق سڑک، فضائی یا کشتی کے راستے رسائی ممکن نہیں۔"
+  allocation.equity: "مساوات کی کم از کم حد مطلوب {req}، لاگو {app} (زیادہ سے زیادہ قابل عمل {max})؛ مساوات کی خاطر چھوڑا گیا احاطہ: {cost} (احاطہ کے وزن والے افراد)۔"
+  allocation.equity_nocost: "مساوات کی کم از کم حد مطلوب {req}، لاگو {app} (زیادہ سے زیادہ قابل عمل {max})۔"
+  allocation.shadow: "{commodity}: ہر اضافی اکائی وزنی احاطہ میں {v} کا اضافہ کرے گی (احاطہ کے وزن والے افراد فی اکائی)۔"
+  caveat.disclaimer: "{text}"
+  caveat.mode.demo: "ڈیمو موڈ: اعداد و شمار محفوظ شدہ ڈیمو ڈیٹا ({label}) سے ہیں، براہ راست ذرائع سے نہیں۔"
+  caveat.mode.live: "لائیو موڈ: آئیز اور اوریکل کے اعداد و شمار براہ راست کالز سے ہیں۔"
+  caveat.mode.fallback: "براہ راست ڈیٹا دستیاب نہیں تھا، اس لیے اعداد و شمار محفوظ شدہ ڈیمو ڈیٹا ({label}) سے ہیں، براہ راست ذرائع سے نہیں۔"
+  caveat.eyes_unvalidated: "ڈیمو منظر۔ سیلاب کی نقشہ سازی کا ماڈل {eval_dataset} پر جانچا گیا، اس خطے پر نہیں۔ سیلاب کے پھیلاؤ کو غیر تصدیق شدہ سمجھیں۔"
+  caveat.oracle_modeled: "دریا کے اعداد و شمار ماڈل شدہ دریائی بہاؤ (GloFAS بذریعہ Open-Meteo) ہیں، آلات کی ریڈنگ نہیں۔"
+  caveat.recorded: "{organ} کا نتیجہ محفوظ شدہ ریکارڈ ہے، براہ راست کال نہیں۔"
+  caveat.missing.extent: "{organ} نے جواب نہیں دیا ({code})؛ سیلاب کے پھیلاؤ کا حصہ نامکمل ہے۔"
+  caveat.missing.forecast: "{organ} نے جواب نہیں دیا ({code})؛ دریا کی پیش گوئی کا حصہ نامکمل ہے۔"
+  caveat.missing.guidance: "{organ} نے جواب نہیں دیا ({code})؛ رہنمائی کا حصہ نامکمل ہے۔"
+  caveat.missing.allocation: "{organ} نے جواب نہیں دیا ({code})؛ تقسیم کا حصہ نامکمل ہے۔"
+  caveat.assumptions: "یہ تقسیم ان مفروضات پر مبنی ہے: {items}۔"
+  caveat.conflict.flagged: "غیر حل شدہ اختلاف: {description} کسی بھی فریق کو حتمی نہیں مانا گیا۔"
+  caveat.conflict.escalated: "غیر حل شدہ اختلاف جس پر انسانی فیصلہ درکار ہے: {description} کسی بھی فریق کو حتمی نہیں مانا گیا۔"
+  caveat.conflict.reconciled: "حل شدہ اختلاف: {description} لیجر کو صرف سیٹلائٹ پر مبنی شدت کے ساتھ دوبارہ چلایا گیا، اور دونوں نتائج کا حوالہ دیا گیا ہے۔"
+  caveat.critic_failed: "خودکار جانچ میں {n} غیر حل شدہ مسائل ملے۔ اس بریفنگ کو احتیاط سے استعمال کریں۔"
+  caveat.verbatim_foreign: "کچھ متن اپنی اصل زبان میں دکھایا گیا ہے کیونکہ جانچا ہوا ترجمہ دستیاب نہیں تھا۔"
+conflicts:
+  r1: "دریا کے خطرے کی حد سے تجاوز کا ماڈل شدہ امکان {oracle_low_p} سے کم رہتا ہے (بلند ترین {p})، جبکہ سیٹلائٹ نقشہ سازی کے مطابق دریائی اضلاع کے رقبے کا {fl} زیر آب ہے۔ پیش گوئی اور سیٹلائٹ نقشہ دونوں مکمل تصویر نہیں ہو سکتے۔"
+  r2: "لیجر نے {subjects} کو امداد مختص کی، جنہیں سیٹلائٹ نقشہ سازی خشک دکھاتی ہے (زیر آب حصہ {eyes_dry_frac} سے کم)۔"
+  r3: "لائبریری کی رہنمائی {subjects} کے لیے فی فرد روزانہ {lib} بتاتی ہے، جبکہ لیجر نے {led} استعمال کیا (فرق {need_rel_tol} سے زیادہ)۔"
+assumptions:
+  intro: "شدت کی نقشہ بندی کے پیرامیٹر اندازے پر مبنی ہیں"
+  f_noise: "{v} سے کم زیر آب حصہ تقسیم بندی کا شور سمجھا جاتا ہے"
+  f_sat: "جس ضلع کا {v} رقبہ زیر آب ہو، اسے مکمل متاثر سمجھا جاتا ہے"
+  lambda: "پیش گوئی کا خطرہ شدت میں زیادہ سے زیادہ {v} کا اضافہ کرتا ہے"
+  pi: "پیش گوئی والے دریا کے خشک ضلع کی آبادی کا {v} خطرے میں سمجھا جاتا ہے"
+  kappa: "مکمل متاثرہ ضلع میں سڑک تک رسائی {v} کم ہو جاتی ہے (زیر آب رقبہ زیر آب سڑکوں کا متبادل ہے)"
+  need: "فی فرد ضروریات: {items}"
+  need_item: "{commodity} {qty} {unit}، {days} دنوں کے لیے"
+  need_item_total: "{commodity} {qty} {unit} فی فرد"
+  no_eyes: "منصوبہ سیٹلائٹ ڈیٹا پر مبنی نہیں (آئیز دستیاب نہیں)؛ لیجر نے اپنے ڈیٹا سیٹ کی طے شدہ اقدار استعمال کیں"
+  no_oracle: "منصوبہ دریا کی پیش گوئی پر مبنی نہیں (اوریکل دستیاب نہیں یا خطرے کی حد موجود نہیں)"
+  no_districts: "اضلاع کا بنیادی ڈیٹا دستیاب نہیں تھا، اس لیے لیجر نے اپنے ڈیٹا سیٹ کی طے شدہ اقدار استعمال کیں"
+disclaimer: "اسٹچ فیصلہ سازی میں مدد کا آلہ ہے، کوئی سرکاری انتباہی نظام یا اتھارٹی نہیں۔ کسی بھی اقدام سے پہلے ہر عدد کی مقامی امدادی اداروں سے تصدیق کریں۔"

@@ -275,7 +275,7 @@ class LlmSteps:
                 {"claim": d.final_text, "evidence": ev},
                 JUDGE_SCHEMA,
             )
-            if isinstance(self.llm, FakeLLM) and not self.llm.has(req) and not self.strict:
+            if isinstance(self.llm, FakeLLM) and not self._usable(req):
                 out[d.id] = self.judge_sync_proxy(d, ev)
                 self.trace.add("brain.judge", None, "lexical_proxy", claim_id=d.id)
                 continue

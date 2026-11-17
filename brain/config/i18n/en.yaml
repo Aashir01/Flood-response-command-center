@@ -85,7 +85,7 @@ templates:
   caveat.critic_failed: "Automated checks found {n} unresolved issues. Treat this briefing with care."
   caveat.verbatim_foreign: "Some organ-authored text is shown in its original language because no checked translation was available."
 conflicts:
-  r1: "The modeled chance of exceeding the danger threshold stays below {oracle_low_p} (peak {p}), while satellite mapping shows {fl} of the basin districts' area flooded. The forecast and the observation cannot both be the full picture."
+  r1: "The modeled chance of exceeding the danger threshold stays below {oracle_low_p} (peak {p}), while satellite mapping shows {fl} of the basin districts' area flooded. The forecast and the satellite map cannot both be the full picture."
   r2: "The Ledger allocated aid to {subjects}, which satellite mapping shows as unflooded (flooded fraction below {eyes_dry_frac})."
   r3: "Library guidance gives {lib} per person per day for {subjects}, while the Ledger used {led} (difference above {need_rel_tol})."
 assumptions:
