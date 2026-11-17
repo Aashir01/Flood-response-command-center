@@ -16,13 +16,13 @@ from pathlib import Path
 
 import pytest
 
-_path = Path(__file__).parent / "strategies.py"
-if "voice_strategies" not in sys.modules:
-    _spec = importlib.util.spec_from_file_location("voice_strategies", _path)
-    assert _spec is not None and _spec.loader is not None
-    _module = importlib.util.module_from_spec(_spec)
-    sys.modules["voice_strategies"] = _module
-    _spec.loader.exec_module(_module)
+for _name, _file in (("voice_strategies", "strategies.py"), ("voice_helpers", "helpers.py")):
+    if _name not in sys.modules:
+        _spec = importlib.util.spec_from_file_location(_name, Path(__file__).parent / _file)
+        assert _spec is not None and _spec.loader is not None
+        _module = importlib.util.module_from_spec(_spec)
+        sys.modules[_name] = _module
+        _spec.loader.exec_module(_module)
 
 _VOICE_ENV = (
     "DEEPGRAM_API_KEY",
