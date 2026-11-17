@@ -422,6 +422,10 @@ class _Run:
 
     async def execute(self) -> RunResult:
         plan = default_plan(self.scenario, plan_id=det_uuid(self.bid, "plan"))
+        plan, plan_fallback = await self.steps.vary_plan(
+            plan, enabled=self.r.settings.planner == "llm"
+        )
+        self.plan_fallback = plan_fallback
         self._static_entries()
         self.plan_event(plan)
         limits = Limits(organ_phase_deadline_s=self.r.settings.organ_deadline_s)

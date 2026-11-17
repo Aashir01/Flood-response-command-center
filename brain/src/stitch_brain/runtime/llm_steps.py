@@ -21,7 +21,9 @@ from stitch_brain.config import I18n
 from stitch_brain.core.checks import claim_issues, evidence_values
 from stitch_brain.core.claims import ClaimDraft
 from stitch_brain.core.evidence import EvidenceStore
+from stitch_brain.core.graph import Plan, PlanError
 from stitch_brain.core.numbers import UnitTable, language_ok, scan
+from stitch_brain.core.plans import OPTIONAL_WHITELIST, apply_variation
 from stitch_common.llm import FakeLLM, LLMClient, LLMRequest, LLMUnavailable, Message
 from stitch_common.llm import RecordingMissing as RecordingMissing
 
@@ -48,6 +50,17 @@ JUDGE_SYSTEM = (
     "Decide whether the sentence is fully supported by the evidence strings. Return "
     '{"verdict": "entailed"} or {"verdict": "not_entailed"}. ' + UNTRUSTED
 )
+PLAN_SYSTEM = (
+    "You plan which optional analysis steps a flood briefing needs. You may only drop ids from "
+    'optional_whitelist. Return {"drop": [<node id>, ...]} (an empty list keeps every step). '
+    + UNTRUSTED
+)
+PLAN_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {"drop": {"type": "array", "items": {"type": "string"}}},
+    "required": ["drop"],
+    "additionalProperties": False,
+}
 CLAIMS_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {"claims": {"type": "object", "additionalProperties": {"type": "string"}}},
@@ -254,6 +267,27 @@ class LlmSteps:
             else:
                 d.verbatim_foreign = True
         return accepted
+
+    # --- plan variation (design 7.2, 12) ----------------------------------------------------------
+    async def vary_plan(self, plan: Plan, *, enabled: bool) -> tuple[Plan, str | None]:
+        """Optional: the LLM may drop optional nodes from ``OPTIONAL_WHITELIST``. Disabled, a
+        ``fake`` provider (BRN-R2.4), an invalid reply or any error keeps the default plan
+        (BRN-R2.3). Returns the plan and the fallback reason, if any."""
+        if not enabled or self.llm is None or isinstance(self.llm, FakeLLM):
+            return plan, None
+        payload = {
+            "scenario": plan.scenario,
+            "nodes": [n.id for n in plan.nodes],
+            "optional_whitelist": list(OPTIONAL_WHITELIST),
+        }
+        text = await self._call(self.request("brain.plan", PLAN_SYSTEM, payload, PLAN_SCHEMA))
+        if text is None:
+            return plan, "llm unavailable"
+        try:
+            return apply_variation(plan, text), None
+        except PlanError as exc:
+            self.trace.add("brain.plan", None, "invalid_plan", error=str(exc)[:200])
+            return plan, "invalid plan variation"
 
     # --- judge ------------------------------------------------------------------------------------
     def judge_sync_proxy(self, d: ClaimDraft, evidence: list[str]) -> bool:

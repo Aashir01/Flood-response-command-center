@@ -307,7 +307,10 @@ class Issue:
 
 
 def identifiers(text: str, units: UnitTable) -> list[str]:
-    return [m.value for m in scan(text, units).masks if m.kind == "ident"]
+    """Masked identifiers and configured terms (``Sentinel-1``, scene ids): a rewrite may only
+    use ones that occur in the evidence or the template text, so ``Sentinel-1`` cannot become
+    ``Sentinel-2`` behind the mask."""
+    return [m.value for m in scan(text, units).masks if m.kind in ("ident", "term")]
 
 
 def leaf_numbers(value: Any, units: UnitTable) -> tuple[list[Decimal], list[str]]:
@@ -348,26 +351,34 @@ def check_text(
     exempt: Sequence[str] = (),
     require_slots: bool = True,
     known_idents: Iterable[str] | None = None,
+    required_idents: Iterable[str] = (),
 ) -> list[Issue]:
-    """Checks C2 (numbers) and C3 (units) of design 6.3 and 6.4. Empty list means pass."""
+    """Checks C2 (numbers) and C3 (units) of design 6.3 and 6.4. Empty list means pass.
+
+    Each numeric slot needs its own token (a bipartite match), so a rewrite cannot drop one of
+    two equal numbers. ``required_idents`` (identifiers and terms of the template text) must
+    all survive a rewrite."""
     s = scan(text, units, exempt=exempt)
     issues: list[Issue] = []
     seen: set[str] = set()
+    edges: list[list[str]] = []
     for tok in s.tokens:
         if tok.scale and tok.word:
             issues.append(Issue("C2", "scale_word", f"scale word {tok.text!r}"))
             continue
         cands: list[SlotSpec] = []
         for sl in slots:
-            if sl.fmt == "pct":
-                if tok.percent and matches(tok.value, tok.decimals, sl.value * 100, sl.decimals):
-                    cands.append(sl)
-            elif not tok.percent and matches(tok.value, tok.decimals, sl.value, sl.decimals):
+            target = sl.value * 100 if sl.fmt == "pct" else sl.value
+            if tok.percent != (sl.fmt == "pct"):
+                continue
+            if matches(tok.value, tok.decimals, target, sl.decimals) and _keeps_precision(
+                tok, target, sl.decimals
+            ):
                 cands.append(sl)
         if cands:
             good = [c for c in cands if _unit_ok(c, tok)]
             if good:
-                seen.update(c.name for c in good)
+                edges.append([c.name for c in good])
                 continue
             c = cands[0]
             if c.unit is None and tok.unit is not None:
@@ -380,21 +391,25 @@ def check_text(
                 )
             seen.add(c.name)
             continue
-        if any(matches(tok.value, tok.decimals, a, None) for a in extra_numbers) or (
-            tok.percent
-            and any(matches(tok.value, tok.decimals, a * 100, None) for a in extra_numbers)
+        if any(_evidence_match(tok, a) for a in extra_numbers) or (
+            tok.percent and any(_evidence_match(tok, a * 100) for a in extra_numbers)
         ):
             continue
         issues.append(Issue("C2", "new_number", f"{tok.text} is not in the evidence"))
     if known_idents is not None:
         known = set(known_idents)
         for mk in s.masks:
-            if mk.kind == "ident" and mk.value not in known:
+            if mk.kind in ("ident", "term") and mk.value not in known:
                 issues.append(Issue("C2", "new_identifier", f"{mk.value!r} is not in the evidence"))
     allowed_dates = set(slot_dates) | set(extra_dates)
     for d in s.dates:
         if d not in allowed_dates:
             issues.append(Issue("C2", "new_date", f"date {d} is not in the evidence"))
+    if known_idents is not None:
+        for ident in dict.fromkeys(required_idents):
+            if ident not in s.normalized:  # substring: exempt spans hide masks, not text
+                issues.append(Issue("C2", "dropped_identifier", f"{ident!r} missing from text"))
+    seen |= _assign(edges)
     if require_slots:
         for sl in slots:
             if sl.fmt in ("int", "dec", "pct") and sl.name not in seen:
@@ -403,6 +418,47 @@ def check_text(
             if d not in s.dates:
                 issues.append(Issue("C2", "dropped_slot", f"date {d} missing from text"))
     return issues
+
+
+def _assign(edges: Sequence[Sequence[str]]) -> set[str]:
+    """Maximum bipartite matching of tokens to slot names (Kuhn's algorithm); returns the
+    matched slot names. Slots per claim are few, so the quadratic cost is irrelevant."""
+    owner: dict[str, int] = {}
+
+    def augment(i: int, visited: set[str]) -> bool:
+        for name in edges[i]:
+            if name in visited:
+                continue
+            visited.add(name)
+            if name not in owner or augment(owner[name], visited):
+                owner[name] = i
+                return True
+        return False
+
+    for i in range(len(edges)):
+        augment(i, set())
+    return set(owner)
+
+
+def _keeps_precision(tok: NumToken, value: Decimal, decimals: int | None) -> bool:
+    """A token with fewer decimals than the slot's display precision is accepted only when
+    nothing is lost (``1.00`` as ``1``, ``0.0%`` as ``0%``), never ``0.20`` as ``0``."""
+    if decimals is None or tok.decimals >= decimals:
+        return True
+    try:
+        return _q(value, decimals, ROUND_HALF_UP) == _q(value, tok.decimals, ROUND_HALF_UP)
+    except InvalidOperation:
+        return False
+
+
+def _evidence_match(tok: NumToken, value: Decimal) -> bool:
+    """A number from an evidence leaf, rounded to the token's decimals, without losing the
+    leaf's own precision below the token's (``0.2`` may not appear as ``0``)."""
+    if not matches(tok.value, tok.decimals, value, None):
+        return False
+    exp = value.normalize().as_tuple().exponent
+    own = max(0, -exp) if isinstance(exp, int) else 0
+    return tok.decimals >= own or _keeps_precision(tok, value, own) or tok.value != 0
 
 
 def _unit_ok(slot: SlotSpec, tok: NumToken) -> bool:

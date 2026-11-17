@@ -70,7 +70,7 @@ def number_issues(
         dates += d
         for s in _strings(v):
             idents.update(identifiers(s, units))
-    for s in text_exempt(draft):
+    for s in [*text_exempt(draft), *draft.text.values()]:  # template text is code output
         idents.update(identifiers(s, units))
     numeric = [_spec(s) for s in draft.slots.values() if s.numeric]
     slot_dates = [str(s.value)[:10] for s in draft.slots.values() if s.fmt == "date"]
@@ -83,6 +83,7 @@ def number_issues(
         slot_dates=slot_dates,
         exempt=text_exempt(draft),
         known_idents=idents,
+        required_idents=[i for s in draft.text.values() for i in identifiers(s, units)],
     )
     return [ClaimIssue(draft.id, i.check, f"{i.kind}: {i.detail}") for i in found]
 

@@ -129,3 +129,28 @@ def test_restricted_formatter() -> None:
         except PatternError:
             continue
         raise AssertionError(bad)
+
+
+# --- rejection classes found by the BRN-P2 mutation tests (task 20) -------------------------
+REQ = SlotSpec("req", Decimal("0.20"), None, 2, "dec")
+APP = SlotSpec("app", Decimal("0.20"), None, 2, "dec")
+
+
+def test_rounding_a_slot_to_zero_is_precision_loss() -> None:
+    assert "dropped_slot" in _kinds("Floor requested 0.", REQ)
+    assert "new_number" in _kinds("Floor requested 0.", extra_numbers=[Decimal("0.2")])
+    gap = SlotSpec("gap", Decimal("0"), None, 1, "pct")
+    assert _kinds("Gap 0%.", gap) == []  # 0.0% as 0% loses nothing
+
+
+def test_two_equal_slots_need_two_tokens() -> None:
+    assert _kinds("Requested 0.20, applied 0.20.", REQ, APP) == []
+    assert "dropped_slot" in _kinds("Requested many, applied 0.20.", REQ, APP)
+
+
+def test_swapped_term_and_dropped_identifier_rejected() -> None:
+    kw = {"known_idents": ["Sentinel-1", "scene-20220830"]}
+    assert "new_identifier" in _kinds("Scene: Sentinel-2, scene-20220830.", **kw)
+    req = {"required_idents": ["Sentinel-1", "scene-20220830"], **kw}
+    assert "dropped_identifier" in _kinds("Scene: Sentinel-many, scene-20220830.", **req)
+    assert _kinds("Scene: Sentinel-1, scene-20220830.", **req) == []
