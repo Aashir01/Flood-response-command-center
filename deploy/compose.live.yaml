@@ -1,0 +1,22 @@
+# Live override (deploy design 3.2, 3.5): adds the `egress` network (a normal bridge with an
+# internet route) to the services that call external APIs: Brain (LLM), Oracle (Open-Meteo),
+# Library (LLM answers, optional), Eyes and Voice (hosted TTS). Demo mode stays the default per
+# request; keys come from prod.env. Nothing else gains outbound access.
+#   docker compose -f compose.yaml -f deploy/compose.live.yaml up -d --wait
+services:
+  brain:
+    networks: [core, egress]
+  oracle:
+    networks: [core, egress]
+  library:
+    networks: [core, egress]
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  eyes:
+    networks: [core, egress]
+  voice:
+    networks: [core, egress]
+
+networks:
+  egress: {}

@@ -1,0 +1,81 @@
+# Routes, headers and compression shared by every environment (deploy design 5.1).
+# Imported by Caddyfile (dev and CI, HTTP :8080) and Caddyfile.prod (TLS).
+
+log {
+	output stdout
+	format json
+}
+
+header {
+	-Server
+	X-Content-Type-Options nosniff
+	Referrer-Policy strict-origin-when-cross-origin
+	Permissions-Policy "camera=(), geolocation=(), microphone=(self), payment=(), usb=()"
+	Strict-Transport-Security "{$HSTS:max-age=300}"
+	Cross-Origin-Opener-Policy same-origin
+	X-Frame-Options DENY
+}
+
+# Content-Security-Policy, generated at image build from the static export (csp-hashes.mjs).
+import /etc/caddy/snippets/csp.caddy
+
+# Gateway liveness (container healthcheck, smoke test).
+handle /healthz {
+	header Content-Type "text/plain; charset=utf-8"
+	header Cache-Control no-store
+	respond "ok" 200
+}
+
+# Brain HTTP/SSE API. handle_path strips /api. No `encode` here: SSE must not be buffered or
+# compressed, and flush_interval -1 flushes every write immediately.
+handle_path /api/* {
+	request_body {
+		max_size 4MB
+	}
+	header Cache-Control no-store
+	reverse_proxy brain:8000 {
+		flush_interval -1
+		transport http {
+			dial_timeout 5s
+			response_header_timeout 30s
+		}
+	}
+}
+
+# Static frontend (Next.js static export).
+handle {
+	root * /srv
+	encode zstd gzip
+	@hashed path /_next/static/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+	@fonts path /fonts/*
+	header @fonts Cache-Control "public, max-age=31536000, immutable"
+	@map path /map/*
+	header @map Cache-Control "public, max-age=604800"
+	@html path / *.html */
+	header @html Cache-Control "no-cache"
+	try_files {path} {path}/index.html {path}.html
+	file_server
+}
+
+handle_errors {
+	# Brain absent or starting: a JSON error in the Brain API's error shape, not an HTML page.
+	@api_down {
+		path /api/*
+		expression `{err.status_code} in [502, 503, 504]`
+	}
+	handle @api_down {
+		header Content-Type application/json
+		header Retry-After 5
+		respond `{"error":{"code":"UPSTREAM_UNAVAILABLE","message":"The Brain is not reachable yet."}}` 503
+	}
+	@notfound expression `{err.status_code} == 404`
+	handle @notfound {
+		root * /srv
+		rewrite * /404.html
+		file_server
+	}
+	handle {
+		respond "{err.status_code} {err.status_text}" {err.status_code}
+	}
+}

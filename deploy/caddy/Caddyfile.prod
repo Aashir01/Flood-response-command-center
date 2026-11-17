@@ -1,0 +1,21 @@
+# Production gateway (deploy design 5.1): automatic HTTPS for SITE_ADDRESS (default
+# stitch.aashirnoman.dev), HTTP->HTTPS redirect, certificate renewal, HTTP/3.
+# Dry run: set ACME_CA to the Let's Encrypt staging directory in prod.env.
+{
+	email {$ACME_EMAIL}
+	acme_ca {$ACME_CA:https://acme-v02.api.letsencrypt.org/directory}
+	admin off
+	persist_config off
+	servers {
+		protocols h1 h2 h3
+	}
+}
+
+{$SITE_ADDRESS:stitch.aashirnoman.dev} {
+	import /etc/caddy/snippets/common.caddy
+}
+
+# Container healthcheck only (never published): plain HTTP, never redirected to HTTPS.
+http://127.0.0.1:8080 {
+	respond /healthz "ok" 200
+}

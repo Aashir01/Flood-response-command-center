@@ -1,0 +1,6 @@
+# CI override: the gateway on 127.0.0.1:8080 (the runner may use port 80 for something else).
+#   docker compose -f compose.yaml -f deploy/compose.ci.yaml up -d --wait
+services:
+  web:
+    ports: !override
+      - "127.0.0.1:8080:8080"

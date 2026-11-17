@@ -1,0 +1,27 @@
+# Production override (deploy design 3.5): public ports 80/443 (TCP and UDP for HTTP/3) on the
+# gateway only, TLS for SITE_ADDRESS via Caddyfile.prod, persistent ACME state.
+#   docker compose --env-file /opt/stitch/prod.env -f compose.yaml -f deploy/compose.prod.yaml up -d --wait --no-build
+services:
+  web:
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile.prod", "--adapter", "caddyfile"]
+    ports: !override
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    sysctls:
+      net.ipv4.ip_unprivileged_port_start: "0"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-stitch.aashirnoman.dev}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in prod.env}
+      ACME_CA: ${ACME_CA:-https://acme-v02.api.letsencrypt.org/directory}
+      HSTS: ${HSTS:-max-age=300}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    deploy:
+      resources:
+        limits: { memory: 96M, cpus: "0.25" }
+
+volumes:
+  caddy_data: {}
+  caddy_config: {}

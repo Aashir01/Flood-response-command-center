@@ -1,0 +1,11 @@
+# Gateway for local runs and CI (deploy design 5.1): plain HTTP on :8080 inside the container,
+# published on the host as 127.0.0.1:80 by default (WEB_BIND, WEB_PORT). No TLS, no ACME.
+{
+	admin off
+	auto_https off
+	persist_config off
+}
+
+:8080 {
+	import /etc/caddy/snippets/common.caddy
+}

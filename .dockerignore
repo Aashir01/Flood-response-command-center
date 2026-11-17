@@ -1,0 +1,32 @@
+# Build context filter for every Stitch image (deploy design 4.1). Images get source, the
+# committed demo data and committed models only. No secrets, no raw data, no training, no tests.
+.git
+.github
+.kiro
+.hypothesis
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.stitch-hook-debug
+.venv
+**/.venv
+**/__pycache__
+**/*.pyc
+**/node_modules
+**/.next
+**/out
+**/playwright-report
+**/test-results
+**/tsconfig.tsbuildinfo
+**/*.log
+.env
+.env.*
+prod.env
+deploy/secrets
+data/raw
+data/cache
+**/training
+**/tests
+**/*.ipynb
+evals/results
+docs

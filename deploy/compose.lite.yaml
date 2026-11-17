@@ -1,0 +1,32 @@
+# Lite override for small hosts (below the 2 vCPU / 4 GB floor, deploy design 3.5):
+#   docker compose -f compose.yaml -f deploy/compose.lite.yaml up -d --wait
+# Eyes and Voice stay off (do not pass --profile), the Brain reports them disabled, the Library
+# runs without the cross-encoder reranker (search results carry rerank = null) and limits shrink.
+services:
+  library:
+    environment:
+      STITCH_RERANK_MODEL: none
+      STITCH_LIB_THREADS: "1"
+    deploy:
+      resources:
+        limits: { memory: 512M, cpus: "1.0" }
+  seed:
+    environment:
+      STITCH_RERANK_MODEL: none
+  brain:
+    environment:
+      STITCH_ORGANS_DISABLED: eyes,voice
+  postgres:
+    command:
+      - postgres
+      - -c
+      - shared_buffers=48MB
+      - -c
+      - max_connections=20
+      - -c
+      - work_mem=2MB
+      - -c
+      - password_encryption=scram-sha-256
+    deploy:
+      resources:
+        limits: { memory: 256M, cpus: "0.5" }
