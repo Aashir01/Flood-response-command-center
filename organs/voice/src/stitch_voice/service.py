@@ -11,6 +11,7 @@ import base64
 import binascii
 import math
 import re
+import sqlite3
 from collections.abc import Callable, Sequence
 from datetime import UTC, datetime
 from typing import Any
@@ -85,11 +86,21 @@ class VoiceService:
         self.settings = s = settings or load_settings()
         self.cache = AudioStore(s.cache_dir / "audio", s.cache_mb * 1024 * 1024)
         self.prerendered = PrerenderedStore(s.prerendered_dir)
-        self.budget = BudgetStore(
-            s.cache_dir / "budget.sqlite3", clock or (lambda: datetime.now(UTC))
-        )
+        self.budget: BudgetStore | None
+        try:
+            self.budget = BudgetStore(
+                s.cache_dir / "budget.sqlite3", clock or (lambda: datetime.now(UTC))
+            )
+        except (OSError, sqlite3.Error):
+            # Fail closed: without the budget counter no paid call is made. The server still
+            # starts (prerendered, local Whisper) and /healthz reports the cache as unwritable.
+            self.budget = None
+            _log.warning("voice cache is not writable; hosted providers disabled")
         self.tts = list(tts) if tts is not None else self._default_tts()
         self.stt = list(stt) if stt is not None else self._default_stt()
+        if self.budget is None:
+            self.tts = [p for p in self.tts if not p.hosted]
+            self.stt = [p for p in self.stt if not p.hosted]
 
     # -- provider selection --------------------------------------------------------------
     def _default_tts(self) -> list[TTSProvider]:
@@ -115,6 +126,11 @@ class VoiceService:
         if s.stt_provider == "deepgram" and s.deepgram_ready:
             return [DeepgramSTT(s.deepgram_api_key, base_url=s.deepgram_base_url), whisper]
         return [whisper]
+
+    def _budget(self) -> BudgetStore:
+        if self.budget is None:  # hosted providers are removed in this case; defensive only
+            raise BudgetExceeded("the budget store is not available")
+        return self.budget
 
     def meta(self) -> dict[str, Any]:
         tts = [p.name for p in self.tts if p.available()]
@@ -212,7 +228,7 @@ class VoiceService:
         chars = sum(len(p) for p in parts)
         reserved = 0
         if provider.hosted:
-            decision = self.budget.reserve(
+            decision = self._budget().reserve(
                 provider.name, "tts_chars", chars, self.settings.tts_monthly_char_cap
             )
             if not decision.allowed:
@@ -225,11 +241,11 @@ class VoiceService:
             wav = pieces[0] if len(pieces) == 1 else audio.join_wav(pieces, PAUSE_S)
         except audio.AudioError as exc:
             if reserved:
-                self.budget.release(provider.name, "tts_chars", reserved)
+                self._budget().release(provider.name, "tts_chars", reserved)
             raise ProviderError(f"could not join audio ({exc})") from exc
         except ProviderError:
             if reserved:
-                self.budget.release(provider.name, "tts_chars", reserved)
+                self._budget().release(provider.name, "tts_chars", reserved)
             raise
         info = audio.wav_info(wav)
         meta = {
@@ -299,7 +315,7 @@ class VoiceService:
         for provider in self.stt:
             seconds = math.ceil(checked.duration_s)
             if provider.hosted:
-                decision = self.budget.reserve(
+                decision = self._budget().reserve(
                     provider.name, "stt_seconds", seconds, self.settings.stt_monthly_seconds_cap
                 )
                 if not decision.allowed:
@@ -309,7 +325,7 @@ class VoiceService:
                 result = provider.transcribe(raw, params.format, hint, checked.duration_s)
             except ProviderError as exc:
                 if provider.hosted:
-                    self.budget.release(provider.name, "stt_seconds", seconds)
+                    self._budget().release(provider.name, "stt_seconds", seconds)
                 errors.append(exc)
                 warnings.append(f"STT_FALLBACK: {provider.name}: {exc.message}")
                 continue

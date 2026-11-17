@@ -170,3 +170,17 @@ def test_meta_reports_urdu_route() -> None:
     meta = h.service(tts=[h.deepgram_tts(h.Recorder([]))], stt=[FakeSTT()]).meta()
     assert meta["urdu_tts"] == "prerendered" and meta["hosted"] is True
     assert meta["tts_chain"] == ["deepgram", "prerendered"]
+
+
+def test_unwritable_cache_disables_hosted_providers(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    blocker = tmp_path / "not-a-dir"
+    blocker.write_text("x", encoding="utf-8")  # the cache path is a file: nothing can be created
+    monkeypatch.setenv("STITCH_VOICE_CACHE_DIR", str(blocker))
+    rec = h.Recorder([h.wav_response()])
+    svc = h.service(tts=[h.deepgram_tts(rec), FakeTTS()], stt=[FakeSTT()])
+    assert svc.budget is None and [p.name for p in svc.tts] == ["fake"]
+    assert svc.health() == {"cache_writable": False}
+    res = h.call(svc, "speak", {"text": "Hello.", "lang": "en"})
+    assert res.ok and res.data.provider == "fake" and rec.requests == []

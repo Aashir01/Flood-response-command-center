@@ -20,8 +20,11 @@ services:
   voice:
     networks: [core, egress]
     environment:
-      # Deepgram: Nova-3 transcription, Aura-2 English speech (STITCH_STT_PROVIDER and
-      # STITCH_TTS_PROVIDER = deepgram in prod.env). The key is useless without egress.
+      # Deepgram: Nova-3 transcription, Aura-2 English speech. The key is useless without
+      # egress. Fallbacks inside the organ: STT to local Whisper, English TTS to the
+      # prerendered cache; Urdu TTS needs Azure, else the prerendered cache, else the text.
+      STITCH_TTS_PROVIDER: ${STITCH_TTS_PROVIDER:-deepgram}
+      STITCH_STT_PROVIDER: ${STITCH_STT_PROVIDER:-deepgram}
       DEEPGRAM_API_KEY: ${DEEPGRAM_API_KEY:-}
       AZURE_SPEECH_KEY: ${AZURE_SPEECH_KEY:-}
       AZURE_SPEECH_REGION: ${AZURE_SPEECH_REGION:-}

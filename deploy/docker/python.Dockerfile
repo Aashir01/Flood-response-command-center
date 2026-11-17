@@ -88,7 +88,10 @@ RUN apt-get update \
  && groupadd --gid 10001 app \
  && useradd --uid 10001 --gid 10001 --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin app \
  && groupadd --gid 10002 seed \
- && useradd --uid 10002 --gid 10002 --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin seed
+ && useradd --uid 10002 --gid 10002 --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin seed \
+ && mkdir -p /cache/voice && chown 10001:10001 /cache/voice
+# /cache/voice: mount point of the `voice_cache` volume. A new named volume copies this owner,
+# so the Voice (uid 10001) can write its audio cache and budget database.
 COPY --from=build /app /app
 ENV PATH=/app/.venv/bin:$PATH \
     HOME=/tmp \
