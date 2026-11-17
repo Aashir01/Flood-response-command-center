@@ -1,8 +1,11 @@
 # Production gateway (deploy design 5.1): automatic HTTPS for SITE_ADDRESS (default
 # stitch.aashirnoman.dev), HTTP->HTTPS redirect, certificate renewal, HTTP/3.
+# Before DNS exists, prod.env sets SITE_ADDRESS=:80 (plain HTTP on the IP, no ACME);
+# deploy/bin/check_dns.sh switches it to the domain once the A record resolves to this host.
 # Dry run: set ACME_CA to the Let's Encrypt staging directory in prod.env.
+# No ACME account email: Let's Encrypt stopped sending expiry emails in 2025 and Caddy renews
+# on its own; the certificate state lives in the caddy_data volume.
 {
-	email {$ACME_EMAIL}
 	acme_ca {$ACME_CA:https://acme-v02.api.letsencrypt.org/directory}
 	admin off
 	persist_config off
@@ -10,11 +13,9 @@
 		protocols h1 h2 h3
 	}
 }
-
 {$SITE_ADDRESS:stitch.aashirnoman.dev} {
 	import /etc/caddy/snippets/common.caddy
 }
-
 # Container healthcheck only (never published): plain HTTP, never redirected to HTTPS.
 http://127.0.0.1:8080 {
 	respond /healthz "ok" 200
