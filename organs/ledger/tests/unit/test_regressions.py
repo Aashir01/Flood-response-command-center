@@ -165,3 +165,32 @@ def test_regression_integer_budget_repair_kept_the_floor() -> None:
     # floors are accepted within 1e-9 of the budget (floors.BUDGET_TOL), so a plan at its floors
     # may exceed the budget by that much and no more
     assert result.total_cost <= spec.budget * (1 + 1e-9)  # type: ignore[operator]
+
+
+def test_regression_undeliverable_commodity_hid_a_budget_overspend() -> None:
+    """Found by LED-P15 (``test_p15_solver_agrees_with_the_closed_form_on_both_sides``, ci
+    profile). Budget 0 gives max_feasible_floor 0. The LP at floor 0.001 must be infeasible
+    (it has to spend 1e-3 cost units), but GLOP reported it optimal: the budget row was divided
+    by the largest raw coefficient, which belonged to ``medical`` (unit cost 25, supply 0, so
+    never deliverable), and the 1e-3 overspend became 9.8e-7 on the scaled row, inside the
+    solver tolerance. Fix: the budget row is scaled by the largest cost a variable can actually
+    add (coefficient times ``min(1, S_k / R_dk)``)."""
+    from stitch_ledger.core.floors import max_feasible_floor
+    from stitch_ledger.core.formulate import build
+    from stitch_ledger.core.solve import solve
+
+    spec = ProblemSpec(
+        districts=(DistrictSpec("d00", 68.0, 0.0, 0.1),),
+        commodities=(
+            CommoditySpec("food", 1.0, 1.0, 1.0),
+            CommoditySpec("medical", 25.0, 6.0, 0.0),
+        ),
+        budget=0.0,
+        equity_floor=0.0,
+        min_road_access=0.1,
+        integer=False,
+    )
+    problem = normalize(spec)
+    assert max_feasible_floor(problem)[0] == 0.0
+    assert solve(build(problem, 0.0, integer=False), 10.0).status == "optimal"
+    assert solve(build(problem, 0.001, integer=False), 10.0).status == "infeasible"

@@ -69,6 +69,25 @@ def integer_floor(phi: float, share: float) -> float:
     return float(max(0, math.ceil(phi * share - INT_EPS)))
 
 
+def _budget_row_reach(problem: Problem, cost_coefs: dict[tuple[int, int], float]) -> float:
+    """Largest cost one LP variable can actually add to the budget row.
+
+    ``f_dk`` cannot exceed ``min(1, S_k / R_dk)`` (the supply row alone caps it), so its largest
+    contribution is ``coef * min(1, S_k / R_dk)``. The budget row is divided by this instead of
+    by the largest raw coefficient. With the raw coefficient, a commodity that cannot be
+    delivered at all (supply 0, high unit cost) inflated the scale by orders of magnitude, an
+    overspend of 1e-3 cost units shrank below GLOP's feasibility tolerance (about 1e-6 on the
+    scaled row), and a floor above ``max_feasible_floor`` was reported ``optimal`` with a zero
+    budget (LED-P15 counterexample, ``tests/unit/test_regressions.py``).
+    """
+    best = 0.0
+    for (d, k), coef in cost_coefs.items():
+        need = problem.need[d][k]
+        cap = 1.0 if need <= 0.0 else min(1.0, problem.commodities[k].supply / need)
+        best = max(best, coef * cap)
+    return best
+
+
 def build(problem: Problem, floor: float, *, integer: bool, no_varbound: bool = False) -> Model:
     """Build the model at the given (already feasible) equity floor.
 
@@ -143,6 +162,10 @@ def build(problem: Problem, floor: float, *, integer: bool, no_varbound: bool = 
             for k in range(ncom)
         }
         scale = max(cost_coefs.values(), default=0.0)
+        if not integer:
+            reach = _budget_row_reach(problem, cost_coefs)
+            if reach > 0.0:
+                scale = reach
         if scale > 0.0:
             m.budget_scale = scale
             limit = problem.budget
