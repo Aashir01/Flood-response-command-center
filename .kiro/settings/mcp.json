@@ -28,7 +28,7 @@
       "command": "uv",
       "args": ["run", "--package", "stitch-voice", "python", "-m", "stitch_voice.server", "--stdio"],
       "env": { "STITCH_MODE": "demo", "STITCH_TTS_PROVIDER": "prerendered" },
-      "disabled": true
+      "disabled": false
     },
     "github": {
       "url": "https://api.githubcopilot.com/mcp/",
