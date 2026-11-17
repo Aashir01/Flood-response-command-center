@@ -60,6 +60,11 @@ from stitch_common.provenance import inputs_hash
 Emit = Callable[[TaskEvent], None]
 LOG = get_logger("stitch_brain.run")
 SUMMARY_MAX = 10
+#: organs that fetch upstream data in live mode (Library and Ledger are local, design 16)
+LIVE_ORGANS = ("eyes", "oracle")
+#: live failures that trigger the single demo-mode call
+FALLBACK_CODES = ("UPSTREAM_UNAVAILABLE", "TIMEOUT")
+MODE_TOOLS = ("segment_flood", "compare_with_permanent_water", "forecast_river")
 
 
 class RunError(Exception):
@@ -197,6 +202,7 @@ class _Run:
         self.started_at = r.clock.now()
         self.health_at_start = r.registry.health()
         self.reruns = 0
+        self.fallbacks: list[str] = []  # nodes re-called in demo mode after a live failure
         self.plans: list[dict[str, Any]] = []
         self.plan_fallback: str | None = None
         self.rule_trace: list[str] = []
@@ -349,7 +355,52 @@ class _Run:
             return AttemptResult(False, self.record_failure(node, attempt, err), err)
         args = BUILDERS[node.builder](self.bctx, node)
         self.call_inputs[node.id] = args
-        ctx = CallContext(self.bid, node.id, attempt, self.scenario.fixture_set)
+        res = await self._call_once(node, attempt, args, c)
+        if self._live_fallback_due(node, res):
+            # Live upstream failed: one demo-mode call of the same tool (design 16, BRN-R9).
+            # The failed live entry stays in the store; the demo entry is stored after it, so
+            # it is the node's latest entry and no ``caveat.missing`` claim is rendered.
+            err = res.error or ErrorDict("UPSTREAM_UNAVAILABLE", "", True)
+            self.fallbacks.append(node.id)
+            self.emit(
+                "notice",
+                node.id,
+                {
+                    "code": "MODE_FALLBACK",
+                    "message": f"{node.organ} live call failed ({err.code}); using demo data",
+                    "details": {"organ": node.organ, "tool": node.tool, "error_code": err.code},
+                },
+                organ=node.organ,
+                tool=node.tool,
+            )
+            demo_args = {**args, "mode": "demo"}
+            self.call_inputs[node.id] = demo_args
+            res = await self._call_once(node, attempt, demo_args, c, fallback=True)
+        return res
+
+    def _live_fallback_due(self, node: Node, res: AttemptResult) -> bool:
+        return (
+            self.req.mode == "live"
+            and not res.ok
+            and node.kind == "organ"
+            and node.organ in LIVE_ORGANS
+            and node.id not in self.fallbacks
+            and res.error is not None
+            and res.error.code in FALLBACK_CODES
+        )
+
+    async def _call_once(
+        self,
+        node: Node,
+        attempt: int,
+        args: dict[str, Any],
+        c: OrganClient,
+        *,
+        fallback: bool = False,
+    ) -> AttemptResult:
+        assert node.tool is not None
+        ctx_node = f"{node.id}.demo_fallback" if fallback else node.id
+        ctx = CallContext(self.bid, ctx_node, attempt, self.scenario.fixture_set)
         started, t0 = self.r.clock.now(), self.r.clock.monotonic()
         if node.kind != "resource":
             try:
@@ -358,6 +409,8 @@ class _Run:
                 err = ErrorDict("INVALID_INPUT", f"brain built invalid arguments: {exc}", False)
                 return AttemptResult(False, self.record_failure(node, attempt, err), err)
         base = {"node_id": node.id, "attempt": attempt, "organ": node.organ, "args": args}
+        if fallback:
+            base["fallback"] = "demo"
         try:
             if node.kind == "resource":
                 out = await c.read_resource(args["uri"], timeout_s=node.timeout_s, ctx=ctx)
@@ -459,7 +512,13 @@ class _Run:
     def _effective_mode(self) -> tuple[str, str | None]:
         if self.req.mode != "live":
             return "demo", None
-        live = [e for e in self.store.entries() if e.organ in ("eyes", "oracle") and e.ok]
+        # Only the calls that take a ``mode`` input count; ``explain_forecast`` is keyed by a
+        # prior run id and has no mode of its own (contract 1).
+        live = [
+            e
+            for e in self.store.entries()
+            if e.organ in LIVE_ORGANS and e.tool in MODE_TOOLS and e.ok
+        ]
         if (
             live
             and all(e.mode == "live" for e in live)
@@ -467,6 +526,11 @@ class _Run:
             and self.store.ok_node("oracle.forecast")
         ):
             return "live", None
+        if self.fallbacks:
+            return (
+                "demo",
+                f"live upstream failed for {', '.join(sorted(self.fallbacks))}; demo data used",
+            )
         return "demo", "live mode was requested, but Eyes and Oracle did not all answer live"
 
     async def execute(self) -> RunResult:
@@ -503,6 +567,7 @@ class _Run:
                 "mode_requested": self.req.mode,
                 "mode_effective": mode,
                 "fallback_reason": fallback,
+                "fallback_nodes": sorted(self.fallbacks),
                 "label": {"en": self.scenario.label.en, "ur": self.scenario.label.ur},
                 "served_by": {o: c.served_by for o, c in self.r.registry.clients.items()},
                 "call_inputs": self.call_inputs,

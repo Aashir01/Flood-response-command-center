@@ -139,6 +139,9 @@ def deep_subset(pattern: Any, value: Any) -> bool:
     return bool(pattern == value)
 
 
+MODE_ARG = "mode"
+
+
 def _leaves(pattern: Any) -> int:
     if isinstance(pattern, dict):
         return sum(_leaves(v) for v in pattern.values())
@@ -151,18 +154,22 @@ def select(
     args: dict[str, Any],
     cited_path: str | None = None,
 ) -> Fixture | None:
+    # The requested ``mode`` never selects a fixture: fixtures are recorded demo data and keep
+    # their own ``provenance.mode``, so a live request served from fixtures reports demo.
+    args = {k: v for k, v in args.items() if k != MODE_ARG}
     best: tuple[int, str] | None = None
     chosen: Fixture | None = None
     for f in fixtures:
+        pattern = {k: v for k, v in f.match_args.items() if k != MODE_ARG}
         if f.match_scenario is not None and f.match_scenario != scenario:
             continue
         if f.run_id_of is not None and f.run_id_of != cited_path:
             continue
-        if f.exact and f.match_args != args:
+        if f.exact and pattern != args:
             continue
-        if not deep_subset(f.match_args, args):
+        if not deep_subset(pattern, args):
             continue
-        score = _leaves(f.match_args) + (1000 if f.match_scenario is not None else 0)
+        score = _leaves(pattern) + (1000 if f.match_scenario is not None else 0)
         key = (-score, f.path)
         if best is None or key < best:
             best, chosen = key, f
