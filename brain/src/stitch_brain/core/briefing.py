@@ -77,13 +77,18 @@ def section_status(section: str, s: StatusInputs) -> tuple[str, list[str]]:
         else:
             missing = [n for n in ("eyes.compare", "oracle.forecast") if not ok.get(n)]
             gap = s.ledger_gap or 0.0
-            status = "partial" if missing or (s.ledger_status == "feasible" and gap > 0) else "ok"
+            gap_open = s.ledger_status == "feasible" and gap > 0
+            status = "partial" if missing or gap_open else "ok"
+            if gap_open:
+                # name the reason, so the UI never shows "partial" without one (BRN-R3.3)
+                missing.append(f"proven optimal plan (solver gap {gap:.2g})")
     else:
         raise ValueError(section)
     removed = s.removed_by_section.get(section, 0)
     kept = s.kept_by_section.get(section, 0)
     if removed:
         status = "unavailable" if kept == 0 else ("partial" if status == "ok" else status)
+        missing.append(f"{removed} claim(s) removed by the critic")
     if status != "unavailable" and kept == 0 and section != "caveats":
         status = "unavailable"
     return status, missing
