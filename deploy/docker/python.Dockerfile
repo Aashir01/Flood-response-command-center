@@ -80,9 +80,10 @@ RUN --mount=type=cache,id=stitch-library-models,target=/cache \
     ls -la /models/*
 
 FROM base AS runtime
-# libgomp1: OpenMP runtime needed by LightGBM (Oracle) and harmless elsewhere (~300 KB).
+# libgomp1: OpenMP runtime needed by LightGBM (Oracle). libexpat1: XML parser that the
+# rasterio/GDAL wheel (Eyes) links against and the slim base image lacks. ~700 KB together.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends libgomp1 \
+ && apt-get install -y --no-install-recommends libgomp1 libexpat1 \
  && rm -rf /var/lib/apt/lists/* \
  && groupadd --gid 10001 app \
  && useradd --uid 10001 --gid 10001 --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin app \
