@@ -42,14 +42,35 @@ def oracle_low(world: World, rnd: random.Random) -> None:
         p["p_exceed"] = round(rnd.uniform(0.0, 0.099), 3)
 
 
+#: R1 needs the basin flooded fraction at or above 0.10; a dried district must leave this much
+#: so a combined scenario still expects R1 (decisions.md, BRN-P6 root cause).
+BASIN_KEEP_FRAC = 0.12
+
+
+def _area(row: dict[str, Any]) -> float:
+    if row.get("district_area_km2") is not None:
+        return float(row["district_area_km2"])
+    return float(row["flooded_km2"]) / float(row["flooded_fraction"])
+
+
 def dry_district(world: World, rnd: random.Random) -> None:
     """One basin district mapped dry (flooded fraction below the 0.01 noise floor) while the
-    Oracle risk stays high (expects R2; the Ledger re-run with Eyes-only severity reconciles)."""
-    district = rnd.choice(BASIN)
-    for r in _data(world, "eyes.compare")["by_district"]:
-        if r["district_id"] == district:
-            r["flooded_fraction"] = round(rnd.uniform(0.0, 0.0099), 4)
-            r["flooded_km2"] = round(r["flooded_fraction"] * r.get("district_area_km2", 1000), 1)
+    Oracle risk stays high (expects R2; the Ledger re-run with Eyes-only severity reconciles).
+
+    The district keeps its area (written to ``district_area_km2``) and is chosen among basin
+    districts whose drying leaves the basin flooded fraction at or above ``BASIN_KEEP_FRAC``,
+    so the mutation does not silently cancel R1 in a combined scenario."""
+    rows = {r["district_id"]: r for r in _data(world, "eyes.compare")["by_district"]}
+    basin = [d for d in BASIN if d in rows]
+    area = sum(_area(rows[d]) for d in basin)
+    flooded = sum(float(rows[d]["flooded_km2"]) for d in basin)
+    keep = [d for d in basin if (flooded - float(rows[d]["flooded_km2"])) / area >= BASIN_KEEP_FRAC]
+    district = rnd.choice(keep or basin)
+    r = rows[district]
+    a = _area(r)
+    r["district_area_km2"] = round(a, 1)
+    r["flooded_fraction"] = round(rnd.uniform(0.0, 0.0099), 4)
+    r["flooded_km2"] = round(r["flooded_fraction"] * a, 1)
 
 
 def need_mismatch(world: World, rnd: random.Random) -> None:
