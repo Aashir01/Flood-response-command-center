@@ -1,4 +1,5 @@
-"""Smoke test: start the server over stdio, list tools, call both, read the stations resource."""
+"""Smoke test: start the server over stdio, list tools, call both, read the stations resource;
+serve ``GET /healthz`` from the streamable HTTP app. Refs: ORA-R4, R6.2."""
 
 from __future__ import annotations
 
@@ -7,10 +8,14 @@ import sys
 from pathlib import Path
 
 from mcp import Client, StdioServerParameters
+from starlette.testclient import TestClient
 
 from stitch_common.envelope import ToolResult
 from stitch_common.organs.oracle import StationInfo
 from stitch_oracle.models import TOOL_NAMES
+from stitch_oracle.server import create_server
+from stitch_oracle.service import OracleService
+from stitch_oracle.store import RunStore
 
 SRC = str(Path(__file__).resolve().parents[1] / "src")
 
@@ -45,3 +50,13 @@ async def test_stdio_lists_tools_calls_both_and_reads_stations() -> None:
     contents = resource.contents[0]
     rows = json.loads(getattr(contents, "text", "[]"))
     assert {StationInfo.model_validate(r).station_id for r in rows} >= {"indus-sukkur"}
+
+
+def test_healthz_reports_checks() -> None:
+    server = create_server(OracleService(store=RunStore()))
+    r = TestClient(server.streamable_http_app()).get("/healthz")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "ok" and body["organ"] == "oracle"
+    assert body["checks"] == {"bundle": True, "dataset": True, "store": True}
+    assert body["contract_version"] == "0.4"
