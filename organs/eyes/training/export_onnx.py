@@ -176,6 +176,30 @@ def main(argv: list[str] | None = None) -> int:
             torch_iou_tp[1] += int((pred & ~t & keep).sum())
             torch_iou_tp[2] += int((~pred & t & keep).sum())
     torch_iou = torch_iou_tp[0] / max(sum(torch_iou_tp), 1)
+    rng = np.random.default_rng(2)
+    tiles = []
+    for c in valid:
+        if len(tiles) == 16:
+            break
+        y0, x0 = (int(v) for v in rng.integers(0, 512 - 256 + 1, 2))
+        tiles.append(np.ascontiguousarray(c.s1[:, y0 : y0 + 256, x0 : x0 + 256]))
+    with torch.no_grad():
+        torch_tiles = [model(torch.from_numpy(t)[None])[0, 0].numpy() for t in tiles]
+
+    def tile_check(sess: Any) -> dict[str, float]:
+        max_d, mean_d, agree = 0.0, [], []
+        for t, zt in zip(tiles, torch_tiles, strict=True):
+            zo = ort_logits(sess, t)
+            d = np.abs(zt - zo)
+            max_d = max(max_d, float(d.max()))
+            mean_d.append(float(d.mean()))
+            agree.append(float(((zt > 0) == (zo > 0)).mean()))
+        return {
+            "max_abs_logit_diff": max_d,
+            "mean_abs_logit_diff": float(np.mean(mean_d)),
+            "mask_agreement": float(np.mean(agree)),
+        }
+
     rows: dict[str, dict[str, Any]] = {}
     for name, path in (("fp32", fp32), ("fp16", fp16), ("int8", int8)):
         sess = ort_session(path)
@@ -183,16 +207,28 @@ def main(argv: list[str] | None = None) -> int:
             "bytes": path.stat().st_size,
             "val_iou": val_iou(sess, valid),
             "latency_s_256_2threads": latency(sess),
+            **tile_check(sess),
         }
         print(name, rows[name], flush=True)
 
+    # The design 3.5 order, with the P5 tolerance (mask agreement >= 99.5%, IoU drop <= 1
+    # point) as an eligibility condition for the reduced-precision variants.
     base = rows["fp32"]
+
+    def ok_reduced(name: str) -> bool:
+        r = rows[name]
+        return bool(
+            r["mask_agreement"] >= 0.995
+            and base["val_iou"] - r["val_iou"] <= 0.01
+            and r["bytes"] < SIZE_LIMIT
+        )
+
     if (
-        base["val_iou"] - rows["int8"]["val_iou"] <= 0.01
+        ok_reduced("int8")
         and rows["int8"]["latency_s_256_2threads"] <= base["latency_s_256_2threads"]
     ):
         chosen = "int8"
-    elif rows["fp16"]["bytes"] < SIZE_LIMIT:
+    elif ok_reduced("fp16"):
         chosen = "fp16"
     else:
         chosen = "fp32"
@@ -203,27 +239,7 @@ def main(argv: list[str] | None = None) -> int:
     src = {"fp32": fp32, "fp16": fp16, "int8": int8}[chosen]
     shutil.copyfile(src, shipped)
     (MODELS / "preprocess.json").write_text(json.dumps(pre, indent=2) + "\n")
-
-    sess = ort_session(shipped)
-    rng = np.random.default_rng(2)
-    tiles = []
-    for c in valid:
-        if len(tiles) == 16:
-            break
-        y0, x0 = (int(v) for v in rng.integers(0, 512 - 256 + 1, 2))
-        tiles.append(c.s1[:, y0 : y0 + 256, x0 : x0 + 256])
-    max_d, mean_d, agree, tps = 0.0, [], [], [0, 0, 0]
-    with torch.no_grad():
-        for t in tiles:
-            zt = model(torch.from_numpy(np.ascontiguousarray(t))[None])[0, 0].numpy()
-            zo = ort_logits(sess, np.ascontiguousarray(t))
-            d = np.abs(zt - zo)
-            max_d = max(max_d, float(d.max()))
-            mean_d.append(float(d.mean()))
-            agree.append(float(((zt > 0) == (zo > 0)).mean()))
-            pt, po = zt > 0, zo > 0
-            tps[0] += int((pt & po).sum())
-            tps[1] += int((pt ^ po).sum())
+    shipped_check = tile_check(ort_session(shipped))
     check = {
         "variant": chosen,
         "model_variant": f"unet-resnet18-s1-{chosen}",
@@ -234,15 +250,13 @@ def main(argv: list[str] | None = None) -> int:
         "n_tiles": len(tiles),
         "tile": 256,
         "tiles_from": "sen1floods11 hand-labeled validation split, random 256 crops, seed 2",
-        "max_abs_logit_diff": max_d,
-        "mean_abs_logit_diff": float(np.mean(mean_d)),
-        "mask_agreement": float(np.mean(agree)),
+        **shipped_check,
         "torch_val_iou": torch_iou,
         "onnx_val_iou": rows[chosen]["val_iou"],
         "val_iou_diff_points": 100 * abs(torch_iou - rows[chosen]["val_iou"]),
         "variants": rows,
-        "selection_rule": "int8 if val IoU drop <= 1.0 point and latency <= fp32; else fp16; "
-        "else fp32 if < 50,000,000 bytes",
+        "selection_rule": "int8 if mask agreement >= 99.5%, val IoU drop <= 1.0 point and "
+        "latency <= fp32; else fp16 under the same tolerance; else fp32 if < 50,000,000 bytes",
         "versions": {
             "torch": torch.__version__,
             "onnx": onnx.__version__,
