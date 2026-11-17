@@ -8,7 +8,7 @@ from typing import Any
 
 from stitch_brain.config import ScenarioCfg
 from stitch_brain.core.evidence import EvidenceStore
-from stitch_brain.core.graph import Dep, Node, Plan, validate_plan
+from stitch_brain.core.graph import Dep, Node, Plan, PlanError, validate_plan
 
 #: Optional nodes an LLM plan variation may add or drop (design 7.2).
 OPTIONAL_WHITELIST = ("oracle.explain", "ledger.sensitivity")
@@ -327,6 +327,28 @@ def with_rerun(plan: Plan) -> Plan:
     )
     nodes.insert(idx, rerun_node())
     new = plan.model_copy(update={"nodes": nodes, "revision": plan.revision + 1})
+    return validate_plan(new, BUILDERS)
+
+
+def apply_variation(plan: Plan, reply: str) -> Plan:
+    """An LLM plan variation (design 7.2, 12): strict JSON ``{"drop": [node ids]}`` where every
+    id is an optional node from ``OPTIONAL_WHITELIST``. Anything else raises ``PlanError`` and
+    the caller keeps the default plan (BRN-R2.3)."""
+    import json
+
+    try:
+        obj = json.loads(reply)
+    except ValueError as exc:
+        raise PlanError([f"plan variation is not JSON: {exc}"]) from exc
+    if not isinstance(obj, dict) or set(obj) != {"drop"} or not isinstance(obj["drop"], list):
+        raise PlanError(['plan variation must be {"drop": [ids]}'])
+    drop = obj["drop"]
+    bad = [d for d in drop if not isinstance(d, str) or d not in OPTIONAL_WHITELIST]
+    if bad:
+        raise PlanError([f"not an optional node: {bad[0]!r}"])
+    keep = [n for n in plan.nodes if n.id not in drop]
+    nodes = [n.model_copy(update={"deps": [d for d in n.deps if d.id not in drop]}) for n in keep]
+    new = plan.model_copy(update={"nodes": nodes, "planner": "llm"})
     return validate_plan(new, BUILDERS)
 
 

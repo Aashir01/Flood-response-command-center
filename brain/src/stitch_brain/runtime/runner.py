@@ -13,6 +13,7 @@ from stitch_brain.core.briefing import StatusInputs, assemble, labels_for, secti
 from stitch_brain.core.claims import SECTION_ORDER, ClaimDraft
 from stitch_brain.core.confidence import ConfidenceParams, confidence, organ_confidences
 from stitch_brain.core.conflicts import ConflictRecord, apply_disputed, entry_data, records_from
+from stitch_brain.core.critic import run_critic
 from stitch_brain.core.evidence import (
     EvidenceEntry,
     EvidenceStore,
@@ -32,9 +33,11 @@ from stitch_brain.core.plans import (
 from stitch_brain.core.rules import RuleSet, evaluate, evaluate_rule
 from stitch_brain.core.severity import build_ledger_input
 from stitch_brain.core.synth import render_all
+from stitch_brain.core.templates.caveats import render_post_critic
 from stitch_brain.core.templates.common import RenderCtx
 from stitch_brain.runtime.clock import Clock, RealClock
 from stitch_brain.runtime.executor import AttemptResult, ErrorDict, Executor, Limits, NodeOutcome
+from stitch_brain.runtime.llm_steps import LlmSteps
 from stitch_brain.runtime.organs import CallContext, CallOutcome, OrganClient
 from stitch_brain.runtime.registry import OrganRegistry
 from stitch_brain.runtime.validate import ContractViolation, validate_input
@@ -167,6 +170,13 @@ class _Run:
         self.health_at_start = r.registry.health()
         self.reruns = 0
         self.rule_trace: list[str] = []
+        self.t0 = r.clock.monotonic()
+        self.steps = LlmSteps(
+            r.llm,
+            r.i18n,
+            phrase=r.settings.phrase,
+            strict=r.settings.fake_strict,
+        )
 
     # --- events ------------------------------------------------------------------------------
     def emit(
@@ -454,7 +464,9 @@ class _Run:
         apply_disputed(
             drafts, records, self.r.i18n.pack(self.req.lang).disputed_suffix, self.req.lang
         )
-        critic = CriticVerdict(passed=True, removed_claims=[], notes=[])
+        cids = [r.cid for r in records]
+        verdicts = await self.llm_stage(drafts, cids)
+        drafts, critic = self.critic_stage(drafts, cids, ctx, verdicts)
         briefing = self._assemble(drafts, outcomes, conflicts, critic, mode)
         self.emit("briefing", "briefing", briefing.model_dump(mode="json"))
         return RunResult(
@@ -463,8 +475,68 @@ class _Run:
             plan=plan,
             outcomes=outcomes,
             drafts=drafts,
-            trace={"calls": self.calls},
+            trace={"calls": self.calls, "llm_calls": self.steps.trace.calls},
         )
+
+    # --- LLM steps and critic (design 10, 12, 13) ----------------------------------------------
+    async def llm_stage(self, drafts: list[ClaimDraft], cids: list[str]) -> dict[str, bool]:
+        """Phrase and translate within the run deadline; skipped when the deadline has passed
+        (template text is used). Returns judge verdicts for rewritten claims."""
+        lang = self.req.lang
+        elapsed = self.r.clock.monotonic() - self.t0
+        if elapsed < self.r.settings.run_deadline_s:
+            await self.steps.phrase(drafts, self.store, lang, cids)
+            await self.steps.translate(drafts, self.store, lang, cids)
+            return await self.steps.judge_many(drafts, self.store)
+        for d in drafts:
+            if self.steps.needs_translation(d, lang):
+                d.verbatim_foreign = True
+        return {}
+
+    def critic_stage(
+        self,
+        drafts: list[ClaimDraft],
+        cids: list[str],
+        ctx: RenderCtx,
+        verdicts: Mapping[str, bool],
+    ) -> tuple[list[ClaimDraft], CriticVerdict]:
+        pre: dict[str, str] = {}
+        for issue in ctx.issues:
+            cid = issue.split(":", 1)[0].strip()
+            pre.setdefault(cid, issue)
+        res = run_critic(
+            drafts,
+            self.store,
+            self.r.i18n,
+            self.req.lang,
+            self.scenario,
+            conflict_ids=cids,
+            judge=lambda d, _ev: verdicts.get(d.id, False),
+            pre_removed=pre,
+        )
+        for p in res.passes:
+            self.emit("critic", "critic", p.payload())
+        last = res.passes[-1]
+        unresolved = 0 if res.verdict.passed else max(1, len(last.issues))
+        self.store.put(
+            brain_entry(
+                briefing_id=self.bid,
+                node_id="critic",
+                tool="critic",
+                data={
+                    "passed": res.verdict.passed,
+                    "removed_claims": list(res.verdict.removed_claims),
+                    "notes": list(res.verdict.notes),
+                    "unresolved": unresolved,
+                    "reverted": list(res.reverted),
+                    "passes": [p.payload() for p in res.passes],
+                },
+                at=self.r.clock.now(),
+                mode=self.req.mode,
+            )
+        )
+        out = res.drafts + render_post_critic(ctx, res.drafts)
+        return out, res.verdict
 
     # --- conflicts and the single reconciliation (design 9.4) ---------------------------------
     def _conflict_event(self, rec: ConflictRecord) -> None:

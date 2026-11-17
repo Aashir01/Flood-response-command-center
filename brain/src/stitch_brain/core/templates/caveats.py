@@ -198,6 +198,42 @@ def render_conflict_caveats(ctx: RenderCtx) -> list[ClaimDraft]:
     return out
 
 
+def render_post_critic(ctx: RenderCtx, drafts: Iterable[ClaimDraft]) -> list[ClaimDraft]:
+    """Caveats the assembler adds after the critic (design 10.3, 13): ``caveat.critic_failed``
+    when the critic did not pass (cites the ``critic`` entry), and ``caveat.verbatim_foreign``
+    when organ text is shown untranslated (cites that text)."""
+    out: list[ClaimDraft] = []
+    entry = ctx.ok("critic")
+    if entry is not None and entry.data().get("passed") is False:
+        out.append(
+            claim(
+                ctx,
+                cid="caveat.critic_failed",
+                section="caveats",
+                kind="statement",
+                template_id="caveat.critic_failed",
+                slots={"n": leaf("n", entry, ["data", "unresolved"], "int")},
+                order=60,
+                extra_refs=[entry.ref("/data/passed")],
+            )
+        )
+    foreign = [d for d in drafts if d.verbatim_foreign]
+    if foreign:
+        out.append(
+            claim(
+                ctx,
+                cid="caveat.verbatim_foreign",
+                section="caveats",
+                kind="statement",
+                template_id="caveat.verbatim_foreign",
+                slots={},
+                order=61,
+                extra_refs=[d.evidence[0] for d in foreign],
+            )
+        )
+    return out
+
+
 def render_assumptions(ctx: RenderCtx) -> list[ClaimDraft]:
     derive = ctx.ok("derive.ledger_input")
     if derive is None:
