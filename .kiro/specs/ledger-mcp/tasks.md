@@ -106,3 +106,8 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
 | P3, P7, P8, P13 | 7 | P12, P16 | 3 |
 | P6 | 9 | P14, P9 | 6 |
 | P15, P19 | 5 | | |
+
+## Status (final audit)
+
+All core tasks are done. Open:
+- 17 (commodity priority weights, `stretch`): not done. It needs a contract change (`priority_weight`); the solver keeps equal weights `λ_k = 1/|K|`.
