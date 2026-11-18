@@ -75,7 +75,6 @@ export async function tabUntil(page: Page, pred: (el: Element) => boolean, max =
   const src = pred.toString();
   for (let i = 0; i < max; i++) {
     await page.keyboard.press('Tab');
-    // eslint-disable-next-line no-new-func
     const ok = await page.evaluate((s) => {
       const el = document.activeElement;
       return !!el && (new Function(`return (${s})`)() as (e: Element) => boolean)(el);
