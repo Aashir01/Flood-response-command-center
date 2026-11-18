@@ -39,7 +39,7 @@ Target: about half a day. Do first. `core` unless marked.
   - Five hook JSON files, `hook_io.py` and the four helper scripts. Log the first real payload to `.kiro/hooks/.last-event.json`-style debug output (git-ignored path) to learn the shape.
   - Done when: each hook is visible in the Kiro hooks panel, and each script runs by hand. Refs: BOOT-R6.
 
-- [ ] **10. `mcp.json`** `core`
+- [x] **10. `mcp.json`** `core`
   - Register the eight servers per the design. Verify `filesystem` and `fetch` start from the IDE MCP panel. Keep organ servers and GitHub disabled until they exist.
   - Done when: no secrets in the file and the enabled servers show as connected. Refs: BOOT-R4.
 
@@ -75,3 +75,11 @@ Target: about half a day. Do first. `core` unless marked.
 | BOOT-R10 | 14 |
 
 Properties: P1 to P3 in task 2, P4 in task 3, P5 in task 5, P6 in task 7, P7 in task 6.
+
+## Status (final audit)
+
+Task 10 is ticked: `.kiro/settings/mcp.json` registers the eight servers (five organs, filesystem, fetch, GitHub) with no literal secrets (GitHub uses `${GITHUB_TOKEN}`), and `deploy/bin/check_repo_hygiene.py` with `tests/deploy/test_check_repo_hygiene.py` fails on a credential in the file. Oracle, Library, Ledger and Voice connect in the IDE; `eyes-mcp` and `github` stay disabled in the file.
+
+Open:
+- 14 (Powers, owner action): no Power was installed. The write-up records Powers as not used.
+- 15 (Kiro CLI, owner action): `kiro-cli` was not installed. The write-up documents headless use as not demonstrated.
