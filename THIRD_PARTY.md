@@ -34,6 +34,11 @@ Every third-party library, dataset, and model used by Stitch is listed here with
 | Google Cloud Text-to-Speech (fallback provider) | voice | Google service terms | planned |
 | Meta MMS-TTS (optional local mode, OFF by default, not bundled) | voice | CC BY-NC 4.0 (non-commercial) | optional |
 | Coqui XTTS (not used; noted as a non-commercial alternative) | voice | CPML (non-commercial) | not used |
+| `intfloat/multilingual-e5-small` (revision `614241f6`, exported to int8 ONNX by `scripts/export_models.py`, fetched at build time by `scripts/fetch_models.py`) | library (dense retrieval) | MIT | in use |
+| `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1` (revision `1427fd65`, int8 ONNX, fetched at build time) | library (reranker, English) | Apache-2.0 | in use |
+| ResNet-18 ImageNet weights (torchvision, loaded by segmentation_models_pytorch) | eyes (encoder initialisation for training only; not shipped separately) | BSD-3-Clause (torchvision); the ImageNet dataset's own terms limit it to non-commercial research | in use (training) |
+| Stitch Eyes U-Net `organs/eyes/models/eyes_unet_r18.onnx` (trained by this project on Sen1Floods11, int8) | eyes | MIT (this repository); training data attribution per the Sen1Floods11 row | in use |
+| `Qwen/Qwen3-235B-A22B-Instruct-2507` (served by Nebius Token Factory; its replies are recorded in `data/demo/llm/brain.jsonl` and `data/demo/library/llm_recordings.jsonl`) | brain, library | Apache-2.0 | in use (production; recordings offline) |
 
 ## Code libraries
 
