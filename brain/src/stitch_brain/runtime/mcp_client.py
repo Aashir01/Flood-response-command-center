@@ -47,6 +47,9 @@ BACKOFF_STEPS_S = (1.0, 2.0, 4.0, 8.0, 16.0, 30.0)
 BREAKER_WINDOW_S = 15.0
 PING_INTERVAL_S = 10.0
 PROBE_TIMEOUT_S = 5.0
+# Largest single SSE event accepted from an organ over HTTP: a 4,000-character spoken briefing
+# is about 12 MB of WAV, 16 MB in base64.
+MAX_SSE_EVENT_BYTES = 32 * 1024 * 1024
 PROBE_FAILURES = 3
 _DROP_KEYS = frozenset({"description", "title", "default", "examples"})
 
@@ -135,7 +138,12 @@ class McpOrganClient:
         if ep.transport == "http":
             if not ep.url:
                 raise ValueError(f"{self.organ}: http transport needs a url")
-            return Client(ep.url, read_timeout_seconds=60, cache=None)
+            from mcp.client.streamable_http import streamable_http_client
+
+            # One tool result is one SSE event. The SDK caps an event at 1 MiB, but a spoken
+            # briefing (WAV, base64) is several MB, so the cap is raised for organ calls.
+            transport = streamable_http_client(ep.url, max_sse_event_size=MAX_SSE_EVENT_BYTES)
+            return Client(transport, read_timeout_seconds=60, cache=None)
         cmd = ep.command or [sys.executable, "-m", f"stitch_{self.organ}.server", "--stdio"]
         if cmd[0] == "python":
             cmd = [sys.executable, *cmd[1:]]
