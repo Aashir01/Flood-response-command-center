@@ -137,7 +137,7 @@ Manual commands on the host (same project the deploy uses):
 cd /opt/stitch/repo
 alias dc='TAG=$(sed -n s/^TAG=//p /opt/stitch/current.env) docker compose --env-file /opt/stitch/prod.env -f compose.yaml -f deploy/compose.prod.yaml -f deploy/compose.live.yaml'
 # compose.live.yaml is in the list because deploy.conf has COMPOSE_OVERRIDES="deploy/compose.live.yaml"
-# (egress for Oracle live mode and Deepgram voice). STITCH_LLM_PROVIDER stays fake, see docs/decisions.md.
+# (egress for Oracle live mode, Deepgram voice and the Nebius LLM; prod.env sets STITCH_LLM_PROVIDER=nebius).
 dc ps                                  # states and health
 dc logs -f --tail 100 brain            # JSON logs per service (rotated: 3 x 10 MB)
 dc up -d --no-deps web                 # recreate the gateway after a prod.env change
@@ -213,7 +213,11 @@ Equivalent raw commands: `docker compose exec -T postgres pg_dump -U stitch_owne
 | Offline smoke (DEP-P5, P6) | `bash deploy/bin/offline_smoke.sh http://127.0.0.1:8080` (CI) or with `COMPOSE_FILES`, `SKIP_RESTART=1` on the VPS |
 | Smoke only | `python3 deploy/bin/smoke.py <base url> --allow-disabled voice` |
 
-## Status on the VPS (2026-11-17)
+## Status on the VPS (2026-11-18)
+
+https://stitch.aashirnoman.dev serves the full stack over HTTPS (Caddy, Let's Encrypt). `/api/healthz` is ok and all five organs (eyes, oracle, library, ledger, voice) report ready. The demo briefing for `demo-sindh-2022` completes in about 30 s with every section ok and the critic passing. Production sets `STITCH_LLM_PROVIDER=nebius` (Qwen/Qwen3-235B-A22B-Instruct-2507) and uses Deepgram for voice. Deploys use `stitch-deploy <sha>` from the laptop.
+
+The notes below are the earlier status of 2026-11-17, kept for the record.
 
 Running at 884ff75 from `/srv/stitch`: web, postgres (seeded: 9 docs, 65 chunks, `already seeded` on rerun), library, ledger, oracle, eyes, all healthy. `http://64.177.59.11/` and `/healthz` return 200. `/api/*` returns the gateway's JSON 503 `UPSTREAM_UNAVAILABLE`, because the Brain package has no HTTP app yet (`python -m stitch_brain.api` fails; brain task 23). The Brain container is stopped so it does not crash-loop. The smoke script and the offline smoke need the Brain and were not run.
 
