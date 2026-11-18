@@ -102,13 +102,25 @@ async def transcribe(request: Request, registry: OrganRegistry) -> JSONResponse:
     return JSONResponse(resp.model_dump(mode="json", exclude_none=True))
 
 
-def briefing_script(briefing: dict[str, Any], limit: int = SPEAK_MAX_CHARS) -> str:
-    """The spoken script: section titles and claim texts in briefing order, cut at a sentence
-    boundary under ``limit``. Built only from the stored briefing (every claim has provenance)."""
+# The spoken briefing is a summary: each section's title and its first claims. Reading every
+# allocation line aloud ran to about six minutes of audio; this keeps it near two minutes. The
+# full briefing stays on screen.
+SPEAK_SCRIPT_CHARS = 1500
+SPEAK_CLAIMS_PER_SECTION = 2
+
+
+def briefing_script(
+    briefing: dict[str, Any],
+    limit: int = SPEAK_SCRIPT_CHARS,
+    claims_per_section: int = SPEAK_CLAIMS_PER_SECTION,
+) -> str:
+    """The spoken script: each section's title and its first ``claims_per_section`` claim
+    texts, in briefing order, cut at a sentence boundary under ``limit``. Built only from the
+    stored briefing (every claim has provenance)."""
     parts: list[str] = []
     for sec in briefing.get("sections") or []:
         texts = [str(c.get("text", "")).strip() for c in sec.get("claims") or []]
-        texts = [t for t in texts if t]
+        texts = [t for t in texts if t][:claims_per_section]
         if not texts:
             continue
         parts.append(f"{sec.get('title', '')}.")

@@ -49,7 +49,7 @@ PING_INTERVAL_S = 10.0
 PROBE_TIMEOUT_S = 5.0
 # Largest single SSE event accepted from an organ over HTTP: a 4,000-character spoken briefing
 # is about 12 MB of WAV, 16 MB in base64.
-MAX_SSE_EVENT_BYTES = 32 * 1024 * 1024
+MAX_SSE_EVENT_BYTES = 64 * 1024 * 1024
 PROBE_FAILURES = 3
 _DROP_KEYS = frozenset({"description", "title", "default", "examples"})
 
