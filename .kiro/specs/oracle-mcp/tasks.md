@@ -144,3 +144,8 @@ Blocked by the **bootstrap** spec: `stitch_common` models and envelope, the `sur
 | P8 | 9, 11 | X3 | 4 |
 | X4 | 8 | X5 | 7 |
 | X7, X8 | 5 | X10 | 15 |
+
+## Status (final audit)
+
+All core tasks are done. Open:
+- 19 (rainfall-forecast features, `stretch`): not done. The Historical Forecast archive starts in 2021, too short beside the 2017-2023 test period (`docs/decisions.md`). `forecast[].rainfall_mm` stays absent, which the contract allows.
