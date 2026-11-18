@@ -29,7 +29,7 @@ Tasks 1, 2, 3, 4, 5 (dry run), 6, 7, 9, 10, 11 (CI reduced to: hygiene, python, 
   - Tests: unit tests for the script with temporary git repos (a bad `.gitignore` containing `.kiro`, a tracked `.env`, a credential-looking value in `mcp.json`, an unlisted demo file). Refs: DEP-R3.1, R3.3, R5.2, R8.1 to R8.3, P2, P3.
   - Done when: each seeded violation fails the script with a clear message and a clean repo passes.
 
-- [ ] **2. Provision the VPS and DNS** `owner` (2.5 h)
+- [x] **2. Provision the VPS and DNS** `owner` (2.5 h)
   - Follow design §10 steps 1 to 8: Vultr instance, users, SSH hardening, UFW and Vultr firewall, unattended upgrades, swap, Docker Engine, directories. Create the name.com A record for `stitch` (TTL 300). Record vCPU, RAM, disk, region, IPv4 in `deploy/README.md`. Generate the deploy key pair; add the forced-command line; store `DEPLOY_SSH_KEY`, `VPS_HOST`, `VPS_USER`, `VPS_HOST_KEY` as GitHub environment secrets.
   - Checks: `nslookup stitch.aashirnoman.dev 1.1.1.1` returns the IPv4; `dig AAAA` and `dig CAA` reviewed; `ss -ltnp` shows nothing on 80 and 443; `ssh deploy@host true` is refused (forced command accepts only a SHA or `rollback`). Refs: DEP-R7.1, R6.3.
   - Done when: the checks pass and plan numbers are recorded (this unblocks sizing).
@@ -39,37 +39,37 @@ Tasks 1, 2, 3, 4, 5 (dry run), 6, 7, 9, 10, 11 (CI reduced to: hygiene, python, 
   - Checks: `docker run caddy validate` for both Caddyfiles in CI; local `docker compose up web` serves the placeholder on `127.0.0.1:8080`; `curl -I` shows the security headers and `Content-Encoding: zstd` or gzip for the page. Refs: DEP-R4.1, R4.3, R4.4.
   - Done when: the placeholder runs locally and the Caddyfiles validate.
 
-- [ ] **4. Minimal CD: publish, SSH deploy, rollback** `core` (3 h)
+- [x] **4. Minimal CD: publish, SSH deploy, rollback** `core` (3 h)
   - `cd.yml` (workflow_run after CI on `main`; build and push `web` to GHCR tagged by SHA and `main`; deploy job with environment `production`; pinned known_hosts; forced-command call; post-deploy smoke; rollback on failure). `deploy/bin/deploy.sh` installed as `/usr/local/bin/stitch-deploy` (flock, SHA validation, previous tag recorded, `pull`, `up -d --wait`, image retention of current and previous). `deploy/bin/smoke.py --placeholder` (healthz and page only).
   - Set the GHCR package visibility to public after the first push (record the click path in the runbook).
   - Checks: shell tests for the SHA validation (accepts 40 hex, rejects `; rm -rf`, `../`, empty); a deliberate failing smoke triggers rollback. Refs: DEP-R6.1 to R6.3.
   - Done when: a push to `main` deploys the placeholder and a forced bad deploy rolls back.
 
-- [ ] **5. Run the dry run** `owner` + agent (1.5 h)
+- [x] **5. Run the dry run** `owner` + agent (1.5 h)
   - Design §13: start with Let's Encrypt staging, confirm issuance, switch to the production CA, clear `caddy_data` staging certificates, confirm a valid certificate, HTTP to HTTPS redirect, and `https://stitch.aashirnoman.dev/healthz`. Run CD once end to end; run `rollback` once.
   - Record in `deploy/README.md`: time to certificate, pull time, open ports (`nmap` or `nc -z` from a laptop to 22, 80, 443 and closed 5432, 8000), actual plan.
   - Done when: the placeholder is live on the public URL with a trusted certificate, CD redeploys it, rollback works. Refs: DEP-R4.1, R6, R7.1.
 
 ### Phase B: real stack
 
-- [ ] **6. Compose base: topology, secrets, Postgres, healthchecks, limits** `core` (4 h) *(needs organ and Brain stubs that answer `/healthz`)*
+- [x] **6. Compose base: topology, secrets, Postgres, healthchecks, limits** `core` (4 h) *(needs organ and Brain stubs that answer `/healthz`)*
   - `deploy/compose.yaml` per design §3 (all services, `core` internal and `edge` networks, volumes, `init-secrets`, Postgres init script with extension and roles, `seed` placeholder, healthchecks, `depends_on` conditions, `x-logging`, `read_only`, `tmpfs`, `cap_drop`, `no-new-privileges`, memory and CPU limits). Root `compose.yaml` with `include`. Overrides `compose.live.yaml`, `compose.lite.yaml`, `compose.ci.yaml`.
   - Verify and record: Compose `include` works on the target Docker versions (local and CI and VPS); `required: false` semantics for Eyes and Voice (design §3.1); a fresh volume start generates secrets once and a second start does not regenerate them.
   - Checks: `docker compose config -q` for every override combination (CI); containers on `core` cannot reach the internet (negative control); Postgres refuses connections without the password; `psql` as `stitch_app` cannot `CREATE TABLE`. Refs: DEP-R1.1, R1.4, R1.5, R2.3, R3.4, R4.2, R7.2, R7.3, P4.
   - Done when: `docker compose up --wait` reaches all-healthy with stub organs and secrets are not in `docker inspect` env output.
 
-- [ ] **7. Python images: organ and Brain Dockerfiles** `core` (4 h) *(needs each organ's package to install)*
+- [x] **7. Python images: organ and Brain Dockerfiles** `core` (4 h) *(needs each organ's package to install)*
   - `organ.Dockerfile` and `brain.Dockerfile` per design §4.1: pinned digests, `uv sync --frozen --no-dev --package`, non-root uid 10001, CPU-only wheels, demo data and models copied in, no training group. `.dockerignore`. `docker-bake.hcl` targets for all services with GHA cache.
   - `deploy/bin/check_images.py` and `deploy/image-budgets.json` (initial budgets from design §4.2; update after measuring).
   - Checks: images build from a clean clone; `torch` is not importable; uid is not 0; size budget check; the container starts with a read-only root filesystem. Refs: DEP-R2.1, R2.2, R2.4.
   - Done when: all six Python images build, pass `check_images.py`, and start under the hardened runtime options.
 
-- [ ] **8. Idempotent seed job** `core` (2 h) *(needs the Library's schema and the committed precomputed embeddings)*
+- [x] **8. Idempotent seed job** `core` (2 h) *(needs the Library's schema and the committed precomputed embeddings)*
   - Wire `seed` into Compose with the advisory lock, migration step, `seed_meta` comparison (design §7). The Library spec owns `python -m stitch_library.seed`; this task integrates and tests it in the stack.
   - Checks (CI stack job): first start seeds; `down` then `up` (no `-v`) logs `already seeded` and chunk count plus hash are unchanged; two concurrent seed runs leave one copy; a changed `STITCH_EMBED_MODEL` triggers a recompute. Refs: DEP-R1.3, P5.
   - Done when: the DEP-P5 check passes.
 
-- [ ] **9. Full web image: frontend export, CSP, gateway** `core` (3 h) *(needs the frontend export build; can use the shell app early)*
+- [x] **9. Full web image: frontend export, CSP, gateway** `core` (3 h) *(needs the frontend export build; can use the shell app early)*
   - `web.Dockerfile` (node build stage and Caddy runtime), `scripts/csp-hashes.mjs` in the frontend, `{$CSP}` assembly, `/api/*` proxy to `brain:8000`, `request_body max_size 4MB`, static caching headers, non-root run with `NET_BIND_SERVICE` in prod.
   - Checks: Playwright (frontend `stack` project) loads `/en/` and `/ur/` with zero CSP violations in the console; map renders with the CSP (workers from blob); SSE events arrive progressively through the gateway (first `organ_call` event reaches the client before the run finishes, measured with timestamps); a response header test for each header in design §5.1. Refs: DEP-R4.1, R4.3, R4.4.
   - Done when: the real frontend is served by the gateway on `127.0.0.1:8080` with a clean console and live SSE.
@@ -79,12 +79,12 @@ Tasks 1, 2, 3, 4, 5 (dry run), 6, 7, 9, 10, 11 (CI reduced to: hygiene, python, 
   - Tests: unit tests of the SSE parser and assertions against the frontend mock Brain (reusing its fixtures), including failure cases (missing evidence, error event, wrong order). Refs: DEP-R10.1, P6.
   - Done when: the script passes against the mock Brain and fails on each seeded defect.
 
-- [ ] **11. Full CI workflow** `core` (5 h)
+- [x] **11. Full CI workflow** `core` (5 h)
   - `ci.yml` per design §9.1: `hygiene`, `python` matrix (uv cache, Postgres service for Library), `evals-smoke`, `frontend` (types drift, lint, tsc, Vitest, build, budget, Playwright `mock` with axe), `images` (bake with GHA cache, `check_images.py`), `stack-smoke` (compose up with timing, negative control, `smoke.py`, Playwright `stack`, restart and seed idempotence). Pin third-party actions by SHA. Upload reports on failure.
   - Checks: a PR with a seeded failure per job (stale generated types, torch in an image, an extra published port, an ignored `.kiro`) fails exactly the intended job. Refs: DEP-R5.1 to R5.4, R10.2.
   - Done when: CI is green on `main` and each seeded failure is caught. Record the duration; if over 20 minutes, split or cache further.
 
-- [ ] **12. Offline guarantee and port audit** `core` (2 h)
+- [x] **12. Offline guarantee and port audit** `core` (2 h)
   - `check_ports.py` on the prod and default compose configurations; browser request audit in the Playwright `stack` project (fail on any request to a host other than the gateway); negative-control step (HTTPS request from `brain` and `voice` must fail in default mode and succeed with `compose.live.yaml` where an egress network exists, tested against a local HTTP server, not the internet).
   - Checks: adding `ports: ["5432:5432"]` to Postgres fails `check_ports.py`; removing `internal: true` fails the negative control. Refs: DEP-R4.2, R10.1, R10.2, P4, P6.
   - Done when: both seeded regressions are caught in CI.
@@ -99,7 +99,7 @@ Tasks 1, 2, 3, 4, 5 (dry run), 6, 7, 9, 10, 11 (CI reduced to: hygiene, python, 
   - Extend `cd.yml` to publish and deploy every image, run migrations (`run --rm seed`), `up -d --wait`, public smoke, automatic rollback on smoke failure. Test: deploy a commit, then deploy a commit that breaks `/api/organs` (rollback must trigger), then `rollback` manually.
   - Done when: a push to `main` updates the live site end to end and both rollback paths work. Refs: DEP-R6.1, R6.2, R10.3.
 
-- [ ] **15. Operations runbook, backup, restore** `core` for the runbook, `cuttable` for the rehearsal (2 h)
+- [x] **15. Operations runbook, backup, restore** `core` for the runbook, `cuttable` for the rehearsal (2 h)
   - `deploy/README.md`: runbook (design §10), owner facts, deploy and rollback commands, certificate troubleshooting, memory table, backup and restore commands, `lite` and `live` usage, how to read logs. Rehearse one `pg_dump` and `pg_restore` into a scratch database.
   - Done when: someone who has never seen the project can redeploy from the README, and the restore rehearsal is recorded. Refs: DEP-R7.1 to R7.4.
 
@@ -158,3 +158,16 @@ Total 46.5 h including the optional extras (task 18). Owner time is about 5 h (t
 | DEP-P4 | 6, 12 | `check_ports.py` on the production config |
 | DEP-P5 | 8, 11 | down/up chunk count and hash unchanged |
 | DEP-P6 | 10, 11, 12, 17 | internal network, negative control, smoke script, Playwright request audit |
+
+## Status (final audit)
+
+The stack is live at https://stitch.aashirnoman.dev (Vultr, 2 vCPU / 16 GB, Caddy HTTPS, Docker Compose).
+
+Ticked: 2 and 5 (VPS, DNS and trusted certificate are live; plan recorded in `deploy/README.md`), 4 (`cd.yml`, `deploy/bin/deploy.sh` with SHA validation in `tests/deploy/test_deploy_sh.py`), 6 (`compose.yaml` and overrides, `check_ports.py`), 7 (`deploy/docker/python.Dockerfile`, one parameterized file for all Python services, with `check_images.py` and `image-budgets.json`), 8 (`deploy/docker/library_seed.py`; reruns log `already seeded`), 9 (`web.Dockerfile`, `csp-hashes.mjs`, `deploy/playwright/stack.spec.ts`), 11 (`ci.yml` with `tests/test_ci_workflow.py` and `tests/deploy/test_workflows.py`), 12 (`check_ports.py` with tests, `offline_smoke.sh`), 15 (runbook and `stitch-backup` with a `rehearse` command; a recorded rehearsal is not in the README).
+
+Open:
+- 13 (memory): idle memory is measured; peak memory under a briefing loop and the time to all-healthy are not recorded.
+- 14 (full CD from GitHub): `cd.yml` is written, but deploys were run by hand with `stitch-deploy <sha>`, which seeds, waits for health, runs the smoke and rolls back on failure. A GitHub-triggered deploy and its rollback paths are not evidenced.
+- 16 (THIRD_PARTY dependency check for Python): the frontend has `check-third-party.mjs`; there is no equivalent check over `uv.lock`, and THIRD_PARTY.md was audited by hand.
+- 17 (clean-clone acceptance): not recorded.
+- 18 (`stretch`): Dependabot, image scanning and fail2ban were not added.
