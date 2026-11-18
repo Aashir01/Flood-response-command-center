@@ -467,6 +467,6 @@ The verifier is a separate implementation on purpose: it re-extracts numbers wit
 - **Confidence is a heuristic**, not a probability.
 - **Statement entailment offline is a lexical proxy.** Template and verbatim statements are checked for numbers, units, labels and language, not meaning. The Nebius judge is used for live runs and with `--live-llm`.
 - **The number guard can reject correct translations** (the `ایک` case in section 11). The cost is an English sentence in an Urdu briefing, with a caveat.
-- **Urdu patterns need a native-speaker proofread.**
+- **Urdu is experimental.** The Urdu patterns and translations are machine-generated and not reviewed by a native speaker. Urdu speech is not provided.
 - **Recorded fixtures are hand-authored** for Eyes, Oracle and Library (`data/demo/MANIFEST.md`); the deployed demo uses the real organs.
 - **Stitch is decision support**, not an operational warning system. Every briefing says so in `caveat.disclaimer`.

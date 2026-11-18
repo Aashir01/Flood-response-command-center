@@ -11,7 +11,7 @@ Goal: the Library works offline, end to end, on the committed subset in about 2.
 Owner actions that block or shape the schedule (do them on day 1, in parallel with coding):
 - Confirm the committed document list and license evidence (task 4, design §3.2).
 - Optionally request written permission from NDMA, PDMA Sindh, and Sphere (§3.1).
-- Find a native Urdu reviewer for the translated documents and for the Urdu questions.
+- (Dropped by owner decision: Urdu is not a focus. The Urdu documents and questions stay as an experimental capability, machine-translated and not reviewed; no native review is planned.)
 
 - [x] **1. Scaffold the organ with `surgeon`** `core` `[M]` (about 1 h)
   - Generate `organs/library/` from the surgeon template: pyproject, `src/stitch_library`, `tests/{unit,property,contract,perf}`, README. Create the module tree from design §1 as empty modules with docstrings.

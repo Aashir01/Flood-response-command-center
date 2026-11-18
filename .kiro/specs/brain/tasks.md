@@ -100,7 +100,7 @@ Schedule target: tasks 1 to 10 (the vertical slice) end of day 1. Tasks 11 to 19
   - `config/i18n/ur.yaml` for every template id, conflict description, caveat and the unit table; `translate` step for organ-authored text with `verbatim_foreign` fallback and caveat; Library queries in Urdu from `scenarios.yaml`.
   - Tests: BRN-P14 (same numbers and units in en and ur); every template id has both languages; language check on Urdu output; translation that changes a number or uses `لاکھ` is rejected. Refs: BRN-R7.5.
   - Done when: `--lang ur` produces a briefing offline with `fake` and P14 passes. Owner proofreads the Urdu patterns.
-  - Status: done; Nebius translations are recorded and replay offline. The native-speaker proofread of `config/i18n/ur.yaml` is still open (`docs/decisions.md`).
+  - Status: done; Nebius translations are recorded and replay offline. Urdu is experimental (machine-translated, not reviewed); by owner decision no native-speaker proofread of `config/i18n/ur.yaml` is planned (`docs/decisions.md`).
 - [x] **22. RunStore, event log, trace, replay** `core`
   - `runtime/store.py` (DuckDB tables, writer lock, retention 50 runs or 48 h, restart marks running runs `failed`), `EventLog`, trace export and `replay`, structured logging with `briefing_id` and `task_id`.
   - Tests: BRN-P4 (twice equal, replay equal, random virtual delays); retention and restart; log lines contain no prompt text at info. Refs: BRN-R10.1, R12.1.
