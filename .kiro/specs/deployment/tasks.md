@@ -171,3 +171,4 @@ Open:
 - 16 (THIRD_PARTY dependency check for Python): the frontend has `check-third-party.mjs`; there is no equivalent check over `uv.lock`, and THIRD_PARTY.md was audited by hand.
 - 17 (clean-clone acceptance): not recorded.
 - 18 (`stretch`): Dependabot, image scanning and fail2ban were not added.
+- 19 (write-up entries): `docs/kiro-writeup.md` covers hooks, MCP, Powers (not used) and the IDE, but has no deployment-specific section on how the spec drove the deployment.
