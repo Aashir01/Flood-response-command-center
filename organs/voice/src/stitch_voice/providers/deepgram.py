@@ -72,7 +72,9 @@ class DeepgramTTS(_Base):
     name: TTSName = "deepgram"
     hosted = True
     # Aura-2 accepts up to 2000 characters per request; stay below it.
-    max_chunk_chars = 1500
+    # Short chunks keep each Deepgram request well under its timeout and let the service
+    # synthesize them in parallel; a 1,500-character chunk (about 100 s of audio) could time out.
+    max_chunk_chars = 400
 
     def __init__(self, api_key: str, voice_en: str = "aura-2-thalia-en", **kw: Any) -> None:
         super().__init__(api_key, **kw)

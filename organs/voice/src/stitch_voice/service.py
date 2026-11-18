@@ -13,6 +13,7 @@ import math
 import re
 import sqlite3
 from collections.abc import Callable, Sequence
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from typing import Any
 
@@ -237,7 +238,7 @@ class VoiceService:
             if decision.warn:
                 warnings.append("TTS_BUDGET_80PCT")
         try:
-            pieces = [provider.synthesize(part, lang, voice).wav for part in parts]
+            pieces = _synthesize_all(provider, parts, lang, voice)
             wav = pieces[0] if len(pieces) == 1 else audio.join_wav(pieces, PAUSE_S)
         except audio.AudioError as exc:
             if reserved:
@@ -375,6 +376,22 @@ class VoiceService:
         sources = [_TERMS[provider.name]] if provider.name in _TERMS else []
         mode = "live" if provider.hosted else current_mode()
         return Outcome(data, warnings=warnings, data_sources=sources, model=model, mode=mode)
+
+
+# Hosted chunks are independent requests; up to this many run at once (order is kept).
+HOSTED_PARALLEL_CHUNKS = 4
+
+
+def _synthesize_all(provider: TTSProvider, parts: list[str], lang: Lang, voice: str) -> list[bytes]:
+    """Synthesize every chunk, in input order. Hosted providers run up to
+    ``HOSTED_PARALLEL_CHUNKS`` requests in parallel; local ones run sequentially."""
+    if not provider.hosted or len(parts) < 2:
+        return [provider.synthesize(part, lang, voice).wav for part in parts]
+    workers = min(HOSTED_PARALLEL_CHUNKS, len(parts))
+    with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="tts") as pool:
+        return [
+            chunk.wav for chunk in pool.map(lambda p: provider.synthesize(p, lang, voice), parts)
+        ]
 
 
 def _voice_ok(provider: str, voice: str) -> bool:
