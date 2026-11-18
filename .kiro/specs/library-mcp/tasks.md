@@ -32,7 +32,7 @@ Owner actions that block or shape the schedule (do them on day 1, in parallel wi
   - Property tests: P9 (idempotence, quote verbatim after normalization), P13 (sentence spans), chunk spans equal `text[start:end]`, chunks never cross pages. Unit tests: hand-built English and Urdu splitting cases (`1.5 litres`, `No. 5`, `۔`, `؟`, bullets, long sentence), language detection on pure, mixed, and Arabic-only samples. Refs: LIB-R1.1, R1.2.
   - Done when: P9 and P13 pass under `ci` and the Urdu fixtures split as written in the docstrings.
 
-- [ ] **4. Manifest, license checker, committed document list** `core` `[M]` (about 2 h of code, plus owner time)
+- [x] **4. Manifest, license checker, committed document list** `core` `[M]` (about 2 h of code, plus owner time)
   - `ingest/manifest.py` (Pydantic model per design §3.3, required fields, slug rule). `scripts/check_corpus_licenses.py` (rules 1 to 5 of §3.3, `--write-docs` to generate `data/demo/MANIFEST.md` and the `THIRD_PARTY.md` document table).
   - Owner-assisted: assemble `data/demo/library/manifest.yaml` and the committed PDFs for the proposed rows in §3.2. For each, read the license on the source page, fill `license_evidence`, and set `owner_confirmed`. Rows the owner cannot confirm become `tier: fetch`. Author or commission the Urdu translations and the field cards as text-first sources.
   - Tests: Hypothesis test that builds random manifests and file trees in a temp directory and compares the checker's verdict to an oracle (P6). Unit tests for each failure rule. Run the checker on the real repo in CI. Refs: LIB-R1.4, R10.1, R10.3. P6.
@@ -54,7 +54,7 @@ Owner actions that block or shape the schedule (do them on day 1, in parallel wi
   - Tests: hand-computed BM25 scores on a 3-document example, Urdu fold equivalence (variant letters match), language routing, rebuild fingerprint. Refs: LIB-R2.1.
   - Done when: hand-computed scores match to 1e-9.
 
-- [ ] **8. Embedder: model fetch, export, `OnnxEmbedder`, `FakeEmbedder`** `core` `[M]` (about 3 h)
+- [x] **8. Embedder: model fetch, export, `OnnxEmbedder`, `FakeEmbedder`** `core` `[M]` (about 3 h)
   - `scripts/fetch_models.py` (pinned revisions and sha256, writes to `STITCH_MODEL_DIR`, build-time only, never imported by the server), `scripts/export_models.py` (dynamic int8 quantization, parity check: mean cosine at least 0.99 on 200 chunks, falls back to fp32 with a log line), `models/embedder.py` (`onnxruntime` with `tokenizers`, `query:` and `passage:` prefixes, L2 normalization, batching), `FakeEmbedder` (hashed bag-of-tokens, deterministic).
   - Extend `build_library_pack.py` to write `vectors.<model_id>.npy`.
   - Tests: `FakeEmbedder` determinism and overlap monotonicity (unit). `@models` tests: embedding shape and norm, English and Urdu paraphrase ranks above an unrelated sentence, int8 versus fp32 parity. Refs: LIB-R1.1, R7.4, R11.1.
@@ -84,12 +84,12 @@ Status (2026-11-17, implementing agent): ticked tasks meet their "Done when". Op
 
 ## After the checkpoint
 
-- [ ] **13. `PgVectorStore`, schema, idempotent seeding, Compose fragment** `core` (about 4 h)
+- [x] **13. `PgVectorStore`, schema, idempotent seeding, Compose fragment** `core` (about 4 h)
   - `store/pgvector.py` (psycopg 3, bound parameters only), `store/schema.sql` and migrator, `store/seed.py` per design §5.4, Postgres init script (`CREATE EXTENSION vector`, non-superuser role), a Compose service snippet and Library container health check to hand to the deployment spec.
   - Tests: the contract suite from task 6 now runs on both stores (`pg` marker, `allow_loopback`). P11 on random data. Seeding twice performs no writes (assert row counts and `meta.seed_key`). A crash mid-seed (simulated) leaves the previous state. A grep test fails on string-built SQL. CI adds a `pgvector/pgvector:pg16` service container and requires the `pg` tests. Refs: LIB-R1.1, R1.5, R8.1. P11, P7.
   - Done when: a second `docker compose up` seeds nothing, and P11 passes against a real Postgres.
 
-- [ ] **14. Reranker** `core` (about 3 h)
+- [x] **14. Reranker** `core` (about 3 h)
   - `models/reranker.py` `OnnxReranker` (mMARCO int8, `tokenizers`, truncation to 256 tokens, batch of 20, semaphore of 4), per-language gating through `STITCH_RERANK_LANGS`, `NullReranker` fallback on load or run errors with a warning. Extend `export_models.py` to the reranker.
   - Tests: `@models` test that the relevant passage ranks above an unrelated one (English), the Urdu behavior is recorded (see task 19), a failing reranker degrades to `rerank = null` without error, P3 still holds with the reranker off, on, and failing. Refs: LIB-R2.1, R2.2, R7.4.
   - Done when: reranked retrieval passes the contract and property tests and falls back cleanly.
@@ -130,7 +130,7 @@ Status (2026-11-17, implementing agent): ticked tasks meet their "Done when". Op
   - Refs: LIB-R8.3, R11. P18.
   - Done when: `search_guidance` p95 is under 1.5 s and Library overhead for `answer_with_citations` is under 2.5 s on the constrained container, or the shortfall is written down with the proposed fix (smaller rerank window, rerank off for a language, smaller model).
 
-- [ ] **22. Claude and OpenAI adapters** `core` (about 2 h)
+- [x] **22. Claude and OpenAI adapters** `core` (about 2 h)
   - `ClaudeClient` and `OpenAIClient` in `stitch_common.llm`, lazy SDK imports, key from the provider's environment variable, timeout and error mapping to `LLMUnavailable`, structured-output request where supported.
   - Tests: mocked transport (no network). A `live` smoke test for each, excluded from CI. Refs: LIB-R7.1, R7.3.
   - Done when: `STITCH_LLM_PROVIDER=anthropic` and `openai` work in a manual `live` run and fail closed without a key.
@@ -177,3 +177,15 @@ Status (2026-11-17, implementing agent): ticked tasks meet their "Done when". Op
 | P9 | 3 | P18 | 12, 21 |
 
 Properties P1 to P6 come from `requirements.md`. P7 to P18 are added by this design (§11).
+
+## Status (final audit)
+
+Ticked: 4 (`ingest/manifest.py`, `scripts/check_corpus_licenses.py`, LIB-P6 in `tests/unit/test_license_check.py`), 8 (`ml/embedder.py`, `scripts/fetch_models.py`, `scripts/export_models.py`, store contract and pgvector pack tests), 13 (`store/pgvector.py`, `schema.sql`, `seed.py`, `tests/integration/test_pgvector_pack.py`), 14 (`ml/reranker.py`, retrieval and answer properties with the reranker), 22 (`ClaudeClient`, `OpenAIClient`, plus `NebiusClient` used in production, tested in `packages/stitch_common/tests/test_llm.py`).
+
+Open:
+- 17 (50-question set): `evals/library/questions.jsonl` (51 lines), `dev_extra.jsonl`, `split.lock` and `validate_questions.py` exist and the eval uses them, but the validator has no unit tests of its own.
+- 19 (model decisions): the reranker comparison is committed (`evals/library/rerank_comparison.json`); the embedder comparison and `docs/library-models.md` were not done.
+- 20 (`scripts/fetch_corpus.py`): not built. The committed corpus is the whole demo corpus.
+- 21 (performance bench): `scripts/bench_library.py` and `tests/perf/` were not built.
+- 23 (documentation): `organs/library/README.md` exists; `docs/library-corpus.md` and `docs/library-models.md` do not.
+- 24 (`stretch`): not done.
